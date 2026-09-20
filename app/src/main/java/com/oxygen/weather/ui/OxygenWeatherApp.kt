@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,7 +22,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -89,7 +92,7 @@ fun OxygenWeatherApp(effects: EffectsLevel = EffectsLevel.SUBTLE) {
                     .safeDrawingPadding(),
             ) {
                 PageTabs(
-                    selected = pagerState.currentPage,
+                    selectedIndex = pagerState.currentPage,
                     onSelect = { page -> scope.launch { pagerState.animateScrollToPage(page) } },
                 )
                 HorizontalPager(
@@ -110,7 +113,7 @@ fun OxygenWeatherApp(effects: EffectsLevel = EffectsLevel.SUBTLE) {
 }
 
 @Composable
-private fun PageTabs(selected: Int, onSelect: (Int) -> Unit) {
+private fun PageTabs(selectedIndex: Int, onSelect: (Int) -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -118,7 +121,7 @@ private fun PageTabs(selected: Int, onSelect: (Int) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         HomePage.entries.forEachIndexed { index, page ->
-            val active = index == selected
+            val active = index == selectedIndex
             TextButton(
                 onClick = { onSelect(index) },
                 modifier = Modifier
@@ -131,11 +134,14 @@ private fun PageTabs(selected: Int, onSelect: (Int) -> Unit) {
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
+                contentPadding = PaddingValues(horizontal = 2.dp, vertical = 0.dp),
             ) {
                 Text(
                     page.label,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                    maxLines = 1,
+                    softWrap = false,
                 )
             }
         }
@@ -148,6 +154,7 @@ private fun NowPage(home: HomePresentation, effects: EffectsLevel) {
     Column(
         Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
@@ -160,11 +167,11 @@ private fun NowPage(home: HomePresentation, effects: EffectsLevel) {
             effects = effects,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1.5f)
+                .heightIn(min = 208.dp)
                 .clearAndSetSemantics { contentDescription = now.spokenSummary },
         ) {
             Row(
-                Modifier.fillMaxSize().padding(18.dp),
+                Modifier.fillMaxWidth().padding(18.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
@@ -186,7 +193,7 @@ private fun NowPage(home: HomePresentation, effects: EffectsLevel) {
         }
 
         Row(
-            Modifier.fillMaxWidth().weight(0.82f),
+            Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             CompactFactPanel(
@@ -194,22 +201,22 @@ private fun NowPage(home: HomePresentation, effects: EffectsLevel) {
                 headline = now.precipitationHeadline,
                 supporting = now.precipitationSupporting,
                 effects = effects,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier.weight(1f).heightIn(min = 114.dp),
             )
             CompactFactPanel(
                 label = "WIND",
                 headline = now.windHeadline,
                 supporting = now.windSupporting,
                 effects = effects,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier.weight(1f).heightIn(min = 114.dp),
             )
         }
 
         val pattern = home.detailGroups.firstOrNull { it.title == "Forecast pattern" }
         if (pattern != null) {
-            GlassPanel(effects, Modifier.fillMaxWidth().weight(0.78f)) {
+            GlassPanel(effects, Modifier.fillMaxWidth().heightIn(min = 106.dp)) {
                 Row(
-                    Modifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp),
+                    Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -353,7 +360,10 @@ private fun DailyWindow(window: DailyWindowPresentation, effects: EffectsLevel, 
 @Composable
 private fun DetailsPage(home: HomePresentation, effects: EffectsLevel) {
     Column(
-        Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         PageHeading("Details", "Provider-neutral measurements and derived context")
@@ -361,13 +371,7 @@ private fun DetailsPage(home: HomePresentation, effects: EffectsLevel) {
             MetricGroup(
                 group = group,
                 effects = effects,
-                modifier = Modifier.weight(
-                    when (group.title) {
-                        "Conditions" -> 1.15f
-                        "Forecast pattern" -> 0.95f
-                        else -> 0.90f
-                    },
-                ),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
@@ -376,12 +380,14 @@ private fun DetailsPage(home: HomePresentation, effects: EffectsLevel) {
 @Composable
 private fun MetricGroup(group: MetricGroupPresentation, effects: EffectsLevel, modifier: Modifier = Modifier) {
     GlassPanel(effects, modifier.fillMaxWidth()) {
-        Column(Modifier.fillMaxSize().padding(12.dp)) {
+        Column(
+            Modifier.fillMaxWidth().padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             Text(group.title, style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(6.dp))
             val rows = group.metrics.chunked(2)
             rows.forEach { row ->
-                Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     row.forEach { metric ->
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
                             Text(metric.label.uppercase(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
