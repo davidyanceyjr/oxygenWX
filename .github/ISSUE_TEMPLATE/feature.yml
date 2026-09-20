@@ -1,0 +1,24 @@
+name: Feature proposal
+description: Propose a weather, data, or native-interface capability
+title: "[Proposal]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or question
+      description: What weather question should the feature help the user answer?
+    validations:
+      required: true
+  - type: textarea
+    id: expression
+    attributes:
+      label: Proposed expression
+      description: Describe the interaction/visual/data composition rather than only a conventional widget.
+    validations:
+      required: true
+  - type: textarea
+    id: data
+    attributes:
+      label: Required data
+      description: List observations, forecasts, historical data, derived metrics, or provider requirements.

@@ -1,0 +1,20 @@
+.gradle/
+.idea/
+local.properties
+**/build/
+*.iml
+.DS_Store
+.externalNativeBuild/
+.cxx/
+captures/
+*.jks
+*.keystore
+.env
+.env.*
+!.env.example
+
+# The launcher bootstraps the official Gradle 9.6.0 wrapper JAR and verifies its SHA-256.
+gradle/wrapper/gradle-wrapper.jar
+
+# Local installed-app UI evidence.
+.codex/test-artifacts/

@@ -1,0 +1,9 @@
+Oxygen Weather v1.0 UI Candidate
+
+This codebase originated from the Apache-2.0 Atmosphere Deck prototype and has been substantially rewritten for the Oxygen Weather replacement track.
+
+Design/product/workflow reference:
+  https://github.com/davidyanceyjr/oxygen
+  pinned reference commit: 0fcbdcb2736d264fbe6cdca9c8b9530f589f4573
+
+The upstream Oxygen repository is GPL-3.0-or-later. This candidate does not vendor the upstream Android implementation. A copy of the upstream license is retained under docs/upstream/ for reference. Final licensing must be reconciled deliberately before this tree replaces the upstream Oxygen repository.
