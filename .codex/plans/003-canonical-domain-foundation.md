@@ -1,6 +1,6 @@
 # Plan 003 — Canonical domain foundation
 
-Status: Active
+Status: Completed
 Cycle ID: 003-canonical-domain-foundation
 Roadmap item: R1.1
 Created: 2026-09-20
