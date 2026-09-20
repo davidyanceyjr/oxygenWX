@@ -59,6 +59,11 @@ def source_contract() -> int:
     if pager_count != 1:
         failures.append(f"expected exactly one outer HorizontalPager, found {pager_count}")
 
+    ui_root = ui_file.parent
+    ui_combined = "\n".join(path.read_text(encoding="utf-8") for path in ui_root.rglob("*.kt"))
+    if "com.oxygen.weather.data." in ui_combined:
+        failures.append("Compose UI imports canonical data instead of presentation models")
+
     manifest = (ROOT / "app" / "src" / "main" / "AndroidManifest.xml").read_text(encoding="utf-8")
     build_file = (ROOT / "app" / "build.gradle.kts").read_text(encoding="utf-8")
     if "com.oxygen.weather" not in build_file or "Oxygen Weather" not in manifest:
@@ -69,7 +74,7 @@ def source_contract() -> int:
         for failure in failures:
             print(f"  - {failure}", file=sys.stderr)
         return 1
-    print("Source-contract check passed: new Oxygen UI only, one outer pager, Oxygen app identity present.")
+    print("Source-contract check passed: new Oxygen UI only, one outer pager, presentation-only Compose boundary, Oxygen app identity present.")
     return 0
 
 def diff_check() -> int:

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,14 +52,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.oxygen.weather.data.DemoWeatherRepository
-import com.oxygen.weather.data.WeatherCondition
-import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.DailyWindowPresentation
 import com.oxygen.weather.presentation.HomePresentation
-import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.presentation.HourlyWindowPresentation
 import com.oxygen.weather.presentation.MetricGroupPresentation
+import com.oxygen.weather.presentation.WeatherMarkCondition
 import kotlinx.coroutines.launch
 
 private enum class HomePage(val label: String) {
@@ -72,20 +70,24 @@ enum class EffectsLevel { OFF, SUBTLE }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OxygenWeatherApp(effects: EffectsLevel = EffectsLevel.SUBTLE) {
-    val bundle = remember { DemoWeatherRepository.load() }
-    val derived = remember(bundle) { HistoricalSynthesis.derive(bundle) }
-    val presentation = remember(bundle, derived) { HomePresentationMapper.map(bundle, derived) }
+fun OxygenWeatherApp(
+    presentation: HomePresentation,
+    effects: EffectsLevel = EffectsLevel.SUBTLE,
+) {
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
+    val resolvedEffects = remember(effects) { effects.resolveEffects() }
 
     BackHandler(enabled = pagerState.currentPage > 0) {
-        scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+        scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, resolvedEffects) }
     }
 
     OxygenTheme {
         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-            AtmosphereBackground(presentation.current.conditionIdentity, effects)
+            when (resolvedEffects.rootBackground) {
+                RootBackground.SOLID -> Unit
+                RootBackground.ATMOSPHERE -> AtmosphereBackground(presentation.current.conditionIdentity)
+            }
             Column(
                 Modifier
                     .fillMaxSize()
@@ -93,7 +95,7 @@ fun OxygenWeatherApp(effects: EffectsLevel = EffectsLevel.SUBTLE) {
             ) {
                 PageTabs(
                     selectedIndex = pagerState.currentPage,
-                    onSelect = { page -> scope.launch { pagerState.animateScrollToPage(page) } },
+                    onSelect = { page -> scope.launch { pagerState.moveToPage(page, resolvedEffects) } },
                 )
                 HorizontalPager(
                     state = pagerState,
@@ -101,14 +103,22 @@ fun OxygenWeatherApp(effects: EffectsLevel = EffectsLevel.SUBTLE) {
                     beyondViewportPageCount = 1,
                 ) { page ->
                     when (HomePage.entries[page]) {
-                        HomePage.NOW -> NowPage(presentation, effects)
-                        HomePage.HOURLY -> HourlyPage(presentation, effects)
-                        HomePage.DAILY -> DailyPage(presentation, effects)
-                        HomePage.DETAILS -> DetailsPage(presentation, effects)
+                        HomePage.NOW -> NowPage(presentation, resolvedEffects)
+                        HomePage.HOURLY -> HourlyPage(presentation, resolvedEffects)
+                        HomePage.DAILY -> DailyPage(presentation, resolvedEffects)
+                        HomePage.DETAILS -> DetailsPage(presentation, resolvedEffects)
                     }
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+private suspend fun PagerState.moveToPage(page: Int, effects: ResolvedEffects) {
+    when (effects.navigationMotion) {
+        NavigationMotion.IMMEDIATE -> scrollToPage(page)
+        NavigationMotion.ANIMATED -> animateScrollToPage(page)
     }
 }
 
@@ -149,7 +159,7 @@ private fun PageTabs(selectedIndex: Int, onSelect: (Int) -> Unit) {
 }
 
 @Composable
-private fun NowPage(home: HomePresentation, effects: EffectsLevel) {
+private fun NowPage(home: HomePresentation, effects: ResolvedEffects) {
     val now = home.current
     Column(
         Modifier
@@ -234,7 +244,7 @@ private fun NowPage(home: HomePresentation, effects: EffectsLevel) {
 }
 
 @Composable
-private fun HourlyPage(home: HomePresentation, effects: EffectsLevel) {
+private fun HourlyPage(home: HomePresentation, effects: ResolvedEffects) {
     var windowIndex by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     val windows = home.hourlyWindows
     if (windows.isEmpty()) {
@@ -270,7 +280,7 @@ private fun HourlyPage(home: HomePresentation, effects: EffectsLevel) {
 }
 
 @Composable
-private fun HourlyWindow(window: HourlyWindowPresentation, effects: EffectsLevel, modifier: Modifier = Modifier) {
+private fun HourlyWindow(window: HourlyWindowPresentation, effects: ResolvedEffects, modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         window.entries.chunked(2).forEach { pair ->
             Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -306,7 +316,7 @@ private fun HourlyWindow(window: HourlyWindowPresentation, effects: EffectsLevel
 }
 
 @Composable
-private fun DailyPage(home: HomePresentation, effects: EffectsLevel) {
+private fun DailyPage(home: HomePresentation, effects: ResolvedEffects) {
     var windowIndex by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     val windows = home.dailyWindows
     if (windows.isEmpty()) {
@@ -332,7 +342,7 @@ private fun DailyPage(home: HomePresentation, effects: EffectsLevel) {
 }
 
 @Composable
-private fun DailyWindow(window: DailyWindowPresentation, effects: EffectsLevel, modifier: Modifier = Modifier) {
+private fun DailyWindow(window: DailyWindowPresentation, effects: ResolvedEffects, modifier: Modifier = Modifier) {
     GlassPanel(effects, modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 8.dp)) {
             window.entries.forEach { entry ->
@@ -358,7 +368,7 @@ private fun DailyWindow(window: DailyWindowPresentation, effects: EffectsLevel, 
 }
 
 @Composable
-private fun DetailsPage(home: HomePresentation, effects: EffectsLevel) {
+private fun DetailsPage(home: HomePresentation, effects: ResolvedEffects) {
     Column(
         Modifier
             .fillMaxSize()
@@ -378,7 +388,7 @@ private fun DetailsPage(home: HomePresentation, effects: EffectsLevel) {
 }
 
 @Composable
-private fun MetricGroup(group: MetricGroupPresentation, effects: EffectsLevel, modifier: Modifier = Modifier) {
+private fun MetricGroup(group: MetricGroupPresentation, effects: ResolvedEffects, modifier: Modifier = Modifier) {
     GlassPanel(effects, modifier.fillMaxWidth()) {
         Column(
             Modifier.fillMaxWidth().padding(12.dp),
@@ -420,7 +430,7 @@ private fun CompactFactPanel(
     label: String,
     headline: String,
     supporting: String,
-    effects: EffectsLevel,
+    effects: ResolvedEffects,
     modifier: Modifier = Modifier,
 ) {
     GlassPanel(effects, modifier) {
@@ -455,7 +465,7 @@ private fun WindowControls(
 }
 
 @Composable
-private fun UnavailablePage(message: String, effects: EffectsLevel) {
+private fun UnavailablePage(message: String, effects: ResolvedEffects) {
     Box(Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.Center) {
         GlassPanel(effects, Modifier.fillMaxWidth()) {
             Text(message, Modifier.padding(24.dp), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
@@ -465,37 +475,36 @@ private fun UnavailablePage(message: String, effects: EffectsLevel) {
 
 @Composable
 private fun GlassPanel(
-    effects: EffectsLevel,
+    effects: ResolvedEffects,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val alpha = if (effects == EffectsLevel.OFF) 1f else 0.86f
     Surface(
-        modifier = modifier.border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.28f), RoundedCornerShape(24.dp)),
+        modifier = modifier.border(
+            1.dp,
+            MaterialTheme.colorScheme.outline.copy(alpha = effects.outlineOpacity),
+            RoundedCornerShape(24.dp),
+        ),
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = alpha),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = effects.panelOpacity),
         contentColor = MaterialTheme.colorScheme.onSurface,
     ) { content() }
 }
 
 @Composable
-private fun AtmosphereBackground(condition: WeatherCondition, effects: EffectsLevel) {
-    if (effects == EffectsLevel.OFF) {
-        Box(Modifier.fillMaxSize().background(OxygenSkyTop))
-        return
-    }
+private fun AtmosphereBackground(condition: WeatherMarkCondition) {
     val gradient = Brush.verticalGradient(listOf(OxygenSkyTop, OxygenSkyBottom))
     Canvas(Modifier.fillMaxSize().background(gradient)) {
         when (condition) {
-            WeatherCondition.CLEAR -> {
+            WeatherMarkCondition.CLEAR -> {
                 drawCircle(OxygenGlow.copy(alpha = 0.10f), size.minDimension * 0.62f, Offset(size.width * 0.82f, size.height * 0.12f))
                 drawCircle(OxygenGlow.copy(alpha = 0.08f), size.minDimension * 0.36f, Offset(size.width * 0.12f, size.height * 0.82f))
             }
-            WeatherCondition.PARTLY_CLOUDY, WeatherCondition.CLOUDY -> {
+            WeatherMarkCondition.PARTLY_CLOUDY, WeatherMarkCondition.CLOUDY -> {
                 drawCircle(Color.White.copy(alpha = 0.035f), size.minDimension * 0.62f, Offset(size.width * 0.15f, size.height * 0.18f))
                 drawCircle(OxygenGlow.copy(alpha = 0.055f), size.minDimension * 0.72f, Offset(size.width * 0.92f, size.height * 0.62f))
             }
-            WeatherCondition.RAIN, WeatherCondition.STORM -> {
+            WeatherMarkCondition.RAIN, WeatherMarkCondition.STORM -> {
                 repeat(14) { index ->
                     val x = size.width * (index / 13f)
                     val y = size.height * ((index * 0.073f) % 0.7f)
@@ -508,7 +517,7 @@ private fun AtmosphereBackground(condition: WeatherCondition, effects: EffectsLe
                     )
                 }
             }
-            WeatherCondition.SNOW -> {
+            WeatherMarkCondition.SNOW -> {
                 repeat(18) { index ->
                     val x = size.width * ((index * 37 % 100) / 100f)
                     val y = size.height * ((index * 61 % 100) / 100f)

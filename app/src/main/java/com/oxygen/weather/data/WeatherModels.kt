@@ -2,6 +2,44 @@ package com.oxygen.weather.data
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneId
+
+/** Opaque locally assigned identity; it is never a provider ID or a display name. */
+@JvmInline
+value class LocalLocationId(val value: String) {
+    init {
+        require(value.isNotBlank()) { "Local location ID must not be blank." }
+    }
+}
+
+/** Provider-neutral location information used to interpret local weather times. */
+data class WeatherLocation(
+    val id: LocalLocationId,
+    val displayName: String?,
+    val timeZone: ZoneId,
+) {
+    init {
+        require(displayName?.isNotBlank() != false) { "Location display name must be null or nonblank." }
+    }
+}
+
+/** Opaque provider-neutral source identity; display text is deliberately separate. */
+@JvmInline
+value class WeatherSourceId(val value: String) {
+    init {
+        require(value.isNotBlank()) { "Weather source ID must not be blank." }
+    }
+}
+
+data class WeatherSource(
+    val id: WeatherSourceId,
+    val displayName: String?,
+) {
+    init {
+        require(displayName?.isNotBlank() != false) { "Source display name must be null or nonblank." }
+    }
+}
 
 enum class WeatherCondition {
     CLEAR,
@@ -18,12 +56,16 @@ enum class DataType {
     FORECAST,
     OFFICIAL_ALERT,
     DERIVED,
+    HISTORICAL_REFERENCE,
 }
 
 data class DataProvenance(
-    val sourceName: String,
     val dataType: DataType,
-    val retrievedAt: LocalDateTime,
+    val source: WeatherSource? = null,
+    /** The source's stated validity instant, when it supplies one. */
+    val validAt: Instant? = null,
+    /** The instant Oxygen retrieved this data, when known. */
+    val retrievedAt: Instant? = null,
 )
 
 /** Canonical meteorological values. Presentation formatting belongs in presentation/. */
@@ -75,7 +117,7 @@ data class HistoricalBaseline(
 )
 
 data class WeatherBundle(
-    val placeLabel: String,
+    val location: WeatherLocation,
     val current: CurrentWeather,
     val hourly: List<HourWeather>,
     val daily: List<DayWeather>,

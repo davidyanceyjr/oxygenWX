@@ -27,7 +27,7 @@ Outcome:
 
 Evidence/limitations are summarized in `VERIFICATION.md` and `.codex/history/2026-09-20-000-replacement-prototype-bootstrap.md`.
 
-### R0.2 — Installed baseline verification — NEXT
+### R0.2 — Installed baseline verification — DONE
 
 Production boundary: current deterministic fixture through the real Compose application.
 
@@ -41,11 +41,15 @@ Acceptance:
 - record any clipping/overlap before feature work begins;
 - preserve evidence under `.codex/test-artifacts/<cycle-id>/` and close the cycle into history.
 
-Out of scope: live networking, location, cache, alerts, settings redesign.
+Out of scope: live networking, location, cache, alerts, settings redesign. Evidence and
+limitations: `.codex/history/2026-09-20-001-installed-baseline-verification.md`.
 
-### R0.3 — Appearance-off baseline — PLANNED
+### R0.3 — Appearance-off baseline — DONE
 
-Add an explicit effective Effects Off rendering path that is opaque, static, and complete. Verify that disabling decoration does not remove weather meaning or controls.
+Added a debug-selectable effective Effects Off rendering path that is opaque, static, and
+complete. Installed compact and large-font evidence, focused resolver/launch tests, and
+verification limitations are recorded in
+`.codex/history/2026-09-20-002-appearance-off-baseline.md`.
 
 ## R1 — Domain and presentation stabilization
 

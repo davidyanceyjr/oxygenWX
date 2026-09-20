@@ -10,13 +10,13 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import com.oxygen.weather.data.WeatherCondition
+import com.oxygen.weather.presentation.WeatherMarkCondition
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
 fun WeatherMark(
-    condition: WeatherCondition,
+    condition: WeatherMarkCondition,
     modifier: Modifier = Modifier,
     tint: Color = OxygenText,
 ) {
@@ -76,13 +76,13 @@ fun WeatherMark(
         }
 
         when (condition) {
-            WeatherCondition.CLEAR -> sun(center, size.minDimension * 0.18f)
-            WeatherCondition.PARTLY_CLOUDY -> {
+            WeatherMarkCondition.CLEAR -> sun(center, size.minDimension * 0.18f)
+            WeatherMarkCondition.PARTLY_CLOUDY -> {
                 sun(Offset(size.width * 0.68f, size.height * 0.34f), size.minDimension * 0.12f)
                 cloud()
             }
-            WeatherCondition.CLOUDY -> cloud()
-            WeatherCondition.RAIN -> {
+            WeatherMarkCondition.CLOUDY -> cloud()
+            WeatherMarkCondition.RAIN -> {
                 cloud()
                 repeat(3) { index ->
                     val x = size.width * (0.32f + index * 0.18f)
@@ -95,7 +95,7 @@ fun WeatherMark(
                     )
                 }
             }
-            WeatherCondition.STORM -> {
+            WeatherMarkCondition.STORM -> {
                 cloud()
                 val bolt = Path().apply {
                     moveTo(size.width * 0.53f, size.height * 0.66f)
@@ -108,7 +108,7 @@ fun WeatherMark(
                 }
                 drawPath(bolt, OxygenChartAccent)
             }
-            WeatherCondition.SNOW -> {
+            WeatherMarkCondition.SNOW -> {
                 cloud()
                 repeat(3) { index ->
                     val x = size.width * (0.30f + index * 0.20f)

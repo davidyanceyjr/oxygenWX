@@ -1,6 +1,7 @@
 package com.oxygen.weather.data
 
 import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
@@ -14,6 +15,12 @@ import kotlin.math.sin
 object DemoWeatherRepository {
     fun load(now: LocalDateTime = LocalDateTime.now()): WeatherBundle {
         val anchor = now.withMinute(0).withSecond(0).withNano(0)
+        val location = WeatherLocation(
+            id = LocalLocationId("demo-station"),
+            displayName = "Demo Station",
+            timeZone = ZoneId.of("America/Chicago"),
+        )
+        val retrievedAt = anchor.atZone(location.timeZone).toInstant()
         val current = CurrentWeather(
             observedAt = anchor,
             condition = WeatherCondition.PARTLY_CLOUDY,
@@ -98,20 +105,28 @@ object DemoWeatherRepository {
         )
 
         return WeatherBundle(
-            placeLabel = "Demo Station",
+            location = location,
             current = current,
             hourly = hourly,
             daily = daily,
             baseline = baseline,
             currentProvenance = DataProvenance(
-                sourceName = "Offline development fixture",
                 dataType = DataType.MODEL_ESTIMATE,
-                retrievedAt = anchor,
+                source = WeatherSource(
+                    id = WeatherSourceId("development-fixture"),
+                    displayName = "Offline development fixture",
+                ),
+                validAt = current.observedAt.atZone(location.timeZone).toInstant(),
+                retrievedAt = retrievedAt,
             ),
             forecastProvenance = DataProvenance(
-                sourceName = "Offline development fixture",
                 dataType = DataType.FORECAST,
-                retrievedAt = anchor,
+                source = WeatherSource(
+                    id = WeatherSourceId("development-fixture"),
+                    displayName = "Offline development fixture",
+                ),
+                validAt = hourly.firstOrNull()?.time?.atZone(location.timeZone)?.toInstant(),
+                retrievedAt = retrievedAt,
             ),
         )
     }

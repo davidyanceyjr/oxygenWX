@@ -28,7 +28,13 @@ provider / cache / historical source (future)
 
 ## `data/`
 
-Canonical weather models use metric units and provider-neutral condition identity. Provenance identifies source and semantic data class. `DemoWeatherRepository` is a deterministic development fixture, not the eventual production repository.
+Canonical weather models use metric units and provider-neutral condition identity. A
+`WeatherLocation` pairs an opaque local identity with an IANA timezone and an optional display
+name; neither field is a provider identifier. `DataProvenance` separately records a provenance
+kind, optional opaque source identity/display name, and optional valid and retrieval `Instant`
+values. Presentation applies the location timezone when formatting an available instant. Missing
+metadata remains null until it is presented as unavailable. `DemoWeatherRepository` is a
+deterministic development fixture, not the eventual production repository.
 
 ## `derived/`
 

@@ -1,7 +1,8 @@
 package com.oxygen.weather.presentation
 
-import com.oxygen.weather.data.DataType
 import com.oxygen.weather.data.DayWeather
+import com.oxygen.weather.data.DataProvenance
+import com.oxygen.weather.data.DataType
 import com.oxygen.weather.data.HourWeather
 import com.oxygen.weather.data.WeatherBundle
 import com.oxygen.weather.data.WeatherCondition
@@ -36,8 +37,18 @@ data class CurrentPresentation(
     val windHeadline: String,
     val windSupporting: String,
     val spokenSummary: String,
-    val conditionIdentity: WeatherCondition,
+    val conditionIdentity: WeatherMarkCondition,
 )
+
+/** Rendering identity derived from, but intentionally separate from, canonical weather data. */
+enum class WeatherMarkCondition {
+    CLEAR,
+    PARTLY_CLOUDY,
+    CLOUDY,
+    RAIN,
+    STORM,
+    SNOW,
+}
 
 data class HourlyWindowPresentation(
     val rangeLabel: String,
@@ -49,7 +60,7 @@ data class HourlyEntryPresentation(
     val condition: String,
     val temperature: String,
     val precipitation: String?,
-    val conditionIdentity: WeatherCondition,
+    val conditionIdentity: WeatherMarkCondition,
     val spokenSummary: String,
 )
 
@@ -69,7 +80,7 @@ data class DailyEntryPresentation(
     val low: String,
     val high: String,
     val precipitation: String,
-    val conditionIdentity: WeatherCondition,
+    val conditionIdentity: WeatherMarkCondition,
     val spokenSummary: String,
 )
 
@@ -100,11 +111,12 @@ object HomePresentationMapper {
         val maxPop = nextSix.maxOfOrNull { it.precipitationProbabilityPct } ?: 0.0
         val amount = nextSix.sumOf { it.precipitationMm }
         val current = bundle.current
+        val location = bundle.location.displayName ?: "Location unavailable"
         val condition = current.condition.displayName()
 
         return HomePresentation(
             current = CurrentPresentation(
-                location = bundle.placeLabel,
+                location = location,
                 temperature = temp(current.temperatureC),
                 condition = condition,
                 apparent = temp(current.apparentC),
@@ -115,7 +127,7 @@ object HomePresentationMapper {
                 windHeadline = "${current.windSpeedKph.roundToInt()} km/h",
                 windSupporting = "Gusts ${current.windGustKph.roundToInt()} · ${compass(current.windDirectionDeg)}",
                 spokenSummary = buildString {
-                    append(bundle.placeLabel)
+                    append(location)
                     append(", ")
                     append(condition)
                     append(", ")
@@ -128,14 +140,14 @@ object HomePresentationMapper {
                     append(current.windSpeedKph.roundToInt())
                     append(" kilometers per hour.")
                 },
-                conditionIdentity = current.condition,
+                conditionIdentity = current.condition.toWeatherMarkCondition(),
             ),
             hourlyWindows = hourlyWindows,
             hourlyDateJumps = dateJumps,
             dailyWindows = dailyWindows,
             detailGroups = details(bundle, derived),
-            sourceLine = "${bundle.currentProvenance.dataType.displayName()} · ${bundle.currentProvenance.sourceName}",
-            updatedLine = "Updated ${bundle.currentProvenance.retrievedAt.format(updatedFormatter)}",
+            sourceLine = bundle.currentProvenance.sourceLine(),
+            updatedLine = bundle.currentProvenance.updatedLine(bundle.location.timeZone),
         )
     }
 
@@ -159,7 +171,7 @@ object HomePresentationMapper {
                     condition = condition,
                     temperature = temp(hour.temperatureC),
                     precipitation = pop,
-                    conditionIdentity = hour.condition,
+                    conditionIdentity = hour.condition.toWeatherMarkCondition(),
                     spokenSummary = buildString {
                         append(hour.time.format(hourFormatter))
                         append(", ")
@@ -191,7 +203,7 @@ object HomePresentationMapper {
                     low = temp(day.lowC),
                     high = temp(day.highC),
                     precipitation = precip,
-                    conditionIdentity = day.condition,
+                    conditionIdentity = day.condition.toWeatherMarkCondition(),
                     spokenSummary = "$dayLabel, $condition, low ${temp(day.lowC)}, high ${temp(day.highC)}, precipitation $precip",
                 )
             },
@@ -245,13 +257,30 @@ fun WeatherCondition.displayName(): String = when (this) {
     WeatherCondition.SNOW -> "Snow"
 }
 
+private fun WeatherCondition.toWeatherMarkCondition(): WeatherMarkCondition = when (this) {
+    WeatherCondition.CLEAR -> WeatherMarkCondition.CLEAR
+    WeatherCondition.PARTLY_CLOUDY -> WeatherMarkCondition.PARTLY_CLOUDY
+    WeatherCondition.CLOUDY -> WeatherMarkCondition.CLOUDY
+    WeatherCondition.RAIN -> WeatherMarkCondition.RAIN
+    WeatherCondition.STORM -> WeatherMarkCondition.STORM
+    WeatherCondition.SNOW -> WeatherMarkCondition.SNOW
+}
+
 private fun DataType.displayName(): String = when (this) {
     DataType.OBSERVATION -> "Observation"
     DataType.MODEL_ESTIMATE -> "Model estimate"
     DataType.FORECAST -> "Forecast"
     DataType.OFFICIAL_ALERT -> "Official alert"
     DataType.DERIVED -> "Derived"
+    DataType.HISTORICAL_REFERENCE -> "Historical reference"
 }
+
+private fun DataProvenance.sourceLine(): String =
+    "${dataType.displayName()} · ${source?.displayName ?: "Source unavailable"}"
+
+private fun DataProvenance.updatedLine(timeZone: java.time.ZoneId): String =
+    retrievedAt?.atZone(timeZone)?.format(updatedFormatter)?.let { "Updated $it" }
+        ?: "Update time unavailable"
 
 private fun AtmosphereTexture.displayName(): String = name.lowercase().replaceFirstChar(Char::uppercaseChar)
 private fun temp(value: Double): String = "${value.roundToInt()}°"

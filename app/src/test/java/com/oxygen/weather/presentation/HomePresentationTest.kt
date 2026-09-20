@@ -1,8 +1,12 @@
 package com.oxygen.weather.presentation
 
 import com.oxygen.weather.data.DemoWeatherRepository
+import com.oxygen.weather.data.DataProvenance
+import com.oxygen.weather.data.DataType
 import com.oxygen.weather.derived.HistoricalSynthesis
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -39,8 +43,40 @@ class HomePresentationTest {
 
     @Test
     fun sourceAndCurrentSemanticsAreExplicit() {
-        assertTrue(presentation.sourceLine.startsWith("Model estimate"))
+        assertEquals("Model estimate · Offline development fixture", presentation.sourceLine)
+        assertEquals("Updated 12:00 PM", presentation.updatedLine)
+        assertEquals(WeatherMarkCondition.PARTLY_CLOUDY, presentation.current.conditionIdentity)
         assertTrue(presentation.current.spokenSummary.contains("feels like"))
         assertTrue(presentation.current.spokenSummary.contains("Wind"))
+    }
+
+    @Test
+    fun retrievalTimeUsesTheLocationTimezoneAtThePresentationBoundary() {
+        val utcInstant = Instant.parse("2026-09-20T17:00:00Z")
+        val tokyoBundle = bundle.copy(
+            location = bundle.location.copy(timeZone = ZoneId.of("Asia/Tokyo")),
+            currentProvenance = bundle.currentProvenance.copy(retrievedAt = utcInstant),
+        )
+
+        assertEquals(
+            "Updated 2:00 AM",
+            HomePresentationMapper.map(tokyoBundle, HistoricalSynthesis.derive(tokyoBundle)).updatedLine,
+        )
+    }
+
+    @Test
+    fun unavailableMetadataUsesExplicitTextInsteadOfPlaceholderValues() {
+        val unavailableBundle = bundle.copy(
+            location = bundle.location.copy(displayName = null),
+            currentProvenance = DataProvenance(dataType = DataType.FORECAST),
+        )
+        val unavailablePresentation = HomePresentationMapper.map(
+            unavailableBundle,
+            HistoricalSynthesis.derive(unavailableBundle),
+        )
+
+        assertEquals("Location unavailable", unavailablePresentation.current.location)
+        assertEquals("Forecast · Source unavailable", unavailablePresentation.sourceLine)
+        assertEquals("Update time unavailable", unavailablePresentation.updatedLine)
     }
 }

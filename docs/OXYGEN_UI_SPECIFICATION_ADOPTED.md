@@ -109,6 +109,8 @@ Implemented in this first rewrite:
 - Visible source/update context.
 - Derived/history separation in Details.
 - Basic screen-reader summaries and semantic page tabs.
+- An effective, debug-selectable Effects Off rendering path for installed verification. It is solid,
+  opaque, static, and complete; it is not a persisted user preference.
 
 Still separate future slices:
 
@@ -118,7 +120,7 @@ Still separate future slices:
 - unit preferences;
 - persisted Oxygen/Paper/Terminal themes;
 - high contrast preference;
-- Off/Subtle/Full effects preference;
+- persisted Off/Subtle/Full effects preference;
 - Simple layout;
 - installed screenshot/accessibility evidence matrix;
 - release signing/publication.
