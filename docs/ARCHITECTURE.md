@@ -32,9 +32,21 @@ Canonical weather models use metric units and provider-neutral condition identit
 `WeatherLocation` pairs an opaque local identity with an IANA timezone and an optional display
 name; neither field is a provider identifier. `DataProvenance` separately records a provenance
 kind, optional opaque source identity/display name, and optional valid and retrieval `Instant`
-values. Presentation applies the location timezone when formatting an available instant. Missing
-metadata remains null until it is presented as unavailable. `DemoWeatherRepository` is a
-deterministic development fixture, not the eventual production repository.
+values. Presentation applies the location timezone when formatting an available instant. Record
+times for current and hourly weather remain location-local `LocalDateTime` values, and daily
+records remain local `LocalDate` values; they are distinct from the absolute provenance instants.
+
+Source-optional weather conditions and measurements are nullable canonical values. Present
+numeric values must be finite, while absent values remain null rather than becoming a sentinel.
+`WeatherBundle` preserves supplied chronological list order, permits duplicate timestamps/dates,
+and rejects only decreasing chronology. `OfficialAlert` is a separate source record with required
+official-alert provenance, so a forecast record cannot be presented as an official warning.
+
+`WeatherRepositoryResult` carries a usable normalized bundle alongside live/cache origin,
+freshness, optional refresh-failure facts, and cache-write outcome. These are domain facts, not
+Compose loading/error states; the presentation-state mapping belongs to its later roadmap slice.
+`DemoWeatherRepository` is a deterministic development fixture, not the eventual production
+repository.
 
 ## `derived/`
 

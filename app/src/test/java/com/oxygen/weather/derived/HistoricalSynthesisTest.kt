@@ -4,6 +4,7 @@ import com.oxygen.weather.data.DemoWeatherRepository
 import java.time.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -39,5 +40,30 @@ class HistoricalSynthesisTest {
     @Test
     fun analogYearsAreNormalized() {
         assertEquals(listOf(1998, 2007, 2019), derived.analogYears)
+    }
+
+    @Test
+    fun incompleteCanonicalInputsProduceUnavailableDerivedSignals() {
+        val partial = bundle.copy(
+            current = bundle.current.copy(
+                temperatureC = null,
+                pressureHpa = null,
+                relativeHumidityPct = null,
+            ),
+            hourly = bundle.hourly.mapIndexed { index, hour ->
+                if (index == 0) hour.copy(temperatureC = null, pressureHpa = null) else hour
+            },
+        )
+
+        val partialDerived = HistoricalSynthesis.derive(partial)
+
+        assertNull(partialDerived.seasonalTemperaturePercentile)
+        assertNull(partialDerived.thermalDepartureC)
+        assertNull(partialDerived.pressureDepartureHpa)
+        assertNull(partialDerived.pressureTendencyHpa3h)
+        assertNull(partialDerived.thermalMomentumC3h)
+        assertNull(partialDerived.persistenceIndex)
+        assertNull(partialDerived.forecastVolatility)
+        assertNull(partialDerived.atmosphereTexture)
     }
 }

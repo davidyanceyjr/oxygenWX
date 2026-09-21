@@ -37,7 +37,7 @@ data class CurrentPresentation(
     val windHeadline: String,
     val windSupporting: String,
     val spokenSummary: String,
-    val conditionIdentity: WeatherMarkCondition,
+    val conditionIdentity: WeatherMarkCondition?,
 )
 
 /** Rendering identity derived from, but intentionally separate from, canonical weather data. */
@@ -60,7 +60,7 @@ data class HourlyEntryPresentation(
     val condition: String,
     val temperature: String,
     val precipitation: String?,
-    val conditionIdentity: WeatherMarkCondition,
+    val conditionIdentity: WeatherMarkCondition?,
     val spokenSummary: String,
 )
 
@@ -80,7 +80,7 @@ data class DailyEntryPresentation(
     val low: String,
     val high: String,
     val precipitation: String,
-    val conditionIdentity: WeatherMarkCondition,
+    val conditionIdentity: WeatherMarkCondition?,
     val spokenSummary: String,
 )
 
@@ -97,7 +97,7 @@ data class MetricPresentation(
 
 object HomePresentationMapper {
     fun map(bundle: WeatherBundle, derived: DerivedWeather): HomePresentation {
-        val hourly = bundle.hourly.sortedBy { it.time }.take(72)
+        val hourly = bundle.hourly.take(72)
         val daily = bundle.daily.take(10)
         val hourlyWindows = hourly.chunked(6).map(::hourlyWindow)
         val dailyWindows = daily.chunked(5).map { dailyWindow(it, bundle.current.observedAt.toLocalDate()) }
@@ -108,8 +108,10 @@ object HomePresentationMapper {
         }.distinctBy { it.label }
 
         val nextSix = hourly.take(6)
-        val maxPop = nextSix.maxOfOrNull { it.precipitationProbabilityPct } ?: 0.0
-        val amount = nextSix.sumOf { it.precipitationMm }
+        val probabilities = nextSix.mapNotNull { it.precipitationProbabilityPct }
+        val amounts = nextSix.mapNotNull { it.precipitationMm }
+        val maxPop = probabilities.maxOrNull()
+        val amount = amounts.takeIf { it.isNotEmpty() }?.sum()
         val current = bundle.current
         val location = bundle.location.displayName ?: "Location unavailable"
         val condition = current.condition.displayName()
@@ -122,10 +124,14 @@ object HomePresentationMapper {
                 apparent = temp(current.apparentC),
                 humidity = percent(current.relativeHumidityPct),
                 dewPoint = temp(current.dewPointC),
-                precipitationHeadline = if (maxPop <= 0.0) "No precipitation indicated" else "${percent(maxPop)} chance",
-                precipitationSupporting = "Next 6h · ${amount.oneDecimal()} mm",
-                windHeadline = "${current.windSpeedKph.roundToInt()} km/h",
-                windSupporting = "Gusts ${current.windGustKph.roundToInt()} · ${compass(current.windDirectionDeg)}",
+                precipitationHeadline = when {
+                    maxPop == null -> "Precipitation unavailable"
+                    maxPop <= 0.0 -> "No precipitation indicated"
+                    else -> "${percent(maxPop)} chance"
+                },
+                precipitationSupporting = "Next 6h · ${amount?.oneDecimal() ?: "Amount unavailable"}${if (amount == null) "" else " mm"}",
+                windHeadline = current.windSpeedKph?.let { "${it.roundToInt()} km/h" } ?: "Unavailable",
+                windSupporting = windSupporting(current.windGustKph, current.windDirectionDeg),
                 spokenSummary = buildString {
                     append(location)
                     append(", ")
@@ -137,8 +143,7 @@ object HomePresentationMapper {
                     append(". Humidity ")
                     append(percent(current.relativeHumidityPct))
                     append(". Wind ")
-                    append(current.windSpeedKph.roundToInt())
-                    append(" kilometers per hour.")
+                    append(current.windSpeedKph?.roundToInt()?.let { "$it kilometers per hour." } ?: "unavailable.")
                 },
                 conditionIdentity = current.condition.toWeatherMarkCondition(),
             ),
@@ -165,7 +170,7 @@ object HomePresentationMapper {
             rangeLabel = range,
             entries = hours.map { hour ->
                 val condition = hour.condition.displayName()
-                val pop = hour.precipitationProbabilityPct.takeIf { it > 0.0 }?.let(::percent)
+                val pop = hour.precipitationProbabilityPct?.takeIf { it > 0.0 }?.let(::percent)
                 HourlyEntryPresentation(
                     time = hour.time.format(hourFormatter),
                     condition = condition,
@@ -192,10 +197,11 @@ object HomePresentationMapper {
             entries = days.map { day ->
                 val dayLabel = label(day)
                 val condition = day.condition.displayName()
-                val precip = if (day.precipitationProbabilityPct <= 0.0) {
-                    "Dry"
-                } else {
-                    "${percent(day.precipitationProbabilityPct)} · ${day.precipitationMm.oneDecimal()} mm"
+                val precip = when (val probability = day.precipitationProbabilityPct) {
+                    null -> "Precipitation unavailable"
+                    else -> if (probability <= 0.0) "Dry" else {
+                        "${percent(probability)} · ${day.precipitationMm?.oneDecimal() ?: "Amount unavailable"}${if (day.precipitationMm == null) "" else " mm"}"
+                    }
                 }
                 DailyEntryPresentation(
                     day = dayLabel,
@@ -212,13 +218,13 @@ object HomePresentationMapper {
 
     private fun details(bundle: WeatherBundle, derived: DerivedWeather): List<MetricGroupPresentation> {
         val current = bundle.current
-        val conditions = listOf(
-            MetricPresentation("Feels like", temp(current.apparentC)),
-            MetricPresentation("Humidity", percent(current.relativeHumidityPct)),
-            MetricPresentation("Dew point", temp(current.dewPointC)),
-            MetricPresentation("Pressure", "${current.pressureHpa.oneDecimal()} hPa"),
-            MetricPresentation("Cloud cover", percent(current.cloudCoverPct)),
-            MetricPresentation("Visibility", "${current.visibilityKm.oneDecimal()} km"),
+        val conditions = listOfNotNull(
+            current.apparentC?.let { MetricPresentation("Feels like", temp(it)) },
+            current.relativeHumidityPct?.let { MetricPresentation("Humidity", percent(it)) },
+            current.dewPointC?.let { MetricPresentation("Dew point", temp(it)) },
+            current.pressureHpa?.let { MetricPresentation("Pressure", "${it.oneDecimal()} hPa") },
+            current.cloudCoverPct?.let { MetricPresentation("Cloud cover", percent(it)) },
+            current.visibilityKm?.let { MetricPresentation("Visibility", "${it.oneDecimal()} km") },
         )
         val forecastPattern = listOfNotNull(
             derived.thermalMomentumC3h?.let { MetricPresentation("3h temperature", signedTemp(it)) },
@@ -234,7 +240,7 @@ object HomePresentationMapper {
             derived.analogYears.takeIf { it.isNotEmpty() }?.let { MetricPresentation("Analog years", it.joinToString()) },
         )
         return buildList {
-            add(MetricGroupPresentation("Conditions", conditions))
+            if (conditions.isNotEmpty()) add(MetricGroupPresentation("Conditions", conditions))
             if (forecastPattern.isNotEmpty()) add(MetricGroupPresentation("Forecast pattern", forecastPattern))
             if (history.isNotEmpty()) {
                 add(
@@ -248,22 +254,24 @@ object HomePresentationMapper {
     }
 }
 
-fun WeatherCondition.displayName(): String = when (this) {
+fun WeatherCondition?.displayName(): String = when (this) {
     WeatherCondition.CLEAR -> "Clear"
     WeatherCondition.PARTLY_CLOUDY -> "Partly cloudy"
     WeatherCondition.CLOUDY -> "Cloudy"
     WeatherCondition.RAIN -> "Rain"
     WeatherCondition.STORM -> "Storm"
     WeatherCondition.SNOW -> "Snow"
+    null -> "Unavailable"
 }
 
-private fun WeatherCondition.toWeatherMarkCondition(): WeatherMarkCondition = when (this) {
+private fun WeatherCondition?.toWeatherMarkCondition(): WeatherMarkCondition? = when (this) {
     WeatherCondition.CLEAR -> WeatherMarkCondition.CLEAR
     WeatherCondition.PARTLY_CLOUDY -> WeatherMarkCondition.PARTLY_CLOUDY
     WeatherCondition.CLOUDY -> WeatherMarkCondition.CLOUDY
     WeatherCondition.RAIN -> WeatherMarkCondition.RAIN
     WeatherCondition.STORM -> WeatherMarkCondition.STORM
     WeatherCondition.SNOW -> WeatherMarkCondition.SNOW
+    null -> null
 }
 
 private fun DataType.displayName(): String = when (this) {
@@ -283,11 +291,17 @@ private fun DataProvenance.updatedLine(timeZone: java.time.ZoneId): String =
         ?: "Update time unavailable"
 
 private fun AtmosphereTexture.displayName(): String = name.lowercase().replaceFirstChar(Char::uppercaseChar)
-private fun temp(value: Double): String = "${value.roundToInt()}°"
-private fun percent(value: Double): String = "${value.roundToInt().coerceIn(0, 100)}%"
+private fun temp(value: Double?): String = value?.let { "${it.roundToInt()}°" } ?: "Unavailable"
+private fun percent(value: Double?): String = value?.let { "${it.roundToInt().coerceIn(0, 100)}%" } ?: "Unavailable"
 private fun Double.oneDecimal(): String = "%.1f".format(this)
 private fun signedTemp(value: Double): String = "%+.1f°".format(value)
 private fun signed(value: Double, unit: String): String = "%+.1f %s".format(value, unit)
+
+private fun windSupporting(gustKph: Double?, directionDeg: Double?): String {
+    val gust = gustKph?.let { "Gusts ${it.roundToInt()}" }
+    val direction = directionDeg?.let(::compass)
+    return listOfNotNull(gust, direction).takeIf { it.isNotEmpty() }?.joinToString(" · ") ?: "Wind details unavailable"
+}
 
 private fun compass(degrees: Double): String {
     val directions = listOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")

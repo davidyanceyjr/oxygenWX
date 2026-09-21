@@ -40,15 +40,14 @@
   `.codex/test-artifacts/002-appearance-off-baseline/`. TalkBack service traversal and RTL were
   not exercised.
 
-## Repository wrapper limitation
+## Repository wrapper repair
 
-`python scripts/dev.py test` and `python scripts/dev.py check` reach the Gradle wrapper bootstrap,
-but the repository-pinned 9.6.0 distribution URL returns HTTP 404:
+The former Gradle 9.6.0 bootstrap failure was repaired in cycle 004. The
+checked-in wrapper now uses checksum-verified Gradle 9.7.0, and
+`python scripts/dev.py test` plus `python scripts/dev.py check` passed through
+that wrapper with Java 26 and Android SDK 37. See
+`.codex/history/2026-09-20-004-gradle-wrapper-distribution-repair.md` for the
+exact verification and host limitations.
 
-```text
-Oxygen Weather: bootstrapping Gradle Wrapper 9.6.0...
-curl: (22) The requested URL returned error: 404
-```
-
-The successful direct Gradle invocation above is equivalent verification only; it does not repair
-or change the repository wrapper. The wrapper issue remains a build-infrastructure follow-up.
+This repair is a prerequisite for, not completion evidence of, R7.3's
+clean-clone Linux verification or its Windows/macOS follow-on slices.

@@ -86,7 +86,9 @@ fun OxygenWeatherApp(
         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
             when (resolvedEffects.rootBackground) {
                 RootBackground.SOLID -> Unit
-                RootBackground.ATMOSPHERE -> AtmosphereBackground(presentation.current.conditionIdentity)
+                RootBackground.ATMOSPHERE -> presentation.current.conditionIdentity?.let { condition ->
+                    AtmosphereBackground(condition)
+                }
             }
             Column(
                 Modifier
@@ -194,11 +196,13 @@ private fun NowPage(home: HomePresentation, effects: ResolvedEffects) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
-                WeatherMark(
-                    condition = now.conditionIdentity,
-                    modifier = Modifier.size(108.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
+                now.conditionIdentity?.let { condition ->
+                    WeatherMark(
+                        condition = condition,
+                        modifier = Modifier.size(108.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
             }
         }
 
@@ -296,8 +300,10 @@ private fun HourlyWindow(window: HourlyWindowPresentation, effects: ResolvedEffe
                             Modifier.fillMaxSize().padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            WeatherMark(entry.conditionIdentity, Modifier.size(42.dp), MaterialTheme.colorScheme.primary)
-                            Spacer(Modifier.width(10.dp))
+                            entry.conditionIdentity?.let { condition ->
+                                WeatherMark(condition, Modifier.size(42.dp), MaterialTheme.colorScheme.primary)
+                                Spacer(Modifier.width(10.dp))
+                            }
                             Column(Modifier.weight(1f)) {
                                 Text(entry.time, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(entry.temperature, style = MaterialTheme.typography.headlineMedium)
@@ -354,8 +360,10 @@ private fun DailyWindow(window: DailyWindowPresentation, effects: ResolvedEffect
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(entry.day, style = MaterialTheme.typography.labelMedium, modifier = Modifier.width(54.dp))
-                    WeatherMark(entry.conditionIdentity, Modifier.size(34.dp), MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.width(8.dp))
+                    entry.conditionIdentity?.let { condition ->
+                        WeatherMark(condition, Modifier.size(34.dp), MaterialTheme.colorScheme.primary)
+                        Spacer(Modifier.width(8.dp))
+                    }
                     Text(entry.condition, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Column(horizontalAlignment = Alignment.End) {
                         Text("${entry.low}  ${entry.high}", style = MaterialTheme.typography.titleMedium)

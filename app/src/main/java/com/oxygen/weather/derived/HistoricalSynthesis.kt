@@ -30,7 +30,7 @@ data class DerivedWeather(
 
 object HistoricalSynthesis {
     fun derive(bundle: WeatherBundle): DerivedWeather {
-        val hourly = bundle.hourly.sortedBy { it.time }.take(12)
+        val hourly = bundle.hourly.take(12)
         val anchor = hourly.firstOrNull()
         val threeHour = anchor?.let { first ->
             hourly.firstOrNull { !it.time.isBefore(first.time.plusHours(3)) }
@@ -45,8 +45,8 @@ object HistoricalSynthesis {
 
         return DerivedWeather(
             seasonalTemperaturePercentile = empiricalPercentile(bundle.current.temperatureC, samples),
-            thermalDepartureC = bundle.current.temperatureC - bundle.baseline.normalTemperatureC,
-            pressureDepartureHpa = bundle.current.pressureHpa - bundle.baseline.normalPressureHpa,
+            thermalDepartureC = bundle.current.temperatureC?.minus(bundle.baseline.normalTemperatureC),
+            pressureDepartureHpa = bundle.current.pressureHpa?.minus(bundle.baseline.normalPressureHpa),
             pressureTendencyHpa3h = pressureTendency,
             thermalMomentumC3h = thermalMomentum,
             persistenceIndex = persistence,
@@ -58,18 +58,23 @@ object HistoricalSynthesis {
         )
     }
 
-    private fun <T> difference(first: T?, later: T?, value: (T) -> Double): Double? {
+    private fun <T> difference(first: T?, later: T?, value: (T) -> Double?): Double? {
         if (first == null || later == null) return null
-        return value(later) - value(first)
+        return value(later)?.let { laterValue -> value(first)?.let { firstValue -> laterValue - firstValue } }
     }
 
     private fun persistence(hourly: List<HourWeather>): Int? {
         if (hourly.size < 4) return null
+        if (hourly.any {
+                it.temperatureC == null || it.pressureHpa == null ||
+                    it.precipitationProbabilityPct == null || it.windSpeedKph == null
+            }
+        ) return null
         val pairs = hourly.zipWithNext()
-        val tempChange = pairs.map { abs(it.second.temperatureC - it.first.temperatureC) }.average()
-        val pressureChange = pairs.map { abs(it.second.pressureHpa - it.first.pressureHpa) }.average()
-        val popChange = pairs.map { abs(it.second.precipitationProbabilityPct - it.first.precipitationProbabilityPct) }.average()
-        val windChange = pairs.map { abs(it.second.windSpeedKph - it.first.windSpeedKph) }.average()
+        val tempChange = pairs.map { abs(requireNotNull(it.second.temperatureC) - requireNotNull(it.first.temperatureC)) }.average()
+        val pressureChange = pairs.map { abs(requireNotNull(it.second.pressureHpa) - requireNotNull(it.first.pressureHpa)) }.average()
+        val popChange = pairs.map { abs(requireNotNull(it.second.precipitationProbabilityPct) - requireNotNull(it.first.precipitationProbabilityPct)) }.average()
+        val windChange = pairs.map { abs(requireNotNull(it.second.windSpeedKph) - requireNotNull(it.first.windSpeedKph)) }.average()
 
         val disruption = weightedIndex(
             tempChange / 2.0 to 30.0,
@@ -82,9 +87,14 @@ object HistoricalSynthesis {
 
     private fun volatility(hourly: List<HourWeather>): Int? {
         if (hourly.size < 4) return null
-        val tempSpread = hourly.maxOf { it.temperatureC } - hourly.minOf { it.temperatureC }
-        val popSpread = hourly.maxOf { it.precipitationProbabilityPct } - hourly.minOf { it.precipitationProbabilityPct }
-        val windSpread = hourly.maxOf { it.windSpeedKph } - hourly.minOf { it.windSpeedKph }
+        if (hourly.any {
+                it.temperatureC == null || it.precipitationProbabilityPct == null ||
+                    it.windSpeedKph == null || it.condition == null
+            }
+        ) return null
+        val tempSpread = hourly.maxOf { requireNotNull(it.temperatureC) } - hourly.minOf { requireNotNull(it.temperatureC) }
+        val popSpread = hourly.maxOf { requireNotNull(it.precipitationProbabilityPct) } - hourly.minOf { requireNotNull(it.precipitationProbabilityPct) }
+        val windSpread = hourly.maxOf { requireNotNull(it.windSpeedKph) } - hourly.minOf { requireNotNull(it.windSpeedKph) }
         val conditionTransitions = hourly.zipWithNext().count { it.first.condition != it.second.condition }
         val transitionRate = conditionTransitions.toDouble() / (hourly.size - 1).coerceAtLeast(1)
 
@@ -106,20 +116,21 @@ object HistoricalSynthesis {
         persistence: Int?,
         volatility: Int?,
     ): AtmosphereTexture? {
-        if (hourly.size < 4) return null
-        val meanPop = hourly.map { it.precipitationProbabilityPct }.average()
-        val popSpread = hourly.maxOf { it.precipitationProbabilityPct } - hourly.minOf { it.precipitationProbabilityPct }
+        if (hourly.size < 4 || bundle.current.relativeHumidityPct == null || pressureTendency == null || persistence == null || volatility == null) return null
+        if (hourly.any { it.precipitationProbabilityPct == null }) return null
+        val meanPop = hourly.map { requireNotNull(it.precipitationProbabilityPct) }.average()
+        val popSpread = hourly.maxOf { requireNotNull(it.precipitationProbabilityPct) } - hourly.minOf { requireNotNull(it.precipitationProbabilityPct) }
         return when {
-            bundle.current.relativeHumidityPct >= 85.0 && meanPop >= 40.0 -> AtmosphereTexture.SATURATED
-            popSpread >= 50.0 && abs(pressureTendency ?: 0.0) >= 1.0 -> AtmosphereTexture.TURNING
-            (volatility ?: 0) >= 65 -> AtmosphereTexture.RESTLESS
-            (persistence ?: 0) >= 75 -> AtmosphereTexture.SETTLED
+            requireNotNull(bundle.current.relativeHumidityPct) >= 85.0 && meanPop >= 40.0 -> AtmosphereTexture.SATURATED
+            popSpread >= 50.0 && abs(pressureTendency) >= 1.0 -> AtmosphereTexture.TURNING
+            volatility >= 65 -> AtmosphereTexture.RESTLESS
+            persistence >= 75 -> AtmosphereTexture.SETTLED
             else -> AtmosphereTexture.VARIABLE
         }
     }
 
-    private fun empiricalPercentile(value: Double, sortedSamples: List<Double>): Int? {
-        if (sortedSamples.size < 20) return null
+    private fun empiricalPercentile(value: Double?, sortedSamples: List<Double>): Int? {
+        if (value == null || sortedSamples.size < 20) return null
         val below = sortedSamples.count { it < value }
         val equal = sortedSamples.count { it == value }
         val rank = (below + equal * 0.5) / sortedSamples.size.toDouble()

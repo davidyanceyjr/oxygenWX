@@ -16,10 +16,11 @@ import kotlin.math.sin
 
 @Composable
 fun WeatherMark(
-    condition: WeatherMarkCondition,
+    condition: WeatherMarkCondition?,
     modifier: Modifier = Modifier,
     tint: Color = OxygenText,
 ) {
+    if (condition == null) return
     Canvas(modifier.clearAndSetSemantics { }) {
         val stroke = size.minDimension * 0.07f
         val cloudTop = size.height * 0.43f

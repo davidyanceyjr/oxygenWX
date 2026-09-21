@@ -8,6 +8,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -45,6 +46,15 @@ class HomePresentationTest {
     fun sourceAndCurrentSemanticsAreExplicit() {
         assertEquals("Model estimate · Offline development fixture", presentation.sourceLine)
         assertEquals("Updated 12:00 PM", presentation.updatedLine)
+        assertEquals("28°", presentation.current.temperature)
+        assertEquals("Partly cloudy", presentation.current.condition)
+        assertEquals("29°", presentation.current.apparent)
+        assertEquals("56%", presentation.current.humidity)
+        assertEquals("18°", presentation.current.dewPoint)
+        assertEquals("No precipitation indicated", presentation.current.precipitationHeadline)
+        assertEquals("Next 6h · 0.0 mm", presentation.current.precipitationSupporting)
+        assertEquals("13 km/h", presentation.current.windHeadline)
+        assertEquals("Gusts 23 · SW", presentation.current.windSupporting)
         assertEquals(WeatherMarkCondition.PARTLY_CLOUDY, presentation.current.conditionIdentity)
         assertTrue(presentation.current.spokenSummary.contains("feels like"))
         assertTrue(presentation.current.spokenSummary.contains("Wind"))
@@ -78,5 +88,76 @@ class HomePresentationTest {
         assertEquals("Location unavailable", unavailablePresentation.current.location)
         assertEquals("Forecast · Source unavailable", unavailablePresentation.sourceLine)
         assertEquals("Update time unavailable", unavailablePresentation.updatedLine)
+    }
+
+    @Test
+    fun missingWeatherFieldsMapHonestlyWithoutZeroPrecipitationOrConditionMark() {
+        val partialBundle = bundle.copy(
+            current = bundle.current.copy(
+                condition = null,
+                temperatureC = null,
+                apparentC = null,
+                windSpeedKph = null,
+                windGustKph = null,
+                windDirectionDeg = null,
+            ),
+            hourly = bundle.hourly.mapIndexed { index, hour ->
+                if (index < 6) hour.copy(
+                    condition = null,
+                    temperatureC = null,
+                    precipitationProbabilityPct = null,
+                    precipitationMm = null,
+                ) else hour
+            },
+            daily = bundle.daily.mapIndexed { index, day ->
+                if (index == 0) day.copy(
+                    condition = null,
+                    lowC = null,
+                    highC = null,
+                    precipitationProbabilityPct = null,
+                    precipitationMm = null,
+                ) else day
+            },
+        )
+
+        val partial = HomePresentationMapper.map(partialBundle, HistoricalSynthesis.derive(partialBundle))
+        val firstHour = partial.hourlyWindows.first().entries.first()
+        val firstDay = partial.dailyWindows.first().entries.first()
+
+        assertEquals("Unavailable", partial.current.temperature)
+        assertEquals("Unavailable", partial.current.condition)
+        assertEquals("Unavailable", partial.current.apparent)
+        assertEquals("Unavailable", partial.current.windHeadline)
+        assertEquals("Wind details unavailable", partial.current.windSupporting)
+        assertEquals("Precipitation unavailable", partial.current.precipitationHeadline)
+        assertEquals("Next 6h · Amount unavailable", partial.current.precipitationSupporting)
+        assertNull(partial.current.conditionIdentity)
+        assertEquals("Unavailable", firstHour.condition)
+        assertEquals("Unavailable", firstHour.temperature)
+        assertNull(firstHour.precipitation)
+        assertNull(firstHour.conditionIdentity)
+        assertEquals("Unavailable", firstDay.condition)
+        assertEquals("Unavailable", firstDay.low)
+        assertEquals("Unavailable", firstDay.high)
+        assertEquals("Precipitation unavailable", firstDay.precipitation)
+        assertNull(firstDay.conditionIdentity)
+    }
+
+    @Test
+    fun optionalMissingDetailMeasurementsAreOmittedRatherThanInvented() {
+        val noDetailsBundle = bundle.copy(
+            current = bundle.current.copy(
+                apparentC = null,
+                relativeHumidityPct = null,
+                dewPointC = null,
+                pressureHpa = null,
+                cloudCoverPct = null,
+                visibilityKm = null,
+            ),
+        )
+
+        val presentation = HomePresentationMapper.map(noDetailsBundle, HistoricalSynthesis.derive(noDetailsBundle))
+
+        assertTrue(presentation.detailGroups.none { it.title == "Conditions" })
     }
 }

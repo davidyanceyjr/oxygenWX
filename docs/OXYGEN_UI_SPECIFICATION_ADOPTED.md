@@ -1,10 +1,64 @@
 # Adopted Oxygen UI Specification — v1.0 Candidate
 
-This document is the local implementation contract for the clean-room UI rewrite. It is based on the Oxygen prototype's UI/product specifications at the pinned upstream commit recorded in `upstream/OXYGEN_SOURCE_REFERENCE.md`, but is written for this codebase rather than copied from the upstream implementation.
+This document is the local implementation contract for the clean-room UI redesign.
+It supersedes the visual direction of the earlier Oxygen prototype and its Base
+Art Sheet v0.2. The upstream material recorded in
+`upstream/OXYGEN_SOURCE_REFERENCE.md` is historical research, not a visual
+reference or a screen-composition source.
 
 ## Product principle
 
-Weather state may shape the atmosphere of the app, but decoration must never be required to understand the forecast. Data remains the interface; weather provides the visual atmosphere.
+Oxygen is a modern, themed, component-based weather monitor. Weather state may
+shape the atmosphere of the app, but decoration must never be required to
+understand the forecast. Data remains the interface; visual treatment helps
+users recognize state, scan information, and reach useful detail.
+
+## v1 visual direction
+
+The Home experience is four purposeful weather-data screens, not a copied
+dashboard: Now, Hourly, Daily, and Details. Each screen uses a coherent set of
+theme-resolved components for hierarchy, state, and navigation.
+
+- **Aesthetic and functional:** calm, contemporary information design with
+  strong typographic hierarchy, intentional spacing, and a clear action model.
+- **Themed components:** surfaces, type, status treatments, weather marks,
+  charts/indicators, and controls consume semantic appearance tokens. A theme
+  changes their presentation consistently without changing weather meaning.
+- **Visual weather monitor:** compact indicators and weather-state treatments
+  communicate conditions, trends, freshness, availability, and selected state;
+  visible text and semantics always provide the equivalent meaning.
+- **Progressive detail:** a weather fact, summary, or indicator may link to a
+  relevant inspection surface when that link has a clear label, target, and
+  navigation outcome. It must not conceal required information or compete with
+  the primary page task.
+- **Gestures with feedback:** horizontal swiping remains owned by the outer
+  Home pager. Any other gesture must have an explicit affordance and immediate,
+  accessible state feedback; it cannot be the only route to weather data or a
+  core action.
+
+### Deprecated visual language
+
+Do not use the upstream Base Art Sheet v0.2, its photographic weather scenes,
+dark-glass/gold card examples, or its dashboard composition as an implementation
+or review target. Those materials are deprecated in this repository. Likewise,
+the earlier local screenshot baselines remain historical verification evidence,
+not acceptance references for the redesigned UI.
+
+### Selected visual references
+
+The initial selected direction is **Theme B — dark data monitor**. These
+project-local, non-runtime assets record the selected concept and its base page
+anatomy for future visual review:
+
+- `docs/assets/design-references/oxygen-theme-b-storyboard-v1.png` — four-page
+  storyboard showing the shared theme across Now, Hourly, Daily, and Details.
+- `docs/assets/design-references/oxygen-theme-b-base-pages-v1.png` — the base
+  component composition for those four pages before later interaction or visual
+  refinement.
+
+They establish direction and component intent, not pixel-exact implementation
+measurements. Product, accessibility, data-semantics, and navigation contracts
+remain authoritative where an image is ambiguous.
 
 ## Standard Home page model
 
@@ -51,24 +105,26 @@ Details is the audit surface. Source-normalized measurements are grouped separat
 
 Reusable UI surfaces receive typed presentation data and semantic callbacks. They do not receive provider DTOs, repositories, persistence objects, HTTP clients, or raw theme identifiers. Formatting and unit conversion belong upstream of rendering.
 
-## Weather marks and atmosphere
+## Weather marks and monitor states
 
-Weather marks and procedural scenes express provider-neutral condition identity. They are supplemental. Adjacent text/semantics must communicate the same weather meaning.
+Weather marks, state indicators, and optional procedural atmosphere express
+provider-neutral condition identity and monitor state. They are supplemental.
+Adjacent text/semantics must communicate the same weather meaning.
 
-The initial Oxygen visual references used by this candidate are:
+The following roles are semantic appearance inputs, not a prescribed legacy
+palette. Their concrete values are selected by the active theme:
 
-| Role | Value |
+| Role | Intended use |
 | --- | --- |
-| Sky Top | `#07151D` |
-| Sky Bottom | `#153444` |
-| Atmospheric Glow | `#86E4F0` |
-| Glass | `#23414D` |
-| Glass Strong | `#17313C` |
-| Outline | `#7FC1CE` |
-| Chart Accent | `#8DE7F1` |
-| Precipitation | `#79BFFF` |
+| Canvas | app background and broad weather-state field |
+| Surface / elevated surface | readable grouped information and interaction |
+| Primary data | current temperature and page-primary facts |
+| Secondary data | supporting measurements and provenance |
+| Condition / trend | weather marks and data-monitor indicators |
+| Status | loading, stale, unavailable, selected, and alert states |
+| Action | discoverable routes to additional information |
 
-No downloaded weather photographs or runtime icon packs are required for the core experience.
+No downloaded weather photographs or runtime icon packs are required for the core experience. Do not recreate a visual treatment merely because it appears in the deprecated art sheet.
 
 ## Theme/effects contract
 
@@ -98,7 +154,7 @@ Each page must have an explicit answer for loading, ready, cached/stale, partial
 
 ## Current candidate scope
 
-Implemented in this first rewrite:
+Historical implementation baseline (not a visual acceptance target):
 
 - Standard four-page pager.
 - 72-hour/10-day demo presentation horizons.
@@ -113,6 +169,8 @@ Implemented in this first rewrite:
   opaque, static, and complete; it is not a persisted user preference.
 
 Still separate future slices:
+
+- redesigned themed component system and visual-monitor interaction language;
 
 - live provider/repository/cache path;
 - official alerts;

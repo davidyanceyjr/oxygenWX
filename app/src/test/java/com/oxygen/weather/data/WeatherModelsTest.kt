@@ -6,6 +6,8 @@ import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
@@ -78,5 +80,105 @@ class WeatherModelsTest {
         assertEquals(bundle.current.observedAt.atZone(bundle.location.timeZone).toInstant(), bundle.currentProvenance.validAt)
         assertEquals(bundle.hourly.first().time.atZone(bundle.location.timeZone).toInstant(), bundle.forecastProvenance.validAt)
         assertEquals(bundle.currentProvenance.retrievedAt, bundle.forecastProvenance.retrievedAt)
+    }
+
+    @Test
+    fun weatherRecordsPreserveMissingSourceValuesAndRejectNonFiniteNumbers() {
+        val bundle = DemoWeatherRepository.load(LocalDateTime.of(2026, 9, 20, 12, 0))
+        val partial = bundle.current.copy(
+            condition = null,
+            temperatureC = null,
+            precipitationMmPerHr = null,
+        )
+
+        assertNull(partial.condition)
+        assertNull(partial.temperatureC)
+        assertNull(partial.precipitationMmPerHr)
+        assertThrows(IllegalArgumentException::class.java) {
+            bundle.current.copy(temperatureC = Double.NaN)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            bundle.hourly.first().copy(precipitationMm = Double.POSITIVE_INFINITY)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            bundle.daily.first().copy(lowC = Double.NEGATIVE_INFINITY)
+        }
+    }
+
+    @Test
+    fun bundleRequiresNonDecreasingChronologyButPreservesSparseAndDuplicateEntries() {
+        val bundle = DemoWeatherRepository.load(LocalDateTime.of(2026, 9, 20, 12, 0))
+        val first = bundle.hourly.first().copy(condition = null, temperatureC = null)
+        val duplicate = first.copy()
+
+        val sparseWithDuplicate = bundle.copy(hourly = listOf(first, duplicate))
+        assertEquals(listOf(first, duplicate), sparseWithDuplicate.hourly)
+        assertThrows(IllegalArgumentException::class.java) {
+            bundle.copy(hourly = listOf(bundle.hourly[1], bundle.hourly[0]))
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            bundle.copy(daily = listOf(bundle.daily[1], bundle.daily[0]))
+        }
+    }
+
+    @Test
+    fun officialAlertsPreserveNullableSourceFieldsAndRequireOfficialProvenance() {
+        val provenance = DataProvenance(
+            dataType = DataType.OFFICIAL_ALERT,
+            source = WeatherSource(WeatherSourceId("alert-authority"), "Alert authority"),
+        )
+        val alert = OfficialAlert(
+            issuer = "National Weather Service",
+            eventName = "Flood Watch",
+            severity = null,
+            effectiveAt = null,
+            expiresAt = null,
+            description = null,
+            instructions = null,
+            sourceUrl = null,
+            provenance = provenance,
+        )
+
+        assertNull(alert.severity)
+        assertNull(alert.sourceUrl)
+        assertEquals(DataType.OFFICIAL_ALERT, alert.provenance.dataType)
+        assertThrows(IllegalArgumentException::class.java) {
+            alert.copy(provenance = provenance.copy(dataType = DataType.FORECAST))
+        }
+    }
+
+    @Test
+    fun repositoryResultKeepsUsableLiveDataWhenCacheWritingFails() {
+        val bundle = DemoWeatherRepository.load(LocalDateTime.of(2026, 9, 20, 12, 0))
+        val result = WeatherRepositoryResult(
+            bundle = bundle,
+            origin = WeatherDataOrigin.LIVE,
+            freshness = WeatherFreshness.CURRENT,
+            refreshFailure = null,
+            cacheWriteOutcome = CacheWriteOutcome.FAILED,
+        )
+        val cached = result.copy(
+            origin = WeatherDataOrigin.CACHE,
+            freshness = WeatherFreshness.STALE,
+            refreshFailure = RefreshFailure(RefreshFailureKind.NETWORK, Instant.parse("2026-09-20T18:00:00Z")),
+            cacheWriteOutcome = CacheWriteOutcome.NOT_ATTEMPTED,
+        )
+
+        assertSame(bundle, result.bundle)
+        assertEquals(WeatherDataOrigin.LIVE, result.origin)
+        assertEquals(CacheWriteOutcome.FAILED, result.cacheWriteOutcome)
+        assertEquals(WeatherDataOrigin.CACHE, cached.origin)
+        assertEquals(WeatherFreshness.STALE, cached.freshness)
+        assertEquals(RefreshFailureKind.NETWORK, requireNotNull(cached.refreshFailure).kind)
+    }
+
+    @Test
+    fun completeFixtureRetainsHorizonSizesAndChronology() {
+        val bundle = DemoWeatherRepository.load(LocalDateTime.of(2026, 9, 20, 12, 0))
+
+        assertEquals(72, bundle.hourly.size)
+        assertEquals(10, bundle.daily.size)
+        assertTrue(bundle.hourly.zipWithNext().all { !it.second.time.isBefore(it.first.time) })
+        assertTrue(bundle.daily.zipWithNext().all { !it.second.date.isBefore(it.first.date) })
     }
 }

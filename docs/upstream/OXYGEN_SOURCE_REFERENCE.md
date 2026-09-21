@@ -18,4 +18,18 @@ Primary design/process references consulted:
 
 This candidate does **not** vendor the upstream Android implementation. The local UI is a fresh implementation built against the documented product/page/workflow contracts. The exact upstream art-sheet image is also not a runtime asset in this project; its palette and design direction are represented as local Compose tokens and procedural rendering.
 
+## Visual-reference status: deprecated
+
+The upstream Base Art Sheet v0.2 and its example surfaces are historical research
+material only. They must not be used as a visual target, copied as a screen
+composition, or presented as the intended Oxygen Weather 1.0 UI. In particular,
+the dark-glass cards, gold weather marks, photographic scene examples, and the
+example dashboard arrangement are deprecated for this replacement-track project.
+
+Oxygen Weather 1.0 is being redesigned as a modern, themed, component-based
+weather monitor. Its active visual direction is defined locally in
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`; the upstream source remains useful
+only for non-visual product research where it does not conflict with local
+authority.
+
 The upstream repository may evolve after this pinned commit. Re-review its current specification before replacing the upstream repository or merging later upstream behavior.
