@@ -165,12 +165,21 @@ Historical implementation baseline (not a visual acceptance target):
 - Visible source/update context.
 - Derived/history separation in Details.
 - Basic screen-reader summaries and semantic page tabs.
+- A fixed development-default Theme B `ResolvedAppearance` boundary owns the
+  current semantic colors, typography, shared layout/shape values, Material
+  bridge, and Off/Subtle effects resolution.
+- Shared structural monitor components are implemented: the neutral header,
+  named Home page selector, opaque section surface, and explicit forecast-window
+  controls. The header carries visible page identity plus supporting
+  presentation text; on Now, that supporting text carries source/update
+  context.
 - An effective, debug-selectable Effects Off rendering path for installed verification. It is solid,
   opaque, static, and complete; it is not a persisted user preference.
 
 Still separate future slices:
 
-- redesigned themed component system and visual-monitor interaction language;
+- application of the Theme B system to each page, including page-specific
+  forecast and Details monitor components;
 
 - live provider/repository/cache path;
 - official alerts;

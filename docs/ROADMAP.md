@@ -71,7 +71,7 @@ started.
 
 Decision record and delivery sequence: `.codex/history/2026-09-20-006-theme-b-visual-system-foundation.md`.
 
-### R0.5 — Theme B semantic appearance resolver — PLANNED
+### R0.5 — Theme B semantic appearance resolver — DONE
 
 Replace legacy art-sheet-derived visual literals with a Theme B
 `ResolvedAppearance` boundary: semantic color/surface/status/action roles,
@@ -79,12 +79,16 @@ typography, spacing, shapes, and effects/motion resolution. The result must
 keep Effects Off opaque/static/complete and support future themes without
 theme-id branches inside components. No page-composition redesign belongs here.
 
-### R0.6 — Theme B shared monitor components — PLANNED
+Evidence/limitations: `.codex/history/2026-09-21-008-theme-b-semantic-appearance-resolver.md`.
+
+### R0.6 — Theme B shared monitor components — DONE
 
 Create the shared structural components: location/freshness header, named page
 selector that drives the outer pager, opaque section surface, and explicit
 window controls. Components consume presentation models and semantic callbacks
 only; they add no provider/data contracts or destinations.
+
+Evidence: `.codex/history/2026-09-21-009-theme-b-shared-monitor-components.md`.
 
 ### R0.6A — Theme B forecast monitor components — PLANNED
 

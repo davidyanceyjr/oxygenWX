@@ -4,11 +4,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,12 +22,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -42,12 +36,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -66,8 +57,6 @@ private enum class HomePage(val label: String) {
     DETAILS("Details"),
 }
 
-enum class EffectsLevel { OFF, SUBTLE }
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OxygenWeatherApp(
@@ -76,18 +65,18 @@ fun OxygenWeatherApp(
 ) {
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
-    val resolvedEffects = remember(effects) { effects.resolveEffects() }
+    val appearance = remember(effects) { resolveAppearance(effects) }
 
     BackHandler(enabled = pagerState.currentPage > 0) {
-        scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, resolvedEffects) }
+        scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, appearance.effects) }
     }
 
-    OxygenTheme {
-        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-            when (resolvedEffects.rootBackground) {
+    OxygenTheme(appearance) {
+        Box(Modifier.fillMaxSize().background(appearance.canvas)) {
+            when (appearance.effects.rootBackground) {
                 RootBackground.SOLID -> Unit
                 RootBackground.ATMOSPHERE -> presentation.current.conditionIdentity?.let { condition ->
-                    AtmosphereBackground(condition)
+                    AtmosphereBackground(condition, appearance)
                 }
             }
             Column(
@@ -95,9 +84,11 @@ fun OxygenWeatherApp(
                     .fillMaxSize()
                     .safeDrawingPadding(),
             ) {
-                PageTabs(
+                HomePageSelector(
+                    pageLabels = HomePage.entries.map { it.label },
                     selectedIndex = pagerState.currentPage,
-                    onSelect = { page -> scope.launch { pagerState.moveToPage(page, resolvedEffects) } },
+                    appearance = appearance,
+                    onSelect = { page -> scope.launch { pagerState.moveToPage(page, appearance.effects) } },
                 )
                 HorizontalPager(
                     state = pagerState,
@@ -105,10 +96,10 @@ fun OxygenWeatherApp(
                     beyondViewportPageCount = 1,
                 ) { page ->
                     when (HomePage.entries[page]) {
-                        HomePage.NOW -> NowPage(presentation, resolvedEffects)
-                        HomePage.HOURLY -> HourlyPage(presentation, resolvedEffects)
-                        HomePage.DAILY -> DailyPage(presentation, resolvedEffects)
-                        HomePage.DETAILS -> DetailsPage(presentation, resolvedEffects)
+                        HomePage.NOW -> NowPage(presentation, appearance)
+                        HomePage.HOURLY -> HourlyPage(presentation, appearance)
+                        HomePage.DAILY -> DailyPage(presentation, appearance)
+                        HomePage.DETAILS -> DetailsPage(presentation, appearance)
                     }
                 }
             }
@@ -125,65 +116,30 @@ private suspend fun PagerState.moveToPage(page: Int, effects: ResolvedEffects) {
 }
 
 @Composable
-private fun PageTabs(selectedIndex: Int, onSelect: (Int) -> Unit) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        HomePage.entries.forEachIndexed { index, page ->
-            val active = index == selectedIndex
-            TextButton(
-                onClick = { onSelect(index) },
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 48.dp)
-                    .semantics {
-                        selected = active
-                        contentDescription = "${page.label} page, ${index + 1} of ${HomePage.entries.size}"
-                    },
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                ),
-                contentPadding = PaddingValues(horizontal = 2.dp, vertical = 0.dp),
-            ) {
-                Text(
-                    page.label,
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
-                    maxLines = 1,
-                    softWrap = false,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun NowPage(home: HomePresentation, effects: ResolvedEffects) {
+private fun NowPage(home: HomePresentation, appearance: ResolvedAppearance) {
+    val layout = appearance.layout
     val now = home.current
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+            .padding(horizontal = layout.pageGutter, vertical = layout.pageVerticalInset),
+        verticalArrangement = Arrangement.spacedBy(layout.pageStackGap),
     ) {
-        PageHeading(
+        MonitorHeader(
             title = now.location,
             supporting = "${home.sourceLine} · ${home.updatedLine}",
         )
 
-        GlassPanel(
-            effects = effects,
+        MonitorSection(
+            appearance = appearance,
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 208.dp)
                 .clearAndSetSemantics { contentDescription = now.spokenSummary },
         ) {
             Row(
-                Modifier.fillMaxWidth().padding(18.dp),
+                Modifier.fillMaxWidth().padding(layout.heroPanelInset),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
@@ -200,7 +156,7 @@ private fun NowPage(home: HomePresentation, effects: ResolvedEffects) {
                     WeatherMark(
                         condition = condition,
                         modifier = Modifier.size(108.dp),
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = appearance.conditionAccent,
                     )
                 }
             }
@@ -208,27 +164,27 @@ private fun NowPage(home: HomePresentation, effects: ResolvedEffects) {
 
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(layout.controlGap),
         ) {
             CompactFactPanel(
                 label = "PRECIPITATION",
                 headline = now.precipitationHeadline,
                 supporting = now.precipitationSupporting,
-                effects = effects,
+                appearance = appearance,
                 modifier = Modifier.weight(1f).heightIn(min = 114.dp),
             )
             CompactFactPanel(
                 label = "WIND",
                 headline = now.windHeadline,
                 supporting = now.windSupporting,
-                effects = effects,
+                appearance = appearance,
                 modifier = Modifier.weight(1f).heightIn(min = 114.dp),
             )
         }
 
         val pattern = home.detailGroups.firstOrNull { it.title == "Forecast pattern" }
         if (pattern != null) {
-            GlassPanel(effects, Modifier.fillMaxWidth().heightIn(min = 106.dp)) {
+            MonitorSection(appearance, Modifier.fillMaxWidth().heightIn(min = 106.dp)) {
                 Row(
                     Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -248,33 +204,35 @@ private fun NowPage(home: HomePresentation, effects: ResolvedEffects) {
 }
 
 @Composable
-private fun HourlyPage(home: HomePresentation, effects: ResolvedEffects) {
+private fun HourlyPage(home: HomePresentation, appearance: ResolvedAppearance) {
+    val layout = appearance.layout
     var windowIndex by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     val windows = home.hourlyWindows
     if (windows.isEmpty()) {
-        UnavailablePage("Hourly forecast unavailable", effects)
+        UnavailablePage("Hourly forecast unavailable", appearance)
         return
     }
     val selectedIndex = windowIndex.coerceIn(0, windows.lastIndex)
     val window = windows[selectedIndex]
 
     Column(
-        Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        Modifier.fillMaxSize().padding(horizontal = layout.pageGutter, vertical = layout.pageVerticalInset),
+        verticalArrangement = Arrangement.spacedBy(layout.gridGap),
     ) {
-        PageHeading("Hourly", window.rangeLabel)
+        MonitorHeader("Hourly", window.rangeLabel)
         if (home.hourlyDateJumps.isNotEmpty()) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 home.hourlyDateJumps.take(4).forEach { jump ->
                     TextButton(
                         onClick = { windowIndex = jump.windowIndex.coerceIn(0, windows.lastIndex) },
-                        modifier = Modifier.weight(1f).heightIn(min = 48.dp),
+                        modifier = Modifier.weight(1f).heightIn(min = layout.controlTargetMinimum),
                     ) { Text(jump.label, style = MaterialTheme.typography.labelMedium) }
                 }
             }
         }
-        HourlyWindow(window, effects, Modifier.weight(1f))
-        WindowControls(
+        HourlyWindow(window, appearance, Modifier.weight(1f))
+        ForecastWindowControls(
+            appearance = appearance,
             canEarlier = selectedIndex > 0,
             canLater = selectedIndex < windows.lastIndex,
             onEarlier = { windowIndex = selectedIndex - 1 },
@@ -284,13 +242,14 @@ private fun HourlyPage(home: HomePresentation, effects: ResolvedEffects) {
 }
 
 @Composable
-private fun HourlyWindow(window: HourlyWindowPresentation, effects: ResolvedEffects, modifier: Modifier = Modifier) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+private fun HourlyWindow(window: HourlyWindowPresentation, appearance: ResolvedAppearance, modifier: Modifier = Modifier) {
+    val layout = appearance.layout
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(layout.gridGap)) {
         window.entries.chunked(2).forEach { pair ->
-            Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(layout.gridGap)) {
                 pair.forEach { entry ->
-                    GlassPanel(
-                        effects,
+                    MonitorSection(
+                        appearance,
                         Modifier
                             .weight(1f)
                             .fillMaxHeight()
@@ -301,7 +260,7 @@ private fun HourlyWindow(window: HourlyWindowPresentation, effects: ResolvedEffe
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             entry.conditionIdentity?.let { condition ->
-                                WeatherMark(condition, Modifier.size(42.dp), MaterialTheme.colorScheme.primary)
+                                WeatherMark(condition, Modifier.size(42.dp), appearance.conditionAccent)
                                 Spacer(Modifier.width(10.dp))
                             }
                             Column(Modifier.weight(1f)) {
@@ -309,7 +268,7 @@ private fun HourlyWindow(window: HourlyWindowPresentation, effects: ResolvedEffe
                                 Text(entry.temperature, style = MaterialTheme.typography.headlineMedium)
                                 Text(entry.condition, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 entry.precipitation?.let {
-                                    Text("Precip $it", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                                    Text("Precip $it", style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
                                 }
                             }
                         }
@@ -322,23 +281,25 @@ private fun HourlyWindow(window: HourlyWindowPresentation, effects: ResolvedEffe
 }
 
 @Composable
-private fun DailyPage(home: HomePresentation, effects: ResolvedEffects) {
+private fun DailyPage(home: HomePresentation, appearance: ResolvedAppearance) {
+    val layout = appearance.layout
     var windowIndex by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     val windows = home.dailyWindows
     if (windows.isEmpty()) {
-        UnavailablePage("Daily forecast unavailable", effects)
+        UnavailablePage("Daily forecast unavailable", appearance)
         return
     }
     val selectedIndex = windowIndex.coerceIn(0, windows.lastIndex)
     val window = windows[selectedIndex]
 
     Column(
-        Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        Modifier.fillMaxSize().padding(horizontal = layout.pageGutter, vertical = layout.pageVerticalInset),
+        verticalArrangement = Arrangement.spacedBy(layout.pageStackGap),
     ) {
-        PageHeading("Daily", window.rangeLabel)
-        DailyWindow(window, effects, Modifier.weight(1f))
-        WindowControls(
+        MonitorHeader("Daily", window.rangeLabel)
+        DailyWindow(window, appearance, Modifier.weight(1f))
+        ForecastWindowControls(
+            appearance = appearance,
             canEarlier = selectedIndex > 0,
             canLater = selectedIndex < windows.lastIndex,
             onEarlier = { windowIndex = selectedIndex - 1 },
@@ -348,8 +309,8 @@ private fun DailyPage(home: HomePresentation, effects: ResolvedEffects) {
 }
 
 @Composable
-private fun DailyWindow(window: DailyWindowPresentation, effects: ResolvedEffects, modifier: Modifier = Modifier) {
-    GlassPanel(effects, modifier.fillMaxWidth()) {
+private fun DailyWindow(window: DailyWindowPresentation, appearance: ResolvedAppearance, modifier: Modifier = Modifier) {
+    MonitorSection(appearance, modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 8.dp)) {
             window.entries.forEach { entry ->
                 Row(
@@ -361,13 +322,13 @@ private fun DailyWindow(window: DailyWindowPresentation, effects: ResolvedEffect
                 ) {
                     Text(entry.day, style = MaterialTheme.typography.labelMedium, modifier = Modifier.width(54.dp))
                     entry.conditionIdentity?.let { condition ->
-                        WeatherMark(condition, Modifier.size(34.dp), MaterialTheme.colorScheme.primary)
+                        WeatherMark(condition, Modifier.size(34.dp), appearance.conditionAccent)
                         Spacer(Modifier.width(8.dp))
                     }
                     Text(entry.condition, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Column(horizontalAlignment = Alignment.End) {
                         Text("${entry.low}  ${entry.high}", style = MaterialTheme.typography.titleMedium)
-                        Text(entry.precipitation, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+                        Text(entry.precipitation, style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
                     }
                 }
             }
@@ -376,19 +337,20 @@ private fun DailyWindow(window: DailyWindowPresentation, effects: ResolvedEffect
 }
 
 @Composable
-private fun DetailsPage(home: HomePresentation, effects: ResolvedEffects) {
+private fun DetailsPage(home: HomePresentation, appearance: ResolvedAppearance) {
+    val layout = appearance.layout
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(horizontal = layout.pageGutter, vertical = layout.pageVerticalInset),
+        verticalArrangement = Arrangement.spacedBy(layout.gridGap),
     ) {
-        PageHeading("Details", "Provider-neutral measurements and derived context")
+        MonitorHeader("Details", "Provider-neutral measurements and derived context")
         home.detailGroups.forEach { group ->
             MetricGroup(
                 group = group,
-                effects = effects,
+                appearance = appearance,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -396,11 +358,12 @@ private fun DetailsPage(home: HomePresentation, effects: ResolvedEffects) {
 }
 
 @Composable
-private fun MetricGroup(group: MetricGroupPresentation, effects: ResolvedEffects, modifier: Modifier = Modifier) {
-    GlassPanel(effects, modifier.fillMaxWidth()) {
+private fun MetricGroup(group: MetricGroupPresentation, appearance: ResolvedAppearance, modifier: Modifier = Modifier) {
+    val layout = appearance.layout
+    MonitorSection(appearance, modifier.fillMaxWidth()) {
         Column(
-            Modifier.fillMaxWidth().padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            Modifier.fillMaxWidth().padding(layout.panelInset),
+            verticalArrangement = Arrangement.spacedBy(layout.gridGap),
         ) {
             Text(group.title, style = MaterialTheme.typography.titleMedium)
             val rows = group.metrics.chunked(2)
@@ -420,29 +383,16 @@ private fun MetricGroup(group: MetricGroupPresentation, effects: ResolvedEffects
 }
 
 @Composable
-private fun PageHeading(title: String, supporting: String) {
-    Column(Modifier.fillMaxWidth()) {
-        Text(title, style = MaterialTheme.typography.headlineMedium)
-        Text(
-            supporting,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
-@Composable
 private fun CompactFactPanel(
     label: String,
     headline: String,
     supporting: String,
-    effects: ResolvedEffects,
+    appearance: ResolvedAppearance,
     modifier: Modifier = Modifier,
 ) {
-    GlassPanel(effects, modifier) {
-        Column(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.Center) {
+    val layout = appearance.layout
+    MonitorSection(appearance, modifier) {
+        Column(Modifier.fillMaxSize().padding(layout.compactPanelInset), verticalArrangement = Arrangement.Center) {
             Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(4.dp))
             Text(headline, style = MaterialTheme.typography.titleMedium)
@@ -452,72 +402,33 @@ private fun CompactFactPanel(
 }
 
 @Composable
-private fun WindowControls(
-    canEarlier: Boolean,
-    canLater: Boolean,
-    onEarlier: () -> Unit,
-    onLater: () -> Unit,
-) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Button(
-            onClick = onEarlier,
-            enabled = canEarlier,
-            modifier = Modifier.weight(1f).heightIn(min = 48.dp),
-        ) { Text("Earlier") }
-        Button(
-            onClick = onLater,
-            enabled = canLater,
-            modifier = Modifier.weight(1f).heightIn(min = 48.dp),
-        ) { Text("Later") }
-    }
-}
-
-@Composable
-private fun UnavailablePage(message: String, effects: ResolvedEffects) {
+private fun UnavailablePage(message: String, appearance: ResolvedAppearance) {
     Box(Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.Center) {
-        GlassPanel(effects, Modifier.fillMaxWidth()) {
+        MonitorSection(appearance, Modifier.fillMaxWidth()) {
             Text(message, Modifier.padding(24.dp), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
         }
     }
 }
 
 @Composable
-private fun GlassPanel(
-    effects: ResolvedEffects,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    Surface(
-        modifier = modifier.border(
-            1.dp,
-            MaterialTheme.colorScheme.outline.copy(alpha = effects.outlineOpacity),
-            RoundedCornerShape(24.dp),
-        ),
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = effects.panelOpacity),
-        contentColor = MaterialTheme.colorScheme.onSurface,
-    ) { content() }
-}
-
-@Composable
-private fun AtmosphereBackground(condition: WeatherMarkCondition) {
-    val gradient = Brush.verticalGradient(listOf(OxygenSkyTop, OxygenSkyBottom))
+private fun AtmosphereBackground(condition: WeatherMarkCondition, appearance: ResolvedAppearance) {
+    val gradient = Brush.verticalGradient(listOf(appearance.atmosphereTop, appearance.atmosphereBottom))
     Canvas(Modifier.fillMaxSize().background(gradient)) {
         when (condition) {
             WeatherMarkCondition.CLEAR -> {
-                drawCircle(OxygenGlow.copy(alpha = 0.10f), size.minDimension * 0.62f, Offset(size.width * 0.82f, size.height * 0.12f))
-                drawCircle(OxygenGlow.copy(alpha = 0.08f), size.minDimension * 0.36f, Offset(size.width * 0.12f, size.height * 0.82f))
+                drawCircle(appearance.atmosphereGlow.copy(alpha = 0.10f), size.minDimension * 0.62f, Offset(size.width * 0.82f, size.height * 0.12f))
+                drawCircle(appearance.atmosphereGlow.copy(alpha = 0.08f), size.minDimension * 0.36f, Offset(size.width * 0.12f, size.height * 0.82f))
             }
             WeatherMarkCondition.PARTLY_CLOUDY, WeatherMarkCondition.CLOUDY -> {
-                drawCircle(Color.White.copy(alpha = 0.035f), size.minDimension * 0.62f, Offset(size.width * 0.15f, size.height * 0.18f))
-                drawCircle(OxygenGlow.copy(alpha = 0.055f), size.minDimension * 0.72f, Offset(size.width * 0.92f, size.height * 0.62f))
+                drawCircle(appearance.atmosphereHighlight.copy(alpha = 0.035f), size.minDimension * 0.62f, Offset(size.width * 0.15f, size.height * 0.18f))
+                drawCircle(appearance.atmosphereGlow.copy(alpha = 0.055f), size.minDimension * 0.72f, Offset(size.width * 0.92f, size.height * 0.62f))
             }
             WeatherMarkCondition.RAIN, WeatherMarkCondition.STORM -> {
                 repeat(14) { index ->
                     val x = size.width * (index / 13f)
                     val y = size.height * ((index * 0.073f) % 0.7f)
                     drawLine(
-                        OxygenPrecipitation.copy(alpha = 0.08f),
+                        appearance.precipitationAccent.copy(alpha = 0.08f),
                         Offset(x, y),
                         Offset(x - size.width * 0.08f, y + size.height * 0.16f),
                         strokeWidth = 2f,
@@ -529,7 +440,7 @@ private fun AtmosphereBackground(condition: WeatherMarkCondition) {
                 repeat(18) { index ->
                     val x = size.width * ((index * 37 % 100) / 100f)
                     val y = size.height * ((index * 61 % 100) / 100f)
-                    drawCircle(Color.White.copy(alpha = 0.10f), 3f + (index % 3), Offset(x, y))
+                    drawCircle(appearance.atmosphereHighlight.copy(alpha = 0.10f), 3f + (index % 3), Offset(x, y))
                 }
             }
         }

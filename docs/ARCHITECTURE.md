@@ -60,6 +60,17 @@ The presentation mapper owns text/unit formatting, page-window selection, concis
 
 Compose owns layout, interaction, weather marks, atmospheric rendering, and accessibility semantics. The outer Home pager is the sole horizontal-swipe owner. Hourly/Daily window changes are explicit UI actions.
 
+Shared rendering consumes the UI-local `ResolvedAppearance` contract. The fixed
+Theme B resolver owns semantic colors, typography, shared layout/shape values,
+and effects resolution; `OxygenTheme` bridges those values into Material and
+provides the contract through a composition boundary. The shared monitor
+structures are `MonitorHeader`, `HomePageSelector`, `MonitorSection`, and
+`ForecastWindowControls`; page, pager, and forecast-window state remains in
+`OxygenWeatherApp`. These components receive presentation text/models,
+`ResolvedAppearance`, and semantic callbacks only. Compose receives the
+resolved appearance and presentation models, never a raw theme identifier,
+provider DTO, repository, or persistence object.
+
 ## Production expansion
 
 Reintroduce features behind interfaces instead of into screen code:

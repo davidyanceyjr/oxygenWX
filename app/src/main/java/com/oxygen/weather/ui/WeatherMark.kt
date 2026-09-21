@@ -18,9 +18,11 @@ import kotlin.math.sin
 fun WeatherMark(
     condition: WeatherMarkCondition?,
     modifier: Modifier = Modifier,
-    tint: Color = OxygenText,
+    tint: Color? = null,
 ) {
     if (condition == null) return
+    val appearance = LocalResolvedAppearance.current
+    val resolvedTint = tint ?: appearance.conditionAccent
     Canvas(modifier.clearAndSetSemantics { }) {
         val stroke = size.minDimension * 0.07f
         val cloudTop = size.height * 0.43f
@@ -57,11 +59,11 @@ fun WeatherMark(
                 )
                 lineTo(cloudLeft + cloudWidth * 0.17f, cloudTop + cloudHeight * 0.78f)
             }
-            drawPath(path, tint, style = Stroke(width = stroke, cap = StrokeCap.Round))
+            drawPath(path, resolvedTint, style = Stroke(width = stroke, cap = StrokeCap.Round))
         }
 
         fun sun(center: Offset, radius: Float) {
-            drawCircle(tint, radius, center, style = Stroke(stroke))
+            drawCircle(resolvedTint, radius, center, style = Stroke(stroke))
             repeat(8) { index ->
                 val angle = Math.toRadians(index * 45.0)
                 val start = Offset(
@@ -72,7 +74,7 @@ fun WeatherMark(
                     center.x + cos(angle).toFloat() * radius * 1.95f,
                     center.y + sin(angle).toFloat() * radius * 1.95f,
                 )
-                drawLine(tint, start, end, stroke, StrokeCap.Round)
+                drawLine(resolvedTint, start, end, stroke, StrokeCap.Round)
             }
         }
 
@@ -88,7 +90,7 @@ fun WeatherMark(
                 repeat(3) { index ->
                     val x = size.width * (0.32f + index * 0.18f)
                     drawLine(
-                        OxygenPrecipitation,
+                        appearance.precipitationAccent,
                         Offset(x, size.height * 0.72f),
                         Offset(x - size.width * 0.04f, size.height * 0.88f),
                         stroke * 0.8f,
@@ -107,13 +109,13 @@ fun WeatherMark(
                     lineTo(size.width * 0.55f, size.height * 0.75f)
                     close()
                 }
-                drawPath(bolt, OxygenChartAccent)
+                drawPath(bolt, appearance.conditionAccent)
             }
             WeatherMarkCondition.SNOW -> {
                 cloud()
                 repeat(3) { index ->
                     val x = size.width * (0.30f + index * 0.20f)
-                    drawCircle(tint, size.minDimension * 0.025f, Offset(x, size.height * 0.82f))
+                    drawCircle(resolvedTint, size.minDimension * 0.025f, Offset(x, size.height * 0.82f))
                 }
             }
         }
