@@ -1,12 +1,12 @@
 # Current Development Cycle
 
-State: ACTIVE
-Cycle ID: 015-theme-b-now-base-page
-Roadmap item: R0.10
-Plan: .codex/plans/015-theme-b-now-base-page.md
-Evidence: .codex/test-artifacts/015-theme-b-now-base-page/
+State: IDLE
+Cycle ID: none
+Roadmap item: none
+Plan: none
+Evidence: none
 Last updated: 2026-09-21
 
 ## Current objective
 
-# Plan 015 — Theme B Now base page
+No active cycle. Select the next item from `docs/ROADMAP.md`.

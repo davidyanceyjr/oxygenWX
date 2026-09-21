@@ -128,12 +128,14 @@ signals, and historical context; do not invent chart/trend inputs or weaken
 provenance. Verify compact, large-font, and Effects Off installed states.
 Evidence: `.codex/history/2026-09-21-014-theme-b-details-base-page.md`.
 
-### R0.10 — Theme B Now base page — ACTIVE
+### R0.10 — Theme B Now base page — DONE
 
 Apply the established Theme B system to Now after the prioritized data pages.
 Preserve current-condition hierarchy, source/freshness, alert-summary semantics,
 and the existing outer-pager contract. This slice must not revive the retired
 art-sheet dashboard composition.
+
+Evidence: `.codex/history/2026-09-21-015-theme-b-now-base-page.md`.
 
 ### R0.11 — Roadmap context-budget audit — DONE
 

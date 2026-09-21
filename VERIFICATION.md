@@ -272,3 +272,44 @@ clean-clone Linux verification or its Windows/macOS follow-on slices.
   was restored to 1.0. The initial visible emulator startup remained stuck in
   boot animation; successful installed evidence came from the repository's
   headless `-no-snapshot` launcher.
+
+## R0.10 Theme B Now base page — execution evidence
+
+- The Now renderer now keeps the global `Now` identity visible, retains the
+  supplied location/source/update context as complete lines, preserves the
+  dominant current temperature/condition hierarchy and supporting current
+  facts, exposes the existing concise summary plus dew point in hero
+  semantics, and renders every supplied Forecast pattern metric through
+  `InspectionMetricGroup` in mapper order. No presentation, domain, provider,
+  repository, pager, or component API contract changed.
+- Deterministic coverage passed with the exact fixture summary
+  `Demo Station, Partly cloudy, 28°, feels like 29°. Humidity 56%. Wind 13
+  kilometers per hour.`, all five Forecast pattern labels in order, explicit
+  omission when derived inputs are absent, and exact unavailable humidity/dew
+  point wording in the partial-current fixture.
+- Passed with JDK 27 at `/usr/lib/jvm/java-27-openjdk` and the project-local
+  SDK `/home/opsman/project_git/oxygenWX/.android-sdk`: `python
+  scripts/dev.py workflow`, `python scripts/dev.py contract`, `python
+  scripts/dev.py test`, `python scripts/dev.py build`, `python scripts/dev.py
+  check`, and `git diff --check`. The final APK was installed from
+  `app/build/outputs/apk/debug/app-debug.apk` on `oxygen_starter` /
+  `emulator-5554`.
+- Windowed X verification used `DISPLAY=:0` with the local AVD at the compact
+  `360x640` override and density `160`. Subtle and debug Effects Off compact
+  captures show the named Now page, complete context, current hierarchy,
+  supporting tiles, full five-metric Forecast pattern after scrolling, and
+  hero semantics. Selector navigation to Hourly, outer swipe, and Android Back
+  smoke checks were captured. Effects Off was solid/opaque/static.
+- Font scale `1.3` Subtle and Effects Off captures show complete header/source
+  context, readable primary/supporting facts, no critical overlap or clipping,
+  and reachable lower Forecast pattern content after scrolling. The emulator
+  font scale and locale were restored to `1.0` and `en-US`.
+- Evidence is retained under
+  `.codex/test-artifacts/015-theme-b-now-base-page/`, including screenshots,
+  hierarchy dumps, navigation captures, and the initial emulator startup
+  capture.
+- RTL was attempted with the device locale switched to `ar-EG`, but the
+  captured state remained on the emulator splash during the transition and
+  hierarchy dumping returned no root; RTL is therefore unverified. Service-
+  level TalkBack was not run. Live providers, cache, alerts, and other
+  unimplemented roadmap boundaries remain outside this slice.

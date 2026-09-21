@@ -100,8 +100,10 @@ class HomePresentationTest {
         assertEquals("13 km/h", presentation.current.windHeadline)
         assertEquals("Gusts 23 · SW", presentation.current.windSupporting)
         assertEquals(WeatherMarkCondition.PARTLY_CLOUDY, presentation.current.conditionIdentity)
-        assertTrue(presentation.current.spokenSummary.contains("feels like"))
-        assertTrue(presentation.current.spokenSummary.contains("Wind"))
+        assertEquals(
+            "Demo Station, Partly cloudy, 28°, feels like 29°. Humidity 56%. Wind 13 kilometers per hour.",
+            presentation.current.spokenSummary,
+        )
     }
 
     @Test
@@ -141,6 +143,8 @@ class HomePresentationTest {
                 condition = null,
                 temperatureC = null,
                 apparentC = null,
+                relativeHumidityPct = null,
+                dewPointC = null,
                 windSpeedKph = null,
                 windGustKph = null,
                 windDirectionDeg = null,
@@ -171,6 +175,8 @@ class HomePresentationTest {
         assertEquals("Unavailable", partial.current.temperature)
         assertEquals("Unavailable", partial.current.condition)
         assertEquals("Unavailable", partial.current.apparent)
+        assertEquals("Unavailable", partial.current.humidity)
+        assertEquals("Unavailable", partial.current.dewPoint)
         assertEquals("Unavailable", partial.current.windHeadline)
         assertEquals("Wind details unavailable", partial.current.windSupporting)
         assertEquals("Precipitation unavailable", partial.current.precipitationHeadline)
@@ -203,6 +209,17 @@ class HomePresentationTest {
         val presentation = HomePresentationMapper.map(noDetailsBundle, HistoricalSynthesis.derive(noDetailsBundle))
 
         assertTrue(presentation.detailGroups.none { it.title == "Conditions" })
+    }
+
+    @Test
+    fun missingDerivedInputsOmitForecastPatternRatherThanPaddingIt() {
+        val noPatternBundle = bundle.copy(hourly = emptyList())
+        val noPattern = HomePresentationMapper.map(
+            noPatternBundle,
+            HistoricalSynthesis.derive(noPatternBundle),
+        )
+
+        assertTrue(noPattern.detailGroups.none { it.title == "Forecast pattern" })
     }
 
     @Test

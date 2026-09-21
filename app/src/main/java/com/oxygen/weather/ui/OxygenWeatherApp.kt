@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -127,8 +126,8 @@ private fun NowPage(home: HomePresentation, appearance: ResolvedAppearance) {
         verticalArrangement = Arrangement.spacedBy(layout.pageStackGap),
     ) {
         MonitorHeader(
-            title = now.location,
-            supporting = "${home.sourceLine} · ${home.updatedLine}",
+            title = "Now",
+            supporting = listOf(now.location, home.sourceLine, home.updatedLine).joinToString("\n"),
         )
 
         MonitorSection(
@@ -136,7 +135,9 @@ private fun NowPage(home: HomePresentation, appearance: ResolvedAppearance) {
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 208.dp)
-                .clearAndSetSemantics { contentDescription = now.spokenSummary },
+                .semantics {
+                    contentDescription = "${now.spokenSummary} Dew point ${now.dewPoint}."
+                },
         ) {
             Row(
                 Modifier.fillMaxWidth().padding(layout.heroPanelInset),
@@ -184,21 +185,11 @@ private fun NowPage(home: HomePresentation, appearance: ResolvedAppearance) {
 
         val pattern = home.detailGroups.firstOrNull { it.title == "Forecast pattern" }
         if (pattern != null) {
-            MonitorSection(appearance, Modifier.fillMaxWidth().heightIn(min = 106.dp)) {
-                Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    pattern.metrics.take(3).forEach { metric ->
-                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(metric.label.uppercase(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
-                            Spacer(Modifier.height(4.dp))
-                            Text(metric.value, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
-                        }
-                    }
-                }
-            }
+            InspectionMetricGroup(
+                group = pattern,
+                appearance = appearance,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }

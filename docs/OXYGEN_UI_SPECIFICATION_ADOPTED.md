@@ -195,13 +195,16 @@ Historical implementation baseline (not a visual acceptance target):
   by ordered Conditions, Forecast pattern, and Historical context groups.
   Important facts remain visible text and semantics; no chart or trend-series
   data is invented.
+- The Theme B Now composition is implemented with a visible `Now` identity,
+  location/source/update context, dominant current temperature and condition,
+  readable apparent/humidity/dew-point, precipitation and wind facts, and the
+  optional complete ordered Forecast pattern group. Visible text and inspected
+  semantics carry the same meaning as the supplied presentation models; no
+  chart or alert content is invented.
 - An effective, debug-selectable Effects Off rendering path for installed verification. It is solid,
   opaque, static, and complete; it is not a persisted user preference.
 
 Still separate future slices:
-
-- application of the Theme B system to the Now page, including its remaining
-  page-specific composition;
 
 - live provider/repository/cache path;
 - official alerts;

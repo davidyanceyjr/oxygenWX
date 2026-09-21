@@ -80,6 +80,10 @@ its page and window state also remains in `OxygenWeatherApp`.
 The Details page composes the supplied `SourceFreshnessPanel` followed by
 ordered typed `MetricGroupPresentation` groups in a vertically scrollable
 Theme B page; page and pager state remains in `OxygenWeatherApp`.
+The Now page composes the supplied `CurrentPresentation`, source/update
+context, current metric tiles, and the optional ordered Forecast pattern group
+through these Theme B monitor components; page and pager state remains in
+`OxygenWeatherApp`.
 These components receive presentation text/models, `ResolvedAppearance`, and
 semantic callbacks only. Compose receives the resolved appearance and
 presentation models, never a raw theme identifier, provider DTO, repository,
