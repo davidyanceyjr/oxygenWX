@@ -71,6 +71,15 @@ or typed presentation entries plus `ResolvedAppearance` only. Details shares
 `SourceFreshnessPanel` and `InspectionMetricGroup`, which receive supplied
 source/update strings or typed presentation groups plus `ResolvedAppearance`
 only. Page, pager, and forecast-window state remains in `OxygenWeatherApp`.
+The Hourly page composes the presentation-supplied local-date jumps and
+six-entry window through these shared monitor components; its page and window
+state remains in `OxygenWeatherApp`.
+The Daily page composes each presentation-supplied five-day window through the
+shared opaque section and `DailyForecastRow`, with explicit window controls;
+its page and window state also remains in `OxygenWeatherApp`.
+The Details page composes the supplied `SourceFreshnessPanel` followed by
+ordered typed `MetricGroupPresentation` groups in a vertically scrollable
+Theme B page; page and pager state remains in `OxygenWeatherApp`.
 These components receive presentation text/models, `ResolvedAppearance`, and
 semantic callbacks only. Compose receives the resolved appearance and
 presentation models, never a raw theme identifier, provider DTO, repository,

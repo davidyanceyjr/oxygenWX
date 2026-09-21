@@ -6,11 +6,13 @@ from __future__ import annotations
 import argparse
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+MIN_JAVA_MAJOR = 17
 
 GRADLE_TASKS = {
     "build": [":app:assembleDebug"],
@@ -25,10 +27,114 @@ def gradle_launcher() -> Path:
     return ROOT / ("gradlew.bat" if os.name == "nt" else "gradlew")
 
 
+def java_executable(java_home: Path) -> Path:
+    return java_home / "bin" / ("java.exe" if os.name == "nt" else "java")
+
+
+def java_major(java_home: Path) -> int | None:
+    executable = java_executable(java_home)
+    if not executable.is_file():
+        return None
+    result = subprocess.run(
+        [str(executable), "-version"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    version_output = f"{result.stdout}\n{result.stderr}"
+    match = re.search(r'version "([0-9]+)(?:\.([0-9]+))?', version_output)
+    if not match:
+        return None
+    major = int(match.group(1))
+    return int(match.group(2)) if major == 1 and match.group(2) else major
+
+
+def java_home_candidates() -> list[Path]:
+    candidates: list[Path] = []
+
+    configured = os.environ.get("JAVA_HOME")
+    if configured:
+        candidates.append(Path(configured))
+
+    on_path = shutil.which("java.exe" if os.name == "nt" else "java")
+    if on_path:
+        candidates.append(Path(on_path).resolve().parent.parent)
+
+    if os.name == "nt":
+        for variable in ("ProgramFiles", "ProgramFiles(x86)", "LOCALAPPDATA"):
+            parent = os.environ.get(variable)
+            if parent:
+                candidates.extend(Path(parent).glob("Java/*"))
+                candidates.extend(Path(parent).glob("Eclipse Adoptium/*"))
+    elif sys.platform == "darwin":
+        candidates.extend(Path("/Library/Java/JavaVirtualMachines").glob("*/Contents/Home"))
+        candidates.extend(Path("/usr/local/opt").glob("openjdk*/libexec/openjdk.jdk/Contents/Home"))
+    else:
+        for parent in (Path("/usr/lib/jvm"), Path("/usr/java"), Path("/opt/java")):
+            if parent.is_dir():
+                candidates.extend(path for path in parent.iterdir() if path.is_dir())
+
+    unique: list[Path] = []
+    seen: set[Path] = set()
+    for candidate in candidates:
+        resolved = candidate.expanduser().resolve()
+        if resolved not in seen:
+            seen.add(resolved)
+            unique.append(resolved)
+    return unique
+
+
+def resolve_java_home() -> tuple[Path, int] | None:
+    supported: list[tuple[Path, int]] = []
+    for candidate in java_home_candidates():
+        major = java_major(candidate)
+        if major is not None and major >= MIN_JAVA_MAJOR:
+            supported.append((candidate, major))
+
+    if not supported:
+        return None
+
+    configured = os.environ.get("JAVA_HOME")
+    if configured:
+        configured_path = Path(configured).expanduser().resolve()
+        for candidate, major in supported:
+            if candidate == configured_path:
+                return candidate, major
+
+    return max(supported, key=lambda item: (item[1], str(item[0])))
+
+
+def gradle_environment() -> dict[str, str] | None:
+    resolved = resolve_java_home()
+    if resolved is None:
+        print(
+            f"Gradle requires JDK {MIN_JAVA_MAJOR} or later. "
+            "Install a compatible JDK or set JAVA_HOME.",
+            file=sys.stderr,
+        )
+        return None
+
+    java_home, major = resolved
+    environment = os.environ.copy()
+    environment["JAVA_HOME"] = str(java_home)
+    environment["PATH"] = str(java_home / "bin") + os.pathsep + environment.get("PATH", "")
+    print(f"Using JDK {major}: {java_home}", flush=True)
+    if not environment.get("ANDROID_SDK_ROOT") and not environment.get("ANDROID_HOME"):
+        local_sdk = ROOT / ".android-sdk"
+        if local_sdk.is_dir():
+            environment["ANDROID_SDK_ROOT"] = str(local_sdk)
+            environment["ANDROID_HOME"] = str(local_sdk)
+            print(f"Using Android SDK: {local_sdk}", flush=True)
+    return environment
+
+
 def run_gradle(tasks: list[str]) -> int:
     launcher = gradle_launcher()
     if not launcher.exists():
         print(f"Gradle launcher not found: {launcher}", file=sys.stderr)
+        return 2
+    environment = gradle_environment()
+    if environment is None:
         return 2
     gradle_args = [str(launcher), "--no-daemon", *tasks]
     if os.name == "nt":
@@ -36,7 +142,7 @@ def run_gradle(tasks: list[str]) -> int:
         command = ["cmd.exe", "/d", "/s", "/c", command_line]
     else:
         command = gradle_args
-    return subprocess.run(command, cwd=ROOT, check=False).returncode
+    return subprocess.run(command, cwd=ROOT, env=environment, check=False).returncode
 
 
 
@@ -92,15 +198,19 @@ def diff_check() -> int:
 
 def adb_path() -> str | None:
     binary = "adb.exe" if os.name == "nt" else "adb"
-    direct = shutil.which(binary)
-    if direct:
-        return direct
     for key in ("ANDROID_SDK_ROOT", "ANDROID_HOME"):
         root = os.environ.get(key)
         if root:
             candidate = Path(root) / "platform-tools" / binary
             if candidate.exists():
                 return str(candidate)
+    local_sdk = ROOT / ".android-sdk"
+    local_candidate = local_sdk / "platform-tools" / binary
+    if local_candidate.exists():
+        return str(local_candidate)
+    direct = shutil.which(binary)
+    if direct:
+        return direct
     return None
 
 

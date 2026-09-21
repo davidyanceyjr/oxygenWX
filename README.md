@@ -45,7 +45,7 @@ Provider-normalized measurements remain separate from experimental forecast-patt
 Prerequisites:
 
 - Python 3.10+ recommended for the cross-platform developer command.
-- JDK 17.
+- JDK 17 or later. `scripts/dev.py` selects an installed compatible JDK when the shell default is older.
 - Android SDK platform 37 and build tools 37.0.0.
 - Network access on first build unless Gradle/Android dependencies are already cached.
 

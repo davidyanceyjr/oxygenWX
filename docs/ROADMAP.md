@@ -105,28 +105,30 @@ needed by Details. No chart container was added because the presentation model
 does not yet define a series interval, provenance, range, and unavailable-data
 behavior. Evidence: `.codex/history/2026-09-21-011-theme-b-details-monitor-components.md`.
 
-### R0.7 — Theme B Hourly base page — PLANNED
+### R0.7 — Theme B Hourly base page — DONE
 
 Apply the Theme B system to Hourly first. Preserve six actual chronological
 entries per window, date jumps, explicit Earlier/Later controls, pager/back
 behavior, visible text, and semantic summaries. Verify compact, large-font, and
-Effects Off installed states.
+Effects Off installed states. Evidence: `.codex/history/2026-09-21-012-theme-b-hourly-base-page.md`.
 
-### R0.8 — Theme B Daily base page — PLANNED
+### R0.8 — Theme B Daily base page — DONE
 
 Apply the Theme B system to Daily using the shared components. Preserve five
 chronological rows per window, numeric low/high, precipitation meaning, and
 explicit Earlier/Later controls without a nested pager. Verify compact,
-large-font, and Effects Off installed states.
+large-font, and Effects Off installed states. Evidence:
+`.codex/history/2026-09-21-013-theme-b-daily-base-page.md`.
 
-### R0.9 — Theme B Details base page — PLANNED
+### R0.9 — Theme B Details base page — DONE
 
 Apply the Theme B system to Details. Preserve a visibly distinct separation of
 current/source-normalized data, source/freshness, derived forecast-pattern
 signals, and historical context; do not invent chart/trend inputs or weaken
 provenance. Verify compact, large-font, and Effects Off installed states.
+Evidence: `.codex/history/2026-09-21-014-theme-b-details-base-page.md`.
 
-### R0.10 — Theme B Now base page — PLANNED
+### R0.10 — Theme B Now base page — ACTIVE
 
 Apply the established Theme B system to Now after the prioritized data pages.
 Preserve current-condition hierarchy, source/freshness, alert-summary semantics,

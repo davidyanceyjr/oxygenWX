@@ -270,8 +270,20 @@ internal fun InspectionMetricGroup(
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     row.forEach { metric ->
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
-                            Text(metric.label.uppercase(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text(metric.value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                            Text(
+                                metric.label.uppercase(),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 2,
+                                overflow = TextOverflow.Clip,
+                            )
+                            Text(
+                                metric.value,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 3,
+                                overflow = TextOverflow.Clip,
+                            )
                         }
                     }
                     if (row.size == 1) Spacer(Modifier.weight(1f))

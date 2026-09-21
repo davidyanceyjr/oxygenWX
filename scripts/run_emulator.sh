@@ -3,8 +3,8 @@
 set -euo pipefail
 
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
-SDK_ROOT=${OXYGEN_SDK_ROOT:-${ANDROID_SDK_ROOT:-/home/opsman/project_git/oxygen/.android-sdk}}
-AVD_HOME=${OXYGEN_AVD_HOME:-/home/opsman/project_git/oxygen/.android/avd}
+SDK_ROOT=${OXYGEN_SDK_ROOT:-${ANDROID_SDK_ROOT:-"$ROOT_DIR/.android-sdk"}}
+AVD_HOME=${OXYGEN_AVD_HOME:-"$ROOT_DIR/.android/avd"}
 AVD_NAME=${OXYGEN_AVD_NAME:-oxygen_starter}
 PACKAGE_NAME=${OXYGEN_PACKAGE_NAME:-com.oxygen.weather}
 ACTIVITY_NAME=${OXYGEN_ACTIVITY_NAME:-.MainActivity}
@@ -74,14 +74,48 @@ ADB="$SDK_ROOT/platform-tools/adb"
 EMULATOR="$SDK_ROOT/emulator/emulator"
 APK_PATH="$ROOT_DIR/app/build/outputs/apk/debug/app-debug.apk"
 
-if [[ -z "${JAVA_HOME:-}" ]]; then
-    for candidate in /usr/lib/jvm/java-17-openjdk /usr/lib/jvm/java-26-openjdk; do
-        if [[ -x "$candidate/bin/java" ]]; then
-            export JAVA_HOME=$candidate
-            break
-        fi
-    done
-fi
+java_major() {
+    local version
+    [[ -x "$1/bin/java" ]] || return 1
+    version=$("$1/bin/java" -version 2>&1 | awk -F '"' '/version/ { print $2; exit }')
+    case "$version" in
+        1.*) version=${version#1.} ;;
+    esac
+    version=${version%%.*}
+    [[ "$version" =~ ^[0-9]+$ ]] || return 1
+    printf '%s\n' "$version"
+}
+
+ensure_supported_jdk() {
+    local major=0 candidate candidate_major
+    if [[ -n "${JAVA_HOME:-}" ]]; then
+        major=$(java_major "$JAVA_HOME" 2>/dev/null || printf '0')
+    fi
+
+    if ((major < 17)); then
+        for candidate in \
+            /usr/lib/jvm/java-17-openjdk \
+            /usr/lib/jvm/java-21-openjdk \
+            /usr/lib/jvm/java-26-openjdk \
+            /usr/lib/jvm/java-27-openjdk; do
+            candidate_major=$(java_major "$candidate" 2>/dev/null || true)
+            if [[ "$candidate_major" =~ ^[0-9]+$ ]] && ((candidate_major >= 17)); then
+                export JAVA_HOME="$candidate"
+                major=$candidate_major
+                break
+            fi
+        done
+    fi
+
+    if ((major < 17)); then
+        echo "Gradle requires JDK 17 or later. Set JAVA_HOME to a compatible JDK and rerun." >&2
+        exit 1
+    fi
+    export PATH="$JAVA_HOME/bin:$PATH"
+    echo "Using JDK $major: $JAVA_HOME"
+}
+
+ensure_supported_jdk
 
 resolve_gradle() {
     if [[ -n "${OXYGEN_GRADLE_BIN:-}" && -x "$OXYGEN_GRADLE_BIN" ]]; then

@@ -24,6 +24,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,6 +40,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.DailyWindowPresentation
@@ -218,12 +221,26 @@ private fun HourlyPage(home: HomePresentation, appearance: ResolvedAppearance) {
     ) {
         MonitorHeader("Hourly", window.rangeLabel)
         if (home.hourlyDateJumps.isNotEmpty()) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                home.hourlyDateJumps.take(4).forEach { jump ->
-                    TextButton(
-                        onClick = { windowIndex = jump.windowIndex.coerceIn(0, windows.lastIndex) },
-                        modifier = Modifier.weight(1f).heightIn(min = layout.controlTargetMinimum),
-                    ) { Text(jump.label, style = MaterialTheme.typography.labelMedium) }
+            Column(
+                Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                home.hourlyDateJumps.chunked(4).forEach { dateRow ->
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        dateRow.forEach { jump ->
+                            TextButton(
+                                onClick = { windowIndex = jump.windowIndex.coerceIn(0, windows.lastIndex) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .heightIn(min = layout.controlTargetMinimum)
+                                    .semantics {
+                                        selected = jump.windowIndex == selectedIndex
+                                        contentDescription = "Show ${jump.label} hourly forecast"
+                                    },
+                            ) { Text(jump.label, style = MaterialTheme.typography.labelMedium) }
+                        }
+                        repeat(4 - dateRow.size) { Spacer(Modifier.weight(1f)) }
+                    }
                 }
             }
         }
@@ -290,14 +307,27 @@ private fun DailyPage(home: HomePresentation, appearance: ResolvedAppearance) {
 @Composable
 private fun DailyWindow(window: DailyWindowPresentation, appearance: ResolvedAppearance, modifier: Modifier = Modifier) {
     MonitorSection(appearance, modifier.fillMaxWidth()) {
-        Column(Modifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 8.dp)) {
-            window.entries.forEach { entry ->
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 14.dp, vertical = 8.dp)
+                .semantics {
+                    contentDescription = "Daily forecast, ${window.rangeLabel}, ${window.entries.size} days"
+                },
+        ) {
+            window.entries.forEachIndexed { index, entry ->
                 DailyForecastRow(
                     entry = entry,
                     appearance = appearance,
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(1f),
                 )
+                if (index < window.entries.lastIndex) {
+                    HorizontalDivider(
+                        color = appearance.outline.copy(alpha = appearance.effects.outlineOpacity),
+                        thickness = 1.dp,
+                    )
+                }
             }
         }
     }
@@ -311,9 +341,12 @@ private fun DetailsPage(home: HomePresentation, appearance: ResolvedAppearance) 
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = layout.pageGutter, vertical = layout.pageVerticalInset),
-        verticalArrangement = Arrangement.spacedBy(layout.gridGap),
+        verticalArrangement = Arrangement.spacedBy(layout.pageStackGap),
     ) {
-        MonitorHeader("Details", "Provider-neutral measurements and derived context")
+        MonitorHeader(
+            "Details",
+            "Normalized measurements · forecast pattern · historical context",
+        )
         SourceFreshnessPanel(
             sourceLine = home.sourceLine,
             updatedLine = home.updatedLine,

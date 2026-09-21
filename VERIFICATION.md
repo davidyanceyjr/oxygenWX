@@ -167,3 +167,108 @@ clean-clone Linux verification or its Windows/macOS follow-on slices.
   Back-navigation, RTL, or service-level TalkBack evidence. Those visual and
   interaction boundaries remain unverified. Evidence notes are retained under
   `.codex/test-artifacts/011-theme-b-details-monitor-components/`.
+
+## Developer command and local emulator repair
+
+- `scripts/dev.py` now discovers and selects the available JDK 27 when the
+  default shell `java` is Java 8, and automatically selects this checkout's
+  `.android-sdk` when no Android SDK environment variable is set. The selected
+  JDK/SDK are passed to Gradle without changing the checked-in wrapper.
+- From the default shell, `python scripts/dev.py test` passed with
+  `Using JDK 27: /usr/lib/jvm/java-27-openjdk` and
+  `Using Android SDK: /home/opsman/project_git/oxygenWX/.android-sdk`.
+  `python scripts/dev.py check` passed workflow validation, source-contract
+  validation, JVM tests, lint, debug APK assembly, and the final diff check.
+- `scripts/run_emulator.sh` now resolves the local `.android-sdk` and
+  `.android/avd/oxygen_starter` defaults. It started `oxygen_starter` as
+  `emulator-5554`, installed and launched the debug APK, and produced the
+  compact screenshot and hierarchy evidence under
+  `.codex/test-artifacts/012-theme-b-hourly-base-page/`.
+- The emulator initially displayed a transient System UI not-responding
+  dialog; after selecting Wait and relaunching Oxygen Weather, the app was
+  captured normally with page-selector semantics and visible weather facts.
+- Service-level TalkBack tests are intentionally disabled for resource usage;
+  no TalkBack claim is made. RTL remains outside this repair's verification.
+
+## R0.7 Theme B Hourly base page
+
+- The Hourly page now composes every presentation-supplied local-date control,
+  the two-column six-entry monitor grid, and explicit Earlier/Later controls.
+  Date controls retain their visible labels and expose represented-date
+  descriptions plus selected state. The seven-entry sparse-horizon regression
+  proves `[6, 1]` windows without padding or reordering.
+- Passed before and after implementation: `python scripts/dev.py workflow`,
+  `python scripts/dev.py contract`, `python scripts/dev.py test`, and
+  `git diff --check`. `python scripts/dev.py check` passed workflow and source
+  contract validation, JVM tests, lint, and debug APK assembly. The explicit
+  Java 8 fallback command also passed:
+  `JAVA_HOME=/usr/lib/jvm/java-8-openjdk python scripts/dev.py test`.
+- Installed verification used JDK 27, the local SDK
+  `/home/opsman/project_git/oxygenWX/.android-sdk`, AVD
+  `.android/avd/oxygen_starter`, serial `emulator-5554`, and compact viewport
+  `360x640` with density `160`. Compact evidence covers the first Hourly
+  window, Later navigation, Thu date jump/final window, page-selector and
+  outer-swipe navigation, Android Back to Now, visible entry summaries, and
+  Earlier/Later boundary states.
+- Font scale `1.3` evidence was captured for normal Subtle and debug Effects
+  Off (`--ez oxygen_effects_off true`) Hourly first/final states. No critical
+  clipping or overlap was observed; the emulator was restored to font scale
+  `1.0`. Screenshots and hierarchy dumps are under
+  `.codex/test-artifacts/012-theme-b-hourly-base-page/`.
+- Service-level TalkBack was intentionally excluded for resource usage and
+  RTL was not exercised. Live providers, cache, alerts, and Compose UI-test
+  infrastructure remain outside this slice.
+
+## R0.8 Theme B Daily base page
+
+- The Daily renderer now composes each supplied five-day window in the shared
+  opaque monitor section, adds Theme B row separators, retains visible Daily
+  range identity, and keeps Earlier/Later as the only window controls. A
+  section-level semantic summary reports the represented range and actual day
+  count; each row keeps the existing spoken summary and visible weather facts.
+- The new sparse seven-day presentation test proves `[5, 2]` windows and
+  preserves the supplied chronological day labels without renderer padding.
+  Existing complete two-window and missing low/high/precipitation assertions
+  remain passing.
+- Passed with the project-local JDK 27 and SDK: `python scripts/dev.py workflow`,
+  `python scripts/dev.py contract`, `python scripts/dev.py test`,
+  `python scripts/dev.py check`, and `git diff --check`. The full check passed
+  JVM tests, lint, and debug APK assembly.
+- The debug APK was installed on `oxygen_starter` / `emulator-5554` at the
+  compact `360x640` override and the Compose hierarchy exposed page labels and
+  presentation text. The headless framebuffer captures were black after
+  launch, and interaction subsequently triggered an emulator/app ANR, so no
+  Daily screenshot, window-navigation, large-font, Effects Off, or visual
+  clipping claim is made for R0.8. Evidence and raw logs are retained under
+  `.codex/test-artifacts/013-theme-b-daily-base-page/`.
+- Service-level TalkBack and RTL were not exercised. Live providers,
+  repository/cache, alerts, and other unimplemented roadmap boundaries remain
+  outside this slice.
+
+## R0.9 Theme B Details base page — execution evidence
+
+- The page-level Details composition now uses the resolved `pageStackGap`, names
+  normalized measurements/forecast pattern/historical context in its header,
+  keeps `SourceFreshnessPanel` first, and renders every supplied typed metric
+  group in mapper order. The existing `InspectionMetricGroup` renderer now
+  wraps long labels to two lines and values to three lines without ellipsis;
+  no component API, domain, provider, navigation, or dependency boundary
+  changed.
+- Deterministic coverage adds exact labels for Conditions, Forecast pattern,
+  and Historical context, plus omission of empty optional groups while keeping
+  `Model estimate · Offline development fixture` and `Updated 12:00 PM`.
+- Passed: `python scripts/dev.py workflow`, `python scripts/dev.py contract`,
+  `python scripts/dev.py test`, `python scripts/dev.py check`, and
+  `git diff --check`, using JDK 27 and the local `.android-sdk`.
+- Installed evidence was captured on `oxygen_starter` / `emulator-5554` at
+  `360x640`, with normal Subtle and Effects Off states at font scales 1.0 and
+  1.3. Page-selector navigation, Details semantics, lower-group scrolling, and
+  Back to Daily are retained under
+  `.codex/test-artifacts/014-theme-b-details-base-page/`.
+- At font scale 1.3, both Subtle and Effects Off expose complete historical
+  labels and the full `32 comparable historical samples` Reference value;
+  lower content remains reachable without critical clipping or overlap.
+- RTL and service-level TalkBack were not exercised. The emulator font scale
+  was restored to 1.0. The initial visible emulator startup remained stuck in
+  boot animation; successful installed evidence came from the repository's
+  headless `-no-snapshot` launcher.

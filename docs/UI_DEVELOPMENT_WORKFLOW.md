@@ -77,4 +77,4 @@ python scripts/dev.py run
 python scripts/dev.py screenshot --output .codex/test-artifacts/<cycle-id>/home.png
 ```
 
-The Python command chooses the repository Gradle launcher appropriate for the host OS and uses adb from `PATH`, `ANDROID_SDK_ROOT`, or `ANDROID_HOME` for run/screenshot operations.
+The Python command chooses the repository Gradle launcher appropriate for the host OS, selects an available JDK 17+ when the shell default is older, and uses adb from `PATH`, `ANDROID_SDK_ROOT`, or `ANDROID_HOME` for run/screenshot operations. The repository's headless emulator helper defaults to `.android/avd/oxygen_starter` and `.android-sdk` within this checkout.

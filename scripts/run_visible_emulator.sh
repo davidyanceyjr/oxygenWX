@@ -85,7 +85,8 @@ ensure_supported_jdk() {
         for candidate in \
             /usr/lib/jvm/java-17-openjdk \
             /usr/lib/jvm/java-21-openjdk \
-            /usr/lib/jvm/java-26-openjdk; do
+            /usr/lib/jvm/java-26-openjdk \
+            /usr/lib/jvm/java-27-openjdk; do
             candidate_major=$(java_major "$candidate" 2>/dev/null || true)
             if [[ "$candidate_major" =~ ^[0-9]+$ ]] && ((candidate_major >= 17)); then
                 export JAVA_HOME="$candidate"

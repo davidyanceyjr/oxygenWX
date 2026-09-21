@@ -177,18 +177,31 @@ Historical implementation baseline (not a visual acceptance target):
   `HourlyForecastTile`, and `DailyForecastRow`. They render supplied
   presentation strings/entries and resolved appearance values; page-specific
   composition and state remain owned by the page functions.
+- The Theme B Hourly page composition is implemented: it presents every
+  supplied local-date control, a two-column six-entry forecast grid, and
+  explicit Earlier/Later controls. Date controls expose their represented date
+  and selected state through semantics, while entries retain visible text and
+  concise spoken summaries.
+- The Theme B Daily page composition is implemented: it presents the supplied
+  five-day window in an opaque monitor section with visible range identity,
+  separated forecast rows, and explicit Earlier/Later controls. Rows retain
+  visible date, condition, low/high, precipitation, and concise spoken summary
+  semantics; sparse windows are rendered without padding.
 - Shared Details monitor components are implemented: `SourceFreshnessPanel`
   presents supplied source/update text as explicit inspection facts, and
   `InspectionMetricGroup` renders the supplied semantic group boundary and
-  metric values. They do not create chart or trend-series data; the Details
-  page-specific Theme B composition remains future work.
+  metric values. The Theme B Details composition is implemented as a
+  vertically scrollable page with the source/freshness surface first, followed
+  by ordered Conditions, Forecast pattern, and Historical context groups.
+  Important facts remain visible text and semantics; no chart or trend-series
+  data is invented.
 - An effective, debug-selectable Effects Off rendering path for installed verification. It is solid,
   opaque, static, and complete; it is not a persisted user preference.
 
 Still separate future slices:
 
-- application of the Theme B system to each page, including page-specific
-  forecast composition and Details monitor components;
+- application of the Theme B system to the Now page, including its remaining
+  page-specific composition;
 
 - live provider/repository/cache path;
 - official alerts;

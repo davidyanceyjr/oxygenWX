@@ -7,6 +7,7 @@ import com.oxygen.weather.derived.HistoricalSynthesis
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -23,9 +24,40 @@ class HomePresentationTest {
     }
 
     @Test
+    fun hourlyPreservesSparseSevenEntryHorizonWithoutPaddingOrReordering() {
+        val sparseBundle = bundle.copy(hourly = bundle.hourly.take(7))
+        val sparse = HomePresentationMapper.map(sparseBundle, HistoricalSynthesis.derive(sparseBundle))
+
+        assertEquals(listOf(6, 1), sparse.hourlyWindows.map { it.entries.size })
+        assertEquals(
+            sparseBundle.hourly.map { it.time.format(DateTimeFormatter.ofPattern("h a")) },
+            sparse.hourlyWindows.flatMap { window -> window.entries }.map { it.time },
+        )
+    }
+
+    @Test
     fun dailyUsesTwoFiveDayWindows() {
         assertEquals(2, presentation.dailyWindows.size)
         assertTrue(presentation.dailyWindows.all { it.entries.size == 5 })
+    }
+
+    @Test
+    fun dailyPreservesSparseSevenDayHorizonWithoutPaddingOrReordering() {
+        val sparseBundle = bundle.copy(daily = bundle.daily.take(7))
+        val sparse = HomePresentationMapper.map(sparseBundle, HistoricalSynthesis.derive(sparseBundle))
+
+        assertEquals(listOf(5, 2), sparse.dailyWindows.map { it.entries.size })
+        assertEquals(
+            sparseBundle.daily.map { day ->
+                if (day.date == sparseBundle.current.observedAt.toLocalDate()) {
+                    "TODAY"
+                } else {
+                    day.date.format(DateTimeFormatter.ofPattern("EEE")).uppercase()
+                }
+            },
+            sparse.dailyWindows.flatMap { window -> window.entries }
+                .map { it.day },
+        )
     }
 
     @Test
@@ -39,6 +71,18 @@ class HomePresentationTest {
         assertEquals(
             listOf("Conditions", "Forecast pattern", "Historical context"),
             presentation.detailGroups.map { it.title },
+        )
+        assertEquals(
+            listOf("Feels like", "Humidity", "Dew point", "Pressure", "Cloud cover", "Visibility"),
+            presentation.detailGroups[0].metrics.map { it.label },
+        )
+        assertEquals(
+            listOf("3h temperature", "3h pressure", "Persistence", "Volatility", "Pattern"),
+            presentation.detailGroups[1].metrics.map { it.label },
+        )
+        assertEquals(
+            listOf("Seasonal temperature", "Temperature departure", "Pressure departure", "Analog years", "Reference"),
+            presentation.detailGroups[2].metrics.map { it.label },
         )
     }
 
@@ -159,5 +203,34 @@ class HomePresentationTest {
         val presentation = HomePresentationMapper.map(noDetailsBundle, HistoricalSynthesis.derive(noDetailsBundle))
 
         assertTrue(presentation.detailGroups.none { it.title == "Conditions" })
+    }
+
+    @Test
+    fun detailsOmitEmptyOptionalGroupsButKeepSourceContext() {
+        val emptyDetailsBundle = bundle.copy(
+            current = bundle.current.copy(
+                temperatureC = null,
+                apparentC = null,
+                relativeHumidityPct = null,
+                dewPointC = null,
+                pressureHpa = null,
+                cloudCoverPct = null,
+                visibilityKm = null,
+            ),
+            hourly = emptyList(),
+            baseline = bundle.baseline.copy(
+                temperatureSamplesC = emptyList(),
+                analogYears = emptyList(),
+            ),
+        )
+
+        val emptyDetails = HomePresentationMapper.map(
+            emptyDetailsBundle,
+            HistoricalSynthesis.derive(emptyDetailsBundle),
+        )
+
+        assertTrue(emptyDetails.detailGroups.isEmpty())
+        assertEquals("Model estimate · Offline development fixture", emptyDetails.sourceLine)
+        assertEquals("Updated 12:00 PM", emptyDetails.updatedLine)
     }
 }
