@@ -90,11 +90,13 @@ only; they add no provider/data contracts or destinations.
 
 Evidence: `.codex/history/2026-09-21-009-theme-b-shared-monitor-components.md`.
 
-### R0.6A — Theme B forecast monitor components — PLANNED
+### R0.6A — Theme B forecast monitor components — DONE
 
 After R0.6, add the reusable metric tile, hourly forecast tile, and daily
 forecast row. Preserve visible text/semantics and actual forecast values; do
 not apply the components to a page composition in this slice.
+
+Evidence: `.codex/history/2026-09-21-010-theme-b-forecast-monitor-components.md`.
 
 ### R0.6B — Theme B Details monitor components — PLANNED
 

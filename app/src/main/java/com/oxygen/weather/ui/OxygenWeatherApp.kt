@@ -166,14 +166,14 @@ private fun NowPage(home: HomePresentation, appearance: ResolvedAppearance) {
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(layout.controlGap),
         ) {
-            CompactFactPanel(
+            MetricTile(
                 label = "PRECIPITATION",
                 headline = now.precipitationHeadline,
                 supporting = now.precipitationSupporting,
                 appearance = appearance,
                 modifier = Modifier.weight(1f).heightIn(min = 114.dp),
             )
-            CompactFactPanel(
+            MetricTile(
                 label = "WIND",
                 headline = now.windHeadline,
                 supporting = now.windSupporting,
@@ -248,31 +248,13 @@ private fun HourlyWindow(window: HourlyWindowPresentation, appearance: ResolvedA
         window.entries.chunked(2).forEach { pair ->
             Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(layout.gridGap)) {
                 pair.forEach { entry ->
-                    MonitorSection(
-                        appearance,
-                        Modifier
+                    HourlyForecastTile(
+                        entry = entry,
+                        appearance = appearance,
+                        modifier = Modifier
                             .weight(1f)
-                            .fillMaxHeight()
-                            .clearAndSetSemantics { contentDescription = entry.spokenSummary },
-                    ) {
-                        Row(
-                            Modifier.fillMaxSize().padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            entry.conditionIdentity?.let { condition ->
-                                WeatherMark(condition, Modifier.size(42.dp), appearance.conditionAccent)
-                                Spacer(Modifier.width(10.dp))
-                            }
-                            Column(Modifier.weight(1f)) {
-                                Text(entry.time, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                Text(entry.temperature, style = MaterialTheme.typography.headlineMedium)
-                                Text(entry.condition, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                entry.precipitation?.let {
-                                    Text("Precip $it", style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
-                                }
-                            }
-                        }
-                    }
+                            .fillMaxHeight(),
+                    )
                 }
                 if (pair.size == 1) Spacer(Modifier.weight(1f))
             }
@@ -313,24 +295,12 @@ private fun DailyWindow(window: DailyWindowPresentation, appearance: ResolvedApp
     MonitorSection(appearance, modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 8.dp)) {
             window.entries.forEach { entry ->
-                Row(
-                    Modifier
+                DailyForecastRow(
+                    entry = entry,
+                    appearance = appearance,
+                    modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
-                        .clearAndSetSemantics { contentDescription = entry.spokenSummary },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(entry.day, style = MaterialTheme.typography.labelMedium, modifier = Modifier.width(54.dp))
-                    entry.conditionIdentity?.let { condition ->
-                        WeatherMark(condition, Modifier.size(34.dp), appearance.conditionAccent)
-                        Spacer(Modifier.width(8.dp))
-                    }
-                    Text(entry.condition, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text("${entry.low}  ${entry.high}", style = MaterialTheme.typography.titleMedium)
-                        Text(entry.precipitation, style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
-                    }
-                }
+                )
             }
         }
     }
@@ -378,25 +348,6 @@ private fun MetricGroup(group: MetricGroupPresentation, appearance: ResolvedAppe
                     if (row.size == 1) Spacer(Modifier.weight(1f))
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun CompactFactPanel(
-    label: String,
-    headline: String,
-    supporting: String,
-    appearance: ResolvedAppearance,
-    modifier: Modifier = Modifier,
-) {
-    val layout = appearance.layout
-    MonitorSection(appearance, modifier) {
-        Column(Modifier.fillMaxSize().padding(layout.compactPanelInset), verticalArrangement = Arrangement.Center) {
-            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.height(4.dp))
-            Text(headline, style = MaterialTheme.typography.titleMedium)
-            Text(supporting, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

@@ -114,3 +114,35 @@ clean-clone Linux verification or its Windows/macOS follow-on slices.
 - RTL layout and service-level TalkBack traversal/speech remain unverified.
   No live network, provider, repository, cache, alerts, new Compose UI-test
   dependency, or page-specific Theme B redesign was exercised in this slice.
+
+## R0.6A Theme B forecast monitor components
+
+- Baseline: `python scripts/dev.py workflow` and
+  `python scripts/dev.py contract` passed. The default-shell
+  `python scripts/dev.py test` was blocked by the shell exposing Java 8;
+  Gradle requires Java 17 or later. With
+  `JAVA_HOME=/usr/lib/jvm/java-26-openjdk` and the project-local
+  `.android-sdk`, `python scripts/dev.py test` passed after the extraction.
+- The shared UI boundary now contains `MetricTile`, `HourlyForecastTile`, and
+  `DailyForecastRow`. Now, Hourly, and Daily use those renderers at their
+  existing call sites. The one outer `HorizontalPager`, page order, Back
+  handling, window state, visible forecast values, and entry spoken summaries
+  remain in place.
+- Closure: with Java 26 and the project-local Android SDK,
+  `python scripts/dev.py check` passed workflow validation, the source
+  contract, JVM tests, lint, and debug APK assembly. `git diff --check` passed.
+- Installed APK: `app/build/outputs/apk/debug/app-debug.apk`, installed on
+  `emulator-5554` (`oxygen_starter`) at the 360x640 compact override. Subtle
+  and debug Effects Off captures cover Now, Hourly first/Later/date jump,
+  Daily first/Later, Details, page-selector and forecast-entry semantics, and
+  Back transitions Details → Daily → Hourly → Now. The compact visual result
+  is equivalent to the pre-extraction rendering; Effects Off is solid/opaque
+  and transitions immediately.
+- At font scale 1.3, Subtle and Effects Off captures cover Now, Hourly
+  first/Later, Daily first/Later, and Details; key facts and controls remained
+  reachable, with expected one-line ellipsis for a long daily condition.
+  Font scale was restored to 1.0. Evidence is retained under
+  `.codex/test-artifacts/010-theme-b-forecast-monitor-components/`.
+- RTL layout and service-level TalkBack traversal/speech were not exercised.
+  No live network, provider/repository/cache, alert, Compose UI-test harness,
+  or page-specific Theme B redesign was exercised in this slice.

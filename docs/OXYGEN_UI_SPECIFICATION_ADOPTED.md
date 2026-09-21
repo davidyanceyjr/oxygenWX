@@ -173,13 +173,17 @@ Historical implementation baseline (not a visual acceptance target):
   controls. The header carries visible page identity plus supporting
   presentation text; on Now, that supporting text carries source/update
   context.
+- Shared forecast monitor components are implemented: `MetricTile`,
+  `HourlyForecastTile`, and `DailyForecastRow`. They render supplied
+  presentation strings/entries and resolved appearance values; page-specific
+  composition and state remain owned by the page functions.
 - An effective, debug-selectable Effects Off rendering path for installed verification. It is solid,
   opaque, static, and complete; it is not a persisted user preference.
 
 Still separate future slices:
 
 - application of the Theme B system to each page, including page-specific
-  forecast and Details monitor components;
+  forecast composition and Details monitor components;
 
 - live provider/repository/cache path;
 - official alerts;

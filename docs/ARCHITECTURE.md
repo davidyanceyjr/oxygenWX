@@ -65,11 +65,13 @@ Theme B resolver owns semantic colors, typography, shared layout/shape values,
 and effects resolution; `OxygenTheme` bridges those values into Material and
 provides the contract through a composition boundary. The shared monitor
 structures are `MonitorHeader`, `HomePageSelector`, `MonitorSection`, and
-`ForecastWindowControls`; page, pager, and forecast-window state remains in
-`OxygenWeatherApp`. These components receive presentation text/models,
-`ResolvedAppearance`, and semantic callbacks only. Compose receives the
-resolved appearance and presentation models, never a raw theme identifier,
-provider DTO, repository, or persistence object.
+`ForecastWindowControls`. The forecast renderers are `MetricTile`,
+`HourlyForecastTile`, and `DailyForecastRow`; they receive formatted strings
+or typed presentation entries plus `ResolvedAppearance` only. Page, pager, and
+forecast-window state remains in `OxygenWeatherApp`. These components receive
+presentation text/models, `ResolvedAppearance`, and semantic callbacks only.
+Compose receives the resolved appearance and presentation models, never a raw
+theme identifier, provider DTO, repository, or persistence object.
 
 ## Production expansion
 

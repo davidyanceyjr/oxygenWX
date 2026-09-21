@@ -5,9 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -16,13 +21,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.oxygen.weather.presentation.DailyEntryPresentation
+import com.oxygen.weather.presentation.HourlyEntryPresentation
 
 @Composable
 internal fun MonitorHeader(
@@ -125,5 +134,90 @@ internal fun ForecastWindowControls(
             enabled = canLater,
             modifier = Modifier.weight(1f).heightIn(min = layout.controlTargetMinimum),
         ) { Text("Later") }
+    }
+}
+
+@Composable
+internal fun MetricTile(
+    label: String,
+    headline: String,
+    supporting: String?,
+    appearance: ResolvedAppearance,
+    modifier: Modifier = Modifier,
+) {
+    val layout = appearance.layout
+    MonitorSection(appearance, modifier) {
+        Column(
+            Modifier.fillMaxSize().padding(layout.compactPanelInset),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(4.dp))
+            Text(headline, style = MaterialTheme.typography.titleMedium)
+            supporting?.let {
+                Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+    }
+}
+
+@Composable
+internal fun HourlyForecastTile(
+    entry: HourlyEntryPresentation,
+    appearance: ResolvedAppearance,
+    modifier: Modifier = Modifier,
+) {
+    MonitorSection(
+        appearance,
+        modifier.clearAndSetSemantics { contentDescription = entry.spokenSummary },
+    ) {
+        Row(
+            Modifier.fillMaxSize().padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            entry.conditionIdentity?.let { condition ->
+                WeatherMark(condition, Modifier.size(42.dp), appearance.conditionAccent)
+                Spacer(Modifier.width(10.dp))
+            }
+            Column(Modifier.weight(1f)) {
+                Text(entry.time, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(entry.temperature, style = MaterialTheme.typography.headlineMedium)
+                Text(entry.condition, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                entry.precipitation?.let {
+                    Text("Precip $it", style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun DailyForecastRow(
+    entry: DailyEntryPresentation,
+    appearance: ResolvedAppearance,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .clearAndSetSemantics { contentDescription = entry.spokenSummary },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(entry.day, style = MaterialTheme.typography.labelMedium, modifier = Modifier.width(54.dp))
+        entry.conditionIdentity?.let { condition ->
+            WeatherMark(condition, Modifier.size(34.dp), appearance.conditionAccent)
+            Spacer(Modifier.width(8.dp))
+        }
+        Text(
+            entry.condition,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Column(horizontalAlignment = Alignment.End) {
+            Text("${entry.low}  ${entry.high}", style = MaterialTheme.typography.titleMedium)
+            Text(entry.precipitation, style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
+        }
     }
 }
