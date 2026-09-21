@@ -177,6 +177,11 @@ Historical implementation baseline (not a visual acceptance target):
   `HourlyForecastTile`, and `DailyForecastRow`. They render supplied
   presentation strings/entries and resolved appearance values; page-specific
   composition and state remain owned by the page functions.
+- Shared Details monitor components are implemented: `SourceFreshnessPanel`
+  presents supplied source/update text as explicit inspection facts, and
+  `InspectionMetricGroup` renders the supplied semantic group boundary and
+  metric values. They do not create chart or trend-series data; the Details
+  page-specific Theme B composition remains future work.
 - An effective, debug-selectable Effects Off rendering path for installed verification. It is solid,
   opaque, static, and complete; it is not a persisted user preference.
 

@@ -39,14 +39,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.DailyWindowPresentation
 import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.HourlyWindowPresentation
-import com.oxygen.weather.presentation.MetricGroupPresentation
 import com.oxygen.weather.presentation.WeatherMarkCondition
 import kotlinx.coroutines.launch
 
@@ -317,37 +314,18 @@ private fun DetailsPage(home: HomePresentation, appearance: ResolvedAppearance) 
         verticalArrangement = Arrangement.spacedBy(layout.gridGap),
     ) {
         MonitorHeader("Details", "Provider-neutral measurements and derived context")
+        SourceFreshnessPanel(
+            sourceLine = home.sourceLine,
+            updatedLine = home.updatedLine,
+            appearance = appearance,
+            modifier = Modifier.fillMaxWidth(),
+        )
         home.detailGroups.forEach { group ->
-            MetricGroup(
+            InspectionMetricGroup(
                 group = group,
                 appearance = appearance,
                 modifier = Modifier.fillMaxWidth(),
             )
-        }
-    }
-}
-
-@Composable
-private fun MetricGroup(group: MetricGroupPresentation, appearance: ResolvedAppearance, modifier: Modifier = Modifier) {
-    val layout = appearance.layout
-    MonitorSection(appearance, modifier.fillMaxWidth()) {
-        Column(
-            Modifier.fillMaxWidth().padding(layout.panelInset),
-            verticalArrangement = Arrangement.spacedBy(layout.gridGap),
-        ) {
-            Text(group.title, style = MaterialTheme.typography.titleMedium)
-            val rows = group.metrics.chunked(2)
-            rows.forEach { row ->
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    row.forEach { metric ->
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
-                            Text(metric.label.uppercase(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            Text(metric.value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                        }
-                    }
-                    if (row.size == 1) Spacer(Modifier.weight(1f))
-                }
-            }
         }
     }
 }

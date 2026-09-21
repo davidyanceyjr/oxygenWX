@@ -98,11 +98,12 @@ not apply the components to a page composition in this slice.
 
 Evidence: `.codex/history/2026-09-21-010-theme-b-forecast-monitor-components.md`.
 
-### R0.6B — Theme B Details monitor components — PLANNED
+### R0.6B — Theme B Details monitor components — DONE
 
-After R0.6A, add the source/freshness and bounded trend/inspection components
-needed by Details. A chart container may render only presentation data whose
-interval, provenance, and unavailable behavior are already defined.
+Added the presentation-only source/freshness and bounded inspection components
+needed by Details. No chart container was added because the presentation model
+does not yet define a series interval, provenance, range, and unavailable-data
+behavior. Evidence: `.codex/history/2026-09-21-011-theme-b-details-monitor-components.md`.
 
 ### R0.7 — Theme B Hourly base page — PLANNED
 

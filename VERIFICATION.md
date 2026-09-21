@@ -146,3 +146,24 @@ clean-clone Linux verification or its Windows/macOS follow-on slices.
 - RTL layout and service-level TalkBack traversal/speech were not exercised.
   No live network, provider/repository/cache, alert, Compose UI-test harness,
   or page-specific Theme B redesign was exercised in this slice.
+
+## R0.6B Theme B Details monitor components
+
+- `python scripts/dev.py workflow` and `python scripts/dev.py contract` passed
+  before and after the change. `SourceFreshnessPanel` now shows supplied source
+  and update strings as labeled Details facts and provides a combined semantic
+  summary; `InspectionMetricGroup` is the shared presentation-only owner of the
+  pre-existing Conditions, Forecast pattern, and Historical context grid.
+- The default Java remains Java 8 and cannot run Gradle. The earlier Java 26
+  path recorded by prior cycles is absent on this host; with
+  `JAVA_HOME=/usr/lib/jvm/java-27-openjdk`, Java 27 first in `PATH`, and the
+  project-local `.android-sdk`, `python scripts/dev.py test` passed.
+- With that same environment, `python scripts/dev.py check` passed its active
+  workflow validation, JVM tests, lint, and debug APK assembly. `git diff
+  --check` passed. The separate source-contract command also passed, retaining
+  one outer pager and the presentation-only Compose boundary.
+- No adb device was connected (`adb devices -l` returned an empty device list),
+  so this cycle has no installed screenshots, hierarchy dumps, font-scale,
+  Back-navigation, RTL, or service-level TalkBack evidence. Those visual and
+  interaction boundaries remain unverified. Evidence notes are retained under
+  `.codex/test-artifacts/011-theme-b-details-monitor-components/`.

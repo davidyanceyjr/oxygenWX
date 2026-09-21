@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.DailyEntryPresentation
 import com.oxygen.weather.presentation.HourlyEntryPresentation
+import com.oxygen.weather.presentation.MetricGroupPresentation
 
 @Composable
 internal fun MonitorHeader(
@@ -218,6 +219,64 @@ internal fun DailyForecastRow(
         Column(horizontalAlignment = Alignment.End) {
             Text("${entry.low}  ${entry.high}", style = MaterialTheme.typography.titleMedium)
             Text(entry.precipitation, style = MaterialTheme.typography.labelMedium, color = appearance.precipitationAccent)
+        }
+    }
+}
+
+@Composable
+internal fun SourceFreshnessPanel(
+    sourceLine: String,
+    updatedLine: String,
+    appearance: ResolvedAppearance,
+    modifier: Modifier = Modifier,
+) {
+    val layout = appearance.layout
+    MonitorSection(
+        appearance,
+        modifier.clearAndSetSemantics {
+            contentDescription = "Source: $sourceLine. Freshness: $updatedLine"
+        },
+    ) {
+        Column(
+            Modifier.fillMaxWidth().padding(layout.panelInset),
+            verticalArrangement = Arrangement.spacedBy(layout.gridGap),
+        ) {
+            SourceFreshnessFact("SOURCE", sourceLine)
+            SourceFreshnessFact("FRESHNESS", updatedLine)
+        }
+    }
+}
+
+@Composable
+private fun SourceFreshnessFact(label: String, value: String) {
+    Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+}
+
+@Composable
+internal fun InspectionMetricGroup(
+    group: MetricGroupPresentation,
+    appearance: ResolvedAppearance,
+    modifier: Modifier = Modifier,
+) {
+    val layout = appearance.layout
+    MonitorSection(appearance, modifier.fillMaxWidth()) {
+        Column(
+            Modifier.fillMaxWidth().padding(layout.panelInset),
+            verticalArrangement = Arrangement.spacedBy(layout.gridGap),
+        ) {
+            Text(group.title, style = MaterialTheme.typography.titleMedium)
+            group.metrics.chunked(2).forEach { row ->
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    row.forEach { metric ->
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
+                            Text(metric.label.uppercase(), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(metric.value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        }
+                    }
+                    if (row.size == 1) Spacer(Modifier.weight(1f))
+                }
+            }
         }
     }
 }
