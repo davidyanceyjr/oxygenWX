@@ -175,12 +175,17 @@ status copy is identical for visible and accessibility text. No provider,
 cache, or refresh orchestration was implemented. Evidence and limitations:
 `.codex/history/2026-09-21-017-refresh-cache-presentation-states.md`.
 
-### R1.3 — Unit conversion boundary — ACTIVE
+### R1.3 — Unit conversion boundary — DONE
 
-Keep canonical values unchanged while adding pure, deterministic Metric/US/UK
-conversion and formatting functions for each supported weather quantity. This
-active plan covers the pure presentation boundary only; applying the preset to
-Home mapping remains R1.3A. Plan: `.codex/plans/018-unit-conversion-boundary.md`.
+Keep canonical values unchanged while adding additive pure presentation
+conversion/formatting APIs for Metric/US/UK: absolute and differential
+temperature, wind speed/gust, pressure and its differences, visibility,
+precipitation amount/rate, and unchanged percent/direction/duration values.
+Absolute temperatures and temperature differences use distinct conversions;
+formatting is deterministic and locale-independent. No existing mapper or
+fixture output changes. Applying the preset to Home mapping remains R1.3A. Plan:
+`.codex/plans/018-unit-conversion-boundary.md`. Evidence and limitations:
+`.codex/history/2026-09-21-018-unit-conversion-boundary.md`.
 
 ### R1.3A — Unit-aware presentation mapping — PLANNED
 
