@@ -2,7 +2,7 @@
 
 Status: Completed
 Cycle ID: 019-production-theme-system-authority
-Roadmap item: R0.12
+Roadmap item: R0.11A
 Created: 2026-09-22
 
 ## Objective
@@ -32,7 +32,7 @@ Documentation, design-reference assets, theme token/specification documents, pro
 ## Acceptance criteria
 
 - Five built-in themes are consistently named Atmospheric, Glass, Minimal OLED, Instrument, and Terminal.
-- R0.12–R0.17A are ordered after R0.11 and before R1 with only R0.12 NEXT; successors PLANNED.
+- At the time of close, R0.11A–R0.11H were ordered after R0.11 and before R1, with R0.11A NEXT and successors PLANNED. After this work was reconciled, R0.11A is DONE and R0.11B is NEXT.
 - Design references, token catalog, architecture/contract documentation, useful prompts, and all staged candidates are organized under permanent docs paths.
 - Historical Theme B references remain intact; docs describe the current implementation as a sketch/baseline rather than the final production visual target.
 - No documentation path points to the removed intake directory.
@@ -52,5 +52,9 @@ Run `python scripts/dev.py workflow`, `python scripts/dev.py contract`, and `git
 ## Out of scope
 
 - Production Kotlin, Android resources, tests, dependencies, renderer/resolver implementation, or application behavior.
-- Any R0.13 work or future theme implementation.
+- Any R0.11B work or future theme implementation.
 - Removing existing Theme B historical references or unrelated cleanup.
+
+## Post-close roadmap reconciliation
+
+The cycle completed the authority/assets slice now identified as R0.11A. Its original close-time verification recorded the then-current roadmap status (R0.11A NEXT); the repaired roadmap now marks R0.11A DONE and R0.11B NEXT. Staged source candidates live under `docs/theme-system/staged-production/` and were not added to Android source/resource roots.

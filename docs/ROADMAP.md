@@ -146,7 +146,7 @@ production behavior or release scope.
 
 Evidence: `.codex/history/2026-09-20-007-roadmap-context-budget-audit.md`.
 
-### R0.12 — Production theme-system authority — NEXT
+### R0.11A — Production theme-system authority — DONE
 
 Organize the approved five-theme design references and token catalog under
 project-owned documentation paths, and synchronize the product, UI, and
@@ -157,9 +157,11 @@ application behavior.
 Acceptance: the five production themes and cross-theme invariants are consistent
 across authority docs; reference paths resolve; current sketch language is
 historical/baseline; workflow and contract checks plus `git diff --check` pass.
-The history record must state that no production rendering changed.
+The staged production candidates remain documentation material under `docs/theme-system/staged-production/`; no Android source or runtime resource was changed.
 
-### R0.13 — Production theme resolver foundation — PLANNED
+Evidence: `.codex/history/2026-09-22-019-production-theme-system-authority.md`.
+
+### R0.11B — Production theme resolver foundation — NEXT
 
 Introduce the additive semantic theme identity/catalog/resolver behind the
 existing UI-local appearance boundary. Add no page-composition changes and do
@@ -167,7 +169,7 @@ not change the app entry point. Preserve the current renderer as the default
 while resolver/catalog tests establish all five built-in themes and Effects Off
 invariants.
 
-### R0.14 — Production themed shared components — PLANNED
+### R0.11C — Production themed shared components — PLANNED
 
 Add reusable theme-resolved surfaces, page identity/navigation styling,
 current-condition hero, metric presentation, forecast entry/row treatment,
@@ -175,20 +177,20 @@ Details groups, weather marks, and background primitives. Keep them additive and
 unreferenced by the app entry point until page migration slices. Components
 consume typed presentation data plus resolved semantic appearance only.
 
-### R0.15 — Atmospheric Now + Hourly migration — PLANNED
+### R0.11D — Atmospheric Now + Hourly migration — PLANNED
 
 Migrate Now and Hourly to the production component family using Atmospheric as
 the verification theme. Preserve current facts, spoken summaries, six-entry
 windows, date jumps, Earlier/Later, outer-pager ownership, Back behavior, and
 Effects Off completeness. Do not migrate Daily or Details in this slice.
 
-### R0.15A — Atmospheric Daily + Details migration — PLANNED
+### R0.11E — Atmospheric Daily + Details migration — PLANNED
 
-After R0.15, migrate Daily and Details to the same production component family.
+After R0.11D, migrate Daily and Details to the same production component family.
 Preserve five-day windows, Earlier/Later, source/freshness,
 provider-normalized/derived/historical separation, and no invented chart inputs.
 
-### R0.16 — Alternate production theme mappings — PLANNED
+### R0.11F — Alternate production theme mappings — PLANNED
 
 Add Glass, Minimal OLED, Instrument, and Terminal mappings through the same
 semantic resolver and component family. Themes may vary visual treatment but
@@ -196,7 +198,7 @@ not page structure, forecast membership, weather meaning, provenance, or
 accessibility meaning. No component branches on raw theme IDs to change
 data/navigation behavior.
 
-### R0.17 — Production renderer cutover + sketch retirement — PLANNED
+### R0.11G — Production renderer cutover + sketch retirement — PLANNED
 
 After the migrated pages and all theme mappings have installed evidence, make
 the production renderer the application path. Remove or isolate obsolete
@@ -204,7 +206,7 @@ Theme B sketch-only code only when the final diff proves it is unused. Do not
 change provider/presentation semantics, add settings persistence, or refetch
 weather because of theme selection.
 
-### R0.17A — Cross-theme visual/accessibility verification — PLANNED
+### R0.11H — Cross-theme visual/accessibility verification — PLANNED
 
 Verify the installed production renderer across the five built-in themes,
 compact phone, a large-font case, RTL where chronology/navigation is affected,
@@ -395,7 +397,7 @@ verify no canonical value/cache mutation or unit mismatch occurs.
 
 Persist and restore one of Atmospheric, Glass, Minimal OLED, Instrument, or
 Terminal without changing canonical weather/cache values or causing a forecast
-refetch. Depends on the production resolver, renderer, and verification work in R0.13–R0.17A.
+refetch. Depends on the production resolver, renderer, and verification work in R0.11B–R0.11H.
 
 ### R5.2A — Theme selection settings surface — PLANNED
 

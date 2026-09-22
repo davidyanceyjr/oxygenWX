@@ -451,147 +451,147 @@
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/ThemeEngineCompatibility.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/ThemeEngineCompatibility.kt",
       "sha256": "08cb2f016fb1515cb9ee099fd18f05b88122aedbcdab3cb722403032134c3ae5"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/LegacyEffectsAdapter.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/LegacyEffectsAdapter.kt",
       "sha256": "fbfe1a00e11ccc3aad238e615496f62abc0368909cee2b69434e9463c97ce253"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeCatalog.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeCatalog.kt",
       "sha256": "4ede5582facc4947295ec71c81e582fdc857755c9dab03c327fd35eb6c2b118f"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeEngine.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeEngine.kt",
       "sha256": "27741d277866e4bf959b875e2afa940883a7773d137bdaeb6bacf10e0756f505"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeEngineModels.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeEngineModels.kt",
       "sha256": "0291ec833971ce22c5ce804310915858c66ea238cc6e8d7ebbff158c2bb18e14"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeResolver.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeResolver.kt",
       "sha256": "8303fa83a10289f7e31260b767d8348b4c070f11bedda884f2f90007ee4a4924"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/test/java/com/oxygen/weather/ui/themeengine/ThemeCatalogTest.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/test/java/com/oxygen/weather/ui/themeengine/ThemeCatalogTest.kt",
       "sha256": "64386cf00ff435640c34b8d93c049eeeaade5931270df6bfc0e97d92ecb054c3"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/test/java/com/oxygen/weather/ui/themeengine/ThemeResolverTest.kt",
+      "path": "docs/theme-system/staged-production/R0.11B-theme-resolver-foundation/app/src/test/java/com/oxygen/weather/ui/themeengine/ThemeResolverTest.kt",
       "sha256": "d1957949fdb748ec760d17f6cef772bcf3d53de9a84a5c1eda8f823ac797ce14"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeBackground.kt",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeBackground.kt",
       "sha256": "22ff308bc436a9d05e494f135b92167db7c723a3bb114fe0a556d0868277e2e7"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ProductionHomeComponents.kt",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ProductionHomeComponents.kt",
       "sha256": "5fd698f4c318bab86a388c9e815b930e634493214ad56d302a45f1441af1d5a0"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemePanels.kt",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemePanels.kt",
       "sha256": "8f1f7d5731deb7c7879a81bf1a987fe605208c272eebcb294e744159486a99d4"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemedWeatherMark.kt",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemedWeatherMark.kt",
       "sha256": "a948d744e3d6a65edb7a2defb4afa2ee110aafb70aee633097d45e0b7a8c3ea5"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/WeatherDisplayComponents.kt",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/WeatherDisplayComponents.kt",
       "sha256": "a5dd322e5856321f2c9b68cb1fab7e38afe4418069c33b7e60eb936eba78e665"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_atmospheric.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_theme_atmospheric.xml",
       "sha256": "bad0a6ffaf462a6657aa278685d208de892a1b4bb0643eded2b25943ff394934"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_glass.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_theme_glass.xml",
       "sha256": "e3cb79f1435fa4a8d71be0709be792a7a016b40a84a2851da48d50be544bd46a"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_instrument.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_theme_instrument.xml",
       "sha256": "43f34359ade1264e0c0116f4fecc86f55a7e0d634044f720bb9daea884d1f291"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_oled.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_theme_oled.xml",
       "sha256": "0498bf917ae9ff2254f9e066104ce84e09880e40d63ae943f7c5eb11f11e3c10"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_terminal.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_theme_terminal.xml",
       "sha256": "42326a2cce8ac3fc62a5dd12e64f719057449b9a92f0c05e8dabff6c5fe962e8"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_humidity.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_wx_humidity.xml",
       "sha256": "5fd447f4e05d586d2d4086ea0de2f07d8905aacc953e774f1ede3751bc6bb62c"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_pressure.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_wx_pressure.xml",
       "sha256": "36976cbca85074d57202e16a7f51d03f2c13b1385f6070264c32a6fd0dab2a77"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_uv.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_wx_uv.xml",
       "sha256": "bf89d079a000058a14d78d2935a1f83cb3feda81242bc1523728094e2a7e47dd"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_visibility.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_wx_visibility.xml",
       "sha256": "e4df7ee34b0e87548e4e5d9bfea00928b00c86221e21934222bfea6527710389"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_wind.xml",
+      "path": "docs/theme-system/staged-production/R0.11C-shared-production-components/app/src/main/res/drawable/ic_wx_wind.xml",
       "sha256": "5dddbd25b42abc319c2bfe545cd46ee5bbb89b77503f36f87f9e431bfde14542"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.15-page-migration-candidate/app/src/main/java/com/oxygen/weather/ui/themeengine/ProductionWeatherHome.kt",
+      "path": "docs/theme-system/staged-production/R0.11D-now-hourly-migration-candidate/app/src/main/java/com/oxygen/weather/ui/themeengine/ProductionWeatherHome.kt",
       "sha256": "3bffb48aa56f50d763638e7735b2025d438927cdf5698533106286bc79e8c567"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.16-alternate-theme-verification/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemePreviewGallery.kt",
+      "path": "docs/theme-system/staged-production/R0.11F-alternate-theme-verification/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemePreviewGallery.kt",
       "sha256": "a96a60aa23068c4bf4fb6b5e02b1905006d7490c2df9147c83670320ce41c2f1"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/MainActivity.kt",
+      "path": "docs/theme-system/staged-production/R0.11G-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/MainActivity.kt",
       "sha256": "0460348f2015611c885a1eb46fdc95e5ae10f3ae21a2a7e53c34f7f73d333e1a"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/ThemeLaunchSelection.kt",
+      "path": "docs/theme-system/staged-production/R0.11G-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/ThemeLaunchSelection.kt",
       "sha256": "babad5208e8970c5e7031f5837ecc0f2223f7757d037a173aff3fbfe5f58c202"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/ui/OxygenWeatherApp.kt",
+      "path": "docs/theme-system/staged-production/R0.11G-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/ui/OxygenWeatherApp.kt",
       "sha256": "9957ade5e28b7cd9be02f420faffafabc9c803b211c7395c25f7f0594fd65ed1"
     },
     {
       "category": "staged-candidate",
-      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/test/java/com/oxygen/weather/ThemeLaunchSelectionTest.kt",
+      "path": "docs/theme-system/staged-production/R0.11G-renderer-cutover-candidate/app/src/test/java/com/oxygen/weather/ThemeLaunchSelectionTest.kt",
       "sha256": "5a244d3bdc5731babff13acfdf83a2ec3ac078e857a3d256c637036f539efc38"
     }
   ]

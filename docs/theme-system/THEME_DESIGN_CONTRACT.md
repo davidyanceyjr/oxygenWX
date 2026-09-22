@@ -25,4 +25,4 @@ These references guide visual exploration and component intent. They do not requ
 
 Theme selection, contrast, effects, and system motion policy resolve to semantic appearance roles and render styles before theme-aware Compose components consume the existing typed presentation models. Components must not branch on a raw theme identity to change weather or interaction meaning. Layout and theming remain presentation concerns.
 
-The future architecture is documented in `docs/ARCHITECTURE.md`. R0.12 establishes authority only; R0.13 and later roadmap slices implement the resolver, components, page migration, cutover, and verification in bounded stages.
+The future architecture is documented in `docs/ARCHITECTURE.md`. R0.11A establishes authority only; R0.11B and later roadmap slices implement the resolver, components, page migration, cutover, and verification in bounded stages.
