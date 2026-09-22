@@ -1,0 +1,598 @@
+{
+  "schemaVersion": 1,
+  "preparedAgainst": "7e63abad6344f8c1d82e6bfd71590782af9c23a1",
+  "themes": [
+    "Atmospheric",
+    "Glass",
+    "Minimal OLED",
+    "Instrument",
+    "Terminal"
+  ],
+  "files": [
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/README.md",
+      "sha256": "218986a2026e66bd2db13498193f8566fdeceef884460be658a88c9dc935bc8f"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/atmospheric/backgrounds/atmospheric_backdrop.png",
+      "sha256": "f246dd860b963654d9f96723e06b71ac0a22424a736fd403f18e79e91de97c73"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/backgrounds/glass_backdrop.png",
+      "sha256": "30c81e3783c0df301360cdec0a3aa08d4970e2a473e4cf084e44b8fa79a6cb56"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png",
+      "sha256": "74e834c76e148d561d5f4696c9784b3e1131bd31089f13878d1863954eb85860"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/01_color_palette.png",
+      "sha256": "bbd6b1a39cc019f0d24d1b9d6ae63f17d23a42d153b96086bf67735c1a730428"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/02_typography.png",
+      "sha256": "350e5c5e7256a53678b43901fecfb34c44f922eb2cb9ec081a858c9e0534d39b"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/03_iconography.png",
+      "sha256": "8ec1589c7ce3f69d086898cb367db1072f5465bef1e0ae934407cd4321e67efb"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/04_core_components.png",
+      "sha256": "84dd940d2ef0e3009ca970b81dd70b77eeb3220c525daca04d9a14c0f013fd19"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/05_data_viz_components.png",
+      "sha256": "653e7583b4900646d89f12dc7c1d08d0b1f9e92285951c8213c9737f3b75f882"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/06_layout_spacing_tokens.png",
+      "sha256": "31dce044d553922237c98e26280baa730a04f851bc30333e478b68b8e74e0b0e"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/07_panel_anatomy.png",
+      "sha256": "1c10d3cb6de97ad30aa27327ff06c9f620894ae07feb40938ea9e0ae1b8639c6"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/08_screen_example.png",
+      "sha256": "a9970f5d4af1849c453485b148570dfe131a80003aceeb13c33701468092e29d"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/air_quality.png",
+      "sha256": "509654cd3080e38a0d7c5e28414f7b77de511087bd7062be1a7502dfe63fb84d"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png",
+      "sha256": "ca07610cd1cc8b57035fd9cd1452aa776d1f6cf678ca4beb3d4a868d340b5ae3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/humidity.png",
+      "sha256": "ee974e162d5fa880d0a11ff39a2d6c07fd28ad9b111421825512cbc8c15d88fe"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/pressure.png",
+      "sha256": "c6108f908e713f77f4a8f83c1e78a25c7ff1f3b8238bba56308a1391b8da8916"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/radar.png",
+      "sha256": "d35096aa3b7bb320e7c54999c9f5f8ffe5722a970922d1ad69f7e4c5a301bfc3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/rain.png",
+      "sha256": "7f1afc5dd85d93a7ed14b46ef20331fffd6b8456b7c27a760c3166e858a10e0d"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/storm.png",
+      "sha256": "645987d469f00ab2761d7a3d5a59f1dda57be2587ab0cdbc61b592485964564c"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/sunny.png",
+      "sha256": "e72fa56b3c361252b338ddda929820692006f1cdc0a7d67ac34c168d03cabb80"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/temperature.png",
+      "sha256": "8ed01296d65f4c00884508e10ffa2ee6d8e4def512326b1c44652d6b58f6e5ad"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/uv_index.png",
+      "sha256": "35b33ffe7c33cf15e74c3397c31f137fa262e8f706bd3494d2f4a31917c316a7"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/visibility.png",
+      "sha256": "f8380843f720b993c04d93b2de08ddc6504db6402ceef2fddd6a10e641d02bb3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/wind.png",
+      "sha256": "472d78a60e20fbc2c58375e970cf4aa88ac51c1ff628121767f9930173e81424"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/backgrounds/instrument_backdrop.png",
+      "sha256": "82612a2f6abb7be342975c405634293fec81367a275f625fd04e1e1ebaf92b22"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png",
+      "sha256": "0a99c3b80bef14e70358bdc4859d88791e944203d150104427a3ea43bdd39dcd"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/01_color_palette.png",
+      "sha256": "e50c7a6f78d59b61268d98f37f5776ba2a385a3a4c76d53d4976e638fee16861"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/02_typography.png",
+      "sha256": "6676be8b702b3c909be7a5a497723ed2453501aa7348f5edce29b1c321ecf5a5"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/03_iconography.png",
+      "sha256": "da9396f70bee5d2f52bb2a503510896c6145ea5b80db9170c7fc5a0743bf6def"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/04_core_components.png",
+      "sha256": "52c905d28b8822f384743c94ef7e2f86485a5d4429c767c7e6070d435c75e9d4"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/05_data_viz_components.png",
+      "sha256": "f1f597a594a5192b77f4574eef321cbfb232b877cd7a89f8b0cdfe29080ffd70"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/06_layout_spacing_tokens.png",
+      "sha256": "1eb034bc84050e10cf9c7e47745139ae8bf61070fd8d161bc86c0cccaa658271"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/07_panel_anatomy.png",
+      "sha256": "f36f6ad7fdf3c8fbf801055c63f0ef70ee1335e66ba8b067ba95b3624c5e97d3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/08_screen_example.png",
+      "sha256": "c15df78e5a4750f302888d4f0c92f42c547edd7d035bd7de37b29fee0f5bff94"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/air_quality.png",
+      "sha256": "653d4ff0260acfb8fb7661a7f661750db7d3e7019ac633a3d0c0049436841aef"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png",
+      "sha256": "18cbea5b9ebe0992330c255ec32309b9dece74cbe13a3936675415bf434003b3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/humidity.png",
+      "sha256": "6af0d4a26faa6824f23903e9dd5a36babbba4c211a1b76774168d8aefcdae0e0"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/pressure.png",
+      "sha256": "faecc6ed803d7e049ddfd52c8ec46cda3c8e8535f6f698e4c4e2869bb00855af"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/radar.png",
+      "sha256": "9c5787adf479c8e6d0edf3b923e8a883e7eac5e12dd610bdf1ab01a23caa55c5"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/rain.png",
+      "sha256": "5e642bbc0a5f02a4e807306e791f686add377046f1233ba663f1bc993fdcb64d"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/storm.png",
+      "sha256": "703b959bb6fcd9270b1b5ffe242f2abbfab8caa55ce7e7ec29bdcab25b54bd77"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/sunny.png",
+      "sha256": "255da302474f4b1a4fad8043ed2211c9d3655bd57e80ef3f0100418d5e9db16b"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/temperature.png",
+      "sha256": "bfdd1ca800301c756224680be930116b85d8b7ac5468c4dc0d40d49c2ff1a7c3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/uv_index.png",
+      "sha256": "8524c999ece363e9ca9cc1c632e337040c32955639eb5c25a34bb3359b53e4ac"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/visibility.png",
+      "sha256": "40110a6c50dbba42cf846d03ec95eedc025e0bc73286a350e4aaf6b0ef963c13"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/wind.png",
+      "sha256": "9411d17100a09c8aa6b6e916ca619bdb74165c15b910d6b63f3374f15c7c34e9"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/minimal-oled/backgrounds/oled_backdrop.png",
+      "sha256": "3289ae4838bd2fee459921025d00f3c3d33b96d3982efb6afd09e5f17f20ecd3"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/footer_capabilities.png",
+      "sha256": "0445f08c59768e33e5b0aba7724cbede08e95bccfc4e4f36e13587db7ae1466c"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/glass_phone.png",
+      "sha256": "2fae2ffd8a832e32870d811a57159543a1a5b08d73b7aa533901c56f6ebd94ea"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/header_title.png",
+      "sha256": "81a28d5fc41ee6f11e2f69e23fe384a427eec36f0fc019a78e498ef7398e5bd4"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/instrument_phone.png",
+      "sha256": "120a190d45d88af6c317a84dd67bd6e68d22cbb6016c421b48156cbefbe75e1b"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/boards/oxygenwx_theme_engine_ui_package.png",
+      "sha256": "888f374a06ad1bb89958da5b3c742e83c0b09c441377a3832b08d0b7256dd8cc"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/boards/weather_concept_board.png",
+      "sha256": "4dd74bc2e1d2a633c7494f6b20f93ca0af11207084c0d16210df5b1d77c9c0a9"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/boards/weather_reimagined_board.png",
+      "sha256": "446711e451750e42e01caad83f43c3820adbfcaf21b89e58aaebf140a9f77048"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/01_theme_personalities.png",
+      "sha256": "51ff2ebd14272ef08697afd4b3d47fa15e8ee072437d1a2effa2faff647985dd"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/02_shared_design_tokens.png",
+      "sha256": "5b70a661accf3f1f7c02417996e86c13c23e3bc28756db79c9e6c8dd5a1f6957"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/03_core_components.png",
+      "sha256": "d1b73c9322e1944ff34bbadaa5f90b6e849fe558e8f06e88b59271bcebc3c0bf"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/04_standard_home_structure.png",
+      "sha256": "ae6f1adcd1ce74b5f9b00e073ba33055bc4931fa24d410bead31e25a7ed01388"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/05_theme_mapping_matrix.png",
+      "sha256": "21bc521f95a791dbdd7c8499ad7b7da2db85b90f64ccdf330f49614981707973"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/06_example_screen_glass.png",
+      "sha256": "2c25e45962a5e01d6e3e3c66e6903c2ea442b383181543faa8b078ec8c9c728d"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/07_package_contents.png",
+      "sha256": "9c3a7185efc4087a8234a0b35863c9f157ce1b1b541764de2f08a4e6ab04e57e"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/right_value_prop.png",
+      "sha256": "e8173cd97cdbd8656f665969c6626a811f3e13ee801f9ed911dd29c5e6bec343"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_clear.svg",
+      "sha256": "cc6cda4f937cee5cbe22f7883e995d76b060e62a74fe6b539d90aae3564b26a7"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_cloudy.svg",
+      "sha256": "4f3c3eb755022cd2cda2baac2ee8241f93253b0c5d544894de47676dc52ae1af"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_humidity.svg",
+      "sha256": "335483e650e07f686a32ccb247186e5c7890626d08e3a7591256125e510fab9b"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_location.svg",
+      "sha256": "c41de2b7bec87677d89048449c73d1defac7868d3c139bf731a549b128ce8846"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_map.svg",
+      "sha256": "c90eaa75c4236f0288becc8a67961d75129aa0e0537a9ddc7afd43647a49384c"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_partly_cloudy.svg",
+      "sha256": "777ce0dc593404d4afca3f35efee4b7fe5660ba03e5211d65206dcbace364c93"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_pressure.svg",
+      "sha256": "53446a4b31db5e91313d230a54c1e2e0f17a9724feac72a66727b6aecc6a4f01"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_rain.svg",
+      "sha256": "2a083e0478075d642e8f344770a18ae910730b2d6804aa8aeaf213baa1a141c5"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_settings.svg",
+      "sha256": "5ea0275432408cc7d6fae37384737f3884fe311d50b126a48684a311503940c4"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_snow.svg",
+      "sha256": "772a06c701ac70e05038b2479084f47680051386a06ae802790818eecbbb80bd"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_storm.svg",
+      "sha256": "4c9066ff9a74ecc02cb7f8a04c33edc18babb286750278e1d0a4d9536d46a6ea"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_uv.svg",
+      "sha256": "7eaf69f5df91b27c5e3ade7830fa2c7cd8b51947b0dc767ec22fcb88bbc5b2d4"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_visibility.svg",
+      "sha256": "b649ce1ca39786afefc2141c2ff5d038fe28550b1780a2d3f8c0172538f13fe4"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/shared/svg-icons/ic_wind.svg",
+      "sha256": "222d5b4f058275e3e73a73a1e4d92fa61c11096b30c24002559e610ec16b4714"
+    },
+    {
+      "category": "design-reference",
+      "path": "docs/assets/design-references/production-themes/terminal/backgrounds/terminal_backdrop.png",
+      "sha256": "5cb511e9a05b7dbfb7775ea1385961d56ed2d726438d55e5c747f51a661448a2"
+    },
+    {
+      "category": "theme-token",
+      "path": "docs/theme-system/tokens/catalog/atmospheric.json",
+      "sha256": "50909e36510fac71ec103bad8efbbf392e5f544003353987e039e983db4be3f6"
+    },
+    {
+      "category": "theme-token",
+      "path": "docs/theme-system/tokens/catalog/glass.json",
+      "sha256": "3ce2209f125c15983f1d19a403034650afa62ae97890de0eae976a8e33d005ac"
+    },
+    {
+      "category": "theme-token",
+      "path": "docs/theme-system/tokens/catalog/instrument.json",
+      "sha256": "18864612fe1b6729abe514c97e13913413179476bdb48cc998c5596f90b30e46"
+    },
+    {
+      "category": "theme-token",
+      "path": "docs/theme-system/tokens/catalog/minimal_oled.json",
+      "sha256": "a3175fee9fff7e1098b643749c0163e2c1d6931a1060a6bca91ed56fe0d34b11"
+    },
+    {
+      "category": "theme-token",
+      "path": "docs/theme-system/tokens/catalog/terminal.json",
+      "sha256": "b55a20ac0fee5fa1f8266c18576f39ab1ee35c67e47318bc1454d90a44fe5d42"
+    },
+    {
+      "category": "theme-token",
+      "path": "docs/theme-system/tokens/catalog/theme_manifest.json",
+      "sha256": "df463e73f3fc5586e79707e980a47bdf0bc10c25160063107e3547ffe866ba86"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/CANDIDATE_SOURCE_NOTICE.md",
+      "sha256": "b682516119645919af639eb9fe7bf2791510d52cdb2340be551303fb40bfea71"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/ThemeEngineCompatibility.kt",
+      "sha256": "08cb2f016fb1515cb9ee099fd18f05b88122aedbcdab3cb722403032134c3ae5"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/LegacyEffectsAdapter.kt",
+      "sha256": "fbfe1a00e11ccc3aad238e615496f62abc0368909cee2b69434e9463c97ce253"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeCatalog.kt",
+      "sha256": "4ede5582facc4947295ec71c81e582fdc857755c9dab03c327fd35eb6c2b118f"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeEngine.kt",
+      "sha256": "27741d277866e4bf959b875e2afa940883a7773d137bdaeb6bacf10e0756f505"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeEngineModels.kt",
+      "sha256": "0291ec833971ce22c5ce804310915858c66ea238cc6e8d7ebbff158c2bb18e14"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeResolver.kt",
+      "sha256": "8303fa83a10289f7e31260b767d8348b4c070f11bedda884f2f90007ee4a4924"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/test/java/com/oxygen/weather/ui/themeengine/ThemeCatalogTest.kt",
+      "sha256": "64386cf00ff435640c34b8d93c049eeeaade5931270df6bfc0e97d92ecb054c3"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.13-theme-resolver-foundation/app/src/test/java/com/oxygen/weather/ui/themeengine/ThemeResolverTest.kt",
+      "sha256": "d1957949fdb748ec760d17f6cef772bcf3d53de9a84a5c1eda8f823ac797ce14"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeBackground.kt",
+      "sha256": "22ff308bc436a9d05e494f135b92167db7c723a3bb114fe0a556d0868277e2e7"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ProductionHomeComponents.kt",
+      "sha256": "5fd698f4c318bab86a388c9e815b930e634493214ad56d302a45f1441af1d5a0"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemePanels.kt",
+      "sha256": "8f1f7d5731deb7c7879a81bf1a987fe605208c272eebcb294e744159486a99d4"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemedWeatherMark.kt",
+      "sha256": "a948d744e3d6a65edb7a2defb4afa2ee110aafb70aee633097d45e0b7a8c3ea5"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/java/com/oxygen/weather/ui/themeengine/components/WeatherDisplayComponents.kt",
+      "sha256": "a5dd322e5856321f2c9b68cb1fab7e38afe4418069c33b7e60eb936eba78e665"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_atmospheric.xml",
+      "sha256": "bad0a6ffaf462a6657aa278685d208de892a1b4bb0643eded2b25943ff394934"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_glass.xml",
+      "sha256": "e3cb79f1435fa4a8d71be0709be792a7a016b40a84a2851da48d50be544bd46a"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_instrument.xml",
+      "sha256": "43f34359ade1264e0c0116f4fecc86f55a7e0d634044f720bb9daea884d1f291"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_oled.xml",
+      "sha256": "0498bf917ae9ff2254f9e066104ce84e09880e40d63ae943f7c5eb11f11e3c10"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_theme_terminal.xml",
+      "sha256": "42326a2cce8ac3fc62a5dd12e64f719057449b9a92f0c05e8dabff6c5fe962e8"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_humidity.xml",
+      "sha256": "5fd447f4e05d586d2d4086ea0de2f07d8905aacc953e774f1ede3751bc6bb62c"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_pressure.xml",
+      "sha256": "36976cbca85074d57202e16a7f51d03f2c13b1385f6070264c32a6fd0dab2a77"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_uv.xml",
+      "sha256": "bf89d079a000058a14d78d2935a1f83cb3feda81242bc1523728094e2a7e47dd"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_visibility.xml",
+      "sha256": "e4df7ee34b0e87548e4e5d9bfea00928b00c86221e21934222bfea6527710389"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.14-shared-production-components/app/src/main/res/drawable/ic_wx_wind.xml",
+      "sha256": "5dddbd25b42abc319c2bfe545cd46ee5bbb89b77503f36f87f9e431bfde14542"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.15-page-migration-candidate/app/src/main/java/com/oxygen/weather/ui/themeengine/ProductionWeatherHome.kt",
+      "sha256": "3bffb48aa56f50d763638e7735b2025d438927cdf5698533106286bc79e8c567"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.16-alternate-theme-verification/app/src/main/java/com/oxygen/weather/ui/themeengine/components/ThemePreviewGallery.kt",
+      "sha256": "a96a60aa23068c4bf4fb6b5e02b1905006d7490c2df9147c83670320ce41c2f1"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/MainActivity.kt",
+      "sha256": "0460348f2015611c885a1eb46fdc95e5ae10f3ae21a2a7e53c34f7f73d333e1a"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/ThemeLaunchSelection.kt",
+      "sha256": "babad5208e8970c5e7031f5837ecc0f2223f7757d037a173aff3fbfe5f58c202"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/main/java/com/oxygen/weather/ui/OxygenWeatherApp.kt",
+      "sha256": "9957ade5e28b7cd9be02f420faffafabc9c803b211c7395c25f7f0594fd65ed1"
+    },
+    {
+      "category": "staged-candidate",
+      "path": "docs/theme-system/staged-production/R0.17-renderer-cutover-candidate/app/src/test/java/com/oxygen/weather/ThemeLaunchSelectionTest.kt",
+      "sha256": "5a244d3bdc5731babff13acfdf83a2ec3ac078e857a3d256c637036f539efc38"
+    }
+  ]
+}

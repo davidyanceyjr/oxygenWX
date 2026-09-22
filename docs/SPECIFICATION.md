@@ -1,6 +1,6 @@
 # Oxygen Weather 1.0 — Product and Technical Specification
 
-**Specification version:** 1.0-draft.1  
+**Specification version:** 1.0-draft.2
 **Status:** implementation authority for the replacement-track prototype  
 **Date:** 2026-09-20  
 **Platform:** Android  
@@ -106,12 +106,17 @@ An unsupported alert region is different from a confirmed no-alert result.
 
 Appearance targets:
 
-- Oxygen, Paper, and Terminal built-in themes;
+- Atmospheric, Glass, Minimal OLED, Instrument, and Terminal built-in themes;
 - Standard and High contrast, independent of theme;
 - Standard and Simple layout presets;
 - Off, Subtle, and Full effects levels, with Off required to remain opaque, static, and complete.
 
-Changing appearance must not refetch weather or reinterpret weather values.
+The five built-in themes are alternate presentations of the same weather and navigation
+semantics. They may vary palette, typography, density, surface treatment, weather-mark and
+procedural-background treatment, and presentation motion. They must not change forecast values,
+chronology, provenance, missing-data behavior, official-alert meaning, page semantics, or
+accessibility meaning. Theme selection resolves to semantic appearance before reusable Compose
+components render it. Changing appearance must not refetch weather or reinterpret weather values.
 
 ### 3.6 Accessibility
 

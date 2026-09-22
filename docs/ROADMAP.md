@@ -146,6 +146,71 @@ production behavior or release scope.
 
 Evidence: `.codex/history/2026-09-20-007-roadmap-context-budget-audit.md`.
 
+### R0.12 — Production theme-system authority — NEXT
+
+Organize the approved five-theme design references and token catalog under
+project-owned documentation paths, and synchronize the product, UI, and
+architecture authority. The current Theme B renderer remains an implementation
+sketch/baseline. Documentation/assets only; do not change runtime rendering or
+application behavior.
+
+Acceptance: the five production themes and cross-theme invariants are consistent
+across authority docs; reference paths resolve; current sketch language is
+historical/baseline; workflow and contract checks plus `git diff --check` pass.
+The history record must state that no production rendering changed.
+
+### R0.13 — Production theme resolver foundation — PLANNED
+
+Introduce the additive semantic theme identity/catalog/resolver behind the
+existing UI-local appearance boundary. Add no page-composition changes and do
+not change the app entry point. Preserve the current renderer as the default
+while resolver/catalog tests establish all five built-in themes and Effects Off
+invariants.
+
+### R0.14 — Production themed shared components — PLANNED
+
+Add reusable theme-resolved surfaces, page identity/navigation styling,
+current-condition hero, metric presentation, forecast entry/row treatment,
+Details groups, weather marks, and background primitives. Keep them additive and
+unreferenced by the app entry point until page migration slices. Components
+consume typed presentation data plus resolved semantic appearance only.
+
+### R0.15 — Atmospheric Now + Hourly migration — PLANNED
+
+Migrate Now and Hourly to the production component family using Atmospheric as
+the verification theme. Preserve current facts, spoken summaries, six-entry
+windows, date jumps, Earlier/Later, outer-pager ownership, Back behavior, and
+Effects Off completeness. Do not migrate Daily or Details in this slice.
+
+### R0.15A — Atmospheric Daily + Details migration — PLANNED
+
+After R0.15, migrate Daily and Details to the same production component family.
+Preserve five-day windows, Earlier/Later, source/freshness,
+provider-normalized/derived/historical separation, and no invented chart inputs.
+
+### R0.16 — Alternate production theme mappings — PLANNED
+
+Add Glass, Minimal OLED, Instrument, and Terminal mappings through the same
+semantic resolver and component family. Themes may vary visual treatment but
+not page structure, forecast membership, weather meaning, provenance, or
+accessibility meaning. No component branches on raw theme IDs to change
+data/navigation behavior.
+
+### R0.17 — Production renderer cutover + sketch retirement — PLANNED
+
+After the migrated pages and all theme mappings have installed evidence, make
+the production renderer the application path. Remove or isolate obsolete
+Theme B sketch-only code only when the final diff proves it is unused. Do not
+change provider/presentation semantics, add settings persistence, or refetch
+weather because of theme selection.
+
+### R0.17A — Cross-theme visual/accessibility verification — PLANNED
+
+Verify the installed production renderer across the five built-in themes,
+compact phone, a large-font case, RTL where chronology/navigation is affected,
+and Effects Off. Record exact verified and unverified boundaries. This slice is
+evidence/repair only; it must not silently add new product scope.
+
 ## R1 — Domain and presentation stabilization
 
 ### R1.1 — Canonical domain contract — DONE
@@ -326,15 +391,16 @@ preset across recreation/relaunch without changing canonical cached data.
 After R5.1, apply the restored choice across all Home presentation surfaces and
 verify no canonical value/cache mutation or unit mismatch occurs.
 
-### R5.2 — Theme resolver — PLANNED
+### R5.2 — Persisted theme preference — PLANNED
 
-Implement the Paper appearance mapping through the semantic resolver established
-by R0.5. It does not add persistence/settings selection or alter Theme B.
+Persist and restore one of Atmospheric, Glass, Minimal OLED, Instrument, or
+Terminal without changing canonical weather/cache values or causing a forecast
+refetch. Depends on the production resolver, renderer, and verification work in R0.13–R0.17A.
 
-### R5.2A — Terminal theme mapping — PLANNED
+### R5.2A — Theme selection settings surface — PLANNED
 
-After R5.2, implement Terminal through the same semantic resolver and verify no
-component branches on a raw theme identifier.
+Expose the five built-in themes through accessible Appearance settings using the
+existing resolver/catalog. Selection changes presentation only.
 
 ### R5.3 — Contrast preference — PLANNED
 
@@ -394,7 +460,7 @@ destinations, including non-color-only status and unavailable states.
 ### R6.2 — Compact and large-font resilience — PLANNED
 
 Verify the project compact baseline and large-font conditions for all four Home
-pages, including Theme B and Effects Off states.
+pages, including the five production themes and Effects Off states.
 
 ### R6.2A — Settings compact and large-font resilience — PLANNED
 
@@ -407,12 +473,12 @@ Preserve earliest-to-latest data order while mirroring physical layout/direction
 
 ### R6.4 — Reduced-motion and appearance invariance — PLANNED
 
-Verify Theme B, contrast, and effects combinations on Home preserve weather
+Verify production-theme, contrast, and effects combinations on Home preserve weather
 semantics, controls, source/freshness, and no-refetch behavior.
 
 ### R6.4A — Cross-theme and layout appearance invariance — PLANNED
 
-After R6.4, extend the matrix to Paper, Terminal, Simple layout, and Settings
+After R6.4, extend the matrix across the five production themes, Simple layout, and Settings
 while preserving the same semantic/control invariants.
 
 ### R6.5 — Accessibility evidence closure — PLANNED

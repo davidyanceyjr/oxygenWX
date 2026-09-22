@@ -1,0 +1,21 @@
+{
+  "id": "glass",
+  "colors": {
+    "canvas": "#0B1220",
+    "atmosphereTop": "#122B58",
+    "atmosphereBottom": "#281A4A",
+    "atmosphereGlow": "#C084FC",
+    "surface": "#31527A",
+    "elevatedSurface": "#3A5E88",
+    "content": "#F8FAFF",
+    "secondaryData": "#C9D7EC",
+    "outline": "#A6C8FF",
+    "conditionAccent": "#60A5FA",
+    "precipitationAccent": "#22D3EE",
+    "warning": "#FBBF24",
+    "danger": "#FB7185"
+  },
+  "surface": {"opacity": 0.42, "radiusDp": 26, "borderDp": 1},
+  "spacingDp": {"gutter": 16, "stack": 12, "grid": 10, "panel": 14},
+  "motion": {"default": "subtle", "supportsFull": true}
+}

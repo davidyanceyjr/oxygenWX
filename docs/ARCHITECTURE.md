@@ -65,17 +65,44 @@ The presentation layer owns text/unit formatting, page-window selection, concise
 
 Compose owns layout, interaction, weather marks, atmospheric rendering, and accessibility semantics. The outer Home pager is the sole horizontal-swipe owner. Hourly/Daily window changes are explicit UI actions.
 
-Shared rendering consumes the UI-local `ResolvedAppearance` contract. The fixed
-Theme B resolver owns semantic colors, typography, shared layout/shape values,
-and effects resolution; `OxygenTheme` bridges those values into Material and
-provides the contract through a composition boundary. The shared monitor
-structures are `MonitorHeader`, `HomePageSelector`, `MonitorSection`, and
-`ForecastWindowControls`. The forecast renderers are `MetricTile`,
-`HourlyForecastTile`, and `DailyForecastRow`; they receive formatted strings
-or typed presentation entries plus `ResolvedAppearance` only. Details shares
-`SourceFreshnessPanel` and `InspectionMetricGroup`, which receive supplied
-source/update strings or typed presentation groups plus `ResolvedAppearance`
-only. Page, pager, and forecast-window state remains in `OxygenWeatherApp`.
+The current implementation sketch uses the UI-local `ResolvedAppearance` contract.
+Its fixed Theme B resolver owns semantic colors, typography, shared layout/shape values,
+and effects resolution; `OxygenTheme` bridges those values into Material and provides
+the contract through a composition boundary. These components and the current resolver
+are implementation baseline, not the future production visual authority.
+
+The approved future production boundary is:
+
+```text
+Theme selection + contrast + effects + system motion policy
+                         |
+                         v
+             semantic resolved appearance
+                         |
+                         v
+              theme-aware Compose components
+                         |
+                         v
+             existing typed presentation models
+```
+
+The future resolver maps presentation choices to semantic visual roles and render styles.
+Theme-aware Compose components consume those resolved values with the existing typed
+presentation models and semantic callbacks. Theme identity must not alter weather meaning,
+page/navigation behavior, provenance, missing-data handling, or accessibility semantics.
+Theme selection does not enter provider, repository, domain, derived-meteorology, or unit
+conversion architecture and does not refetch weather. The existing sketch components
+remain the current implementation until later roadmap slices introduce and cut over the
+production family. Theme art remains under `docs/assets/design-references/production-themes/`;
+full boards are documentation references, not runtime resources.
+
+The existing sketch monitor structures are `MonitorHeader`, `HomePageSelector`,
+`MonitorSection`, and `ForecastWindowControls`. The forecast renderers are `MetricTile`,
+`HourlyForecastTile`, and `DailyForecastRow`; they receive formatted strings or typed
+presentation entries plus `ResolvedAppearance` only. Details shares `SourceFreshnessPanel`
+and `InspectionMetricGroup`, which receive supplied source/update strings or typed
+presentation groups plus `ResolvedAppearance` only. Page, pager, and forecast-window state
+remains in `OxygenWeatherApp`.
 The Hourly page composes the presentation-supplied local-date jumps and
 six-entry window through these shared monitor components; its page and window
 state remains in `OxygenWeatherApp`.

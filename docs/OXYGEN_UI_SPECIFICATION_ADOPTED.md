@@ -4,7 +4,9 @@ This document is the local implementation contract for the clean-room UI redesig
 It supersedes the visual direction of the earlier Oxygen prototype and its Base
 Art Sheet v0.2. The upstream material recorded in
 `upstream/OXYGEN_SOURCE_REFERENCE.md` is historical research, not a visual
-reference or a screen-composition source.
+reference or a screen-composition source. The currently implemented Theme B UI is
+an implementation sketch/baseline being replaced; it is not the production visual
+acceptance target.
 
 ## Product principle
 
@@ -13,52 +15,36 @@ shape the atmosphere of the app, but decoration must never be required to
 understand the forecast. Data remains the interface; visual treatment helps
 users recognize state, scan information, and reach useful detail.
 
-## v1 visual direction
+## Production visual direction
 
-The Home experience is four purposeful weather-data screens, not a copied
-dashboard: Now, Hourly, Daily, and Details. Each screen uses a coherent set of
-theme-resolved components for hierarchy, state, and navigation.
+The production visual system is a shared component family with five built-in
+presentations:
 
-- **Aesthetic and functional:** calm, contemporary information design with
-  strong typographic hierarchy, intentional spacing, and a clear action model.
-- **Themed components:** surfaces, type, status treatments, weather marks,
-  charts/indicators, and controls consume semantic appearance tokens. A theme
-  changes their presentation consistently without changing weather meaning.
-- **Visual weather monitor:** compact indicators and weather-state treatments
-  communicate conditions, trends, freshness, availability, and selected state;
-  visible text and semantics always provide the equivalent meaning.
-- **Progressive detail:** a weather fact, summary, or indicator may link to a
-  relevant inspection surface when that link has a clear label, target, and
-  navigation outcome. It must not conceal required information or compete with
-  the primary page task.
-- **Gestures with feedback:** horizontal swiping remains owned by the outer
-  Home pager. Any other gesture must have an explicit affordance and immediate,
-  accessible state feedback; it cannot be the only route to weather data or a
-  core action.
+- **Atmospheric** — immersive procedural weather field with restrained container emphasis.
+- **Glass** — layered, restrained translucent surfaces over a procedural atmosphere.
+- **Minimal OLED** — black-first, low-decoration, typography- and data-dominant presentation.
+- **Instrument** — technical monitor treatment with bounded, source-supported data indicators.
+- **Terminal** — flat, console-like presentation with monospace typography.
 
-### Deprecated visual language
+Atmospheric is the initial implementation target. This does not establish a persisted
+user default; persistence and selection are later roadmap work. The personalities and
+shared component references are indexed in
+[`docs/assets/design-references/production-themes/`](assets/design-references/production-themes/).
+They guide visual exploration and component intent, not pixel-exact measurements or
+mandatory screen composition. Start with the [One App. Many Personalities board](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png), [Glass asset sheet](assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png), and [Instrument asset sheet](assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png); the full reference set is listed in the theme-system asset manifest.
 
-Do not use the upstream Base Art Sheet v0.2, its photographic weather scenes,
-dark-glass/gold card examples, or its dashboard composition as an implementation
-or review target. Those materials are deprecated in this repository. Likewise,
-the earlier local screenshot baselines remain historical verification evidence,
-not acceptance references for the redesigned UI.
+Use semantic Compose components, procedural drawing, and vectors where practical. Do
+not paste full art-board screenshots into runtime UI, add large concept boards to Android
+resources, or invent weather data to fill a reference composition. Glass as a local
+production theme is distinct from deprecated upstream dark-glass/gold dashboard examples.
+Where an image conflicts with product, accessibility, meteorological, navigation, or
+data-semantics requirements, the written repository authority wins.
 
-### Selected visual references
+The earlier selected Theme B reference images remain historical records of the current
+implementation sketch, not production acceptance targets:
 
-The initial selected direction is **Theme B — dark data monitor**. These
-project-local, non-runtime assets record the selected concept and its base page
-anatomy for future visual review:
-
-- `docs/assets/design-references/oxygen-theme-b-storyboard-v1.png` — four-page
-  storyboard showing the shared theme across Now, Hourly, Daily, and Details.
-- `docs/assets/design-references/oxygen-theme-b-base-pages-v1.png` — the base
-  component composition for those four pages before later interaction or visual
-  refinement.
-
-They establish direction and component intent, not pixel-exact implementation
-measurements. Product, accessibility, data-semantics, and navigation contracts
-remain authoritative where an image is ambiguous.
+- `docs/assets/design-references/oxygen-theme-b-storyboard-v1.png`
+- `docs/assets/design-references/oxygen-theme-b-base-pages-v1.png`
 
 ## Standard Home page model
 
@@ -131,9 +117,10 @@ No downloaded weather photographs or runtime icon packs are required for the cor
 Presentation configuration must not change weather semantics. The long-term resolver is conceptually:
 
 ```text
-Theme + contrast + effects + system motion policy
-    -> resolved appearance
-    -> Compose rendering
+Theme selection + contrast + effects + system motion policy
+    -> semantic resolved appearance
+    -> theme-aware Compose components
+    -> existing typed presentation models
 ```
 
 Effects Off must resolve to an opaque, static, complete interface. High contrast is an overlay on a selected theme rather than a separate weather interpretation.
@@ -152,9 +139,10 @@ Each page must have an explicit answer for loading, ready, cached/stale, partial
 - Controls should be named by meaning (for example, Earlier/Later) instead of depending on arrow direction alone.
 - Large text may use localized overflow/scrolling rather than clipping or shrinking critical content beyond readability.
 
-## Current candidate scope
+## Current implementation sketch/baseline
 
-Historical implementation baseline (not a visual acceptance target):
+The following describes the currently implemented Theme B sketch for repository context.
+It is historical implementation state and is not a production visual acceptance target:
 
 - Standard four-page pager.
 - 72-hour/10-day demo presentation horizons.
@@ -165,9 +153,10 @@ Historical implementation baseline (not a visual acceptance target):
 - Visible source/update context.
 - Derived/history separation in Details.
 - Basic screen-reader summaries and semantic page tabs.
-- A fixed development-default Theme B `ResolvedAppearance` boundary owns the
-  current semantic colors, typography, shared layout/shape values, Material
-  bridge, and Off/Subtle effects resolution.
+- A fixed development-default Theme B `ResolvedAppearance` boundary currently
+  owns semantic colors, typography, shared layout/shape values, the Material
+  bridge, and Off/Subtle effects resolution. It remains sketch implementation
+  pending the planned production resolver and cutover.
 - Shared structural monitor components are implemented: the neutral header,
   named Home page selector, opaque section surface, and explicit forecast-window
   controls. The header carries visible page identity plus supporting
@@ -177,12 +166,12 @@ Historical implementation baseline (not a visual acceptance target):
   `HourlyForecastTile`, and `DailyForecastRow`. They render supplied
   presentation strings/entries and resolved appearance values; page-specific
   composition and state remain owned by the page functions.
-- The Theme B Hourly page composition is implemented: it presents every
+- The current-sketch Hourly page composition is implemented: it presents every
   supplied local-date control, a two-column six-entry forecast grid, and
   explicit Earlier/Later controls. Date controls expose their represented date
   and selected state through semantics, while entries retain visible text and
   concise spoken summaries.
-- The Theme B Daily page composition is implemented: it presents the supplied
+- The current-sketch Daily page composition is implemented: it presents the supplied
   five-day window in an opaque monitor section with visible range identity,
   separated forecast rows, and explicit Earlier/Later controls. Rows retain
   visible date, condition, low/high, precipitation, and concise spoken summary
@@ -190,12 +179,12 @@ Historical implementation baseline (not a visual acceptance target):
 - Shared Details monitor components are implemented: `SourceFreshnessPanel`
   presents supplied source/update text as explicit inspection facts, and
   `InspectionMetricGroup` renders the supplied semantic group boundary and
-  metric values. The Theme B Details composition is implemented as a
+  metric values. The current-sketch Details composition is implemented as a
   vertically scrollable page with the source/freshness surface first, followed
   by ordered Conditions, Forecast pattern, and Historical context groups.
   Important facts remain visible text and semantics; no chart or trend-series
   data is invented.
-- The Theme B Now composition is implemented with a visible `Now` identity,
+- The current-sketch Now composition is implemented with a visible `Now` identity,
   location/source/update context, dominant current temperature and condition,
   readable apparent/humidity/dew-point, precipitation and wind facts, and the
   optional complete ordered Forecast pattern group. Visible text and inspected
@@ -210,7 +199,7 @@ Still separate future slices:
 - official alerts;
 - location and saved locations;
 - unit preferences;
-- persisted Oxygen/Paper/Terminal themes;
+- persisted selection among Atmospheric, Glass, Minimal OLED, Instrument, and Terminal;
 - high contrast preference;
 - persisted Off/Subtle/Full effects preference;
 - Simple layout;
