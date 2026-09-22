@@ -1,12 +1,14 @@
 # Current Development Cycle
 
 State: ACTIVE
-Cycle ID: 017-refresh-cache-presentation-states
-Roadmap item: R1.2A
-Plan: .codex/plans/017-refresh-cache-presentation-states.md
-Evidence: .codex/test-artifacts/017-refresh-cache-presentation-states/
+Cycle ID: 018-unit-conversion-boundary
+Roadmap item: R1.3
+Plan: .codex/plans/018-unit-conversion-boundary.md
+Evidence: .codex/test-artifacts/018-unit-conversion-boundary/
 Last updated: 2026-09-21
 
 ## Current objective
 
-# Plan 017 — Refresh and cache presentation states
+Add the pure, deterministic Metric/US/UK conversion and formatting boundary for
+supported weather quantities while leaving canonical values unchanged. Keep
+Home mapping and unit preference persistence for their later roadmap slices.

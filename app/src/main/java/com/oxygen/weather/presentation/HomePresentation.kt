@@ -5,6 +5,9 @@ import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DataType
 import com.oxygen.weather.data.CurrentWeather
 import com.oxygen.weather.data.HourWeather
+import com.oxygen.weather.data.RefreshFailureKind
+import com.oxygen.weather.data.WeatherDataOrigin
+import com.oxygen.weather.data.WeatherFreshness
 import com.oxygen.weather.data.WeatherBundle
 import com.oxygen.weather.data.WeatherCondition
 import com.oxygen.weather.derived.AtmosphereTexture
@@ -169,6 +172,60 @@ data class MetricPresentation(
 )
 
 object HomePresentationMapper {
+    /** Maps repository load outcomes while keeping weather-content availability independently nested. */
+    fun mapLoadState(input: HomePresentationInput): HomeLoadState = when (input) {
+        HomePresentationInput.Loading -> HomeLoadState.Loading(
+            StatusPresentation.of("Loading weather data."),
+        )
+        is HomePresentationInput.FailureWithoutData -> {
+            val failure = input.failure.kind.toPresentedFailure()
+            HomeLoadState.FailedWithoutData(
+                StatusPresentation.of("Refresh failed: ${failure.label()}. No saved weather data is available."),
+            )
+        }
+        is HomePresentationInput.Data -> {
+            val result = input.result
+            val content = mapState(result.bundle, input.derived)
+            val freshness = result.freshness.toPresentedFreshness()
+            val origin = result.origin.toRetainedDataOrigin()
+            val status = result.refreshFailure?.let { refreshFailure ->
+                val failure = refreshFailure.kind.toPresentedFailure()
+                val originLabel = if (origin == RetainedDataOrigin.LIVE) "live" else "saved"
+                StatusPresentation.of(
+                    "Refresh failed: ${failure.label()}. Retained $originLabel data is being shown. " +
+                        "Freshness: ${freshness.label()}.",
+                )
+            } ?: when (result.origin) {
+                WeatherDataOrigin.LIVE -> StatusPresentation.of(
+                    "Live weather data. Freshness: ${freshness.label()}.",
+                )
+                WeatherDataOrigin.CACHE -> StatusPresentation.of(
+                    "Saved weather data. Freshness: ${freshness.label()}.",
+                )
+            }
+
+            when {
+                result.refreshFailure != null -> HomeLoadState.RefreshFailedWithRetainedData(
+                    content = content,
+                    origin = origin,
+                    freshness = freshness,
+                    failure = result.refreshFailure.kind.toPresentedFailure(),
+                    status = status,
+                )
+                result.origin == WeatherDataOrigin.LIVE -> HomeLoadState.LiveData(
+                    content = content,
+                    freshness = freshness,
+                    status = status,
+                )
+                else -> HomeLoadState.CachedData(
+                    content = content,
+                    freshness = freshness,
+                    status = status,
+                )
+            }
+        }
+    }
+
     /**
      * Typed state boundary for application-state work. The existing [map] API remains a display
      * adapter until a later slice deliberately changes the caller boundary.
@@ -379,6 +436,35 @@ object HomePresentationMapper {
             }
         }
     }
+}
+
+private fun WeatherFreshness.toPresentedFreshness(): PresentedFreshness = when (this) {
+    WeatherFreshness.CURRENT -> PresentedFreshness.CURRENT
+    WeatherFreshness.STALE -> PresentedFreshness.STALE
+    WeatherFreshness.UNKNOWN -> PresentedFreshness.UNKNOWN
+}
+
+private fun WeatherDataOrigin.toRetainedDataOrigin(): RetainedDataOrigin = when (this) {
+    WeatherDataOrigin.LIVE -> RetainedDataOrigin.LIVE
+    WeatherDataOrigin.CACHE -> RetainedDataOrigin.SAVED
+}
+
+private fun RefreshFailureKind.toPresentedFailure(): PresentedRefreshFailureKind = when (this) {
+    RefreshFailureKind.NETWORK -> PresentedRefreshFailureKind.NETWORK
+    RefreshFailureKind.SOURCE -> PresentedRefreshFailureKind.SOURCE
+    RefreshFailureKind.UNKNOWN -> PresentedRefreshFailureKind.UNSPECIFIED
+}
+
+private fun PresentedFreshness.label(): String = when (this) {
+    PresentedFreshness.CURRENT -> "current"
+    PresentedFreshness.STALE -> "stale"
+    PresentedFreshness.UNKNOWN -> "unknown"
+}
+
+private fun PresentedRefreshFailureKind.label(): String = when (this) {
+    PresentedRefreshFailureKind.NETWORK -> "network"
+    PresentedRefreshFailureKind.SOURCE -> "source"
+    PresentedRefreshFailureKind.UNSPECIFIED -> "unspecified"
 }
 
 private fun List<*>.horizonStatus(targetSize: Int): ForecastHorizonStatus =

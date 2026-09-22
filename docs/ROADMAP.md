@@ -166,17 +166,21 @@ provenance, and derived/history alone do not make a result usable. The slice
 does not add refresh recovery UI or transport failure behavior. Evidence and
 limitations: `.codex/history/2026-09-21-016-presentation-state-contract.md`.
 
-### R1.2A — Refresh and cache presentation states — PLANNED
+### R1.2A — Refresh and cache presentation states — DONE
 
-After R1.2, define typed loading, cached/stale,
-refresh-failed-with-cache, and failed-without-cache presentation states and
-their honest visible/semantic wording. It does not implement provider, cache,
-or refresh orchestration.
+Added an outer typed load/refresh presentation state for loading, live/cached
+data, refresh failure with retained data, and failure without data. Data-bearing
+states preserve the nested R1.2 weather-content result and supplied freshness;
+status copy is identical for visible and accessibility text. No provider,
+cache, or refresh orchestration was implemented. Evidence and limitations:
+`.codex/history/2026-09-21-017-refresh-cache-presentation-states.md`.
 
-### R1.3 — Unit conversion boundary — PLANNED
+### R1.3 — Unit conversion boundary — ACTIVE
 
 Keep canonical values unchanged while adding pure, deterministic Metric/US/UK
-conversion and formatting functions for each supported weather quantity.
+conversion and formatting functions for each supported weather quantity. This
+active plan covers the pure presentation boundary only; applying the preset to
+Home mapping remains R1.3A. Plan: `.codex/plans/018-unit-conversion-boundary.md`.
 
 ### R1.3A — Unit-aware presentation mapping — PLANNED
 

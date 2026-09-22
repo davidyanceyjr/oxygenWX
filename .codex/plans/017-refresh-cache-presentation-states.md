@@ -1,30 +1,52 @@
 # Plan 017 — Refresh and cache presentation states
 
-Status: Active
+Status: Completed
 Cycle ID: 017-refresh-cache-presentation-states
 Roadmap item: R1.2A
 Created: 2026-09-21
-Revised: 2026-09-21
+Revised: 2026-09-21 (revision 2)
 
 ## Objective
 
-Extend the typed Home presentation boundary so application state can report
-loading, live/current data, cached data with freshness, refresh failure while
-retaining usable data, and failure without cached data. Each state supplies
-concise visible and accessibility wording without inventing weather, freshness,
-or a failure cause. The prior complete/partial/unavailable weather-content
-classification remains independently available inside states that contain
-weather data.
+Extend the typed Home presentation boundary with a second, outer state layer
+for loading and refresh/cache outcome. The new boundary must distinguish
+loading, data supplied from live or cached origin, refresh failure while data is
+retained, and failure with no retained data. It must supply deterministic,
+visible and accessibility-equivalent status wording without inventing weather,
+freshness, a cache, source/update metadata, or a failure cause. R1.2's
+complete/partial/unavailable weather-content classification remains a nested,
+independent value whenever an input supplies a bundle.
+
+The independently observable outcome is a pure
+`HomePresentationMapper.mapLoadState(HomePresentationInput)` contract. It
+accepts an explicit loading/data/no-data-failure input and returns a
+presentation-native outer state; the existing `mapState(bundle, derived)` and
+`map(bundle, derived)` APIs remain source-compatible.
 
 ## Production boundary
 
-Only `app/src/main/java/com/oxygen/weather/presentation/` and its deterministic
-unit tests. Add the smallest pure mapping/input contract needed to convert
-existing `WeatherRepositoryResult` facts into presentation states and represent
-loading or failure without data, which the current repository-result model
-cannot carry. The deterministic fixture remains the only caller; do not change
-Compose or application-state integration. No domain/provider/cache contract
-changes are expected.
+Production code is limited to `app/src/main/java/com/oxygen/weather/presentation/`.
+Add a small input algebra in that package: `Loading`, `Data` (a
+`WeatherRepositoryResult` plus its already-derived `DerivedWeather`), and
+`FailureWithoutData` (a supplied `RefreshFailure`). The input is an
+application-to-presentation mapper input, not a UI model. It may consume the
+existing canonical/repository facts but must not change their types or
+invariants.
+
+Add presentation-native output types only: an outer sealed load state, a
+live/cached/retained-data origin representation, a current/stale/unknown
+freshness representation, and a status presentation carrying `visibleText` and
+`accessibilitySummary`. `Data` results must nest the existing
+`HomePresentationState`; `FailureWithoutData` must have status text only and no
+`WeatherBundle`, `HomePresentation`, source line, update line, location, or
+synthetic weather field. The mapper remains pure. The deterministic fixture is
+not rewired; Compose and application-state integration remain unchanged.
+
+Documentation changes are limited to the contract paragraph in
+`docs/ARCHITECTURE.md` and the R1.2A status/outcome in `docs/ROADMAP.md`.
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md` already requires these states as they
+are added and must not be changed to imply rendering that this slice does not
+implement. No domain/provider/cache contract changes are expected.
 
 This is one bounded presentation-model slice, expected to remain below the
 repository's approximately 45% context-window limit. Stop and split follow-up
@@ -40,62 +62,110 @@ presentation package.
   states retain and present the supplied weather bundle; they do not replace
   it with placeholders or imply that cached data is newly fetched.
 - `WeatherDataOrigin`, `WeatherFreshness`, and `RefreshFailure` retain their
-  domain meanings. Unknown freshness remains unknown; failure wording must not
-  claim a cause more specific than the supplied `RefreshFailureKind` supports.
+  domain meanings. The mapper translates them into presentation-native state
+  values rather than making Compose interpret domain enums. Unknown freshness
+  remains unknown; failure wording must not claim a cause more specific than
+  the supplied `RefreshFailureKind` supports.
 - A successful live result remains successful when only its cache write failed;
   cache-write outcome is not a refresh failure and must not change weather
-  presentation state.
+  presentation state or its status wording.
 - A failure with no cached data is distinct from R1.2's unusable-weather state
-  and from loading. It carries no fabricated `WeatherBundle` or source/update
-  claim.
-- Visible state text and accessibility summary are both explicit and
-  semantically equivalent. Compose must not infer state from formatted strings.
+  and from loading. It carries no fabricated `WeatherBundle`, location,
+  source/update claim, or weather-content state.
+- Mapping a supplied repository result always preserves the nested R1.2
+  `Complete`, `Partial`, or `Unavailable` outcome. A repository result whose
+  supplied bundle has no weather fact is not silently converted into a
+  transport/cache failure.
+- Status copy is a first-class presentation value. Its visible and accessibility
+  strings are identical in this model so neither surface can drift
+  semantically. Compose must consume the typed outer state, not infer it from
+  formatted status text.
 - No fetching, retry, cache read/write, persistence, provider orchestration, or
   navigation behavior is added.
 
 ## Implementation steps
 
-1. Read the completed R1.2 mapper, repository-result domain fields, and existing
-   presentation tests; confirm the state matrix and allowed wording against
-   specification/roadmap authority.
-2. Define a compact sealed presentation state/input contract for loading,
-   usable live data, cached data with freshness, refresh failure with retained
-   data, and failure without cached data. Reuse R1.2 weather presentation
-   states and existing domain failure/freshness facts; do not duplicate provider
-   or persistence models.
-3. Implement a pure mapper that preserves source, freshness, valid/update time,
-   and the nested complete/partial weather state. Add concise visible copy and
-   accessibility summaries for every top-level state. Keep any compatibility
-   API narrow and avoid changing the current fixture caller.
-4. Add deterministic tests for every state, freshness known/stale/unknown,
-   failure kinds and retained data, no-data failure, live success with failed
-   cache write, and preservation of nested weather/provenance mapping.
-5. Run focused presentation tests, workflow/contract checks,
-   `python scripts/dev.py check`, and `git diff --check`. Preserve exact outcomes under
-   `.codex/test-artifacts/017-refresh-cache-presentation-states/`.
+1. Re-run the workflow check; inspect the completed R1.2 mapper, the canonical
+   repository-result types, and their tests. Record the exact mapping matrix
+   before editing: input class, supplied origin/freshness/failure facts, outer
+   output class, nested R1.2 state, and status copy.
+2. Add `HomePresentationInput` and the presentation-native outer state models.
+   Keep R1.2's `HomePresentationState` untouched as the nested content model.
+   Do not expose raw `WeatherDataOrigin`, `WeatherFreshness`,
+   `RefreshFailureKind`, `CacheWriteOutcome`, provider DTOs, or persistence
+   entities in the output consumed by UI.
+3. Implement `mapLoadState(input)` with this precedence:
+
+   | Input | Outer result | Required status facts |
+   | --- | --- | --- |
+   | `Loading` | loading | `Loading weather data.` |
+   | `Data` with no refresh failure and live origin | live data | live origin plus supplied current/stale/unknown freshness |
+   | `Data` with no refresh failure and cache origin | cached data | cached origin plus supplied current/stale/unknown freshness |
+   | `Data` with a refresh failure, regardless of retained origin | refresh failed with retained data | supplied failure kind, retained live/cache origin, and supplied freshness |
+   | `FailureWithoutData` | failed without data | supplied failure kind and an explicit absence of saved weather data |
+
+   Use the domain fact labels literally: current, stale, or unknown freshness;
+   network, source, or unspecified refresh failure. Do not derive an age,
+   infer a saved forecast, promise retry, or present `occurredAt` without a
+   documented display-time policy. For every data-bearing row, call the
+   existing `mapState(bundle, derived)` once and retain that exact nested result;
+   its source/update/valid-time formatting remains owned by R1.2 mapping.
+4. Make the wording deterministic and test it exactly. The visible and
+   accessibility strings must be the same model value. Data-bearing status text
+   identifies origin and says `Freshness: current`, `Freshness: stale`, or
+   `Freshness: unknown`; refresh-failed text additionally identifies only the
+   supplied network/source/unspecified failure and says that retained live or
+   saved data is being shown. No-data failure text identifies only the supplied
+   failure kind and says that no saved weather data is available.
+5. Preserve compatibility: leave `mapState(bundle, derived)` and
+   `map(bundle, derived)` signatures and output behavior unchanged, do not
+   change `WeatherRepositoryResult`, and do not alter the fixture or Compose
+   caller. Update `docs/ARCHITECTURE.md` after implementation to name the new
+   outer mapper boundary and its nested R1.2 relationship. Keep R1.2A marked
+   ACTIVE in `docs/ROADMAP.md` until the cycle is closed.
+6. Add a dedicated deterministic presentation-state test file plus only the
+   minimal shared fixture helpers it needs. Run the focused new test while
+   iterating, then the required broader verification. Preserve command output,
+   exact test count/result, final diff inspection, and unverified boundaries
+   under `.codex/test-artifacts/017-refresh-cache-presentation-states/`.
 
 ## Acceptance criteria
 
-- Typed presentation results distinguish loading, live/current usable data,
-  cached usable data, refresh failure with usable retained data, and failure
-  without cache.
-- Cached freshness is explicitly current, stale, or unknown according to the
-  supplied domain fact; no age threshold or freshness inference is introduced.
-- Refresh-failed-with-cache retains and nests the mapped weather presentation
-  and does not describe it as freshly fetched.
-- Failure-without-cache contains no fabricated weather/source/update values and
-  provides honest visible and accessibility wording grounded in the supplied
-  failure kind.
-- A cache-write failure beside a successful live result does not become a
-  refresh-failure state.
-- Deterministic tests cover the state matrix and existing R1.2 presentation
-  tests continue to pass.
+- `mapLoadState` has distinct typed results for loading, live data, cached data,
+  refresh failure with retained data, and failure without data; no caller must
+  parse strings to identify an outcome.
+- Every data-bearing outer state retains the exact nested R1.2 `Complete`,
+  `Partial`, or `Unavailable` result. Complete and partial fixture cases remain
+  weather-bearing; a no-weather-fact bundle remains nested unavailable rather
+  than becoming a no-data refresh failure.
+- The live/cache matrix preserves each supplied `CURRENT`, `STALE`, and
+  `UNKNOWN` freshness fact exactly. It introduces no age threshold or
+  freshness inference.
+- The retained-data failure matrix preserves network, source, and unknown
+  failure distinctions, explicitly identifies the retained origin, and never
+  calls data freshly fetched. A live result with every cache-write outcome,
+  including `FAILED`, remains live data rather than refresh failure.
+- Failure without data has no weather-content model, location, source line,
+  update line, provenance line, or invented cached-data claim. Its exact status
+  wording is limited to the supplied failure kind and absence of saved data.
+- Each status model has exact, accessibility-equivalent visible text and
+  accessibility summary. Existing `mapState`/`map` behavior and the deterministic
+  fixture caller remain unchanged.
+- `docs/ARCHITECTURE.md` accurately describes the implemented boundary;
+  `docs/ROADMAP.md` accurately reflects R1.2A as active during this cycle.
 - No UI, application-state, provider, repository orchestration, cache,
-  persistence, networking, retry, or visual behavior changes.
+  persistence, networking, retry, unit, navigation, or visual behavior changes.
 
 ## Verification and evidence
 
-Minimum commands:
+Focused deterministic test while iterating (using the repository Gradle
+launcher after ensuring the same JDK 17+ requirement used by `scripts/dev.py`):
+
+```sh
+./gradlew --no-daemon :app:testDebugUnitTest --tests com.oxygen.weather.presentation.HomePresentationLoadStateTest
+```
+
+Minimum completion commands:
 
 ```sh
 python scripts/dev.py workflow
@@ -105,24 +175,41 @@ python scripts/dev.py check
 git diff --check
 ```
 
-Run the focused presentation test target while iterating. A forced test rerun is
-appropriate if Gradle reports all tests up-to-date. This is a presentation
-contract slice; installed visual evidence is not required unless implementation
-expands into Compose rendering. Record any unavailable command and its exact
-reason in the cycle evidence file. No visual or service-level accessibility
-verification may be claimed unless performed.
+The new test class must cover this matrix, using deterministic fixture bundles:
+
+- loading;
+- each live and cached origin across `CURRENT`, `STALE`, and `UNKNOWN`;
+- retained-data refresh failure for each failure kind and both retained origins;
+- complete, partial, and nested-unavailable weather-content preservation;
+- all three live cache-write outcomes, especially `FAILED`;
+- no-data failure for each failure kind, including absence of weather/source/
+  update/location fields; and
+- exact visible/accessibility status equivalence plus unchanged existing R1.2
+  mapper tests.
+
+A forced test rerun is appropriate if Gradle reports all tests up-to-date. This
+is a presentation-contract slice; installed visual evidence is not required
+unless work expands into Compose rendering. Record unavailable commands and
+their exact reason in the cycle evidence file. Do not claim visual, RTL, or
+service-level accessibility verification unless performed.
 
 ## Risks and assumptions
 
-- `WeatherRepositoryResult` always carries a usable bundle, so loading and
-  failure-without-cache need a small explicit input representation without
-  weakening that domain invariant.
-- Refresh failure plus cached data may have unknown freshness; preserve that
-  uncertainty instead of treating cache origin as proof of staleness.
-- The wording should communicate status without promising automatic retry or
-  implying official-alert freshness.
-- R1.2 typed weather availability remains nested, not replaced by the load
-  status; empty Details or partial horizons do not imply load failure.
+- `WeatherRepositoryResult` carries a bundle but does not encode loading or a
+  failure with no retained bundle, so the explicit input algebra is required.
+  It must not weaken or mutate the existing repository-result model.
+- Refresh failure plus cached data may have `UNKNOWN` freshness; cache origin
+  alone is not proof of staleness. Conversely, an unusual live/stale or
+  live/unknown domain fact must be presented faithfully rather than normalized
+  away.
+- `RefreshFailure.occurredAt` has no established selected-location display-time
+  contract. Preserve the domain input but do not surface an event time in this
+  slice; a later UI/time-formatting slice may add it deliberately.
+- The wording communicates state without promising automatic retry, claiming
+  an official-alert update, or inventing a root cause.
+- R1.2 availability remains nested, not replaced by outer load status; empty
+  Details, optional-field absence, or a partial horizon does not imply refresh
+  failure.
 
 ## Out of scope
 
@@ -133,3 +220,6 @@ verification may be claimed unless performed.
   redesign.
 - Unit conversion/preferences, weather-data freshness thresholds, alerts,
   provenance semantics, or changes to canonical domain models.
+- Changing `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`, claiming a visible Home
+  loading/error state exists, or recording installed visual/accessibility
+  evidence for this model-only slice.
