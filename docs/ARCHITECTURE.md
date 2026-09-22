@@ -65,11 +65,21 @@ The presentation layer owns text/unit formatting, page-window selection, concise
 
 Compose owns layout, interaction, weather marks, atmospheric rendering, and accessibility semantics. The outer Home pager is the sole horizontal-swipe owner. Hourly/Daily window changes are explicit UI actions.
 
-The current implementation sketch uses the UI-local `ResolvedAppearance` contract.
-Its fixed Theme B resolver owns semantic colors, typography, shared layout/shape values,
-and effects resolution; `OxygenTheme` bridges those values into Material and provides
-the contract through a composition boundary. These components and the current resolver
-are implementation baseline, not the future production visual authority.
+The installed renderer remains the UI-local Theme B sketch. Its existing
+`ResolvedAppearance` resolver owns the semantic values consumed by current
+components; `OxygenTheme` bridges those values into Material and provides them through
+a composition boundary. This is the active app path and its defaults are unchanged.
+
+The additive production theme foundation lives under `ui/themeengine/`. Its typed
+catalog contains Atmospheric, Glass, Minimal OLED, Instrument, and Terminal
+definitions. The pure resolver accepts theme identity, contrast, layout, and effects
+inputs and returns a complete semantic palette, typography, geometry, render-style,
+and motion policy. It has no weather, navigation, persistence, provider, or
+Compose-runtime inputs, and app composition does not call it. Contrast resolves
+through palette values; layout resolves through geometry; Effects Off resolves a
+solid backdrop, no motion, and fully opaque panels and outlines. This resolver
+describes the future component contract; it does not claim those backgrounds or
+effects are rendered today.
 
 The approved future production boundary is:
 
@@ -86,14 +96,14 @@ Theme selection + contrast + effects + system motion policy
              existing typed presentation models
 ```
 
-The future resolver maps presentation choices to semantic visual roles and render styles.
-Theme-aware Compose components consume those resolved values with the existing typed
+Theme-aware Compose components consume the production resolver's resolved values with the existing typed
 presentation models and semantic callbacks. Theme identity must not alter weather meaning,
 page/navigation behavior, provenance, missing-data handling, or accessibility semantics.
 Theme selection does not enter provider, repository, domain, derived-meteorology, or unit
 conversion architecture and does not refetch weather. The existing sketch components
-remain the current implementation until later roadmap slices introduce and cut over the
-production family. Theme art remains under `docs/assets/design-references/production-themes/`;
+remain the current implementation until R0.11D–R0.11G migrate pages and cut over to the
+production family. R0.11C adds its shared components. Theme art remains under
+`docs/assets/design-references/production-themes/`;
 full boards are documentation references, not runtime resources.
 
 The existing sketch monitor structures are `MonitorHeader`, `HomePageSelector`,

@@ -161,13 +161,23 @@ The staged production candidates remain documentation material under `docs/theme
 
 Evidence: `.codex/history/2026-09-22-019-production-theme-system-authority.md`.
 
-### R0.11B — Production theme resolver foundation — NEXT
+### R0.11B — Production theme resolver foundation — DONE
 
-Introduce the additive semantic theme identity/catalog/resolver behind the
-existing UI-local appearance boundary. Add no page-composition changes and do
-not change the app entry point. Preserve the current renderer as the default
-while resolver/catalog tests establish all five built-in themes and Effects Off
-invariants.
+Added the additive typed catalog and pure resolver under
+`ui/themeengine/` for Atmospheric, Glass, Minimal OLED, Instrument, and
+Terminal. The resolver covers Standard/High contrast (palette only),
+Standard/Simple layout (geometry only), and Off/Subtle/Full effects policy.
+Effects Off resolves a solid backdrop, no motion, and fully opaque panels and
+outlines. Theme definitions include semantic palettes, typography, geometry,
+render styles, and preferred-effects metadata. The package remains unreferenced
+by app composition; the existing sketch renderer and launch behavior are
+unchanged.
+
+Focused and full JVM tests, workflow, contract, and diff checks passed. Candidate
+outline alpha values absent from the approved token JSON were not carried over;
+production outlines remain opaque. Exact verification and evidence:
+`.codex/history/2026-09-22-021-production-theme-resolver-foundation.md` and
+`.codex/test-artifacts/021-production-theme-resolver-foundation/`.
 
 ### R0.11C — Production themed shared components — PLANNED
 
