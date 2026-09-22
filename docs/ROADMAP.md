@@ -179,13 +179,25 @@ production outlines remain opaque. Exact verification and evidence:
 `.codex/history/2026-09-22-021-production-theme-resolver-foundation.md` and
 `.codex/test-artifacts/021-production-theme-resolver-foundation/`.
 
-### R0.11C — Production themed shared components — PLANNED
+### R0.11C — Production themed shared components: core monitor — NEXT
 
-Add reusable theme-resolved surfaces, page identity/navigation styling,
-current-condition hero, metric presentation, forecast entry/row treatment,
-Details groups, weather marks, and background primitives. Keep them additive and
-unreferenced by the app entry point until page migration slices. Components
-consume typed presentation data plus resolved semantic appearance only.
+Add the first bounded portion of the reusable production component family:
+theme-resolved surfaces, page identity/global selector, current-condition hero,
+metric tile, hourly forecast entry, daily forecast row, and explicit forecast
+window controls. Components consume typed presentation data and resolved
+semantic appearance only. Keep the package additive and unreferenced by the app
+entry point until page migration slices. Details groups, weather marks, and
+background primitives move to dependent R0.11CA so this component foundation
+stays within the context-budget limit.
+
+Plan: `.codex/plans/022-production-themed-shared-components.md`.
+
+### R0.11CA — Production themed shared components: details and atmosphere — PLANNED
+
+After R0.11C, add reusable Details metric groups and source/freshness treatment,
+provider-neutral weather marks, and background primitives using the same
+resolved appearance boundary. Keep components additive and unreferenced by app
+composition; do not migrate a page or invent chart/gauge inputs.
 
 ### R0.11D — Atmospheric Now + Hourly migration — PLANNED
 

@@ -1,12 +1,12 @@
 # Current Development Cycle
 
-State: IDLE
-Cycle ID: none
-Roadmap item: none
-Plan: none
-Evidence: none
+State: ACTIVE
+Cycle ID: 022-production-themed-shared-components
+Roadmap item: R0.11C
+Plan: .codex/plans/022-production-themed-shared-components.md
+Evidence: .codex/test-artifacts/022-production-themed-shared-components/
 Last updated: 2026-09-22
 
 ## Current objective
 
-No active cycle. Select the next item from `docs/ROADMAP.md`.
+# Plan 022 — Production themed shared components: core monitor
