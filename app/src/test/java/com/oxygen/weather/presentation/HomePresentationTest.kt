@@ -18,6 +18,59 @@ class HomePresentationTest {
     private val presentation = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle))
 
     @Test
+    fun typedStateClassifiesFullSuppliedHorizonsAsComplete() {
+        val state = HomePresentationMapper.mapState(bundle, HistoricalSynthesis.derive(bundle))
+
+        assertTrue(state is HomePresentationState.Complete)
+        assertEquals(presentation, (state as HomePresentationState.Complete).presentation)
+    }
+
+    @Test
+    fun typedStateClassifiesAShortHourlyHorizonWithoutChangingTheDailyHorizon() {
+        val shortHourlyBundle = bundle.copy(hourly = bundle.hourly.take(71))
+
+        val state = HomePresentationMapper.mapState(
+            shortHourlyBundle,
+            HistoricalSynthesis.derive(shortHourlyBundle),
+        )
+
+        assertTrue(state is HomePresentationState.Partial)
+        assertEquals(ForecastHorizonStatus.PARTIAL, (state as HomePresentationState.Partial).horizon.hourly)
+        assertEquals(ForecastHorizonStatus.COMPLETE, state.horizon.daily)
+        assertEquals(71, state.presentation.hourlyWindows.flatMap { it.entries }.size)
+    }
+
+    @Test
+    fun typedStateClassifiesAShortDailyHorizonWithoutChangingTheHourlyHorizon() {
+        val shortDailyBundle = bundle.copy(daily = bundle.daily.take(9))
+
+        val state = HomePresentationMapper.mapState(
+            shortDailyBundle,
+            HistoricalSynthesis.derive(shortDailyBundle),
+        )
+
+        assertTrue(state is HomePresentationState.Partial)
+        assertEquals(ForecastHorizonStatus.COMPLETE, (state as HomePresentationState.Partial).horizon.hourly)
+        assertEquals(ForecastHorizonStatus.PARTIAL, state.horizon.daily)
+        assertEquals(9, state.presentation.dailyWindows.flatMap { it.entries }.size)
+    }
+
+    @Test
+    fun typedStateTreatsCurrentOnlyWeatherAsAUsablePartialHorizon() {
+        val currentOnlyBundle = bundle.copy(hourly = emptyList(), daily = emptyList())
+
+        val state = HomePresentationMapper.mapState(
+            currentOnlyBundle,
+            HistoricalSynthesis.derive(currentOnlyBundle),
+        )
+
+        assertTrue(state is HomePresentationState.Partial)
+        assertEquals(ForecastHorizonStatus.PARTIAL, (state as HomePresentationState.Partial).horizon.hourly)
+        assertEquals(ForecastHorizonStatus.PARTIAL, state.horizon.daily)
+        assertEquals("28°", state.presentation.current.temperature)
+    }
+
+    @Test
     fun hourlyUsesTwelveSixEntryWindows() {
         assertEquals(12, presentation.hourlyWindows.size)
         assertTrue(presentation.hourlyWindows.all { it.entries.size == 6 })
@@ -182,15 +235,89 @@ class HomePresentationTest {
         assertEquals("Precipitation unavailable", partial.current.precipitationHeadline)
         assertEquals("Next 6h · Amount unavailable", partial.current.precipitationSupporting)
         assertNull(partial.current.conditionIdentity)
+        assertEquals(PresentationField.Unavailable, partial.current.fieldAvailability.temperature)
+        assertEquals(PresentationField.Unavailable, partial.current.fieldAvailability.precipitationChance)
+        assertEquals(PresentationField.Unavailable, partial.current.fieldAvailability.windSpeed)
         assertEquals("Unavailable", firstHour.condition)
         assertEquals("Unavailable", firstHour.temperature)
         assertNull(firstHour.precipitation)
         assertNull(firstHour.conditionIdentity)
+        assertEquals(PresentationField.Unavailable, firstHour.fieldAvailability.condition)
+        assertEquals(PresentationField.Unavailable, firstHour.fieldAvailability.temperature)
+        assertEquals(PresentationField.Unavailable, firstHour.fieldAvailability.precipitationChance)
         assertEquals("Unavailable", firstDay.condition)
         assertEquals("Unavailable", firstDay.low)
         assertEquals("Unavailable", firstDay.high)
         assertEquals("Precipitation unavailable", firstDay.precipitation)
         assertNull(firstDay.conditionIdentity)
+        assertEquals(PresentationField.Unavailable, firstDay.fieldAvailability.condition)
+        assertEquals(PresentationField.Unavailable, firstDay.fieldAvailability.lowTemperature)
+        assertEquals(PresentationField.Unavailable, firstDay.fieldAvailability.precipitationChance)
+    }
+
+    @Test
+    fun knownZeroPrecipitationRemainsTypedAsAvailable() {
+        assertEquals(
+            PresentationField.Available("0%"),
+            presentation.current.fieldAvailability.precipitationChance,
+        )
+        assertEquals(
+            PresentationField.Available("0.0 mm"),
+            presentation.current.fieldAvailability.precipitationAmount,
+        )
+    }
+
+    @Test
+    fun typedStateDoesNotTreatTimestampOnlyRecordsAsUsableWeather() {
+        val noWeatherFactsBundle = bundle.copy(
+            current = bundle.current.copy(
+                condition = null,
+                temperatureC = null,
+                apparentC = null,
+                dewPointC = null,
+                relativeHumidityPct = null,
+                pressureHpa = null,
+                windSpeedKph = null,
+                windGustKph = null,
+                windDirectionDeg = null,
+                cloudCoverPct = null,
+                visibilityKm = null,
+                precipitationMmPerHr = null,
+            ),
+            hourly = bundle.hourly.take(1).map {
+                it.copy(
+                    condition = null,
+                    temperatureC = null,
+                    dewPointC = null,
+                    pressureHpa = null,
+                    windSpeedKph = null,
+                    precipitationProbabilityPct = null,
+                    precipitationMm = null,
+                    cloudCoverPct = null,
+                )
+            },
+            daily = bundle.daily.take(1).map {
+                it.copy(
+                    condition = null,
+                    lowC = null,
+                    highC = null,
+                    precipitationProbabilityPct = null,
+                    precipitationMm = null,
+                    windGustKph = null,
+                    sunshineHours = null,
+                )
+            },
+        )
+
+        val state = HomePresentationMapper.mapState(
+            noWeatherFactsBundle,
+            HistoricalSynthesis.derive(noWeatherFactsBundle),
+        )
+
+        assertTrue(state is HomePresentationState.Unavailable)
+        assertEquals("Demo Station", (state as HomePresentationState.Unavailable).presentation.location)
+        assertEquals("Weather data unavailable", state.presentation.message)
+        assertEquals("Model estimate · Offline development fixture", state.presentation.sourceLine)
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.oxygen.weather.presentation
 import com.oxygen.weather.data.DayWeather
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DataType
+import com.oxygen.weather.data.CurrentWeather
 import com.oxygen.weather.data.HourWeather
 import com.oxygen.weather.data.WeatherBundle
 import com.oxygen.weather.data.WeatherCondition
@@ -14,6 +15,75 @@ import kotlin.math.roundToInt
 private val hourFormatter = DateTimeFormatter.ofPattern("h a")
 private val updatedFormatter = DateTimeFormatter.ofPattern("h:mm a")
 private val dayFormatter = DateTimeFormatter.ofPattern("EEE")
+
+/** A rendered weather field whose availability remains typed beside its display text. */
+sealed interface PresentationField {
+    val text: String
+
+    data class Available(override val text: String) : PresentationField
+
+    object Unavailable : PresentationField {
+        override val text: String = "Unavailable"
+    }
+}
+
+data class CurrentFieldAvailability(
+    val condition: PresentationField = PresentationField.Unavailable,
+    val temperature: PresentationField = PresentationField.Unavailable,
+    val apparentTemperature: PresentationField = PresentationField.Unavailable,
+    val relativeHumidity: PresentationField = PresentationField.Unavailable,
+    val dewPoint: PresentationField = PresentationField.Unavailable,
+    val precipitationChance: PresentationField = PresentationField.Unavailable,
+    val precipitationAmount: PresentationField = PresentationField.Unavailable,
+    val windSpeed: PresentationField = PresentationField.Unavailable,
+    val windGust: PresentationField = PresentationField.Unavailable,
+    val windDirection: PresentationField = PresentationField.Unavailable,
+)
+
+data class HourlyFieldAvailability(
+    val condition: PresentationField = PresentationField.Unavailable,
+    val temperature: PresentationField = PresentationField.Unavailable,
+    val precipitationChance: PresentationField = PresentationField.Unavailable,
+    val precipitationAmount: PresentationField = PresentationField.Unavailable,
+)
+
+data class DailyFieldAvailability(
+    val condition: PresentationField = PresentationField.Unavailable,
+    val lowTemperature: PresentationField = PresentationField.Unavailable,
+    val highTemperature: PresentationField = PresentationField.Unavailable,
+    val precipitationChance: PresentationField = PresentationField.Unavailable,
+    val precipitationAmount: PresentationField = PresentationField.Unavailable,
+)
+
+/** Display-target completeness; this says nothing about optional field completeness or freshness. */
+enum class ForecastHorizonStatus {
+    COMPLETE,
+    PARTIAL,
+}
+
+data class ForecastHorizonPresentation(
+    val hourly: ForecastHorizonStatus,
+    val daily: ForecastHorizonStatus,
+)
+
+sealed interface HomePresentationState {
+    data class Complete(val presentation: HomePresentation) : HomePresentationState
+
+    data class Partial(
+        val presentation: HomePresentation,
+        val horizon: ForecastHorizonPresentation,
+    ) : HomePresentationState
+
+    data class Unavailable(val presentation: UnavailableHomePresentation) : HomePresentationState
+}
+
+/** Honest whole-presentation absence without asserting a transport or cache reason. */
+data class UnavailableHomePresentation(
+    val location: String,
+    val sourceLine: String,
+    val updatedLine: String,
+    val message: String = "Weather data unavailable",
+)
 
 data class HomePresentation(
     val current: CurrentPresentation,
@@ -38,6 +108,7 @@ data class CurrentPresentation(
     val windSupporting: String,
     val spokenSummary: String,
     val conditionIdentity: WeatherMarkCondition?,
+    val fieldAvailability: CurrentFieldAvailability = CurrentFieldAvailability(),
 )
 
 /** Rendering identity derived from, but intentionally separate from, canonical weather data. */
@@ -62,6 +133,7 @@ data class HourlyEntryPresentation(
     val precipitation: String?,
     val conditionIdentity: WeatherMarkCondition?,
     val spokenSummary: String,
+    val fieldAvailability: HourlyFieldAvailability = HourlyFieldAvailability(),
 )
 
 data class DateJumpPresentation(
@@ -82,6 +154,7 @@ data class DailyEntryPresentation(
     val precipitation: String,
     val conditionIdentity: WeatherMarkCondition?,
     val spokenSummary: String,
+    val fieldAvailability: DailyFieldAvailability = DailyFieldAvailability(),
 )
 
 data class MetricGroupPresentation(
@@ -96,6 +169,35 @@ data class MetricPresentation(
 )
 
 object HomePresentationMapper {
+    /**
+     * Typed state boundary for application-state work. The existing [map] API remains a display
+     * adapter until a later slice deliberately changes the caller boundary.
+     */
+    fun mapState(bundle: WeatherBundle, derived: DerivedWeather): HomePresentationState {
+        val presentation = map(bundle, derived)
+        if (!bundle.hasUsableWeatherFact()) {
+            return HomePresentationState.Unavailable(
+                UnavailableHomePresentation(
+                    location = presentation.current.location,
+                    sourceLine = presentation.sourceLine,
+                    updatedLine = presentation.updatedLine,
+                ),
+            )
+        }
+
+        val horizon = ForecastHorizonPresentation(
+            hourly = bundle.hourly.horizonStatus(72),
+            daily = bundle.daily.horizonStatus(10),
+        )
+        return if (horizon.hourly == ForecastHorizonStatus.COMPLETE &&
+            horizon.daily == ForecastHorizonStatus.COMPLETE
+        ) {
+            HomePresentationState.Complete(presentation)
+        } else {
+            HomePresentationState.Partial(presentation, horizon)
+        }
+    }
+
     fun map(bundle: WeatherBundle, derived: DerivedWeather): HomePresentation {
         val hourly = bundle.hourly.take(72)
         val daily = bundle.daily.take(10)
@@ -146,6 +248,18 @@ object HomePresentationMapper {
                     append(current.windSpeedKph?.roundToInt()?.let { "$it kilometers per hour." } ?: "unavailable.")
                 },
                 conditionIdentity = current.condition.toWeatherMarkCondition(),
+                fieldAvailability = CurrentFieldAvailability(
+                    condition = field(current.condition) { it.displayName() },
+                    temperature = field(current.temperatureC, ::temp),
+                    apparentTemperature = field(current.apparentC, ::temp),
+                    relativeHumidity = field(current.relativeHumidityPct, ::percent),
+                    dewPoint = field(current.dewPointC, ::temp),
+                    precipitationChance = field(maxPop, ::percent),
+                    precipitationAmount = field(amount) { "${it.oneDecimal()} mm" },
+                    windSpeed = field(current.windSpeedKph) { "${it.roundToInt()} km/h" },
+                    windGust = field(current.windGustKph) { "${it.roundToInt()} km/h" },
+                    windDirection = field(current.windDirectionDeg, ::compass),
+                ),
             ),
             hourlyWindows = hourlyWindows,
             hourlyDateJumps = dateJumps,
@@ -185,6 +299,12 @@ object HomePresentationMapper {
                         append(temp(hour.temperatureC))
                         if (pop != null) append(", precipitation $pop")
                     },
+                    fieldAvailability = HourlyFieldAvailability(
+                        condition = field(hour.condition) { it.displayName() },
+                        temperature = field(hour.temperatureC, ::temp),
+                        precipitationChance = field(hour.precipitationProbabilityPct, ::percent),
+                        precipitationAmount = field(hour.precipitationMm) { "${it.oneDecimal()} mm" },
+                    ),
                 )
             },
         )
@@ -211,6 +331,13 @@ object HomePresentationMapper {
                     precipitation = precip,
                     conditionIdentity = day.condition.toWeatherMarkCondition(),
                     spokenSummary = "$dayLabel, $condition, low ${temp(day.lowC)}, high ${temp(day.highC)}, precipitation $precip",
+                    fieldAvailability = DailyFieldAvailability(
+                        condition = field(day.condition) { it.displayName() },
+                        lowTemperature = field(day.lowC, ::temp),
+                        highTemperature = field(day.highC, ::temp),
+                        precipitationChance = field(day.precipitationProbabilityPct, ::percent),
+                        precipitationAmount = field(day.precipitationMm) { "${it.oneDecimal()} mm" },
+                    ),
                 )
             },
         )
@@ -253,6 +380,51 @@ object HomePresentationMapper {
         }
     }
 }
+
+private fun List<*>.horizonStatus(targetSize: Int): ForecastHorizonStatus =
+    if (size >= targetSize) ForecastHorizonStatus.COMPLETE else ForecastHorizonStatus.PARTIAL
+
+private fun WeatherBundle.hasUsableWeatherFact(): Boolean =
+    current.hasWeatherFact() || hourly.any(HourWeather::hasWeatherFact) || daily.any(DayWeather::hasWeatherFact)
+
+private fun CurrentWeather.hasWeatherFact(): Boolean =
+    condition != null || listOf(
+        temperatureC,
+        apparentC,
+        dewPointC,
+        relativeHumidityPct,
+        pressureHpa,
+        windSpeedKph,
+        windGustKph,
+        windDirectionDeg,
+        cloudCoverPct,
+        visibilityKm,
+        precipitationMmPerHr,
+    ).any { it != null }
+
+private fun HourWeather.hasWeatherFact(): Boolean =
+    condition != null || listOf(
+        temperatureC,
+        dewPointC,
+        pressureHpa,
+        windSpeedKph,
+        precipitationProbabilityPct,
+        precipitationMm,
+        cloudCoverPct,
+    ).any { it != null }
+
+private fun DayWeather.hasWeatherFact(): Boolean =
+    condition != null || listOf(
+        lowC,
+        highC,
+        precipitationProbabilityPct,
+        precipitationMm,
+        windGustKph,
+        sunshineHours,
+    ).any { it != null }
+
+private fun <T> field(value: T?, format: (T) -> String): PresentationField =
+    value?.let { PresentationField.Available(format(it)) } ?: PresentationField.Unavailable
 
 fun WeatherCondition?.displayName(): String = when (this) {
     WeatherCondition.CLEAR -> "Clear"

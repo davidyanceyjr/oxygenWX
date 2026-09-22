@@ -44,7 +44,7 @@ official-alert provenance, so a forecast record cannot be presented as an offici
 
 `WeatherRepositoryResult` carries a usable normalized bundle alongside live/cache origin,
 freshness, optional refresh-failure facts, and cache-write outcome. These are domain facts, not
-Compose loading/error states; the presentation-state mapping belongs to its later roadmap slice.
+Compose loading/error states; refresh/cache outcome presentation remains R1.2A work.
 `DemoWeatherRepository` is a deterministic development fixture, not the eventual production
 repository.
 
@@ -54,7 +54,7 @@ repository.
 
 ## `presentation/`
 
-The presentation mapper owns text/unit formatting, page-window selection, concise spoken summaries, and grouping for Details. Compose should not parse formatted strings to recover meaning.
+The presentation mapper owns text/unit formatting, page-window selection, concise spoken summaries, and grouping for Details. Its typed state boundary distinguishes complete, partial, and whole-presentation unavailable weather data; field availability is typed separately from display text. Complete means at least 72 supplied hourly records and 10 supplied daily records, while any shorter usable horizon is partial. Usability requires a supplied current or forecast weather fact, not merely a timestamp, provenance, or derived/history context. `HomePresentationMapper.mapState(...)` is the typed boundary; the retained `map(...)` output is a source-compatible display adapter pending later application-state integration. Compose should not parse formatted strings to recover meaning.
 
 ## `ui/`
 

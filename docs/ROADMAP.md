@@ -156,11 +156,15 @@ Acceptance includes deterministic equality/missing-value/timezone tests and no p
 
 Evidence: `.codex/history/2026-09-20-005-canonical-domain-contract.md`.
 
-### R1.2 — Presentation state contract — PLANNED
+### R1.2 — Presentation state contract — DONE
 
 Define the typed ready, partial-horizon, missing-field, and unavailable
-presentation states and their mapper boundary. The slice does not add refresh
-recovery UI or transport failure behavior.
+presentation states and their mapper boundary. A complete display horizon is
+72 supplied hourly records plus 10 supplied daily records; a result with a
+weather fact but either shorter horizon is partial, while timestamps,
+provenance, and derived/history alone do not make a result usable. The slice
+does not add refresh recovery UI or transport failure behavior. Evidence and
+limitations: `.codex/history/2026-09-21-016-presentation-state-contract.md`.
 
 ### R1.2A — Refresh and cache presentation states — PLANNED
 

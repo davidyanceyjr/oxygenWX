@@ -1,12 +1,12 @@
 # Current Development Cycle
 
 State: ACTIVE
-Cycle ID: 016-presentation-state-contract
-Roadmap item: R1.2
-Plan: .codex/plans/016-presentation-state-contract.md
-Evidence: .codex/test-artifacts/016-presentation-state-contract/
+Cycle ID: 017-refresh-cache-presentation-states
+Roadmap item: R1.2A
+Plan: .codex/plans/017-refresh-cache-presentation-states.md
+Evidence: .codex/test-artifacts/017-refresh-cache-presentation-states/
 Last updated: 2026-09-21
 
 ## Current objective
 
-Presentation state contract
+# Plan 017 — Refresh and cache presentation states
