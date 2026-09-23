@@ -193,14 +193,18 @@ Evidence and exact limitations:
 `.codex/history/2026-09-22-022-production-themed-shared-components.md` and
 `.codex/test-artifacts/022-production-themed-shared-components/`.
 
-### R0.11CA — Production themed Details and source components — ACTIVE
+### R0.11CA — Production themed Details and source components — DONE
 
-After R0.11C, add reusable Details metric groups and source/freshness treatment
-through the resolved appearance boundary. Verify them in the isolated installed
-debug host. Keep components additive and unreferenced by app composition; do
-not migrate a page or invent chart/gauge inputs. This is the first bounded
-portion of the former Details-and-atmosphere slice. Active plan:
-`.codex/plans/023-production-themed-details-source-components.md`.
+Added reusable Details metric groups and source/update treatment through the
+resolved appearance boundary. The components and complete/sparse/long-text
+debug fixtures are implemented and remain additive and unreferenced by app
+composition. Installed compact, large-font, RTL, Effects Off, and alternate
+appearance checks pass; evidence is under
+`.codex/test-artifacts/023-production-themed-details-source-components/`.
+Do not migrate a page or invent chart/gauge inputs. This is the first bounded
+portion of the former Details-and-atmosphere slice. Evidence and verification
+limits: `.codex/history/2026-09-22-023-production-themed-details-source-components.md`
+and `.codex/test-artifacts/023-production-themed-details-source-components/`.
 
 ### R0.11CAA — Production themed weather marks and backgrounds — PLANNED
 

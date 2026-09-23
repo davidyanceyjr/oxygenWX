@@ -8,7 +8,9 @@ reference or a screen-composition source. The normal four-page app still uses th
 Theme B implementation sketch; its pages have not migrated and it is not the
 production visual acceptance target. The additive production resolver and R0.11C
 core monitor components are implemented and verified through an isolated debug
-showcase, but are not yet referenced by normal app composition.
+showcase. The R0.11CA Details/source components are also implemented in that
+isolated host. These production components are not yet referenced by normal app
+composition.
 
 ## Product principle
 

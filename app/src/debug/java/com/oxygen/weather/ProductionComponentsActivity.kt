@@ -31,18 +31,21 @@ import com.oxygen.weather.data.WeatherCondition
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.CurrentPresentation
 import com.oxygen.weather.presentation.HomePresentationMapper
+import com.oxygen.weather.presentation.MetricPresentation
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.LayoutPreset
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.components.ProductionCurrentHero
 import com.oxygen.weather.ui.themeengine.components.ProductionDailyRow
+import com.oxygen.weather.ui.themeengine.components.ProductionInspectionMetricGroup
 import com.oxygen.weather.ui.themeengine.components.ProductionHourlyDateSelector
 import com.oxygen.weather.ui.themeengine.components.ProductionHourlyEntry
 import com.oxygen.weather.ui.themeengine.components.ProductionMetricTile
 import com.oxygen.weather.ui.themeengine.components.ProductionPageHeader
 import com.oxygen.weather.ui.themeengine.components.ProductionPageSelector
 import com.oxygen.weather.ui.themeengine.components.ProductionSectionSurface
+import com.oxygen.weather.ui.themeengine.components.ProductionSourceFreshnessPanel
 import com.oxygen.weather.ui.themeengine.components.ProductionWindowControls
 import com.oxygen.weather.ui.themeengine.resolveTheme
 import java.time.LocalDateTime
@@ -99,6 +102,22 @@ private fun ProductionComponentsShowcase() {
         else -> sourceBundle
     }
     val presentation = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle))
+    val details = when (fixture) {
+        "Long source" -> presentation.copy(
+            sourceLine = "Source: Open-Meteo · Northwestern Regional Weather Observation and Forecast Demonstration Station · primary forecast provider",
+            updatedLine = "Updated at 9:00 AM local time on Tuesday, September 22, 2026; fixture timestamp for layout verification",
+        )
+        "Long metrics" -> presentation.copy(
+            detailGroups = presentation.detailGroups.map { group ->
+                group.copy(metrics = group.metrics + MetricPresentation(
+                    label = "Extended supporting measurement label for wrapping",
+                    value = "A deliberately long supplied value that must wrap within the panel without clipping or horizontal scrolling.",
+                    supporting = "Supporting context remains visible as a separate line at large font scale.",
+                ))
+            },
+        )
+        else -> presentation
+    }
     val current = when (fixture) {
         "Sparse" -> presentation.current.copy(location = bundle.location.displayName.orEmpty())
         "Long" -> presentation.current.copy(
@@ -122,20 +141,38 @@ private fun ProductionComponentsShowcase() {
         ) {
             Column {
                 Text("Production component verification", color = theme.palette.content)
-                Row(Modifier.fillMaxWidth()) {
-                    listOf("Complete", "Sparse", "Long").forEach { option ->
-                        TextButton(onClick = { fixture = option; callback = "Fixture: $option" }) { Text(option) }
+                listOf(listOf("Complete", "Sparse"), listOf("Long source", "Long metrics")).forEach { options ->
+                    Row(Modifier.fillMaxWidth()) {
+                        options.forEach { option ->
+                            TextButton(
+                                onClick = { fixture = option; callback = "Fixture: $option" },
+                                modifier = Modifier.weight(1f),
+                            ) { Text(option) }
+                        }
+                    }
+                }
+                listOf(listOf("Subtle", "Off"), listOf("High contrast", "Simple")).forEach { options ->
+                    Row(Modifier.fillMaxWidth()) {
+                        options.forEach { option ->
+                            TextButton(
+                                onClick = {
+                                    when (option) {
+                                        "Subtle" -> effects = ThemeEffectsLevel.SUBTLE
+                                        "Off" -> effects = ThemeEffectsLevel.OFF
+                                        "High contrast" -> contrast = ContrastLevel.HIGH
+                                        "Simple" -> layout = LayoutPreset.SIMPLE
+                                    }
+                                },
+                                modifier = Modifier.weight(1f),
+                            ) { Text(option) }
+                        }
                     }
                 }
                 Row(Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { effects = ThemeEffectsLevel.SUBTLE }) { Text("Subtle") }
-                    TextButton(onClick = { effects = ThemeEffectsLevel.OFF }) { Text("Off") }
-                    TextButton(onClick = { contrast = ContrastLevel.HIGH }) { Text("High contrast") }
-                    TextButton(onClick = { layout = LayoutPreset.SIMPLE }) { Text("Simple") }
+                    TextButton(onClick = { themeId = WeatherThemeId.GLASS }, modifier = Modifier.weight(1f)) { Text("Glass") }
+                    TextButton(onClick = { themeId = WeatherThemeId.ATMOSPHERIC }, modifier = Modifier.weight(1f)) { Text("Atmospheric") }
                 }
                 Row(Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { themeId = WeatherThemeId.GLASS }) { Text("Glass") }
-                    TextButton(onClick = { themeId = WeatherThemeId.ATMOSPHERIC }) { Text("Atmospheric") }
                     TextButton(onClick = { rtl = !rtl }) { Text(if (rtl) "RTL on" else "RTL") }
                 }
                 Text("State: $fixture · ${themeId.name} · ${contrast.name} · ${layout.name} · ${effects.name} · ${if (rtl) "RTL" else "LTR"}", color = theme.palette.secondaryData)
@@ -170,6 +207,9 @@ private fun ProductionComponentsShowcase() {
                     onLater = { callback = "Daily later callback" })
             }
             dailyEntries.forEach { ProductionDailyRow(theme, it) }
+            Text("Details inspection", color = theme.palette.content)
+            ProductionSourceFreshnessPanel(theme, details.sourceLine, details.updatedLine)
+            details.detailGroups.forEach { group -> ProductionInspectionMetricGroup(theme, group) }
             }
         }
     }

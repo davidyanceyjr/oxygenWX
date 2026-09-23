@@ -139,8 +139,12 @@ the sketch's `ResolvedAppearance`, a `CompositionLocal`, raw theme IDs, or app
 composition. `ProductionComponentsActivity` is merged only from `src/debug/`, has
 no launcher filter, and prepares deterministic fixture presentations at the host
 boundary; it does not change the normal `MainActivity` or Theme B sketch path.
-Details/source groups remain R0.11CA work; marks and production backgrounds
-remain R0.11CAA work; page migrations remain R0.11D–R0.11G work.
+Production Details/source components are implemented in
+`ProductionDetailsComponents.kt`; they render supplied source/update strings and
+ordered `MetricGroupPresentation` groups. The isolated debug showcase exercises
+complete, sparse, and long-text fixture states. They remain unreferenced by app
+composition until page migration. Marks and production backgrounds remain
+R0.11CAA work; page migrations remain R0.11D–R0.11G work.
 
 ## Production expansion
 
