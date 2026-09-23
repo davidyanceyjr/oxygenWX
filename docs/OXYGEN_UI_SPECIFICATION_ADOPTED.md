@@ -4,9 +4,11 @@ This document is the local implementation contract for the clean-room UI redesig
 It supersedes the visual direction of the earlier Oxygen prototype and its Base
 Art Sheet v0.2. The upstream material recorded in
 `upstream/OXYGEN_SOURCE_REFERENCE.md` is historical research, not a visual
-reference or a screen-composition source. The currently implemented Theme B UI is
-an implementation sketch/baseline being replaced; it is not the production visual
-acceptance target.
+reference or a screen-composition source. The normal four-page app still uses the
+Theme B implementation sketch; its pages have not migrated and it is not the
+production visual acceptance target. The additive production resolver and R0.11C
+core monitor components are implemented and verified through an isolated debug
+showcase, but are not yet referenced by normal app composition.
 
 ## Product principle
 

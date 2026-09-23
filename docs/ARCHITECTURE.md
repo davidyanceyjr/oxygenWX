@@ -77,9 +77,8 @@ inputs and returns a complete semantic palette, typography, geometry, render-sty
 and motion policy. It has no weather, navigation, persistence, provider, or
 Compose-runtime inputs, and app composition does not call it. Contrast resolves
 through palette values; layout resolves through geometry; Effects Off resolves a
-solid backdrop, no motion, and fully opaque panels and outlines. This resolver
-describes the future component contract; it does not claim those backgrounds or
-effects are rendered today.
+solid backdrop, no motion, and fully opaque panels and outlines. The root backdrop
+and motion policy are not rendered by the new production family yet.
 
 The approved future production boundary is:
 
@@ -102,7 +101,7 @@ page/navigation behavior, provenance, missing-data handling, or accessibility se
 Theme selection does not enter provider, repository, domain, derived-meteorology, or unit
 conversion architecture and does not refetch weather. The existing sketch components
 remain the current implementation until R0.11D–R0.11G migrate pages and cut over to the
-production family. R0.11C adds its shared components. Theme art remains under
+production family. R0.11C adds the production shared core monitor components. Theme art remains under
 `docs/assets/design-references/production-themes/`;
 full boards are documentation references, not runtime resources.
 
@@ -126,10 +125,22 @@ The Now page composes the supplied `CurrentPresentation`, source/update
 context, current metric tiles, and the optional ordered Forecast pattern group
 through these Theme B monitor components; page and pager state remains in
 `OxygenWeatherApp`.
-These components receive presentation text/models, `ResolvedAppearance`, and
+These sketch components receive presentation text/models, `ResolvedAppearance`, and
 semantic callbacks only. Compose receives the resolved appearance and
 presentation models, never a raw theme identifier, provider DTO, repository,
 or persistence object.
+
+The additive production core component family is under
+`ui/themeengine/components/ProductionMonitorComponents.kt`. Its section surface,
+page header/selector, current hero, metric tile, hourly entry, daily row, Hourly
+date selector, and window controls receive `ResolvedTheme` explicitly with the
+existing typed presentation fields and semantic callbacks. They do not depend on
+the sketch's `ResolvedAppearance`, a `CompositionLocal`, raw theme IDs, or app
+composition. `ProductionComponentsActivity` is merged only from `src/debug/`, has
+no launcher filter, and prepares deterministic fixture presentations at the host
+boundary; it does not change the normal `MainActivity` or Theme B sketch path.
+Details/source groups remain R0.11CA work; marks and production backgrounds
+remain R0.11CAA work; page migrations remain R0.11D–R0.11G work.
 
 ## Production expansion
 

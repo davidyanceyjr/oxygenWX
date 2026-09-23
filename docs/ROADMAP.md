@@ -179,25 +179,36 @@ production outlines remain opaque. Exact verification and evidence:
 `.codex/history/2026-09-22-021-production-theme-resolver-foundation.md` and
 `.codex/test-artifacts/021-production-theme-resolver-foundation/`.
 
-### R0.11C — Production themed shared components: core monitor — NEXT
+### R0.11C — Production themed shared components: core monitor — DONE
 
-Add the first bounded portion of the reusable production component family:
-theme-resolved surfaces, page identity/global selector, current-condition hero,
-metric tile, hourly forecast entry, daily forecast row, and explicit forecast
-window controls. Components consume typed presentation data and resolved
-semantic appearance only. Keep the package additive and unreferenced by the app
-entry point until page migration slices. Details groups, weather marks, and
-background primitives move to dependent R0.11CA so this component foundation
-stays within the context-budget limit.
+Added the additive `ResolvedTheme` core component family: section surface,
+page header/selector, current hero, metric tile, hourly entry, daily row, Hourly
+date selector, and forecast window controls. An isolated debug-only installed
+showcase and focused adb/hierarchy checks cover values, summaries, callbacks,
+selected/disabled states, and 48dp targets. The normal launcher and Theme B pages
+remain unchanged; Details/source groups, marks, and production backgrounds are
+still out of scope.
 
-Plan: `.codex/plans/022-production-themed-shared-components.md`.
+Evidence and exact limitations:
+`.codex/history/2026-09-22-022-production-themed-shared-components.md` and
+`.codex/test-artifacts/022-production-themed-shared-components/`.
 
-### R0.11CA — Production themed shared components: details and atmosphere — PLANNED
+### R0.11CA — Production themed Details and source components — ACTIVE
 
-After R0.11C, add reusable Details metric groups and source/freshness treatment,
-provider-neutral weather marks, and background primitives using the same
-resolved appearance boundary. Keep components additive and unreferenced by app
-composition; do not migrate a page or invent chart/gauge inputs.
+After R0.11C, add reusable Details metric groups and source/freshness treatment
+through the resolved appearance boundary. Verify them in the isolated installed
+debug host. Keep components additive and unreferenced by app composition; do
+not migrate a page or invent chart/gauge inputs. This is the first bounded
+portion of the former Details-and-atmosphere slice. Active plan:
+`.codex/plans/023-production-themed-details-source-components.md`.
+
+### R0.11CAA — Production themed weather marks and backgrounds — PLANNED
+
+After R0.11CA, add provider-neutral weather marks and background primitives
+through the same resolved appearance boundary. Preserve adjacent weather text
+and semantics, and Effects Off opacity/static completeness. Keep these
+components additive and unreferenced by app composition; page migration begins
+only after this dependent portion is complete.
 
 ### R0.11D — Atmospheric Now + Hourly migration — PLANNED
 
