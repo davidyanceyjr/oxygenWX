@@ -8,11 +8,15 @@
 - **Instrument** — technical monitor treatment; indicators and gauges may express only values or series supplied with suitable semantics, units, ranges, intervals, and provenance.
 - **Terminal** — flat, console-like presentation with monospace typography.
 
-The product owner requires exact visual matching to the approved production
-designs. The existing boards and crops are the baseline for a design review, but
-they do not yet define every exact page/theme composition or availability state.
-Complete and approve a codifiable screen design pack before further visual
-implementation is accepted. Full boards and extracted image crops remain under
+The product owner requires the implementation to match the approved production
+design pack. Use existing boards and crops as references: measure component
+scale, proportions, spacing, type hierarchy, and treatments, then calculate
+page values for the target viewport. Derive states absent from the art using
+the same visual grammar and the typed presentation contract. The
+[reference measurement method](design-pack/REFERENCE_MEASUREMENT_METHOD.md)
+records the calculations and review rules. Complete and approve a codifiable
+screen design pack before further visual implementation is accepted. Full boards
+and extracted image crops remain under
 `docs/assets/design-references/production-themes/`; no large concept board
 belongs in runtime Android resources.
 

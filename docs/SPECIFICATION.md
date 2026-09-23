@@ -15,7 +15,9 @@ When documents disagree, use this order:
 1. `docs/SPECIFICATION.md` — product, data, architecture, safety, release scope.
 2. `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md` — detailed Home/UI presentation contract.
 3. `docs/ARCHITECTURE.md`, `docs/METEOROLOGY.md`, and `DATA_SOURCES.md` — subsystem rules.
-4. `docs/ROADMAP.md` — ordered implementation sequence and gates.
+4. `docs/ROADMAP.md` — general ordered implementation sequence and gates;
+   `docs/theme-pack-roadmap.md` governs the five-theme design-pack, resolver,
+   and renderer track until TP.3 is complete.
 5. `.codex/current.md` and its referenced plan — the currently bounded implementation slice.
 6. `AGENTS.md` — repository operating rules for coding agents.
 

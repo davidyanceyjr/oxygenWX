@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-**Status:** adopted; TP.1 is ACTIVE, with TP.1A documentation complete and TP.1B next
+**Status:** adopted; TP.1 is ACTIVE, with TP.1A and TP.1B complete
 **Adopted:** 2026-09-23
 **Purpose:** complete the codifiable five-theme design pack, implement its appearance
 resolution, and verify the resulting screens through the installed application.
@@ -9,9 +9,30 @@ resolution, and verify the resulting screens through the installed application.
 This roadmap is the governing implementation sequence for the five-theme design
 pack, resolver, and renderer until TP.3 is complete. It covers the missing exact page
 compositions and theme treatments, then the resolver and renderer work needed to
-match those approved designs. Each slice is a separately planned and closed
-workflow cycle. A later slice may begin only after its dependency has been
-closed with evidence.
+match those approved designs. Each main TP child slice is a separately planned
+and closed workflow cycle. Bounded `partial-*` work packages remain inside
+their active parent cycle and receive their own review evidence. A later main
+slice may begin only after its dependency has been closed with evidence.
+
+## Completed execution head — TP.1B
+
+The parent plan is `.codex/plans/026-tp-1b-now-hourly-page-designs.md`.
+Its two bounded work packages were reviewed inside cycle 026. The next
+dependent design slice is TP.1C; TP.1D still owns integrated renders and
+explicit design-owner approval.
+
+1. **TP.1B-partial-A — Now page design — DONE:** five theme/Now cells, Now
+   states, and shared-shell handoff. Initial plan:
+   `.codex/plans/026-tp-1b-now-hourly-page-designs-partial-A.md`.
+2. **TP.1B-partial-B — Hourly page design — DONE:** five theme/Hourly cells,
+   six-entry layout, represented-date and Earlier/Later controls, and combined
+   Now/Hourly review. Plan:
+   `.codex/plans/026-tp-1b-now-hourly-page-designs-partial-B.md`.
+   Evidence: `.codex/test-artifacts/026-tp-1b-now-hourly-page-designs/`.
+
+Each portion targets at most 35% of a fresh context window, below the 45%
+limit. A takes shell/Now decisions; B takes Hourly interaction complexity.
+If either exceeds the limit, split it again before broadening production scope.
 
 ## Shared product and visual invariants
 
@@ -54,15 +75,23 @@ Foundation: `docs/theme-system/design-pack/`. Evidence:
 source/hash, matrix, workflow, contract, and diff checks, plus unresolved owner
 decisions. This does not approve the complete pack.
 
-### TP.1B — Now and Hourly page designs — PLANNED
+### TP.1B — Now and Hourly page designs — DONE
 
 Define the Now and Hourly page compositions for all five themes, including
 shared-composition references, source-mapped content slots, required state
-examples, and 393 × 852 dp measurements. Apply the TP.1A foundation; record
-conflicts as explicit decisions rather than silently changing it. Daily and
-Details are out of scope.
+examples, and 393 × 852 dp measurements. Apply the TP.1A foundation. Record
+pixel ratios, conversion to dp/sp, and treatments for states absent from art
+using the [reference measurement method](theme-system/design-pack/REFERENCE_MEASUREMENT_METHOD.md).
+Record conflicts as explicit decisions rather than silently changing the
+foundation. Daily and Details are out of scope. The two dependent portions
+passed source/model audits. TP.1D remains responsible for
+installed comparison and approval; this documentation closure makes no visual
+runtime acceptance claim.
 
-### TP.1C — Daily and Details page designs — PLANNED
+Plan: `.codex/plans/026-tp-1b-now-hourly-page-designs.md`. Designs:
+`docs/theme-system/design-pack/NOW.md` and `HOURLY.md`.
+
+### TP.1C — Daily and Details page designs — NEXT
 
 Define Daily and Details page compositions for all five themes using the
 completed TP.1A foundation and TP.1B decisions. Preserve five-day windows,
@@ -74,7 +103,9 @@ Do not add unsupported gauges, charts, or data slots.
 Integrate the four page designs into the 20-cell theme/page matrix. Complete
 the asset-use map, compact/large-font/RTL/wider-window/Effects Off examples,
 reference renders, and installed-acceptance checklist. Resolve or visibly
-retain conflicts and open decisions. Record explicit design-owner approval
+retain conflicts after measuring and reviewing the relevant source art. Revise
+proposed values when integrated renders show a mismatch. Record explicit
+design-owner approval
 before closing TP.1; TP.2 remains gated until then.
 
 ### TP.1 shared completion criteria

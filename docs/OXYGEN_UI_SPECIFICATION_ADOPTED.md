@@ -12,6 +12,17 @@ showcase. The R0.11CA Details/source components are also implemented in that
 isolated host. These production components are not yet referenced by normal app
 composition.
 
+## Exact visual acceptance status
+
+The production theme appearance must match the approved codifiable design pack.
+The production boards are visual references: measure their component scale,
+proportions, spacing, type hierarchy, and treatment to calculate screen values.
+Derive states absent from the art with the same component grammar and the typed
+presentation contract. The [reference measurement method](theme-system/design-pack/REFERENCE_MEASUREMENT_METHOD.md)
+defines the calculation and review record. A reviewed design pack is a
+prerequisite for further visual implementation and acceptance. The gap audit is
+at `.codex/test-artifacts/024-production-themed-weather-marks-backgrounds/design-readiness-audit.md`.
+
 ## Product principle
 
 Oxygen is a modern, themed, component-based weather monitor. Weather state may
