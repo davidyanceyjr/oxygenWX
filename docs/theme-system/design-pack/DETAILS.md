@@ -108,4 +108,4 @@ The shared selector is the only page control on Details. In every theme it keeps
 | High contrast | Opaque resolved text/surface pairs, visible boundaries, headings and explicit status; no color-only distinction. |
 | Effects Off | Opaque static canvas and groups; no gradient, grid, blur, glow, or animation. All supplied metric/provenance/status text remains complete. |
 
-**TP.1D review criterion:** compare the installed Details surface against proposed group width, label/value hierarchy, row wrapping, and source/status separation at 393 × 852 dp, then 360 × 640 dp, font scale 1.3, RTL, High contrast and Effects Off. This design cycle runs no installation or render and makes no visual-success claim.
+**TP.1D review criterion:** compare the static Details design surface against proposed group width, label/value hierarchy, row wrapping, and source/status separation at 393 × 852 dp, then 360 × 640 dp, font scale 1.3, RTL, High contrast and Effects Off. This design cycle runs no installation or render and makes no visual-success claim.

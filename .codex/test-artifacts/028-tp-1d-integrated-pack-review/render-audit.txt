@@ -1,0 +1,17 @@
+PASS atmospheric-now.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS atmospheric-hourly.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS glass-now.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS glass-hourly.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS minimal_oled-now.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS minimal_oled-hourly.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS instrument-now.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS instrument-hourly.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS terminal-now.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS terminal-hourly.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS glass-now-compact.svg: dimensions, exact typed strings, no raster links, text widths; scroll=108.0
+PASS glass-hourly-font-1.3.svg: dimensions, exact typed strings, no raster links, text widths; scroll=456.2
+PASS terminal-hourly-rtl.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS atmospheric-now-wide.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS glass-now-effects-off.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS instrument-hourly-high-contrast.svg: dimensions, exact typed strings, no raster links, text widths; scroll=0.0
+PASS 10 unique primary cells, six named condition examples, 16 total SVG references.

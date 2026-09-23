@@ -30,9 +30,10 @@ for non-theme work and resumes as the implementation sequence after TP.3.
 An implementation slice whose stated boundary is expected to consume more than
 approximately 45% of an agent context window must be split before activation.
 The first bounded portion retains its existing identifier; each later dependent
-portion uses the same identifier plus `A`, `B`, and so on (for example,
-`R0.6A`). A suffixed slice is planned work, not automatically release-deferred;
-it may start only after the preceding same-identifier slice has completed.
+portion uses `-partial-A`, `-partial-B`, and so on (for example,
+`TP.1D-partial-A`). Earlier suffixes such as `R0.6A` remain historical IDs.
+A partial slice is planned work, not automatically release-deferred; it may
+start only after its upstream dependency has completed.
 
 ## R0 — Replacement prototype baseline
 

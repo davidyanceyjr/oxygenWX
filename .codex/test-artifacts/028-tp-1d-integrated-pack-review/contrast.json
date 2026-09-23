@@ -1,0 +1,23 @@
+[
+  {
+    "foreground": "#E6EDF3",
+    "background": "#0B0F14",
+    "role": "canvas",
+    "ratio": 16.265,
+    "minimum": 7
+  },
+  {
+    "foreground": "#E6EDF3",
+    "background": "#141A21",
+    "role": "surface",
+    "ratio": 14.817,
+    "minimum": 7
+  },
+  {
+    "foreground": "#E6EDF3",
+    "background": "#1B232C",
+    "role": "elevatedSurface",
+    "ratio": 13.43,
+    "minimum": 7
+  }
+]

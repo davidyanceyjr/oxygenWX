@@ -66,4 +66,14 @@ All token keys below resolve from `docs/theme-system/tokens/catalog/<theme>.json
 | RTL | Mirror physical alignment/control placement, retain list index row-major reading order earliest-to-latest and exact Earlier/Later meaning. Do not reverse the data list. |
 | Effects Off / High contrast | Opaque static canvas/cards, no blur, grid, gradient, glow, or animation; selected/disabled wording and all weather/status/source text remain. High contrast uses verified role pairs and non-color cues. |
 
-**Review criterion:** TP.1D compares the installed 393 × 852 dp layout with measured card pitch, row hierarchy, panel anatomy, and controls, then checks 360 × 640 dp, 1.3 font, RTL, High contrast, and Effects Off. This page records no installed screenshot or pixel-match result.
+**Review criterion:** TP.1D compares the static 393 × 852 dp design layout with measured card pitch, row hierarchy, panel anatomy, and controls, then checks 360 × 640 dp, 1.3 font, RTL, High contrast, and Effects Off. This page records no installed screenshot or pixel-match result.
+
+
+## Integrated render fit refinement
+
+The upstream [integrated pack](INTEGRATED_PACK.md#measurable-composition) records
+D27's actual text-driven heights and fixed reference insets, plus D28/D29's
+explicit font and mark review boundaries. Those measured refinements supersede
+the nominal fit estimates above for the ten upstream references. See
+[SOURCE_DECISIONS.md](SOURCE_DECISIONS.md#integrated-upstream-review-decisions)
+for old/new values and affected cells. TP.3 owns installed comparison.

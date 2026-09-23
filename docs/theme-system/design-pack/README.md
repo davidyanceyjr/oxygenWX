@@ -1,4 +1,4 @@
-# Theme design pack: TP.1B page design
+# Theme design pack: TP.1D upstream integration
 
 **Status:** proposed review material, not an approved or complete design pack. TP.1A records shared decisions; TP.1B designs Now and Hourly, TP.1C designs Daily and Details, and TP.1D integrates the 20 theme/page cells and records explicit design-owner approval. TP.2 remains gated on TP.1D closure.
 
@@ -13,4 +13,12 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit passed, awaiting integrated render review.
 - [DETAILS.md](DETAILS.md): TP.1C partial B, proposed ordered metric groups, source/update/status separation, state behavior, and five theme mappings; documentation audit passed, awaiting integrated render review.
 
-All measurements called *reference* describe a review target rather than a verified installed rendering. This documentation slice includes no app render or implementation acceptance.
+- [INTEGRATED_PACK.md](INTEGRATED_PACK.md): reviewed Now/Hourly upstream table,
+  asset use, typed fixture, measurements and partial-A handoff; ten Daily/Details
+  cells remain pending. Ten primary SVGs and six condition examples are in the
+  [render index](renders/README.md). D28/D29 remain explicit appearance decisions.
+
+The upstream review is complete; the full pack is not approved. TP.1D-partial-A
+owns Daily/Details, cross-pack review and explicit owner approval. TP.2 stays gated.
+
+All measurements called *reference* describe a review target rather than a verified installed rendering. These static design references do not claim installed app or implementation acceptance.

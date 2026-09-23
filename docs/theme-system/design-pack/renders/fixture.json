@@ -1,0 +1,209 @@
+{
+  "anchor": "2026-09-23T09:00:00 America/Chicago; Locale.US",
+  "derivation": "DemoWeatherRepository.load -> HistoricalSynthesis.derive -> HomePresentationMapper.map/mapLoadState; LIVE + UNKNOWN, no failure; design data only",
+  "current": {
+    "location": "Demo Station",
+    "temperature": "28\u00b0",
+    "condition": "Partly cloudy",
+    "apparent": "29\u00b0",
+    "humidity": "56%",
+    "dewPoint": "18\u00b0",
+    "precipitationHeadline": "No precipitation indicated",
+    "precipitationSupporting": "Next 6h \u00b7 0.0 mm",
+    "windHeadline": "13 km/h",
+    "windSupporting": "Gusts 23 \u00b7 SW",
+    "spokenSummary": "Demo Station, Partly cloudy, 28\u00b0, feels like 29\u00b0. Humidity 56%. Wind 13 kilometers per hour.",
+    "conditionIdentity": "PARTLY_CLOUDY",
+    "fieldAvailability": {
+      "condition": {
+        "text": "Partly cloudy"
+      },
+      "temperature": {
+        "text": "28\u00b0"
+      },
+      "apparentTemperature": {
+        "text": "29\u00b0"
+      },
+      "relativeHumidity": {
+        "text": "56%"
+      },
+      "dewPoint": {
+        "text": "18\u00b0"
+      },
+      "precipitationChance": {
+        "text": "0%"
+      },
+      "precipitationAmount": {
+        "text": "0.0 mm"
+      },
+      "windSpeed": {
+        "text": "13 km/h"
+      },
+      "windGust": {
+        "text": "23 km/h"
+      },
+      "windDirection": {
+        "text": "SW"
+      }
+    }
+  },
+  "window": {
+    "rangeLabel": "Wed, 9 AM\u20132 PM",
+    "entries": [
+      {
+        "time": "9 AM",
+        "condition": "Clear",
+        "temperature": "19\u00b0",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "9 AM, Clear, 19\u00b0",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "19\u00b0"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "10 AM",
+        "condition": "Clear",
+        "temperature": "20\u00b0",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "10 AM, Clear, 20\u00b0",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "20\u00b0"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "11 AM",
+        "condition": "Clear",
+        "temperature": "20\u00b0",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "11 AM, Clear, 20\u00b0",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "20\u00b0"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "12 PM",
+        "condition": "Clear",
+        "temperature": "22\u00b0",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "12 PM, Clear, 22\u00b0",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "22\u00b0"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "1 PM",
+        "condition": "Clear",
+        "temperature": "23\u00b0",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "1 PM, Clear, 23\u00b0",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "23\u00b0"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "2 PM",
+        "condition": "Clear",
+        "temperature": "25\u00b0",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "2 PM, Clear, 25\u00b0",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "25\u00b0"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      }
+    ]
+  },
+  "hourlyDateJumps": [
+    {
+      "label": "Wed",
+      "windowIndex": 0
+    },
+    {
+      "label": "Thu",
+      "windowIndex": 3
+    },
+    {
+      "label": "Fri",
+      "windowIndex": 7
+    },
+    {
+      "label": "Sat",
+      "windowIndex": 11
+    }
+  ],
+  "hourlyWindowCount": 12,
+  "sourceLine": "Model estimate \u00b7 Offline development fixture",
+  "updatedLine": "Updated 9:00 AM",
+  "status": "Live weather data. Freshness: unknown."
+}

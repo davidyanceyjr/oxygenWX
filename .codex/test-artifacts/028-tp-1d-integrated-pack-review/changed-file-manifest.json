@@ -1,0 +1,134 @@
+[
+  {
+    "path": ".codex/current.md",
+    "sha256": "4884509b5ac133242239dbb52b58b3a353fdff7d59eb394fa29fb6097b224e9f"
+  },
+  {
+    "path": "docs/ROADMAP.md",
+    "sha256": "7aa5056f63a22f9da69b0810a4ff45578fead32bea21f95c3da5d137deb0a4ba"
+  },
+  {
+    "path": "docs/theme-pack-roadmap.md",
+    "sha256": "1ed761ccccb4d48bf3230dec8ea029da1dfdbcc87b1ca4c57cf0e5e53816ab83"
+  },
+  {
+    "path": "docs/theme-system/design-pack/DAILY.md",
+    "sha256": "1cd36f0efb45aa339f5d9b3386704c92fdc0a3a3b05f60c8e85089480a377bc3"
+  },
+  {
+    "path": "docs/theme-system/design-pack/DETAILS.md",
+    "sha256": "25aa4f14ead656276507c8fd5cf171d4ff322ebfebc4e464dc0fe47e63b470b9"
+  },
+  {
+    "path": "docs/theme-system/design-pack/FOUNDATION.md",
+    "sha256": "b8df282b81fd482db6f8efdc5405520a2bcb10fa2c43f641e5e093034eb309ad"
+  },
+  {
+    "path": "docs/theme-system/design-pack/HOURLY.md",
+    "sha256": "45fa42b50c3ea8c1cb3936afbf74b1bcb57909dea5fd3d3a0aff8bba87ac732f"
+  },
+  {
+    "path": "docs/theme-system/design-pack/NOW.md",
+    "sha256": "75fa0e3ec7ba1781e94b71d48af407e9d66af52bba3c6d03ae6efbbd40a09300"
+  },
+  {
+    "path": "docs/theme-system/design-pack/README.md",
+    "sha256": "c962643402e7f989cea1437cba451cff3806fae3ca08e733623128fd7878170c"
+  },
+  {
+    "path": "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+    "sha256": "56c98cb7f0b642cf1a0503f073e8add375820ef4732b4faa9104df7db5f76b24"
+  },
+  {
+    "path": ".codex/plans/028-tp-1d-integrated-pack-review-partial-A.md",
+    "sha256": "cc4876ff5f6d4b44deef469570b382ba7d227774b9d467800f685301bdab43e3"
+  },
+  {
+    "path": ".codex/plans/028-tp-1d-integrated-pack-review.md",
+    "sha256": "5f81162c66af370f58fe1c0d377b66117cd01bd4ac302f5644ee3fdc48552e39"
+  },
+  {
+    "path": "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+    "sha256": "1672952d20d71b78af3d5bb0aa619071b09590ed07ef364f0f0d6271d4d5f3f8"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/README.md",
+    "sha256": "8bd10eb2e2b2666403af4ee07af39fa1316d95635bc9d04e96bc825ece7b30e8"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/atmospheric-hourly.svg",
+    "sha256": "79db71704bfeec9ce96a67be17bb9315a7f891370c501bc108c82e4fc0fa3ed3"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/atmospheric-now-wide.svg",
+    "sha256": "2bfda36d06a744c61ff25abc6ba0ef08f89be147d55238b3b582f2f442423989"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/atmospheric-now.svg",
+    "sha256": "2df870e3ef3d030358111b4c5123a7807762c325f889545448ea6c6ff28203ba"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/fixture.json",
+    "sha256": "613ce5bf99550c2ad816c99e73479faec1c3bd38356910ec7b3ef834ba295a61"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/generate.py",
+    "sha256": "9e84c2051593093907aa12ced75280b4c35e42a579e5bd27dc743618bfb1d72d"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/glass-hourly-font-1.3.svg",
+    "sha256": "5bf5e85cf382d12d6b414f6344160f09012a8d07f48ec8fb1e5c9b94de083008"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/glass-hourly.svg",
+    "sha256": "60ddaf24a744a98cb219b60d0f416727d97b12eae97828c9485304f559df4988"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/glass-now-compact.svg",
+    "sha256": "acf42f978b913fbe6d4fd4ac8a4a3c62b3213e4c2f2c4da7f07a74e9fef5036b"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/glass-now-effects-off.svg",
+    "sha256": "f0381933b83256e613535ca20eda0d7b2abd7355844a44324e93d89b48e97902"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/glass-now.svg",
+    "sha256": "90199fd6650696bc049745f3a33ddfbda2151f66686568a76f6a5ce656cc6140"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/index.json",
+    "sha256": "fa4fb89daf417820b2826b306273a0161f2c8843d4b14fab3608d2a631e8b5b7"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/instrument-hourly-high-contrast.svg",
+    "sha256": "1e777d2342eb07a318b720d144b6dd0f0040fe2515e4f4ab48660f7dd2c7532e"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/instrument-hourly.svg",
+    "sha256": "536b8625046c45ce3af8c223df3a9b0646c993cf12a938858b878cec5fec87e2"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/instrument-now.svg",
+    "sha256": "eb7678e91c734182e18fe58cba7cdd37584882b8bc9b1a51001d1d55b87d5798"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/minimal_oled-hourly.svg",
+    "sha256": "3bf78fd57d3b9dcfa31773fe794bad5bc1c2f664ad7b441ec7e4912ec8e984da"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/minimal_oled-now.svg",
+    "sha256": "cb5cb49b8433008a7f7914426b14609112fb63a831b59877c6ce48e0ede396e9"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/terminal-hourly-rtl.svg",
+    "sha256": "e8ddbf3a2491c147eb9c35c4a3366b26f62809c5dc24939a45b29c5e0e1a0f22"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/terminal-hourly.svg",
+    "sha256": "b95d4c979aa174c96cdfdcded7166092c85cf95ce995a6cab8e150fef62fbf44"
+  },
+  {
+    "path": "docs/theme-system/design-pack/renders/terminal-now.svg",
+    "sha256": "d4cf92ea2b38bffa36bacbc78abc79fa8f3cdfedd2e5753ce6a34e0d44cced1c"
+  }
+]

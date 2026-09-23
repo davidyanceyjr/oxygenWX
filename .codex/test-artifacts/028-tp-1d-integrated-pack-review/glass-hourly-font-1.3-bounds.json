@@ -1,0 +1,281 @@
+[
+  {
+    "text": "Demo Station",
+    "x": 16.0,
+    "y": 24.0,
+    "width": 168.0,
+    "available": 361,
+    "height": 36.4,
+    "field": "current.location"
+  },
+  {
+    "text": "Hourly",
+    "x": 16.0,
+    "y": 54.0,
+    "width": 59.0,
+    "available": 361,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Now",
+    "x": 22.0,
+    "y": 100.0,
+    "width": 40.0,
+    "available": 78.25,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Hourly",
+    "x": 112.25,
+    "y": 100.0,
+    "width": 59.0,
+    "available": 78.25,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Daily",
+    "x": 202.5,
+    "y": 100.0,
+    "width": 44.0,
+    "available": 78.25,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Details",
+    "x": 292.75,
+    "y": 100.0,
+    "width": 60.0,
+    "available": 78.25,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Wed, 9 AM\u20132 PM",
+    "x": 34.0,
+    "y": 152.0,
+    "width": 205.0,
+    "available": 325,
+    "height": 36.4,
+    "field": "window.rangeLabel"
+  },
+  {
+    "text": "Choose forecast date",
+    "x": 42.0,
+    "y": 204.4,
+    "width": 182.0,
+    "available": 309,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "9 AM",
+    "x": 30.0,
+    "y": 270.4,
+    "width": 39.0,
+    "available": 333.0,
+    "height": 26.0,
+    "field": "entries.0.time"
+  },
+  {
+    "text": "Clear",
+    "x": 30.0,
+    "y": 296.4,
+    "width": 52.0,
+    "available": 333.0,
+    "height": 31.200000000000003,
+    "field": "entries.0.condition"
+  },
+  {
+    "text": "19\u00b0",
+    "x": 30.0,
+    "y": 327.59999999999997,
+    "width": 42.0,
+    "available": 333.0,
+    "height": 36.4,
+    "field": "entries.0.temperature"
+  },
+  {
+    "text": "10 AM",
+    "x": 30.0,
+    "y": 410.0,
+    "width": 47.0,
+    "available": 333.0,
+    "height": 26.0,
+    "field": "entries.1.time"
+  },
+  {
+    "text": "Clear",
+    "x": 30.0,
+    "y": 436.0,
+    "width": 52.0,
+    "available": 333.0,
+    "height": 31.200000000000003,
+    "field": "entries.1.condition"
+  },
+  {
+    "text": "20\u00b0",
+    "x": 30.0,
+    "y": 467.2,
+    "width": 42.0,
+    "available": 333.0,
+    "height": 36.4,
+    "field": "entries.1.temperature"
+  },
+  {
+    "text": "11 AM",
+    "x": 30.0,
+    "y": 549.6,
+    "width": 47.0,
+    "available": 333.0,
+    "height": 26.0,
+    "field": "entries.2.time"
+  },
+  {
+    "text": "Clear",
+    "x": 30.0,
+    "y": 575.6,
+    "width": 52.0,
+    "available": 333.0,
+    "height": 31.200000000000003,
+    "field": "entries.2.condition"
+  },
+  {
+    "text": "20\u00b0",
+    "x": 30.0,
+    "y": 606.8000000000001,
+    "width": 42.0,
+    "available": 333.0,
+    "height": 36.4,
+    "field": "entries.2.temperature"
+  },
+  {
+    "text": "12 PM",
+    "x": 30.0,
+    "y": 689.2,
+    "width": 47.0,
+    "available": 333.0,
+    "height": 26.0,
+    "field": "entries.3.time"
+  },
+  {
+    "text": "Clear",
+    "x": 30.0,
+    "y": 715.2,
+    "width": 52.0,
+    "available": 333.0,
+    "height": 31.200000000000003,
+    "field": "entries.3.condition"
+  },
+  {
+    "text": "22\u00b0",
+    "x": 30.0,
+    "y": 746.4000000000001,
+    "width": 42.0,
+    "available": 333.0,
+    "height": 36.4,
+    "field": "entries.3.temperature"
+  },
+  {
+    "text": "1 PM",
+    "x": 30.0,
+    "y": 828.8000000000001,
+    "width": 38.0,
+    "available": 333.0,
+    "height": 26.0,
+    "field": "entries.4.time"
+  },
+  {
+    "text": "Clear",
+    "x": 30.0,
+    "y": 854.8000000000001,
+    "width": 52.0,
+    "available": 333.0,
+    "height": 31.200000000000003,
+    "field": "entries.4.condition"
+  },
+  {
+    "text": "23\u00b0",
+    "x": 30.0,
+    "y": 886.0000000000001,
+    "width": 42.0,
+    "available": 333.0,
+    "height": 36.4,
+    "field": "entries.4.temperature"
+  },
+  {
+    "text": "2 PM",
+    "x": 30.0,
+    "y": 968.4000000000001,
+    "width": 38.0,
+    "available": 333.0,
+    "height": 26.0,
+    "field": "entries.5.time"
+  },
+  {
+    "text": "Clear",
+    "x": 30.0,
+    "y": 994.4000000000001,
+    "width": 52.0,
+    "available": 333.0,
+    "height": 31.200000000000003,
+    "field": "entries.5.condition"
+  },
+  {
+    "text": "25\u00b0",
+    "x": 30.0,
+    "y": 1025.6000000000001,
+    "width": 42.0,
+    "available": 333.0,
+    "height": 36.4,
+    "field": "entries.5.temperature"
+  },
+  {
+    "text": "Earlier \u00b7 disabled",
+    "x": 24.0,
+    "y": 1104.0,
+    "width": 143.0,
+    "available": 159.5,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Later",
+    "x": 209.5,
+    "y": 1104.0,
+    "width": 46.0,
+    "available": 159.5,
+    "height": 26.0,
+    "field": null
+  },
+  {
+    "text": "Model estimate \u00b7 Offline development fixture",
+    "x": 30.0,
+    "y": 1170.0,
+    "width": 329.0,
+    "available": 333,
+    "height": 23.400000000000002,
+    "field": "sourceLine"
+  },
+  {
+    "text": "Updated 9:00 AM",
+    "x": 30.0,
+    "y": 1199.4,
+    "width": 128.0,
+    "available": 333,
+    "height": 23.400000000000002,
+    "field": "updatedLine"
+  },
+  {
+    "text": "Live weather data. Freshness: unknown.",
+    "x": 30.0,
+    "y": 1228.8000000000002,
+    "width": 294.0,
+    "available": 333,
+    "height": 23.400000000000002,
+    "field": "status"
+  }
+]

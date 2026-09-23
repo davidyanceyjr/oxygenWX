@@ -1,0 +1,3 @@
+{'tests': 66, 'failures': 0, 'errors': 0, 'skipped': 0}
+XML result files: 11
+Gradle check reused up-to-date test outputs; see check.log.

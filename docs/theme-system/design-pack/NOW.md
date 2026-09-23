@@ -71,4 +71,14 @@ Keys below are in `docs/theme-system/tokens/catalog/<theme>.json`; personality k
 | RTL | Mirror alignment, mark side, and visual inset; keep page names and model values in semantic order. Do not reverse weather meaning or Back behavior. |
 | Effects Off | Opaque static canvas/panels, no gradient, grid, blur, glow, or motion; every visible word and control remains. |
 
-**Review criterion:** TP.1D should compare the 393 × 852 dp installed render against the measured component widths, text hierarchy, panel radius, and source/status placement, then check 360 × 640 dp, 1.3 font, RTL, High contrast, and Effects Off. This page makes no screenshot or pixel-match claim.
+**Review criterion:** TP.1D should compare the 393 × 852 dp design render against the measured component widths, text hierarchy, panel radius, and source/status placement, then check 360 × 640 dp, 1.3 font, RTL, High contrast, and Effects Off. This page makes no screenshot or pixel-match claim.
+
+
+## Integrated render fit refinement
+
+The upstream [integrated pack](INTEGRATED_PACK.md#measurable-composition) records
+D27's actual text-driven heights and fixed reference insets, plus D28/D29's
+explicit font and mark review boundaries. Those measured refinements supersede
+the nominal fit estimates above for the ten upstream references. See
+[SOURCE_DECISIONS.md](SOURCE_DECISIONS.md#integrated-upstream-review-decisions)
+for old/new values and affected cells. TP.3 owns installed comparison.

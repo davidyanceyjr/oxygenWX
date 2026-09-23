@@ -1,0 +1,200 @@
+[
+  {
+    "text": "Demo Station",
+    "x": 180.0,
+    "y": 24,
+    "width": 124.0,
+    "available": 480,
+    "height": 28,
+    "field": "current.location"
+  },
+  {
+    "text": "Now",
+    "x": 180.0,
+    "y": 54,
+    "width": 29.0,
+    "available": 480,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "Now",
+    "x": 186.0,
+    "y": 98,
+    "width": 29.0,
+    "available": 108.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "Hourly",
+    "x": 306.0,
+    "y": 98,
+    "width": 43.0,
+    "available": 108.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "Daily",
+    "x": 426.0,
+    "y": 98,
+    "width": 33.0,
+    "available": 108.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "Details",
+    "x": 546.0,
+    "y": 98,
+    "width": 45.0,
+    "available": 108.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "28\u00b0",
+    "x": 212.0,
+    "y": 172,
+    "width": 89.0,
+    "available": 416,
+    "height": 64,
+    "field": "current.temperature"
+  },
+  {
+    "text": "Partly cloudy",
+    "x": 212.0,
+    "y": 236,
+    "width": 119.0,
+    "available": 416,
+    "height": 28,
+    "field": "current.condition"
+  },
+  {
+    "text": "Feels 29\u00b0",
+    "x": 212.0,
+    "y": 272,
+    "width": 67.0,
+    "available": 416,
+    "height": 24,
+    "field": "current.apparent"
+  },
+  {
+    "text": "Humidity",
+    "x": 192.0,
+    "y": 390,
+    "width": 59.0,
+    "available": 212.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "56%",
+    "x": 192.0,
+    "y": 418,
+    "width": 31.0,
+    "available": 212.0,
+    "height": 24,
+    "field": "current.humidity"
+  },
+  {
+    "text": "Dew point",
+    "x": 436.0,
+    "y": 390,
+    "width": 65.0,
+    "available": 212.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "18\u00b0",
+    "x": 436.0,
+    "y": 418,
+    "width": 26.0,
+    "available": 212.0,
+    "height": 24,
+    "field": "current.dewPoint"
+  },
+  {
+    "text": "Precipitation",
+    "x": 192.0,
+    "y": 474,
+    "width": 82.0,
+    "available": 212.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "No precipitation indicated",
+    "x": 192.0,
+    "y": 502,
+    "width": 191.0,
+    "available": 212.0,
+    "height": 24,
+    "field": "current.precipitationHeadline"
+  },
+  {
+    "text": "Next 6h \u00b7 0.0 mm",
+    "x": 192.0,
+    "y": 530,
+    "width": 92.0,
+    "available": 212.0,
+    "height": 18,
+    "field": "current.precipitationSupporting"
+  },
+  {
+    "text": "Wind",
+    "x": 436.0,
+    "y": 474,
+    "width": 33.0,
+    "available": 212.0,
+    "height": 20,
+    "field": null
+  },
+  {
+    "text": "13 km/h",
+    "x": 436.0,
+    "y": 502,
+    "width": 60.0,
+    "available": 212.0,
+    "height": 24,
+    "field": "current.windHeadline"
+  },
+  {
+    "text": "Gusts 23 \u00b7 SW",
+    "x": 436.0,
+    "y": 530,
+    "width": 72.0,
+    "available": 212.0,
+    "height": 18,
+    "field": "current.windSupporting"
+  },
+  {
+    "text": "Model estimate \u00b7 Offline development fixture",
+    "x": 192.0,
+    "y": 582,
+    "width": 243.0,
+    "available": 456,
+    "height": 18,
+    "field": "sourceLine"
+  },
+  {
+    "text": "Updated 9:00 AM",
+    "x": 192.0,
+    "y": 606,
+    "width": 93.0,
+    "available": 456,
+    "height": 18,
+    "field": "updatedLine"
+  },
+  {
+    "text": "Live weather data. Freshness: unknown.",
+    "x": 192.0,
+    "y": 630,
+    "width": 216.0,
+    "available": 456,
+    "height": 18,
+    "field": "status"
+  }
+]

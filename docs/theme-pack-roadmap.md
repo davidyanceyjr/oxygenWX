@@ -1,5 +1,23 @@
 # Oxygen Weather Theme Pack Roadmap
 
+## Execution head — TP.1D upstream complete; partial-A next
+
+**Completed: TP.1D upstream Now/Hourly integration.** Plan:
+`.codex/plans/028-tp-1d-integrated-pack-review.md`. Its ten cells, ten primary
+static references and six condition examples are reviewed in
+`docs/theme-system/design-pack/INTEGRATED_PACK.md`. Exact verification and
+limitations: `.codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md`;
+evidence: `.codex/test-artifacts/028-tp-1d-integrated-pack-review/`.
+D28 font choice and D29 schematic mark detail remain explicit final-review
+decisions. This upstream closure does not complete TP.1D or TP.1.
+
+**Next: TP.1D-partial-A Daily/Details and pack approval.** Initial plan:
+`.codex/plans/028-tp-1d-integrated-pack-review-partial-A.md`. It owns the
+matching ten cells/renders/examples, the 20-cell integration review, and explicit
+design-owner approval. Expand and activate it in its own cycle. TP.2 remains
+gated until partial-A closes with approval. Keep the existing context limits:
+target at most 35% of a fresh window; split before 45% if work grows.
+
 **Status:** adopted; TP.1 is ACTIVE, TP.1A, TP.1B, and TP.1C complete
 **Adopted:** 2026-09-23
 **Purpose:** complete the codifiable five-theme design pack, implement its appearance
@@ -10,9 +28,10 @@ This roadmap is the governing implementation sequence for the five-theme design
 pack, resolver, and renderer until TP.3 is complete. It covers the missing exact page
 compositions and theme treatments, then the resolver and renderer work needed to
 match those approved designs. Each main TP child slice is a separately planned
-and closed workflow cycle. Bounded `partial-*` work packages remain inside
-their active parent cycle and receive their own review evidence. A later main
-slice may begin only after its dependency has been closed with evidence.
+and closed workflow cycle. TP.1B/C used bounded `partial-*` work packages
+inside their parent cycles. TP.1D uses a separately activated dependent
+`partial-*` cycle so each half has its own context budget and review evidence.
+A dependent slice may begin only after its upstream cycle closes with evidence.
 
 ## Completed execution head — TP.1C
 
@@ -106,8 +125,8 @@ pixel ratios, conversion to dp/sp, and treatments for states absent from art
 using the [reference measurement method](theme-system/design-pack/REFERENCE_MEASUREMENT_METHOD.md).
 Record conflicts as explicit decisions rather than silently changing the
 foundation. Daily and Details are out of scope. The two dependent portions
-passed source/model audits. TP.1D remains responsible for
-installed comparison and approval; this documentation closure makes no visual
+passed source/model audits. TP.1D remains responsible for integrated design
+render comparison and approval; this documentation closure makes no visual
 runtime acceptance claim.
 
 Plan: `.codex/plans/026-tp-1b-now-hourly-page-designs.md`. Designs:
@@ -126,15 +145,22 @@ contracts: `docs/theme-system/design-pack/DAILY.md` and `DETAILS.md`; evidence:
 completion does not claim installed visual success or owner approval; TP.1D
 remains required before TP.1 umbrella closure.
 
-### TP.1D — Integrated pack, responsive review, and approval — PLANNED
+### TP.1D — Integrated pack, responsive review, and approval — ACTIVE (upstream complete)
 
 Integrate the four page designs into the 20-cell theme/page matrix. Complete
 the asset-use map, compact/large-font/RTL/wider-window/Effects Off examples,
-reference renders, and installed-acceptance checklist. Resolve or visibly
+reference renders, and the checklist for later TP.3 installed acceptance. Resolve or visibly
 retain conflicts after measuring and reviewing the relevant source art. Revise
 proposed values when integrated renders show a mismatch. Record explicit
 design-owner approval
 before closing TP.1; TP.2 remains gated until then.
+
+Completed upstream plan: `.codex/plans/028-tp-1d-integrated-pack-review.md`.
+It integrated Now/Hourly and their static reference renders/examples; exact verification is in cycle 028 history. The dependent
+`TP.1D-partial-A` initial plan at the execution head completes Daily/Details,
+cross-pack review, and explicit approval in a separately activated cycle. Each
+half targets at most 35% of a fresh context window. The upstream cycle may
+close without claiming TP.1D/TP.1 completion; activation is not approval.
 
 ### TP.1 shared completion criteria
 
