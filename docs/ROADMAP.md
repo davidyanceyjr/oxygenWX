@@ -206,7 +206,7 @@ portion of the former Details-and-atmosphere slice. Evidence and verification
 limits: `.codex/history/2026-09-22-023-production-themed-details-source-components.md`
 and `.codex/test-artifacts/023-production-themed-details-source-components/`.
 
-### R0.11CAA — Production themed weather marks and backgrounds — PLANNED
+### R0.11CAA — Production themed weather marks and backgrounds — ACTIVE
 
 After R0.11CA, add provider-neutral weather marks and background primitives
 through the same resolved appearance boundary. Preserve adjacent weather text

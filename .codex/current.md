@@ -1,12 +1,12 @@
 # Current Development Cycle
 
-State: IDLE
-Cycle ID: none
-Roadmap item: none
-Plan: none
-Evidence: none
+State: ACTIVE
+Cycle ID: 024-production-themed-weather-marks-backgrounds
+Roadmap item: R0.11CAA
+Plan: .codex/plans/024-production-themed-weather-marks-backgrounds.md
+Evidence: .codex/test-artifacts/024-production-themed-weather-marks-backgrounds/
 Last updated: 2026-09-22
 
 ## Current objective
 
-No active cycle. Select the next item from `docs/ROADMAP.md`.
+# Plan 024 — Production themed weather marks and backgrounds
