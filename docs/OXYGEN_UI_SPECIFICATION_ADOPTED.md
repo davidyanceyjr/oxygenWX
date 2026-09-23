@@ -4,13 +4,12 @@ This document is the local implementation contract for the clean-room UI redesig
 It supersedes the visual direction of the earlier Oxygen prototype and its Base
 Art Sheet v0.2. The upstream material recorded in
 `upstream/OXYGEN_SOURCE_REFERENCE.md` is historical research, not a visual
-reference or a screen-composition source. The normal four-page app still uses the
-Theme B implementation sketch; its pages have not migrated and it is not the
-production visual acceptance target. The additive production resolver and R0.11C
-core monitor components are implemented and verified through an isolated debug
-showcase. The R0.11CA Details/source components are also implemented in that
-isolated host. These production components are not yet referenced by normal app
-composition.
+reference or a screen-composition source. The normal four-page app now uses the
+production theme renderer. Atmospheric, Glass, Minimal OLED, Instrument, and
+Terminal are selectable in memory, with Atmospheric as the initial theme. The
+Theme B implementation sketch is historical; it is no longer the normal app
+visual target. The production component showcase remains a debug-only focused
+fixture, while installed review covers the real app path.
 
 ## Exact visual acceptance status
 
@@ -41,12 +40,11 @@ presentations:
 - **Instrument** — technical monitor treatment with bounded, source-supported data indicators.
 - **Terminal** — flat, console-like presentation with monospace typography.
 
-Atmospheric is the initial implementation target. This does not establish a persisted
-user default; persistence and selection are later roadmap work. The personalities and
+Atmospheric is the initial theme selection. The current selection is in memory and
+is not persisted. The personalities and
 shared component references are indexed in
 [`docs/assets/design-references/production-themes/`](assets/design-references/production-themes/).
-They guide visual exploration and component intent, not pixel-exact measurements or
-mandatory screen composition. Start with the [One App. Many Personalities board](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png), [Glass asset sheet](assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png), and [Instrument asset sheet](assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png); the full reference set is listed in the theme-system asset manifest.
+Use the [One App. Many Personalities board](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png), [Glass asset sheet](assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png), and [Instrument asset sheet](assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png) as the visual baseline for the design review; the full reference set is listed in the theme-system asset manifest. These references are not yet a complete exact specification for the production app.
 
 Use semantic Compose components, procedural drawing, and vectors where practical. Do
 not paste full art-board screenshots into runtime UI, add large concept boards to Android
@@ -112,6 +110,17 @@ Weather marks, state indicators, and optional procedural atmosphere express
 provider-neutral condition identity and monitor state. They are supplemental.
 Adjacent text/semantics must communicate the same weather meaning.
 
+The additive production `ProductionWeatherMark` accepts the existing nullable
+presentation condition and resolves its drawing through the selected mark
+style and semantic palette. Clear, partly cloudy, cloudy, rain, storm, and snow
+have distinct decorative marks; a missing condition emits no mark. Mark
+semantics are cleared so adjacent condition text remains the sole accessible
+weather meaning. `ProductionBackdrop` handles each resolved backdrop style
+behind caller content without pointer handling. Effects Off draws only the
+opaque canvas color: no gradient, grid, overlay, or motion. Subtle/Full use
+static procedural backdrops in this slice. These primitives are currently
+isolated to the debug showcase; normal Home migration remains future work.
+
 The following roles are semantic appearance inputs, not a prescribed legacy
 palette. Their concrete values are selected by the active theme:
 
@@ -154,10 +163,10 @@ Each page must have an explicit answer for loading, ready, cached/stale, partial
 - Controls should be named by meaning (for example, Earlier/Later) instead of depending on arrow direction alone.
 - Large text may use localized overflow/scrolling rather than clipping or shrinking critical content beyond readability.
 
-## Current implementation sketch/baseline
+## Historical Theme B implementation sketch/baseline
 
-The following describes the currently implemented Theme B sketch for repository context.
-It is historical implementation state and is not a production visual acceptance target:
+The following describes the Theme B sketch that preceded the production renderer.
+It is retained as historical implementation context and is not a production visual target:
 
 - Standard four-page pager.
 - 72-hour/10-day demo presentation horizons.
@@ -168,10 +177,9 @@ It is historical implementation state and is not a production visual acceptance 
 - Visible source/update context.
 - Derived/history separation in Details.
 - Basic screen-reader summaries and semantic page tabs.
-- A fixed development-default Theme B `ResolvedAppearance` boundary currently
-  owns semantic colors, typography, shared layout/shape values, the Material
-  bridge, and Off/Subtle effects resolution. It remains sketch implementation
-  pending the planned production resolver and cutover.
+- A fixed development-default Theme B `ResolvedAppearance` boundary owned
+  semantic colors, typography, shared layout/shape values, the Material bridge,
+  and Off/Subtle effects resolution. The normal app now uses `ResolvedTheme`.
 - Shared structural monitor components are implemented: the neutral header,
   named Home page selector, opaque section surface, and explicit forecast-window
   controls. The header carries visible page identity plus supporting

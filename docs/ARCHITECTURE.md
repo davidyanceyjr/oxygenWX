@@ -65,22 +65,21 @@ The presentation layer owns text/unit formatting, page-window selection, concise
 
 Compose owns layout, interaction, weather marks, atmospheric rendering, and accessibility semantics. The outer Home pager is the sole horizontal-swipe owner. Hourly/Daily window changes are explicit UI actions.
 
-The installed renderer remains the UI-local Theme B sketch. Its existing
-`ResolvedAppearance` resolver owns the semantic values consumed by current
-components; `OxygenTheme` bridges those values into Material and provides them through
-a composition boundary. This is the active app path and its defaults are unchanged.
+The installed app renderer now uses the production `ResolvedTheme` component
+family. `OxygenWeatherApp` owns the in-memory five-theme selection, outer pager,
+page-window state, and navigation callbacks. Atmospheric is the launch default.
+Theme changes affect presentation only and do not refetch weather.
 
 The additive production theme foundation lives under `ui/themeengine/`. Its typed
 catalog contains Atmospheric, Glass, Minimal OLED, Instrument, and Terminal
 definitions. The pure resolver accepts theme identity, contrast, layout, and effects
 inputs and returns a complete semantic palette, typography, geometry, render-style,
 and motion policy. It has no weather, navigation, persistence, provider, or
-Compose-runtime inputs, and app composition does not call it. Contrast resolves
-through palette values; layout resolves through geometry; Effects Off resolves a
-solid backdrop, no motion, and fully opaque panels and outlines. The root backdrop
-and motion policy are not rendered by the new production family yet.
+Compose-runtime inputs. App composition selects the requested theme and calls
+the pure resolver. Contrast resolves through palette values; layout resolves through geometry; Effects Off resolves a
+solid backdrop, no motion, and fully opaque panels and outlines.
 
-The approved future production boundary is:
+The production boundary is:
 
 ```text
 Theme selection + contrast + effects + system motion policy
@@ -99,9 +98,10 @@ Theme-aware Compose components consume the production resolver's resolved values
 presentation models and semantic callbacks. Theme identity must not alter weather meaning,
 page/navigation behavior, provenance, missing-data handling, or accessibility semantics.
 Theme selection does not enter provider, repository, domain, derived-meteorology, or unit
-conversion architecture and does not refetch weather. The existing sketch components
-remain the current implementation until R0.11D–R0.11G migrate pages and cut over to the
-production family. R0.11C adds the production shared core monitor components. Theme art remains under
+conversion architecture and does not refetch weather. The production renderer now
+covers all four pages and all five built-in visual systems. Its production component
+family owns the rendered surfaces and marks; the old Theme B sketch remains only as
+unused historical implementation code pending safe cleanup. Theme art remains under
 `docs/assets/design-references/production-themes/`;
 full boards are documentation references, not runtime resources.
 
@@ -138,13 +138,23 @@ existing typed presentation fields and semantic callbacks. They do not depend on
 the sketch's `ResolvedAppearance`, a `CompositionLocal`, raw theme IDs, or app
 composition. `ProductionComponentsActivity` is merged only from `src/debug/`, has
 no launcher filter, and prepares deterministic fixture presentations at the host
-boundary; it does not change the normal `MainActivity` or Theme B sketch path.
+boundary; it supplements installed review of the normal app.
 Production Details/source components are implemented in
 `ProductionDetailsComponents.kt`; they render supplied source/update strings and
 ordered `MetricGroupPresentation` groups. The isolated debug showcase exercises
-complete, sparse, and long-text fixture states. They remain unreferenced by app
-composition until page migration. Marks and production backgrounds remain
-R0.11CAA work; page migrations remain R0.11D–R0.11G work.
+complete, sparse, and long-text fixture states. The normal app also uses these
+components. `ProductionWeatherMark` and
+`ProductionBackdrop` add provider-neutral decorative marks and resolved static
+backdrops through this same boundary. The mark accepts the existing nullable
+`WeatherMarkCondition`; all six conditions and all current mark styles have
+explicit rendering paths, while null draws no mark and mark semantics are
+cleared so adjacent supplied text carries the meaning. The backdrop handles
+every current `BackdropStyle`, draws before caller content, and does not own
+input. Effects Off is enforced at render time as the opaque canvas color with
+no gradients, grid, or overlay. Subtle/Full currently select only static
+procedural drawing; animation remains future work. All five theme mappings and
+the four-page production renderer are exercised in the installed app; the
+debug showcase continues to provide focused component fixtures.
 
 ## Production expansion
 

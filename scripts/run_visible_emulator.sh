@@ -12,6 +12,10 @@ AVD_NAME=${OXYGEN_AVD_NAME:-oxygen_starter}
 PACKAGE_NAME=${OXYGEN_PACKAGE_NAME:-com.oxygen.weather}
 ACTIVITY_NAME=${OXYGEN_ACTIVITY_NAME:-.MainActivity}
 SERIAL=${OXYGEN_SERIAL:-}
+SERIAL_EXPLICIT=0
+if [[ -n "$SERIAL" ]]; then
+    SERIAL_EXPLICIT=1
+fi
 CLEAN_INSTALL=0
 
 usage() {
@@ -41,6 +45,7 @@ while (($# > 0)); do
             ;;
         --serial)
             SERIAL=${2:?--serial requires a value}
+            SERIAL_EXPLICIT=1
             shift
             ;;
         --clean-install)
@@ -126,6 +131,30 @@ find_running_emulator() {
     "$ADB" devices | awk '$1 ~ /^emulator-/ && $2 == "device" { print $1; exit }'
 }
 
+serial_is_headless() {
+    local serial=$1 port cmdline cmdline_file port_regex ports_regex
+    [[ "$serial" =~ ^emulator-([0-9]+)$ ]] || return 1
+    port=${BASH_REMATCH[1]}
+    port_regex="(^|[[:space:]])-port[[:space:]]+$port([[:space:]]|$)"
+    ports_regex="(^|[[:space:]])-ports[[:space:]]+([^[:space:]]*,)?$port,?([[:space:]]|$)"
+
+    # ADB cannot turn a -no-window emulator into a desktop window. Match its
+    # console port so another concurrently running emulator is left untouched.
+    for cmdline_file in /proc/[0-9]*/cmdline; do
+        [[ -r "$cmdline_file" ]] || continue
+        cmdline=$(tr '\0' ' ' < "$cmdline_file" 2>/dev/null || true)
+        [[ "$cmdline" == *-no-window* ]] || continue
+        if [[ "$cmdline" =~ $port_regex || "$cmdline" =~ $ports_regex ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+avd_name_for_serial() {
+    "$ADB" -s "$1" emu avd name 2>/dev/null | sed -n '2p' | tr -d '\r'
+}
+
 wait_for_boot() {
     local attempt boot_completed
     for attempt in $(seq 1 90); do
@@ -145,6 +174,41 @@ wait_for_boot() {
 "$ADB" start-server >/dev/null
 
 if [[ -z "$SERIAL" ]]; then
+    SERIAL=$(find_running_emulator || true)
+fi
+
+if [[ -n "$SERIAL" ]] && serial_is_headless "$SERIAL"; then
+    if ((SERIAL_EXPLICIT == 1)); then
+        echo "Emulator $SERIAL is running headless and cannot provide a visible window." >&2
+        echo "Shut it down, then rerun without --serial to start the visible AVD." >&2
+        exit 1
+    fi
+
+    if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
+        echo "Emulator $SERIAL is headless, and no graphical display is available to replace it." >&2
+        echo "Run this from a graphical desktop terminal; the existing emulator was left running." >&2
+        exit 1
+    fi
+
+    running_avd=$(avd_name_for_serial "$SERIAL")
+    if [[ "$running_avd" != "$AVD_NAME" ]]; then
+        echo "Emulator $SERIAL ($running_avd) is headless; refusing to stop an AVD other than '$AVD_NAME'." >&2
+        echo "Close that emulator or select a visible emulator with --serial, then rerun." >&2
+        exit 1
+    fi
+
+    echo "The existing $AVD_NAME emulator is headless; stopping it so a visible window can open."
+    "$ADB" -s "$SERIAL" emu kill >/dev/null
+    for _ in $(seq 1 30); do
+        if [[ "$($ADB -s "$SERIAL" get-state 2>/dev/null || true)" != "device" ]]; then
+            break
+        fi
+        sleep 1
+    done
+    if [[ "$($ADB -s "$SERIAL" get-state 2>/dev/null || true)" == "device" ]]; then
+        echo "Headless emulator $SERIAL did not shut down; refusing to launch another instance." >&2
+        exit 1
+    fi
     SERIAL=$(find_running_emulator || true)
 fi
 
@@ -196,4 +260,14 @@ echo "Installing debug APK on $SERIAL"
 
 echo "Launching $PACKAGE_NAME/$ACTIVITY_NAME"
 "$ADB" -s "$SERIAL" shell am force-stop "$PACKAGE_NAME"
-"$ADB" -s "$SERIAL" shell am start -n "$PACKAGE_NAME/$ACTIVITY_NAME"
+launch_output=$("$ADB" -s "$SERIAL" shell am start -W -n "$PACKAGE_NAME/$ACTIVITY_NAME" 2>&1) || {
+    printf '%s\n' "$launch_output" >&2
+    echo "Android could not launch $PACKAGE_NAME/$ACTIVITY_NAME on $SERIAL." >&2
+    exit 1
+}
+printf '%s\n' "$launch_output"
+if ! grep -Fq 'Status: ok' <<< "$launch_output"; then
+    echo "Android did not confirm that $PACKAGE_NAME/$ACTIVITY_NAME started on $SERIAL." >&2
+    exit 1
+fi
+echo "Oxygen Weather is open on emulator $SERIAL."

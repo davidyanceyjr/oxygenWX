@@ -10,5 +10,7 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [SOURCE_DECISIONS.md](SOURCE_DECISIONS.md): source ledger, conflicts, asset disposition, and owner decisions.
 - [NOW.md](NOW.md): TP.1B partial A, proposed Now composition and five theme mappings; measured and checked for model coverage, awaiting integrated render review.
 - [HOURLY.md](HOURLY.md): TP.1B partial B, proposed Hourly composition, six-entry grid, date/window controls and five theme mappings; measured and checked for model coverage, awaiting integrated render review.
+- [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit passed, awaiting integrated render review.
+- [DETAILS.md](DETAILS.md): TP.1C partial B, proposed ordered metric groups, source/update/status separation, state behavior, and five theme mappings; documentation audit passed, awaiting integrated render review.
 
 All measurements called *reference* describe a review target rather than a verified installed rendering. This documentation slice includes no app render or implementation acceptance.

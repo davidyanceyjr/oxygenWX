@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,6 +38,7 @@ import com.oxygen.weather.presentation.DailyEntryPresentation
 import com.oxygen.weather.presentation.DateJumpPresentation
 import com.oxygen.weather.presentation.HourlyEntryPresentation
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
+import com.oxygen.weather.ui.themeengine.HeroStyle
 import com.oxygen.weather.ui.themeengine.SurfaceStyle
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.ThemePalette
@@ -140,21 +144,49 @@ fun ProductionCurrentHero(
     modifier: Modifier = Modifier,
 ) {
     WithThemeTypography(theme) {
-        ProductionSectionSurface(
-            theme = theme,
-            modifier = modifier.semantics { contentDescription = current.spokenSummary },
-            contentPadding = PaddingValues(theme.geometry.heroPanelInset),
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
-                Text(current.location, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
-                Text(current.temperature, style = theme.typography.displayLarge, color = theme.palette.primaryData)
-                Text(current.condition, style = theme.typography.headlineMedium, color = theme.palette.content)
-                Text("Feels ${current.apparent}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
-                Row(horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
-                    HeroFact(theme.palette, "Humidity", current.humidity, Modifier.weight(1f))
-                    HeroFact(theme.palette, "Dew point", current.dewPoint, Modifier.weight(1f))
+        val heroContent: @Composable ColumnScope.() -> Unit = {
+            Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(current.location, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+                    Text(current.temperature, style = theme.typography.displayLarge, color = theme.palette.primaryData)
+                }
+                current.conditionIdentity?.let { condition ->
+                    ProductionWeatherMark(
+                        theme = theme,
+                        condition = condition,
+                        modifier = Modifier.size(if (theme.heroStyle == HeroStyle.INSTRUMENT) 52.dp else 76.dp),
+                    )
                 }
             }
+            Text(current.condition, style = theme.typography.headlineMedium, color = theme.palette.content)
+            Text("Feels ${current.apparent}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            if (theme.heroStyle == HeroStyle.INSTRUMENT || theme.heroStyle == HeroStyle.TEXT_CONSOLE) {
+                HorizontalDivider(color = theme.palette.outline)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                HeroFact(theme.palette, "Humidity", current.humidity, Modifier.weight(1f))
+                HeroFact(theme.palette, "Dew point", current.dewPoint, Modifier.weight(1f))
+            }
+        }
+        when (theme.heroStyle) {
+            HeroStyle.EDITORIAL -> Column(
+                modifier.fillMaxWidth().semantics { contentDescription = current.spokenSummary }
+                    .padding(horizontal = theme.geometry.heroPanelInset, vertical = theme.geometry.panelInset),
+                verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
+                content = heroContent,
+            )
+            HeroStyle.MINIMAL -> Column(
+                modifier.fillMaxWidth().semantics { contentDescription = current.spokenSummary }
+                    .padding(vertical = theme.geometry.panelInset),
+                verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
+                content = heroContent,
+            )
+            HeroStyle.LAYERED, HeroStyle.INSTRUMENT, HeroStyle.TEXT_CONSOLE -> ProductionSectionSurface(
+                theme = theme,
+                modifier = modifier.semantics { contentDescription = current.spokenSummary },
+                contentPadding = PaddingValues(theme.geometry.heroPanelInset),
+                content = heroContent,
+            )
         }
     }
 }
@@ -222,11 +254,17 @@ fun ProductionDailyRow(
             modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = entry.spokenSummary },
             PaddingValues(theme.geometry.compactPanelInset),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(entry.day, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
-                Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
-                Text("Low ${entry.low}   High ${entry.high}", style = theme.typography.titleMedium, color = theme.palette.primaryData)
-                Text(entry.precipitation, style = theme.typography.labelMedium, color = theme.palette.precipitationAccent)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                entry.conditionIdentity?.let { ProductionWeatherMark(theme, it, Modifier.size(38.dp)) }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Text(entry.day, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+                    Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+                    Text(entry.precipitation, style = theme.typography.labelMedium, color = theme.palette.precipitationAccent)
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text("${entry.high}", style = theme.typography.titleMedium, color = theme.palette.primaryData)
+                    Text("${entry.low}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+                }
             }
         }
     }

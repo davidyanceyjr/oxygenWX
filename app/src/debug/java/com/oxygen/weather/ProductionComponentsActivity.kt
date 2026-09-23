@@ -3,7 +3,6 @@ package com.oxygen.weather
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -32,6 +34,9 @@ import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.CurrentPresentation
 import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.presentation.MetricPresentation
+import com.oxygen.weather.presentation.WeatherMarkCondition
+import com.oxygen.weather.ui.themeengine.components.ProductionBackdrop
+import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.LayoutPreset
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
@@ -134,9 +139,9 @@ private fun ProductionComponentsShowcase() {
     val isSparse = fixture == "Sparse"
 
     MaterialTheme {
+        ProductionBackdrop(theme, Modifier.fillMaxSize()) {
         Column(
-            Modifier.fillMaxSize().background(theme.palette.canvas).safeDrawingPadding()
-                .verticalScroll(rememberScrollState()).padding(12.dp),
+            Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState()).padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
         ) {
             Column {
@@ -147,6 +152,7 @@ private fun ProductionComponentsShowcase() {
                             TextButton(
                                 onClick = { fixture = option; callback = "Fixture: $option" },
                                 modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
                             ) { Text(option) }
                         }
                     }
@@ -164,19 +170,42 @@ private fun ProductionComponentsShowcase() {
                                     }
                                 },
                                 modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
                             ) { Text(option) }
                         }
                     }
                 }
                 Row(Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { themeId = WeatherThemeId.GLASS }, modifier = Modifier.weight(1f)) { Text("Glass") }
-                    TextButton(onClick = { themeId = WeatherThemeId.ATMOSPHERIC }, modifier = Modifier.weight(1f)) { Text("Atmospheric") }
+                    TextButton(onClick = { themeId = WeatherThemeId.GLASS }, modifier = Modifier.weight(1f), colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action)) { Text("Glass") }
+                    TextButton(onClick = { themeId = WeatherThemeId.ATMOSPHERIC }, modifier = Modifier.weight(1f), colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action)) { Text("Atmospheric") }
                 }
                 Row(Modifier.fillMaxWidth()) {
-                    TextButton(onClick = { rtl = !rtl }) { Text(if (rtl) "RTL on" else "RTL") }
+                    TextButton(onClick = { rtl = !rtl }, colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action)) { Text(if (rtl) "RTL on" else "RTL") }
                 }
                 Text("State: $fixture · ${themeId.name} · ${contrast.name} · ${layout.name} · ${effects.name} · ${if (rtl) "RTL" else "LTR"}", color = theme.palette.secondaryData)
                 Text(callback, color = theme.palette.content)
+                Text("Production weather marks · condition stays in text", color = theme.palette.content)
+                listOf<Pair<WeatherMarkCondition?, String>>(
+                    WeatherMarkCondition.CLEAR to "Clear",
+                    WeatherMarkCondition.PARTLY_CLOUDY to "Partly cloudy",
+                    WeatherMarkCondition.CLOUDY to "Cloudy",
+                    WeatherMarkCondition.RAIN to "Rain",
+                    WeatherMarkCondition.STORM to "Storm",
+                    WeatherMarkCondition.SNOW to "Snow",
+                ).plus(null to "Condition unavailable").chunked(3).forEach { rowItems ->
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        rowItems.forEach { (condition, label) ->
+                            Column(
+                                Modifier.weight(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(2.dp),
+                            ) {
+                                ProductionWeatherMark(theme, condition, Modifier.size(36.dp))
+                                Text(label, color = if (condition == null) theme.palette.secondaryData else theme.palette.content)
+                            }
+                        }
+                    }
+                }
             }
             CompositionLocalProvider(
                 LocalLayoutDirection provides if (rtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
@@ -211,6 +240,7 @@ private fun ProductionComponentsShowcase() {
             ProductionSourceFreshnessPanel(theme, details.sourceLine, details.updatedLine)
             details.detailGroups.forEach { group -> ProductionInspectionMetricGroup(theme, group) }
             }
+        }
         }
     }
 }

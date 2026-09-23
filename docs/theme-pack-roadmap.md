@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-**Status:** adopted; TP.1 is ACTIVE, with TP.1A and TP.1B complete
+**Status:** adopted; TP.1 is ACTIVE, TP.1A, TP.1B, and TP.1C complete
 **Adopted:** 2026-09-23
 **Purpose:** complete the codifiable five-theme design pack, implement its appearance
 resolution, and verify the resulting screens through the installed application.
@@ -13,6 +13,28 @@ match those approved designs. Each main TP child slice is a separately planned
 and closed workflow cycle. Bounded `partial-*` work packages remain inside
 their active parent cycle and receive their own review evidence. A later main
 slice may begin only after its dependency has been closed with evidence.
+
+## Completed execution head — TP.1C
+
+Parent cycle **TP.1C is DONE** under `.codex/history/2026-09-23-027-tp-1c-daily-details-page-designs.md`.
+Its documentation-only work packages and combined ten-cell review passed:
+
+1. **TP.1C-partial-A — Daily page design — DONE:** five theme treatments,
+   five-day windows, typed row/action map, responsive/state cases, and
+   evidence in `.codex/test-artifacts/027-tp-1c-daily-details-page-designs/partial-A/`.
+   Contract: `docs/theme-system/design-pack/DAILY.md`.
+2. **TP.1C-partial-B — Details page design — DONE:** ordered typed metric
+   groups, provenance separation, five theme treatments, and evidence in
+   `.codex/test-artifacts/027-tp-1c-daily-details-page-designs/partial-B/`.
+   Contract: `docs/theme-system/design-pack/DETAILS.md`.
+3. **Combined Daily/Details review — PASS:** ten cells audited for shell,
+   model, source, state, contrast, compact/large-font/RTL, and Effects Off
+   consistency. Review: `.codex/test-artifacts/027-tp-1c-daily-details-page-designs/combined-review.md`.
+
+Exact workflow, source-contract, link/token/model, contrast, and diff checks
+are retained beneath `.codex/test-artifacts/027-tp-1c-daily-details-page-designs/`.
+This closes TP.1C only. TP.1 umbrella remains active; TP.1D owns integrated
+20-cell renders and explicit design-owner approval; TP.2 remains gated.
 
 ## Completed execution head — TP.1B
 
@@ -91,12 +113,18 @@ runtime acceptance claim.
 Plan: `.codex/plans/026-tp-1b-now-hourly-page-designs.md`. Designs:
 `docs/theme-system/design-pack/NOW.md` and `HOURLY.md`.
 
-### TP.1C — Daily and Details page designs — NEXT
+### TP.1C — Daily and Details page designs — DONE
 
 Define Daily and Details page compositions for all five themes using the
 completed TP.1A foundation and TP.1B decisions. Preserve five-day windows,
 chronology, provenance grouping, and current presentation-model boundaries.
-Do not add unsupported gauges, charts, or data slots.
+Do not add unsupported gauges, charts, or data slots. The active parent plan is
+`.codex/plans/027-tp-1c-daily-details-page-designs.md`. Both bounded parts and
+the combined ten-cell review are complete under parent cycle 027. Proposed
+contracts: `docs/theme-system/design-pack/DAILY.md` and `DETAILS.md`; evidence:
+`.codex/test-artifacts/027-tp-1c-daily-details-page-designs/`. This documentation
+completion does not claim installed visual success or owner approval; TP.1D
+remains required before TP.1 umbrella closure.
 
 ### TP.1D — Integrated pack, responsive review, and approval — PLANNED
 
