@@ -8,7 +8,13 @@
 - **Instrument** — technical monitor treatment; indicators and gauges may express only values or series supplied with suitable semantics, units, ranges, intervals, and provenance.
 - **Terminal** — flat, console-like presentation with monospace typography.
 
-These references guide visual exploration and component intent. They do not require pixel matching, copied screen compositions, or particular weather imagery. Full boards and extracted image crops remain under `docs/assets/design-references/production-themes/`; no large concept board belongs in runtime Android resources.
+The product owner requires exact visual matching to the approved production
+designs. The existing boards and crops are the baseline for a design review, but
+they do not yet define every exact page/theme composition or availability state.
+Complete and approve a codifiable screen design pack before further visual
+implementation is accepted. Full boards and extracted image crops remain under
+`docs/assets/design-references/production-themes/`; no large concept board
+belongs in runtime Android resources.
 
 ## Product and interaction invariants
 

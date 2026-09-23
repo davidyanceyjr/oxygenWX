@@ -12,7 +12,18 @@ This roadmap converts the specification into bounded, verifiable slices. It is o
 - **NEXT** — next recommended bounded plan.
 - **ACTIVE** — current bounded plan; do not begin another production slice.
 - **PLANNED** — ordered but not active.
+- **PIVOTED** — superseded by an explicitly adopted roadmap track; retain its
+  plan, worktree changes, and evidence without claiming completion.
 - **DEFERRED** — explicitly outside the 1.0 critical path.
+
+## Focused theme-pack roadmap
+
+`docs/theme-pack-roadmap.md` is the governing implementation sequence for the
+five-theme design pack, resolver, and renderer until TP.3 is complete. It
+supersedes the theme-specific implementation sequence below. Product semantics
+remain governed by `docs/SPECIFICATION.md` and
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The general roadmap remains active
+for non-theme work and resumes as the implementation sequence after TP.3.
 
 ## Context-budget slicing rule
 
@@ -206,49 +217,35 @@ portion of the former Details-and-atmosphere slice. Evidence and verification
 limits: `.codex/history/2026-09-22-023-production-themed-details-source-components.md`
 and `.codex/test-artifacts/023-production-themed-details-source-components/`.
 
-### R0.11CAA — Production themed weather marks and backgrounds — ACTIVE
+### R0.11CAA — Production themed weather visuals and app renderer — PIVOTED
 
-After R0.11CA, add provider-neutral weather marks and background primitives
-through the same resolved appearance boundary. Preserve adjacent weather text
-and semantics, and Effects Off opacity/static completeness. Keep these
-components additive and unreferenced by app composition; page migration begins
-only after this dependent portion is complete.
+The prior objective was to implement resolved marks/backdrops and replace the
+Theme B app path with a production renderer across all four pages. R0.11D–R0.11H
+were consolidated into this slice. After the user required exact visual
+matching, the available references were found incomplete for that bar. The
+user has now adopted the focused TP.1–TP.3 roadmap; this R0.11CAA cycle was
+pivoted before completion. Preserve the four-page contract and typed
+presentation facts when any existing work is reviewed under the new roadmap.
 
-### R0.11D — Atmospheric Now + Hourly migration — PLANNED
+This sequence is superseded for future theme-pack implementation by
+`docs/theme-pack-roadmap.md` (TP.1–TP.3). Existing plan 024 changes and evidence
+are retained; its cycle was pivoted before completion and makes no completion
+claim. The prior broad debug-host regression failure is recorded at
+`.codex/test-artifacts/024-production-themed-weather-marks-backgrounds/installed-regression-stop.md`.
+The installed normal-app theme matrix and page captures are under
+`.codex/test-artifacts/024-production-themed-weather-marks-backgrounds/app-cutover/`.
+The exact-visual readiness audit is under
+`.codex/test-artifacts/024-production-themed-weather-marks-backgrounds/design-readiness-audit.md`.
 
-Migrate Now and Hourly to the production component family using Atmospheric as
-the verification theme. Preserve current facts, spoken summaries, six-entry
-windows, date jumps, Earlier/Later, outer-pager ownership, Back behavior, and
-Effects Off completeness. Do not migrate Daily or Details in this slice.
+### R0.11D–R0.11H — Original renderer migration sequence — CONSOLIDATED
 
-### R0.11E — Atmospheric Daily + Details migration — PLANNED
-
-After R0.11D, migrate Daily and Details to the same production component family.
-Preserve five-day windows, Earlier/Later, source/freshness,
-provider-normalized/derived/historical separation, and no invented chart inputs.
-
-### R0.11F — Alternate production theme mappings — PLANNED
-
-Add Glass, Minimal OLED, Instrument, and Terminal mappings through the same
-semantic resolver and component family. Themes may vary visual treatment but
-not page structure, forecast membership, weather meaning, provenance, or
-accessibility meaning. No component branches on raw theme IDs to change
-data/navigation behavior.
-
-### R0.11G — Production renderer cutover + sketch retirement — PLANNED
-
-After the migrated pages and all theme mappings have installed evidence, make
-the production renderer the application path. Remove or isolate obsolete
-Theme B sketch-only code only when the final diff proves it is unused. Do not
-change provider/presentation semantics, add settings persistence, or refetch
-weather because of theme selection.
-
-### R0.11H — Cross-theme visual/accessibility verification — PLANNED
-
-Verify the installed production renderer across the five built-in themes,
-compact phone, a large-font case, RTL where chronology/navigation is affected,
-and Effects Off. Record exact verified and unverified boundaries. This slice is
-evidence/repair only; it must not silently add new product scope.
+These originally separate slices have been consolidated into R0.11CAA at the
+user's direction so the production theme renderer reaches the normal app in one
+coherent correction. Their acceptance checks—four page migrations, all five
+theme mappings, renderer cutover, Effects Off, and cross-theme installed review—
+were tracked in plan 024, which was pivoted before completion. Their acceptance
+criteria now follow `docs/theme-pack-roadmap.md`; no separate completion claim
+is made.
 
 ## R1 — Domain and presentation stabilization
 
