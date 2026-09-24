@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "package": "oxygenWX-theme-engine",
+  "themes": [
+    {
+      "id": "atmospheric",
+      "name": "Atmospheric",
+      "intent": "Immersive weather-state atmosphere with restrained translucent data surfaces",
+      "background": "atmosphere",
+      "surface": "soft_translucent",
+      "typography": "humanist_sans",
+      "weatherMarks": "illustrative_line",
+      "accent": "#8DE7F1"
+    },
+    {
+      "id": "glass",
+      "name": "Glass",
+      "intent": "Layered translucent surfaces with luminous cool accents",
+      "background": "glass_gradient",
+      "surface": "glass",
+      "typography": "clean_sans",
+      "weatherMarks": "soft_line",
+      "accent": "#60A5FA"
+    },
+    {
+      "id": "minimal_oled",
+      "name": "Minimal OLED",
+      "intent": "Near-black low-distraction presentation with minimal decoration",
+      "background": "pure_black",
+      "surface": "minimal",
+      "typography": "clean_sans",
+      "weatherMarks": "minimal_line",
+      "accent": "#F5C451"
+    },
+    {
+      "id": "instrument",
+      "name": "Instrument",
+      "intent": "Technical information-dense monitor with panels, rulers and data-oriented indicators",
+      "background": "instrument_grid",
+      "surface": "instrument_panel",
+      "typography": "technical_sans_mono",
+      "weatherMarks": "instrument_line",
+      "accent": "#F4B400"
+    },
+    {
+      "id": "terminal",
+      "name": "Terminal",
+      "intent": "Monospace retro-computing skin optimized for dense textual weather inspection",
+      "background": "terminal_grid",
+      "surface": "terminal_flat",
+      "typography": "monospace",
+      "weatherMarks": "terminal_glyph",
+      "accent": "#7CFF9B"
+    }
+  ]
+}

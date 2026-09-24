@@ -1,0 +1,21 @@
+{
+  "id": "minimal_oled",
+  "colors": {
+    "canvas": "#000000",
+    "atmosphereTop": "#000000",
+    "atmosphereBottom": "#050505",
+    "atmosphereGlow": "#303030",
+    "surface": "#080808",
+    "elevatedSurface": "#0D0D0D",
+    "content": "#F5F5F5",
+    "secondaryData": "#9CA3AF",
+    "outline": "#2B2B2B",
+    "conditionAccent": "#F5C451",
+    "precipitationAccent": "#67E8F9",
+    "warning": "#FBBF24",
+    "danger": "#F87171"
+  },
+  "surface": {"opacity": 1.0, "radiusDp": 16, "borderDp": 0},
+  "spacingDp": {"gutter": 18, "stack": 18, "grid": 12, "panel": 8},
+  "motion": {"default": "off", "supportsFull": false}
+}

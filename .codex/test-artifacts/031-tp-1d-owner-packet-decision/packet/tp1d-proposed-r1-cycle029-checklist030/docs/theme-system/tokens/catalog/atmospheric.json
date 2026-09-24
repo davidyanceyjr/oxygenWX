@@ -1,0 +1,21 @@
+{
+  "id": "atmospheric",
+  "colors": {
+    "canvas": "#07151D",
+    "atmosphereTop": "#07151D",
+    "atmosphereBottom": "#153444",
+    "atmosphereGlow": "#86E4F0",
+    "surface": "#23414D",
+    "elevatedSurface": "#17313C",
+    "content": "#F2FBFC",
+    "secondaryData": "#B9D5DA",
+    "outline": "#7FC1CE",
+    "conditionAccent": "#8DE7F1",
+    "precipitationAccent": "#79BFFF",
+    "warning": "#FFD56A",
+    "danger": "#FF6B6B"
+  },
+  "surface": {"opacity": 0.86, "radiusDp": 24, "borderDp": 1},
+  "spacingDp": {"gutter": 16, "stack": 10, "grid": 8, "panel": 12},
+  "motion": {"default": "subtle", "supportsFull": true}
+}

@@ -1,0 +1,299 @@
+[
+  {
+    "theme": "atmospheric",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "content",
+    "foreground": "#F2FBFC",
+    "background": "#07151D",
+    "ratio": 17.618
+  },
+  {
+    "theme": "atmospheric",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "secondaryData",
+    "foreground": "#B9D5DA",
+    "background": "#07151D",
+    "ratio": 11.986
+  },
+  {
+    "theme": "atmospheric",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "content",
+    "foreground": "#F2FBFC",
+    "background": "#23414D",
+    "ratio": 10.327
+  },
+  {
+    "theme": "atmospheric",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "secondaryData",
+    "foreground": "#B9D5DA",
+    "background": "#23414D",
+    "ratio": 7.026
+  },
+  {
+    "theme": "atmospheric",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "content",
+    "foreground": "#F2FBFC",
+    "background": "#17313C",
+    "ratio": 12.966
+  },
+  {
+    "theme": "atmospheric",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "secondaryData",
+    "foreground": "#B9D5DA",
+    "background": "#17313C",
+    "ratio": 8.821
+  },
+  {
+    "theme": "glass",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "content",
+    "foreground": "#F8FAFF",
+    "background": "#0B1220",
+    "ratio": 17.929
+  },
+  {
+    "theme": "glass",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "secondaryData",
+    "foreground": "#C9D7EC",
+    "background": "#0B1220",
+    "ratio": 12.852
+  },
+  {
+    "theme": "glass",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "content",
+    "foreground": "#F8FAFF",
+    "background": "#31527A",
+    "ratio": 7.68
+  },
+  {
+    "theme": "glass",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "secondaryData",
+    "foreground": "#C9D7EC",
+    "background": "#31527A",
+    "ratio": 5.505
+  },
+  {
+    "theme": "glass",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "content",
+    "foreground": "#F8FAFF",
+    "background": "#3A5E88",
+    "ratio": 6.411
+  },
+  {
+    "theme": "glass",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "secondaryData",
+    "foreground": "#C9D7EC",
+    "background": "#3A5E88",
+    "ratio": 4.596
+  },
+  {
+    "theme": "minimal_oled",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "content",
+    "foreground": "#F5F5F5",
+    "background": "#000000",
+    "ratio": 19.262
+  },
+  {
+    "theme": "minimal_oled",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "secondaryData",
+    "foreground": "#9CA3AF",
+    "background": "#000000",
+    "ratio": 8.271
+  },
+  {
+    "theme": "minimal_oled",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "content",
+    "foreground": "#F5F5F5",
+    "background": "#080808",
+    "ratio": 18.37
+  },
+  {
+    "theme": "minimal_oled",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "secondaryData",
+    "foreground": "#9CA3AF",
+    "background": "#080808",
+    "ratio": 7.888
+  },
+  {
+    "theme": "minimal_oled",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "content",
+    "foreground": "#F5F5F5",
+    "background": "#0D0D0D",
+    "ratio": 17.827
+  },
+  {
+    "theme": "minimal_oled",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "secondaryData",
+    "foreground": "#9CA3AF",
+    "background": "#0D0D0D",
+    "ratio": 7.655
+  },
+  {
+    "theme": "instrument",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "content",
+    "foreground": "#E6EDF3",
+    "background": "#0B0F14",
+    "ratio": 16.265
+  },
+  {
+    "theme": "instrument",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "secondaryData",
+    "foreground": "#8B96A3",
+    "background": "#0B0F14",
+    "ratio": 6.396
+  },
+  {
+    "theme": "instrument",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "content",
+    "foreground": "#E6EDF3",
+    "background": "#141A21",
+    "ratio": 14.817
+  },
+  {
+    "theme": "instrument",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "secondaryData",
+    "foreground": "#8B96A3",
+    "background": "#141A21",
+    "ratio": 5.827
+  },
+  {
+    "theme": "instrument",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "content",
+    "foreground": "#E6EDF3",
+    "background": "#1B232C",
+    "ratio": 13.43
+  },
+  {
+    "theme": "instrument",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "secondaryData",
+    "foreground": "#8B96A3",
+    "background": "#1B232C",
+    "ratio": 5.281
+  },
+  {
+    "theme": "terminal",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "content",
+    "foreground": "#A4FFB6",
+    "background": "#020704",
+    "ratio": 16.969
+  },
+  {
+    "theme": "terminal",
+    "case": "opaque Off",
+    "surface": "canvas",
+    "role": "secondaryData",
+    "foreground": "#65B879",
+    "background": "#020704",
+    "ratio": 8.394
+  },
+  {
+    "theme": "terminal",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "content",
+    "foreground": "#A4FFB6",
+    "background": "#020704",
+    "ratio": 16.969
+  },
+  {
+    "theme": "terminal",
+    "case": "opaque Off",
+    "surface": "surface",
+    "role": "secondaryData",
+    "foreground": "#65B879",
+    "background": "#020704",
+    "ratio": 8.394
+  },
+  {
+    "theme": "terminal",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "content",
+    "foreground": "#A4FFB6",
+    "background": "#05110A",
+    "ratio": 16.093
+  },
+  {
+    "theme": "terminal",
+    "case": "opaque Off",
+    "surface": "elevatedSurface",
+    "role": "secondaryData",
+    "foreground": "#65B879",
+    "background": "#05110A",
+    "ratio": 7.961
+  },
+  {
+    "theme": "instrument",
+    "case": "High contrast; labels promoted to content",
+    "surface": "canvas",
+    "role": "content",
+    "foreground": "#E6EDF3",
+    "background": "#0B0F14",
+    "ratio": 16.265
+  },
+  {
+    "theme": "instrument",
+    "case": "High contrast; labels promoted to content",
+    "surface": "surface",
+    "role": "content",
+    "foreground": "#E6EDF3",
+    "background": "#141A21",
+    "ratio": 14.817
+  },
+  {
+    "theme": "instrument",
+    "case": "High contrast; labels promoted to content",
+    "surface": "elevatedSurface",
+    "role": "content",
+    "foreground": "#E6EDF3",
+    "background": "#1B232C",
+    "ratio": 13.43
+  }
+]

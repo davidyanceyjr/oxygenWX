@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — TP.1D installed comparison checklist closure
+## Execution head — TP.1D owner disposition planned
 
 **Completed: TP.1D upstream Now/Hourly integration.** Plan:
 `.codex/plans/028-tp-1d-integrated-pack-review.md`. Its ten cells, ten primary
@@ -35,13 +35,24 @@ an executable [TP.3 installed comparison instrument](theme-system/design-pack/TP
 It does not freeze a
 packet, obtain owner approval, close TP.1D/TP.1, or release TP.2.
 
-**Next: TP.1D-partial-A-partial-B-partial-A-partial-A
-owner packet and decision.** Initial plan:
-`.codex/plans/030-tp-1d-approval-packet-decision-partial-A.md`. Review the
-cycle-030 handoff, create and activate its own `.codex` cycle, then freeze the
-exact packet and request explicit owner disposition. Each half targets
-30–35% of a fresh context window and stops before 45%. Pending, revision or
-rejection keeps TP.1D/TP.1 open and TP.2 gated.
+**Completed: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A proposed-pack
+packet freeze.** Cycle 031 plan:
+`.codex/plans/031-tp-1d-owner-packet-decision.md`; evidence:
+`.codex/test-artifacts/031-tp-1d-owner-packet-decision/`. Frozen packet:
+`.codex/test-artifacts/031-tp-1d-owner-packet-decision/packet/tp1d-proposed-r1-cycle029-checklist030/`.
+Its independent audit verified source and manifest digests, 20 primary cells,
+twelve examples, all 32 render targets, and packet-local links/anchors. The
+manifest aggregate SHA-256 is recorded in the cycle audit output. D28/D29/D31
+remain open; TP.1D/TP.1 remain open and TP.2 gated. No owner approval or
+installed-app result is claimed.
+
+**Planned dependent: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-B
+owner disposition.** Initial plan:
+`.codex/plans/032-tp-1d-owner-disposition.md`. It records explicit D28/D29/D31
+decisions against the exact frozen packet revision and digest. Only approval of
+that revision with all three decisions resolved permits TP.1D/TP.1 closure and
+TP.2 eligibility. Requested design changes return to a separately planned
+reference-revision slice. This decision record is not inferred from silence.
 
 **Status:** adopted; TP.1 is ACTIVE, TP.1A, TP.1B, and TP.1C complete
 **Adopted:** 2026-09-23
@@ -181,14 +192,14 @@ design-owner approval
 before closing TP.1; TP.2 remains gated until then.
 
 Completed upstream plan: `.codex/plans/028-tp-1d-integrated-pack-review.md`.
-It integrated Now/Hourly and their static reference renders/examples; exact verification is in cycle 028 history. The dependent
-`TP.1D-partial-A` has completed Daily/Details ten-cell integration. The
+It integrated Now/Hourly and their static reference renders/examples; exact
+verification is in cycle 028 history. The dependent `TP.1D-partial-A` has
+completed Daily/Details ten-cell integration. The
 `TP.1D-partial-A-partial-B` cross-pack review is complete.
-`TP.1D-partial-A-partial-B-partial-A` completed the TP.3 installed checklist;
-dependent `TP.1D-partial-A-partial-B-partial-A-partial-A` owns the frozen
-owner packet and explicit decision. Each targets 30–35% of a fresh context
-window and stops before 45%. Neither checklist activation nor static review
-is design-owner approval.
+`TP.1D-partial-A-partial-B-partial-A` completed the TP.3 installed checklist.
+Cycle 031 owns only the frozen packet and its file/source audit. The dependent
+owner-disposition cycle follows the packet freeze. Checklist activation and
+static review are not design-owner approval.
 
 ### TP.1 shared completion criteria
 
