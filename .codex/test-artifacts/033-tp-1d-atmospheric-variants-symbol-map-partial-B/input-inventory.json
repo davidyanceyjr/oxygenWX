@@ -1,0 +1,748 @@
+{
+  "cycle031_manifest_sha256": "5326956c75653790754a6c87cb53eb40c94e2ad2dc53cc85cb02cc892b294663",
+  "cycle031_entries": [
+    {
+      "path": ".codex/test-artifacts/029-tp-1d-final-integrated-pack-review/asset-hashes.txt",
+      "expected_sha256": "dabbb27dfafd57585c492cefae78dd32d3c0f96539ad8df042057ed223236446",
+      "actual_sha256": "dabbb27dfafd57585c492cefae78dd32d3c0f96539ad8df042057ed223236446",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/029-tp-1d-final-integrated-pack-review/audit.py",
+      "expected_sha256": "0e94111a27e0ed19c1faab1bc0bf5a311a75e770c36c28d2f39db2feac3781a2",
+      "actual_sha256": "0e94111a27e0ed19c1faab1bc0bf5a311a75e770c36c28d2f39db2feac3781a2",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/029-tp-1d-final-integrated-pack-review/opaque-contrast.json",
+      "expected_sha256": "7f6951904cbc0b7a4eaf8090744d568506882f1917f99e9c86f9b46cda717a46",
+      "actual_sha256": "7f6951904cbc0b7a4eaf8090744d568506882f1917f99e9c86f9b46cda717a46",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/029-tp-1d-final-integrated-pack-review/review.md",
+      "expected_sha256": "90cf825e257d05e9fe005f38271b5fd6f750641315ca990cb471797448cd90b5",
+      "actual_sha256": "90cf825e257d05e9fe005f38271b5fd6f750641315ca990cb471797448cd90b5",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/029-tp-1d-final-integrated-pack-review/verification.md",
+      "expected_sha256": "0e55aef6e1d9ca0b2998021e610397d4bfe4229b0dd438059f264a7dd383f36a",
+      "actual_sha256": "0e55aef6e1d9ca0b2998021e610397d4bfe4229b0dd438059f264a7dd383f36a",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/030-tp-1d-approval-packet-decision/checklist-audit.md",
+      "expected_sha256": "7e8d9c79cc6ec958b541fb713d287e2fd3001ad58b21645c29a7954fe59a8bab",
+      "actual_sha256": "7e8d9c79cc6ec958b541fb713d287e2fd3001ad58b21645c29a7954fe59a8bab",
+      "match": true
+    },
+    {
+      "path": "SOURCE_INVENTORY.json",
+      "expected_sha256": "bc26aa07e7f97e9a2dbdf5348639193bb8c49c92ec2d5fe92025d10e78adeca8",
+      "actual_sha256": "bc26aa07e7f97e9a2dbdf5348639193bb8c49c92ec2d5fe92025d10e78adeca8",
+      "match": true
+    },
+    {
+      "path": "app/src/main/java/com/oxygen/weather/presentation/HomeLoadState.kt",
+      "expected_sha256": "74f1b7b58e4386368438e31fa33e5e69ff829765f0440993afa359a4b1c35292",
+      "actual_sha256": "74f1b7b58e4386368438e31fa33e5e69ff829765f0440993afa359a4b1c35292",
+      "match": true
+    },
+    {
+      "path": "app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt",
+      "expected_sha256": "cb1b87cad6588fb260883e84f6662695597f28f9f22d8f8cdadf89c085b01a61",
+      "actual_sha256": "cb1b87cad6588fb260883e84f6662695597f28f9f22d8f8cdadf89c085b01a61",
+      "match": true
+    },
+    {
+      "path": "docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md",
+      "expected_sha256": "bff50508d223627ac577864b81b0d17108e53c90480ce53345527abcad9dea0b",
+      "actual_sha256": "bff50508d223627ac577864b81b0d17108e53c90480ce53345527abcad9dea0b",
+      "match": true
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "expected_sha256": "711c2acb2bf567d13d0417deeeaec09176ac8e441fbbfc3df0f8d99d4bd492f2",
+      "actual_sha256": "711c2acb2bf567d13d0417deeeaec09176ac8e441fbbfc3df0f8d99d4bd492f2",
+      "match": true
+    },
+    {
+      "path": "docs/SPECIFICATION.md",
+      "expected_sha256": "22554db21c633ebc671f4d9aaf97a81994706036b8461e12361a06006caf7bc0",
+      "actual_sha256": "22554db21c633ebc671f4d9aaf97a81994706036b8461e12361a06006caf7bc0",
+      "match": true
+    },
+    {
+      "path": "docs/UI_DEVELOPMENT_WORKFLOW.md",
+      "expected_sha256": "fba0880adb6a8d399d85379d014f7c5e070710808211e2f50d8d0a703c867aef",
+      "actual_sha256": "fba0880adb6a8d399d85379d014f7c5e070710808211e2f50d8d0a703c867aef",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png",
+      "expected_sha256": "74e834c76e148d561d5f4696c9784b3e1131bd31089f13878d1863954eb85860",
+      "actual_sha256": "74e834c76e148d561d5f4696c9784b3e1131bd31089f13878d1863954eb85860",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/02_typography.png",
+      "expected_sha256": "350e5c5e7256a53678b43901fecfb34c44f922eb2cb9ec081a858c9e0534d39b",
+      "actual_sha256": "350e5c5e7256a53678b43901fecfb34c44f922eb2cb9ec081a858c9e0534d39b",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/04_core_components.png",
+      "expected_sha256": "84dd940d2ef0e3009ca970b81dd70b77eeb3220c525daca04d9a14c0f013fd19",
+      "actual_sha256": "84dd940d2ef0e3009ca970b81dd70b77eeb3220c525daca04d9a14c0f013fd19",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/06_layout_spacing_tokens.png",
+      "expected_sha256": "31dce044d553922237c98e26280baa730a04f851bc30333e478b68b8e74e0b0e",
+      "actual_sha256": "31dce044d553922237c98e26280baa730a04f851bc30333e478b68b8e74e0b0e",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/07_panel_anatomy.png",
+      "expected_sha256": "1c10d3cb6de97ad30aa27327ff06c9f620894ae07feb40938ea9e0ae1b8639c6",
+      "actual_sha256": "1c10d3cb6de97ad30aa27327ff06c9f620894ae07feb40938ea9e0ae1b8639c6",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/08_screen_example.png",
+      "expected_sha256": "a9970f5d4af1849c453485b148570dfe131a80003aceeb13c33701468092e29d",
+      "actual_sha256": "a9970f5d4af1849c453485b148570dfe131a80003aceeb13c33701468092e29d",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png",
+      "expected_sha256": "0a99c3b80bef14e70358bdc4859d88791e944203d150104427a3ea43bdd39dcd",
+      "actual_sha256": "0a99c3b80bef14e70358bdc4859d88791e944203d150104427a3ea43bdd39dcd",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/02_typography.png",
+      "expected_sha256": "6676be8b702b3c909be7a5a497723ed2453501aa7348f5edce29b1c321ecf5a5",
+      "actual_sha256": "6676be8b702b3c909be7a5a497723ed2453501aa7348f5edce29b1c321ecf5a5",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/04_core_components.png",
+      "expected_sha256": "52c905d28b8822f384743c94ef7e2f86485a5d4429c767c7e6070d435c75e9d4",
+      "actual_sha256": "52c905d28b8822f384743c94ef7e2f86485a5d4429c767c7e6070d435c75e9d4",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/06_layout_spacing_tokens.png",
+      "expected_sha256": "1eb034bc84050e10cf9c7e47745139ae8bf61070fd8d161bc86c0cccaa658271",
+      "actual_sha256": "1eb034bc84050e10cf9c7e47745139ae8bf61070fd8d161bc86c0cccaa658271",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/07_panel_anatomy.png",
+      "expected_sha256": "f36f6ad7fdf3c8fbf801055c63f0ef70ee1335e66ba8b067ba95b3624c5e97d3",
+      "actual_sha256": "f36f6ad7fdf3c8fbf801055c63f0ef70ee1335e66ba8b067ba95b3624c5e97d3",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "expected_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "actual_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "expected_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "actual_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/glass_phone.png",
+      "expected_sha256": "2fae2ffd8a832e32870d811a57159543a1a5b08d73b7aa533901c56f6ebd94ea",
+      "actual_sha256": "2fae2ffd8a832e32870d811a57159543a1a5b08d73b7aa533901c56f6ebd94ea",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/instrument_phone.png",
+      "expected_sha256": "120a190d45d88af6c317a84dd67bd6e68d22cbb6016c421b48156cbefbe75e1b",
+      "actual_sha256": "120a190d45d88af6c317a84dd67bd6e68d22cbb6016c421b48156cbefbe75e1b",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "expected_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "actual_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "expected_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "actual_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/02_shared_design_tokens.png",
+      "expected_sha256": "5b70a661accf3f1f7c02417996e86c13c23e3bc28756db79c9e6c8dd5a1f6957",
+      "actual_sha256": "5b70a661accf3f1f7c02417996e86c13c23e3bc28756db79c9e6c8dd5a1f6957",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/03_core_components.png",
+      "expected_sha256": "d1b73c9322e1944ff34bbadaa5f90b6e849fe558e8f06e88b59271bcebc3c0bf",
+      "actual_sha256": "d1b73c9322e1944ff34bbadaa5f90b6e849fe558e8f06e88b59271bcebc3c0bf",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/shared/extracted/oxygenwx_package_board/04_standard_home_structure.png",
+      "expected_sha256": "ae6f1adcd1ce74b5f9b00e073ba33055bc4931fa24d410bead31e25a7ed01388",
+      "actual_sha256": "ae6f1adcd1ce74b5f9b00e073ba33055bc4931fa24d410bead31e25a7ed01388",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/ASSET_MANIFEST.json",
+      "expected_sha256": "0907ec7abde18882520d7736d11948c52a28cda700be681008351501fdf48764",
+      "actual_sha256": "0907ec7abde18882520d7736d11948c52a28cda700be681008351501fdf48764",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/THEME_DESIGN_CONTRACT.md",
+      "expected_sha256": "06c6275704607072f9d11e07cfdd7b0a005b7f4a63bcf01c56906b7ccd8a487b",
+      "actual_sha256": "06c6275704607072f9d11e07cfdd7b0a005b7f4a63bcf01c56906b7ccd8a487b",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/CHANGELOG.md",
+      "expected_sha256": "08718417913b89d43470a94411f357a174ff270aca7b4fdf5c5b73903431412d",
+      "actual_sha256": "08718417913b89d43470a94411f357a174ff270aca7b4fdf5c5b73903431412d",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/CONTENT_AND_STATE_RULES.md",
+      "expected_sha256": "a8999e8c84bcfbbd367e84c65325afd4d5f0ee28861512fd7b311535ba0add4e",
+      "actual_sha256": "a8999e8c84bcfbbd367e84c65325afd4d5f0ee28861512fd7b311535ba0add4e",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/DAILY.md",
+      "expected_sha256": "628e5761bd2b02d1423bf7823fb3689d74f6075ac7339b5052a32cd7c2742cbe",
+      "actual_sha256": "628e5761bd2b02d1423bf7823fb3689d74f6075ac7339b5052a32cd7c2742cbe",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/DETAILS.md",
+      "expected_sha256": "cbc8e0f3a45709da6ce946f95905ae9d9c4f0e0540637de4b27e5641856b7174",
+      "actual_sha256": "cbc8e0f3a45709da6ce946f95905ae9d9c4f0e0540637de4b27e5641856b7174",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/FOUNDATION.md",
+      "expected_sha256": "b8df282b81fd482db6f8efdc5405520a2bcb10fa2c43f641e5e093034eb309ad",
+      "actual_sha256": "b8df282b81fd482db6f8efdc5405520a2bcb10fa2c43f641e5e093034eb309ad",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/HOURLY.md",
+      "expected_sha256": "45fa42b50c3ea8c1cb3936afbf74b1bcb57909dea5fd3d3a0aff8bba87ac732f",
+      "actual_sha256": "45fa42b50c3ea8c1cb3936afbf74b1bcb57909dea5fd3d3a0aff8bba87ac732f",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+      "expected_sha256": "8b8d888b06d8c6ecc55da40f2aae8a5837a25f26f6a15ffa1235471930a53159",
+      "actual_sha256": "8b8d888b06d8c6ecc55da40f2aae8a5837a25f26f6a15ffa1235471930a53159",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/NOW.md",
+      "expected_sha256": "75fa0e3ec7ba1781e94b71d48af407e9d66af52bba3c6d03ae6efbbd40a09300",
+      "actual_sha256": "75fa0e3ec7ba1781e94b71d48af407e9d66af52bba3c6d03ae6efbbd40a09300",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/OWNER_GUIDE.md",
+      "expected_sha256": "5e881d1125197a33d9fb340abe516a233be88486baaffb492c791f9d7e706fe5",
+      "actual_sha256": "5e881d1125197a33d9fb340abe516a233be88486baaffb492c791f9d7e706fe5",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/PACKET_INDEX.md",
+      "expected_sha256": "0b597bc16e2e9c03167a71308d5d009015f77d68eb9dd2419ca1edd27265567e",
+      "actual_sha256": "0b597bc16e2e9c03167a71308d5d009015f77d68eb9dd2419ca1edd27265567e",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/README.md",
+      "expected_sha256": "60bd6652c090bfa507d0e5725a2cee03d21aaf1d001322d5df1fa02aa48240d9",
+      "actual_sha256": "60bd6652c090bfa507d0e5725a2cee03d21aaf1d001322d5df1fa02aa48240d9",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/REFERENCE_MEASUREMENT_METHOD.md",
+      "expected_sha256": "f19419ae96a4311965760f6ea878a565bd7ff07e6f6a4df710ba3a4549e1d3f3",
+      "actual_sha256": "f19419ae96a4311965760f6ea878a565bd7ff07e6f6a4df710ba3a4549e1d3f3",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/SOURCE_ATTRIBUTION.md",
+      "expected_sha256": "5aaa3f2f2704054ea8d40a35769267b75ceb64beeeeea396984f7b3124e6d810",
+      "actual_sha256": "5aaa3f2f2704054ea8d40a35769267b75ceb64beeeeea396984f7b3124e6d810",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+      "expected_sha256": "2202587ffcb5240958bf628467e6c4bf672a823eb4b1d80bf31a7727153ca00d",
+      "actual_sha256": "2202587ffcb5240958bf628467e6c4bf672a823eb4b1d80bf31a7727153ca00d",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/TP3_INSTALLED_COMPARISON.md",
+      "expected_sha256": "c7531ab12c90914cf8e4b0aee85c25c3cdfda3e295fdd33b177c4d7411adce7b",
+      "actual_sha256": "c7531ab12c90914cf8e4b0aee85c25c3cdfda3e295fdd33b177c4d7411adce7b",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/README.md",
+      "expected_sha256": "a2e822a469a7fba133bbd40426819931ff07d3feb260c00888631ccd7f9f8c38",
+      "actual_sha256": "a2e822a469a7fba133bbd40426819931ff07d3feb260c00888631ccd7f9f8c38",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-daily.svg",
+      "expected_sha256": "3ba6e4b674cb846962ee4f83decbabc0c8493761f678da7903e64a6b5b17f8b4",
+      "actual_sha256": "3ba6e4b674cb846962ee4f83decbabc0c8493761f678da7903e64a6b5b17f8b4",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-details-wide.svg",
+      "expected_sha256": "cb5e98fd4d14c0db882f23ead7b8fad6b67e9a9e0a175a40d342e3b480b5ed35",
+      "actual_sha256": "cb5e98fd4d14c0db882f23ead7b8fad6b67e9a9e0a175a40d342e3b480b5ed35",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-details.svg",
+      "expected_sha256": "5d8118086369fa5ef6ace44889298a4939d896a4d7574f4a36e1c14c279a02a1",
+      "actual_sha256": "5d8118086369fa5ef6ace44889298a4939d896a4d7574f4a36e1c14c279a02a1",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-hourly.svg",
+      "expected_sha256": "79db71704bfeec9ce96a67be17bb9315a7f891370c501bc108c82e4fc0fa3ed3",
+      "actual_sha256": "79db71704bfeec9ce96a67be17bb9315a7f891370c501bc108c82e4fc0fa3ed3",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-now-wide.svg",
+      "expected_sha256": "2bfda36d06a744c61ff25abc6ba0ef08f89be147d55238b3b582f2f442423989",
+      "actual_sha256": "2bfda36d06a744c61ff25abc6ba0ef08f89be147d55238b3b582f2f442423989",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-now.svg",
+      "expected_sha256": "2df870e3ef3d030358111b4c5123a7807762c325f889545448ea6c6ff28203ba",
+      "actual_sha256": "2df870e3ef3d030358111b4c5123a7807762c325f889545448ea6c6ff28203ba",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/fixture.json",
+      "expected_sha256": "21da432ab44e2331f64b4988178c5ddde6b9172f2338916f200037590d7ab3ce",
+      "actual_sha256": "21da432ab44e2331f64b4988178c5ddde6b9172f2338916f200037590d7ab3ce",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/generate.py",
+      "expected_sha256": "4cceaebbe88308983bcd422e97d3d01dd026c89b09610e32928503216d29455c",
+      "actual_sha256": "4cceaebbe88308983bcd422e97d3d01dd026c89b09610e32928503216d29455c",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-daily-compact.svg",
+      "expected_sha256": "3e8105a553f9c7bb17c095e0644bec4a17424c58eec1a719ad632d1b40a167af",
+      "actual_sha256": "3e8105a553f9c7bb17c095e0644bec4a17424c58eec1a719ad632d1b40a167af",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-daily-effects-off.svg",
+      "expected_sha256": "f02e2696c0d0d3f7d608001c5682926644c535cc59d3ac3bbc66b1bb58af81e8",
+      "actual_sha256": "f02e2696c0d0d3f7d608001c5682926644c535cc59d3ac3bbc66b1bb58af81e8",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-daily.svg",
+      "expected_sha256": "572b20ab3a6b03125c813d764fe0766ea021a1c9fa15c61d27666c9b5fb25b4d",
+      "actual_sha256": "572b20ab3a6b03125c813d764fe0766ea021a1c9fa15c61d27666c9b5fb25b4d",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-details-font-1.3.svg",
+      "expected_sha256": "37d1dd7bba771601883a80b8012980582b292ff0d3a452d8522dfeeb8fce5c42",
+      "actual_sha256": "37d1dd7bba771601883a80b8012980582b292ff0d3a452d8522dfeeb8fce5c42",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-details.svg",
+      "expected_sha256": "998a5d01d5923446ea2267e74164d14564f11eee19941ab8eafcbe4e292391db",
+      "actual_sha256": "998a5d01d5923446ea2267e74164d14564f11eee19941ab8eafcbe4e292391db",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-hourly-font-1.3.svg",
+      "expected_sha256": "5bf5e85cf382d12d6b414f6344160f09012a8d07f48ec8fb1e5c9b94de083008",
+      "actual_sha256": "5bf5e85cf382d12d6b414f6344160f09012a8d07f48ec8fb1e5c9b94de083008",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-hourly.svg",
+      "expected_sha256": "60ddaf24a744a98cb219b60d0f416727d97b12eae97828c9485304f559df4988",
+      "actual_sha256": "60ddaf24a744a98cb219b60d0f416727d97b12eae97828c9485304f559df4988",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-now-compact.svg",
+      "expected_sha256": "acf42f978b913fbe6d4fd4ac8a4a3c62b3213e4c2f2c4da7f07a74e9fef5036b",
+      "actual_sha256": "acf42f978b913fbe6d4fd4ac8a4a3c62b3213e4c2f2c4da7f07a74e9fef5036b",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-now-effects-off.svg",
+      "expected_sha256": "f0381933b83256e613535ca20eda0d7b2abd7355844a44324e93d89b48e97902",
+      "actual_sha256": "f0381933b83256e613535ca20eda0d7b2abd7355844a44324e93d89b48e97902",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/glass-now.svg",
+      "expected_sha256": "90199fd6650696bc049745f3a33ddfbda2151f66686568a76f6a5ce656cc6140",
+      "actual_sha256": "90199fd6650696bc049745f3a33ddfbda2151f66686568a76f6a5ce656cc6140",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/index.json",
+      "expected_sha256": "3243eef23827f99868622641a6752fc4a2ea4aa837df7170812757cd62a577a3",
+      "actual_sha256": "3243eef23827f99868622641a6752fc4a2ea4aa837df7170812757cd62a577a3",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/instrument-daily.svg",
+      "expected_sha256": "56ec2adb701a2570f4531c4bb6ebe843fe62edb5e30bf35fc5c9f2b2678adf86",
+      "actual_sha256": "56ec2adb701a2570f4531c4bb6ebe843fe62edb5e30bf35fc5c9f2b2678adf86",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/instrument-details-high-contrast.svg",
+      "expected_sha256": "fb1d6a5fc456194ba4a6ef3959a58206fca47976f9d05f1bfd5b5d7713788eb3",
+      "actual_sha256": "fb1d6a5fc456194ba4a6ef3959a58206fca47976f9d05f1bfd5b5d7713788eb3",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/instrument-details.svg",
+      "expected_sha256": "329d7816904e16ec5862b47340635a0696cbc8e32f3d4e5243f7e64dd03abd4c",
+      "actual_sha256": "329d7816904e16ec5862b47340635a0696cbc8e32f3d4e5243f7e64dd03abd4c",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/instrument-hourly-high-contrast.svg",
+      "expected_sha256": "1e777d2342eb07a318b720d144b6dd0f0040fe2515e4f4ab48660f7dd2c7532e",
+      "actual_sha256": "1e777d2342eb07a318b720d144b6dd0f0040fe2515e4f4ab48660f7dd2c7532e",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/instrument-hourly.svg",
+      "expected_sha256": "536b8625046c45ce3af8c223df3a9b0646c993cf12a938858b878cec5fec87e2",
+      "actual_sha256": "536b8625046c45ce3af8c223df3a9b0646c993cf12a938858b878cec5fec87e2",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/instrument-now.svg",
+      "expected_sha256": "eb7678e91c734182e18fe58cba7cdd37584882b8bc9b1a51001d1d55b87d5798",
+      "actual_sha256": "eb7678e91c734182e18fe58cba7cdd37584882b8bc9b1a51001d1d55b87d5798",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/minimal_oled-daily.svg",
+      "expected_sha256": "de69194fcf78f2160721c0a3d226938dbb732e7cc4c9bd81e747de0ccec4233b",
+      "actual_sha256": "de69194fcf78f2160721c0a3d226938dbb732e7cc4c9bd81e747de0ccec4233b",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/minimal_oled-details.svg",
+      "expected_sha256": "383677a4ca6a9c6e0002590728ef0ee9e18a1c1a012dd1b5a83cc19842475c7b",
+      "actual_sha256": "383677a4ca6a9c6e0002590728ef0ee9e18a1c1a012dd1b5a83cc19842475c7b",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/minimal_oled-hourly.svg",
+      "expected_sha256": "3bf78fd57d3b9dcfa31773fe794bad5bc1c2f664ad7b441ec7e4912ec8e984da",
+      "actual_sha256": "3bf78fd57d3b9dcfa31773fe794bad5bc1c2f664ad7b441ec7e4912ec8e984da",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/minimal_oled-now.svg",
+      "expected_sha256": "cb5cb49b8433008a7f7914426b14609112fb63a831b59877c6ce48e0ede396e9",
+      "actual_sha256": "cb5cb49b8433008a7f7914426b14609112fb63a831b59877c6ce48e0ede396e9",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/terminal-daily-rtl.svg",
+      "expected_sha256": "f4ab96b5738c753023c71b3d82ca87383f5b3bdd3b39ea7509d4795ced2bc3a9",
+      "actual_sha256": "f4ab96b5738c753023c71b3d82ca87383f5b3bdd3b39ea7509d4795ced2bc3a9",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/terminal-daily.svg",
+      "expected_sha256": "5f1738201855f89631fd918c036484c41bf5463005db009c79d3c836bff1d947",
+      "actual_sha256": "5f1738201855f89631fd918c036484c41bf5463005db009c79d3c836bff1d947",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/terminal-details.svg",
+      "expected_sha256": "6ce6b4935853d107dcd03192395318c39684bf1c91e8d25356119763cf290d0d",
+      "actual_sha256": "6ce6b4935853d107dcd03192395318c39684bf1c91e8d25356119763cf290d0d",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/terminal-hourly-rtl.svg",
+      "expected_sha256": "e8ddbf3a2491c147eb9c35c4a3366b26f62809c5dc24939a45b29c5e0e1a0f22",
+      "actual_sha256": "e8ddbf3a2491c147eb9c35c4a3366b26f62809c5dc24939a45b29c5e0e1a0f22",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/terminal-hourly.svg",
+      "expected_sha256": "b95d4c979aa174c96cdfdcded7166092c85cf95ce995a6cab8e150fef62fbf44",
+      "actual_sha256": "b95d4c979aa174c96cdfdcded7166092c85cf95ce995a6cab8e150fef62fbf44",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/terminal-now.svg",
+      "expected_sha256": "d4cf92ea2b38bffa36bacbc78abc79fa8f3cdfedd2e5753ce6a34e0d44cced1c",
+      "actual_sha256": "d4cf92ea2b38bffa36bacbc78abc79fa8f3cdfedd2e5753ce6a34e0d44cced1c",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/atmospheric.json",
+      "expected_sha256": "50909e36510fac71ec103bad8efbbf392e5f544003353987e039e983db4be3f6",
+      "actual_sha256": "50909e36510fac71ec103bad8efbbf392e5f544003353987e039e983db4be3f6",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/glass.json",
+      "expected_sha256": "3ce2209f125c15983f1d19a403034650afa62ae97890de0eae976a8e33d005ac",
+      "actual_sha256": "3ce2209f125c15983f1d19a403034650afa62ae97890de0eae976a8e33d005ac",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/instrument.json",
+      "expected_sha256": "18864612fe1b6729abe514c97e13913413179476bdb48cc998c5596f90b30e46",
+      "actual_sha256": "18864612fe1b6729abe514c97e13913413179476bdb48cc998c5596f90b30e46",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/minimal_oled.json",
+      "expected_sha256": "a3175fee9fff7e1098b643749c0163e2c1d6931a1060a6bca91ed56fe0d34b11",
+      "actual_sha256": "a3175fee9fff7e1098b643749c0163e2c1d6931a1060a6bca91ed56fe0d34b11",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/terminal.json",
+      "expected_sha256": "b55a20ac0fee5fa1f8266c18576f39ab1ee35c67e47318bc1454d90a44fe5d42",
+      "actual_sha256": "b55a20ac0fee5fa1f8266c18576f39ab1ee35c67e47318bc1454d90a44fe5d42",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/theme_manifest.json",
+      "expected_sha256": "df463e73f3fc5586e79707e980a47bdf0bc10c25160063107e3547ffe866ba86",
+      "actual_sha256": "df463e73f3fc5586e79707e980a47bdf0bc10c25160063107e3547ffe866ba86",
+      "match": true
+    }
+  ],
+  "cycle031_all_match": true,
+  "cycle033_symbol_map_sha256": "34b7298669b71b89118530e7d90c35b413892103ea63aaa9d175e86bfbaa50ac",
+  "cycle033_referenced_source_assets": [
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/03_iconography.png",
+      "expected_sha256": "8ec1589c7ce3f69d086898cb367db1072f5465bef1e0ae934407cd4321e67efb",
+      "actual_sha256": "8ec1589c7ce3f69d086898cb367db1072f5465bef1e0ae934407cd4321e67efb",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png",
+      "expected_sha256": "ca07610cd1cc8b57035fd9cd1452aa776d1f6cf678ca4beb3d4a868d340b5ae3",
+      "actual_sha256": "ca07610cd1cc8b57035fd9cd1452aa776d1f6cf678ca4beb3d4a868d340b5ae3",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/rain.png",
+      "expected_sha256": "7f1afc5dd85d93a7ed14b46ef20331fffd6b8456b7c27a760c3166e858a10e0d",
+      "actual_sha256": "7f1afc5dd85d93a7ed14b46ef20331fffd6b8456b7c27a760c3166e858a10e0d",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/storm.png",
+      "expected_sha256": "645987d469f00ab2761d7a3d5a59f1dda57be2587ab0cdbc61b592485964564c",
+      "actual_sha256": "645987d469f00ab2761d7a3d5a59f1dda57be2587ab0cdbc61b592485964564c",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/glass/extracted/icons/sunny.png",
+      "expected_sha256": "e72fa56b3c361252b338ddda929820692006f1cdc0a7d67ac34c168d03cabb80",
+      "actual_sha256": "e72fa56b3c361252b338ddda929820692006f1cdc0a7d67ac34c168d03cabb80",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/03_iconography.png",
+      "expected_sha256": "da9396f70bee5d2f52bb2a503510896c6145ea5b80db9170c7fc5a0743bf6def",
+      "actual_sha256": "da9396f70bee5d2f52bb2a503510896c6145ea5b80db9170c7fc5a0743bf6def",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png",
+      "expected_sha256": "18cbea5b9ebe0992330c255ec32309b9dece74cbe13a3936675415bf434003b3",
+      "actual_sha256": "18cbea5b9ebe0992330c255ec32309b9dece74cbe13a3936675415bf434003b3",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/rain.png",
+      "expected_sha256": "5e642bbc0a5f02a4e807306e791f686add377046f1233ba663f1bc993fdcb64d",
+      "actual_sha256": "5e642bbc0a5f02a4e807306e791f686add377046f1233ba663f1bc993fdcb64d",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/storm.png",
+      "expected_sha256": "703b959bb6fcd9270b1b5ffe242f2abbfab8caa55ce7e7ec29bdcab25b54bd77",
+      "actual_sha256": "703b959bb6fcd9270b1b5ffe242f2abbfab8caa55ce7e7ec29bdcab25b54bd77",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/instrument/extracted/icons/sunny.png",
+      "expected_sha256": "255da302474f4b1a4fad8043ed2211c9d3655bd57e80ef3f0100418d5e9db16b",
+      "actual_sha256": "255da302474f4b1a4fad8043ed2211c9d3655bd57e80ef3f0100418d5e9db16b",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "expected_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "actual_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "expected_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "actual_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "match": true
+    },
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "expected_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "actual_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "match": true
+    }
+  ],
+  "cycle033_all_sources_match": true,
+  "cycle034_recorded_source_inputs": [
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "expected_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "actual_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/atmospheric.json",
+      "expected_sha256": "50909e36510fac71ec103bad8efbbf392e5f544003353987e039e983db4be3f6",
+      "actual_sha256": "50909e36510fac71ec103bad8efbbf392e5f544003353987e039e983db4be3f6",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/FOUNDATION.md",
+      "expected_sha256": "b8df282b81fd482db6f8efdc5405520a2bcb10fa2c43f641e5e093034eb309ad",
+      "actual_sha256": "b8df282b81fd482db6f8efdc5405520a2bcb10fa2c43f641e5e093034eb309ad",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+      "expected_sha256": "b4f35ace2d4901bfe176ccaf40fc467c8e8e1b64efdbaf4bfb31706659f54761",
+      "actual_sha256": "b4f35ace2d4901bfe176ccaf40fc467c8e8e1b64efdbaf4bfb31706659f54761",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+      "expected_sha256": "b3f35e68a2fda7aab2d026b3a28a8c0e9e1e561f35ff12603929c546df7895c5",
+      "actual_sha256": "b3f35e68a2fda7aab2d026b3a28a8c0e9e1e561f35ff12603929c546df7895c5",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/fixture.json",
+      "expected_sha256": "21da432ab44e2331f64b4988178c5ddde6b9172f2338916f200037590d7ab3ce",
+      "actual_sha256": "21da432ab44e2331f64b4988178c5ddde6b9172f2338916f200037590d7ab3ce",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/index.json",
+      "expected_sha256": "3243eef23827f99868622641a6752fc4a2ea4aa837df7170812757cd62a577a3",
+      "actual_sha256": "3243eef23827f99868622641a6752fc4a2ea4aa837df7170812757cd62a577a3",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/symbol-source-map.json",
+      "expected_sha256": "34b7298669b71b89118530e7d90c35b413892103ea63aaa9d175e86bfbaa50ac",
+      "actual_sha256": "34b7298669b71b89118530e7d90c35b413892103ea63aaa9d175e86bfbaa50ac",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/generate.py",
+      "expected_sha256": "8e75d4cd86b60f3618d7b25ecf285aed8781509507a164308d18e03307e1bc56",
+      "actual_sha256": "8e75d4cd86b60f3618d7b25ecf285aed8781509507a164308d18e03307e1bc56",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-now.svg",
+      "expected_sha256": "2df870e3ef3d030358111b4c5123a7807762c325f889545448ea6c6ff28203ba",
+      "actual_sha256": "2df870e3ef3d030358111b4c5123a7807762c325f889545448ea6c6ff28203ba",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-now-light-proposal.svg",
+      "expected_sha256": "254c9d82aeda96134fc6c197223183aef09f8c8adde2a8cc920490ea31504884",
+      "actual_sha256": "254c9d82aeda96134fc6c197223183aef09f8c8adde2a8cc920490ea31504884",
+      "match": true
+    },
+    {
+      "path": "docs/theme-system/design-pack/proposals/atmospheric-light-palette.json",
+      "expected_sha256": "52579427dfd9238517ecbe751e26db4893081f242a5328fbdf7250c9a2e85203",
+      "actual_sha256": "52579427dfd9238517ecbe751e26db4893081f242a5328fbdf7250c9a2e85203",
+      "match": true
+    }
+  ],
+  "cycle034_all_inputs_match": true,
+  "cycle034_selected_review_examples": [
+    {
+      "path": ".codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/atmospheric-now-compact-light-proposal-full.svg",
+      "expected_sha256": "b7f15fd4a9a1474611049886b784886616aac0cdef3d228f7d600029add01f8e",
+      "actual_sha256": "b7f15fd4a9a1474611049886b784886616aac0cdef3d228f7d600029add01f8e",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/atmospheric-now-font-1.3-light-proposal-full.svg",
+      "expected_sha256": "8a246f1a9fbc774f87b5bfdc1d50b870c59d2248dc0fb571ab8b7d48a75f59ee",
+      "actual_sha256": "8a246f1a9fbc774f87b5bfdc1d50b870c59d2248dc0fb571ab8b7d48a75f59ee",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/atmospheric-now-rtl-light-proposal-full.svg",
+      "expected_sha256": "adfd283b1f8bccd3c9362a5d049b949cb8ed119b7bd97ffed31865736201e430",
+      "actual_sha256": "adfd283b1f8bccd3c9362a5d049b949cb8ed119b7bd97ffed31865736201e430",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/atmospheric-now-high-contrast-light-proposal-full.svg",
+      "expected_sha256": "8498f24bd3ccd0a1cedac332759e6897afa551144e1234fde91c3bd4879ca9d1",
+      "actual_sha256": "8498f24bd3ccd0a1cedac332759e6897afa551144e1234fde91c3bd4879ca9d1",
+      "match": true
+    },
+    {
+      "path": ".codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/atmospheric-now-effects-off-light-proposal-full.svg",
+      "expected_sha256": "fac431f1accebc8d7c6d26df245ecd149f1a344057f5ad87a10891280cf18ad5",
+      "actual_sha256": "fac431f1accebc8d7c6d26df245ecd149f1a344057f5ad87a10891280cf18ad5",
+      "match": true
+    }
+  ],
+  "cycle034_all_examples_match_generator_run_2": true
+}

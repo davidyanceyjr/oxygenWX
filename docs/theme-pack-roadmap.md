@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — TP.1D revised packet integration PLANNED
+## Execution head — TP.1D revised packet integration COMPLETE; owner disposition next
 
 **Completed: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A-partial-A — Atmospheric light palette proposal.** Plan:
 `.codex/plans/034-tp-1d-atmospheric-light-palette-proposal.md`; evidence and limitations:
@@ -10,16 +10,21 @@ unapproved light palette is paired with the unchanged dark candidate through a
 proposed system-mode color-only mapping. D31 remains open; neither scene option
 was selected. No runtime integration or packet assembly occurred.
 
-**Next planned: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A-partial-B — revised packet integration and independent audit.** Plan:
-`.codex/plans/033-tp-1d-atmospheric-variants-symbol-map-partial-B.md`. After both design-reference slices close, assemble and independently audit a new proposed packet revision. This separates the cross-pack inventory/manifest work from the design changes and keeps each slice below the 45% target. Owner disposition of that exact packet remains a later dependent step. D28, D29, and D31 stay pending unless source-backed upstream work explicitly resolves them; no approval is inferred.
+**Completed: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A-partial-B — revised packet integration and independent audit.** Plan revision 2:
+`.codex/plans/033-tp-1d-atmospheric-variants-symbol-map-partial-B.md`; history and evidence:
+`.codex/history/2026-09-24-033-tp-1d-atmospheric-variants-symbol-map-partial-B.md` and
+`.codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/`. Proposed packet:
+`.codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034/`.
+Its packet manifest aggregate SHA-256 is
+`3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869` (the owner-guide row is excluded from this aggregate to avoid self-reference; the full file manifest includes it). The independent audit verified the frozen cycle-031 packet, 20 primary cells, 32 indexed examples, cycle-033 mapping and its cited source assets, both Atmospheric palette modes, six explicitly inventoried unindexed proposal examples, 436 packet-local links, and pending owner fields. D28, D29, and D31 remain pending; the packet is proposed and unapproved. Next: create a fresh bounded owner-disposition plan against this exact revision and aggregate digest. Do not use cycle 031's superseded disposition plan.
 
 **Completed: TP.1D owner packet freeze, superseded for disposition.** Cycle
 031's original proposed packet remains immutable and archived at
 `.codex/test-artifacts/031-tp-1d-owner-packet-decision/packet/tp1d-proposed-r1-cycle029-checklist030/`.
 Its D28/D29/D31 disposition plan is no longer the next action because the
 owner requested a new packet revision first. Create a dependent
-owner-disposition plan against the new revision and digest after the 033B
-packet-integration and audit cycle closes.
+owner-disposition plan against the completed revision and digest recorded in
+the execution head above. Do not use cycle 031's superseded disposition plan.
 
 **Completed: TP.1D upstream Now/Hourly integration.** Plan:
 `.codex/plans/028-tp-1d-integrated-pack-review.md`. Its ten cells, ten primary

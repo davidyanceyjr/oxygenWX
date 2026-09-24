@@ -1,0 +1,43 @@
+{
+  "baseline_files": 93,
+  "revision_files": 118,
+  "changed_baseline_files": [
+    "SHA256SUMS.txt",
+    "SOURCE_INVENTORY.json",
+    "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+    "docs/theme-system/design-pack/OWNER_GUIDE.md",
+    "docs/theme-system/design-pack/PACKET_INDEX.md",
+    "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+    "docs/theme-system/design-pack/renders/README.md"
+  ],
+  "added_revision_files": [
+    "OWNER_GUIDE.md",
+    "REVISION_CHANGELOG.md",
+    "docs/assets/design-references/production-themes/glass/extracted/03_iconography.png",
+    "docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png",
+    "docs/assets/design-references/production-themes/glass/extracted/icons/rain.png",
+    "docs/assets/design-references/production-themes/glass/extracted/icons/storm.png",
+    "docs/assets/design-references/production-themes/glass/extracted/icons/sunny.png",
+    "docs/assets/design-references/production-themes/instrument/extracted/03_iconography.png",
+    "docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png",
+    "docs/assets/design-references/production-themes/instrument/extracted/icons/rain.png",
+    "docs/assets/design-references/production-themes/instrument/extracted/icons/storm.png",
+    "docs/assets/design-references/production-themes/instrument/extracted/icons/sunny.png",
+    "docs/theme-system/design-pack/proposals/atmospheric-light-palette.json",
+    "docs/theme-system/design-pack/renders/atmospheric-now-light-proposal.svg",
+    "docs/theme-system/design-pack/renders/audit_symbol_map.py",
+    "docs/theme-system/design-pack/renders/symbol-source-map.json",
+    "docs/theme-system/design-pack/review-evidence/palette034/atmospheric-now-compact-light-proposal-full.svg",
+    "docs/theme-system/design-pack/review-evidence/palette034/atmospheric-now-effects-off-light-proposal-full.svg",
+    "docs/theme-system/design-pack/review-evidence/palette034/atmospheric-now-font-1.3-light-proposal-full.svg",
+    "docs/theme-system/design-pack/review-evidence/palette034/atmospheric-now-high-contrast-light-proposal-full.svg",
+    "docs/theme-system/design-pack/review-evidence/palette034/atmospheric-now-rtl-light-proposal-full.svg",
+    "docs/theme-system/design-pack/review-evidence/palette034/contrast-results.json",
+    "docs/theme-system/design-pack/review-evidence/palette034/palette-audit.txt",
+    "docs/theme-system/design-pack/review-evidence/palette034/source-inventory.json",
+    "docs/theme-system/design-pack/review-evidence/palette034/static-review.md"
+  ],
+  "missing_baseline_files": [],
+  "added_count": 25,
+  "missing_count": 0
+}

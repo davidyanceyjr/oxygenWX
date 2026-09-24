@@ -1,0 +1,55 @@
+{
+  "status": "inputs used for this proposal review; source absence is not inferred as evidence",
+  "light_specific_source_found": false,
+  "sources": [
+    {
+      "path": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844"
+    },
+    {
+      "path": "docs/theme-system/tokens/catalog/atmospheric.json",
+      "sha256": "50909e36510fac71ec103bad8efbbf392e5f544003353987e039e983db4be3f6"
+    },
+    {
+      "path": "docs/theme-system/design-pack/FOUNDATION.md",
+      "sha256": "b8df282b81fd482db6f8efdc5405520a2bcb10fa2c43f641e5e093034eb309ad"
+    },
+    {
+      "path": "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+      "sha256": "b4f35ace2d4901bfe176ccaf40fc467c8e8e1b64efdbaf4bfb31706659f54761"
+    },
+    {
+      "path": "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+      "sha256": "b3f35e68a2fda7aab2d026b3a28a8c0e9e1e561f35ff12603929c546df7895c5"
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/fixture.json",
+      "sha256": "21da432ab44e2331f64b4988178c5ddde6b9172f2338916f200037590d7ab3ce"
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/index.json",
+      "sha256": "3243eef23827f99868622641a6752fc4a2ea4aa837df7170812757cd62a577a3"
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/symbol-source-map.json",
+      "sha256": "34b7298669b71b89118530e7d90c35b413892103ea63aaa9d175e86bfbaa50ac"
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/generate.py",
+      "sha256": "8e75d4cd86b60f3618d7b25ecf285aed8781509507a164308d18e03307e1bc56"
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-now.svg",
+      "sha256": "2df870e3ef3d030358111b4c5123a7807762c325f889545448ea6c6ff28203ba"
+    },
+    {
+      "path": "docs/theme-system/design-pack/renders/atmospheric-now-light-proposal.svg",
+      "sha256": "254c9d82aeda96134fc6c197223183aef09f8c8adde2a8cc920490ea31504884"
+    },
+    {
+      "path": "docs/theme-system/design-pack/proposals/atmospheric-light-palette.json",
+      "sha256": "52579427dfd9238517ecbe751e26db4893081f242a5328fbdf7250c9a2e85203"
+    }
+  ],
+  "d31_source_observations": "Retain SOURCE_DECISIONS.md recorded RGB samples (31,98,177), (103,142,196), (17,66,106), and (21,65,102) as source observations only; they do not define this derived variant or settle either scene option."
+}

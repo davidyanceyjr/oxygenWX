@@ -1,0 +1,442 @@
+{
+  "anchor": "2026-09-23T09:00:00 America/Chicago; Locale.US",
+  "derivation": "DemoWeatherRepository.load -> HistoricalSynthesis.derive -> HomePresentationMapper.map/mapLoadState; LIVE + UNKNOWN, no failure; design data only",
+  "current": {
+    "location": "Demo Station",
+    "temperature": "28°",
+    "condition": "Partly cloudy",
+    "apparent": "29°",
+    "humidity": "56%",
+    "dewPoint": "18°",
+    "precipitationHeadline": "No precipitation indicated",
+    "precipitationSupporting": "Next 6h · 0.0 mm",
+    "windHeadline": "13 km/h",
+    "windSupporting": "Gusts 23 · SW",
+    "spokenSummary": "Demo Station, Partly cloudy, 28°, feels like 29°. Humidity 56%. Wind 13 kilometers per hour.",
+    "conditionIdentity": "PARTLY_CLOUDY",
+    "fieldAvailability": {
+      "condition": {
+        "text": "Partly cloudy"
+      },
+      "temperature": {
+        "text": "28°"
+      },
+      "apparentTemperature": {
+        "text": "29°"
+      },
+      "relativeHumidity": {
+        "text": "56%"
+      },
+      "dewPoint": {
+        "text": "18°"
+      },
+      "precipitationChance": {
+        "text": "0%"
+      },
+      "precipitationAmount": {
+        "text": "0.0 mm"
+      },
+      "windSpeed": {
+        "text": "13 km/h"
+      },
+      "windGust": {
+        "text": "23 km/h"
+      },
+      "windDirection": {
+        "text": "SW"
+      }
+    }
+  },
+  "window": {
+    "rangeLabel": "Wed, 9 AM–2 PM",
+    "entries": [
+      {
+        "time": "9 AM",
+        "condition": "Clear",
+        "temperature": "19°",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "9 AM, Clear, 19°",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "19°"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "10 AM",
+        "condition": "Clear",
+        "temperature": "20°",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "10 AM, Clear, 20°",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "20°"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "11 AM",
+        "condition": "Clear",
+        "temperature": "20°",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "11 AM, Clear, 20°",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "20°"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "12 PM",
+        "condition": "Clear",
+        "temperature": "22°",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "12 PM, Clear, 22°",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "22°"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "1 PM",
+        "condition": "Clear",
+        "temperature": "23°",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "1 PM, Clear, 23°",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "23°"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "time": "2 PM",
+        "condition": "Clear",
+        "temperature": "25°",
+        "precipitation": null,
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "2 PM, Clear, 25°",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "temperature": {
+            "text": "25°"
+          },
+          "precipitationChance": {
+            "text": "0%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      }
+    ]
+  },
+  "hourlyDateJumps": [
+    {
+      "label": "Wed",
+      "windowIndex": 0
+    },
+    {
+      "label": "Thu",
+      "windowIndex": 3
+    },
+    {
+      "label": "Fri",
+      "windowIndex": 7
+    },
+    {
+      "label": "Sat",
+      "windowIndex": 11
+    }
+  ],
+  "hourlyWindowCount": 12,
+  "sourceLine": "Model estimate · Offline development fixture",
+  "updatedLine": "Updated 9:00 AM",
+  "status": "Live weather data. Freshness: unknown.",
+  "dailyWindow": {
+    "rangeLabel": "TODAY–SUN",
+    "entries": [
+      {
+        "day": "TODAY",
+        "condition": "Clear",
+        "low": "19°",
+        "high": "31°",
+        "precipitation": "8% · 0.0 mm",
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "TODAY, Clear, low 19°, high 31°, precipitation 8% · 0.0 mm",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "lowTemperature": {
+            "text": "19°"
+          },
+          "highTemperature": {
+            "text": "31°"
+          },
+          "precipitationChance": {
+            "text": "8%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "day": "THU",
+        "condition": "Partly cloudy",
+        "low": "20°",
+        "high": "30°",
+        "precipitation": "42% · 2.9 mm",
+        "conditionIdentity": "PARTLY_CLOUDY",
+        "spokenSummary": "THU, Partly cloudy, low 20°, high 30°, precipitation 42% · 2.9 mm",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Partly cloudy"
+          },
+          "lowTemperature": {
+            "text": "20°"
+          },
+          "highTemperature": {
+            "text": "30°"
+          },
+          "precipitationChance": {
+            "text": "42%"
+          },
+          "precipitationAmount": {
+            "text": "2.9 mm"
+          }
+        }
+      },
+      {
+        "day": "FRI",
+        "condition": "Rain",
+        "low": "20°",
+        "high": "29°",
+        "precipitation": "66% · 5.8 mm",
+        "conditionIdentity": "RAIN",
+        "spokenSummary": "FRI, Rain, low 20°, high 29°, precipitation 66% · 5.8 mm",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Rain"
+          },
+          "lowTemperature": {
+            "text": "20°"
+          },
+          "highTemperature": {
+            "text": "29°"
+          },
+          "precipitationChance": {
+            "text": "66%"
+          },
+          "precipitationAmount": {
+            "text": "5.8 mm"
+          }
+        }
+      },
+      {
+        "day": "SAT",
+        "condition": "Clear",
+        "low": "18°",
+        "high": "28°",
+        "precipitation": "13% · 0.0 mm",
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "SAT, Clear, low 18°, high 28°, precipitation 13% · 0.0 mm",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "lowTemperature": {
+            "text": "18°"
+          },
+          "highTemperature": {
+            "text": "28°"
+          },
+          "precipitationChance": {
+            "text": "13%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      },
+      {
+        "day": "SUN",
+        "condition": "Clear",
+        "low": "17°",
+        "high": "28°",
+        "precipitation": "14% · 0.0 mm",
+        "conditionIdentity": "CLEAR",
+        "spokenSummary": "SUN, Clear, low 17°, high 28°, precipitation 14% · 0.0 mm",
+        "fieldAvailability": {
+          "condition": {
+            "text": "Clear"
+          },
+          "lowTemperature": {
+            "text": "17°"
+          },
+          "highTemperature": {
+            "text": "28°"
+          },
+          "precipitationChance": {
+            "text": "14%"
+          },
+          "precipitationAmount": {
+            "text": "0.0 mm"
+          }
+        }
+      }
+    ]
+  },
+  "dailyWindowCount": 2,
+  "detailGroups": [
+    {
+      "title": "Conditions",
+      "metrics": [
+        {
+          "label": "Feels like",
+          "value": "29°",
+          "supporting": null
+        },
+        {
+          "label": "Humidity",
+          "value": "56%",
+          "supporting": null
+        },
+        {
+          "label": "Dew point",
+          "value": "18°",
+          "supporting": null
+        },
+        {
+          "label": "Pressure",
+          "value": "1012.6 hPa",
+          "supporting": null
+        },
+        {
+          "label": "Cloud cover",
+          "value": "36%",
+          "supporting": null
+        },
+        {
+          "label": "Visibility",
+          "value": "16.0 km",
+          "supporting": null
+        }
+      ]
+    },
+    {
+      "title": "Forecast pattern",
+      "metrics": [
+        {
+          "label": "3h temperature",
+          "value": "+2.7°",
+          "supporting": null
+        },
+        {
+          "label": "3h pressure",
+          "value": "+0.5 hPa",
+          "supporting": null
+        },
+        {
+          "label": "Persistence",
+          "value": "81 / 100",
+          "supporting": null
+        },
+        {
+          "label": "Volatility",
+          "value": "42 / 100",
+          "supporting": null
+        },
+        {
+          "label": "Pattern",
+          "value": "Settled",
+          "supporting": null
+        }
+      ]
+    },
+    {
+      "title": "Historical context",
+      "metrics": [
+        {
+          "label": "Seasonal temperature",
+          "value": "84th percentile",
+          "supporting": null
+        },
+        {
+          "label": "Temperature departure",
+          "value": "+3.7° from normal",
+          "supporting": null
+        },
+        {
+          "label": "Pressure departure",
+          "value": "-2.4 hPa",
+          "supporting": null
+        },
+        {
+          "label": "Analog years",
+          "value": "1998, 2007, 2019",
+          "supporting": null
+        },
+        {
+          "label": "Reference",
+          "value": "32 comparable historical samples",
+          "supporting": null
+        }
+      ]
+    }
+  ]
+}

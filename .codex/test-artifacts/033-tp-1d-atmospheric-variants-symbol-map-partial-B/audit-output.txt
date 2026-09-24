@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "revision": "tp1d-proposed-r2-symbol033-palette034",
+  "packet_files": 118,
+  "manifest_entries": 117,
+  "manifest_file_sha256": "ae4c75cbf0bcb7c48dec5d907407da4c8932093dc00a52a4ec2a3921a592f8a1",
+  "manifest_aggregate_excluding_owner_guide_row": "3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869",
+  "source_entries": 117,
+  "frozen_cycle031_manifest_entries": 92,
+  "primary_cells": 20,
+  "indexed_examples": 32,
+  "symbol_map_entries": 30,
+  "palette_proposal_examples": 6,
+  "local_links_checked": 436,
+  "errors": []
+}

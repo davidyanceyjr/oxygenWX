@@ -1,0 +1,10 @@
+{
+  "revision": "tp1d-proposed-r2-symbol033-palette034",
+  "packet": ".codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034",
+  "files_in_manifest": 117,
+  "source_entries": 117,
+  "source_inventory_sha256": "0d5dd9b3a849be97ad6992d9fb5105bf5a4256117d5cd701f030983306ed7086",
+  "packet_manifest_aggregate_sha256_excluding_owner_guide_row": "3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869",
+  "sha256sums_file_sha256": "ae4c75cbf0bcb7c48dec5d907407da4c8932093dc00a52a4ec2a3921a592f8a1",
+  "base_packet_manifest_sha256": "5326956c75653790754a6c87cb53eb40c94e2ad2dc53cc85cb02cc892b294663"
+}

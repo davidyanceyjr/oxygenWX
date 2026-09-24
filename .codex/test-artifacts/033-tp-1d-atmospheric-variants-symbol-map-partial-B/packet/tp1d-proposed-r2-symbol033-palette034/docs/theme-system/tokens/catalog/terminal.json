@@ -1,0 +1,21 @@
+{
+  "id": "terminal",
+  "colors": {
+    "canvas": "#020704",
+    "atmosphereTop": "#020704",
+    "atmosphereBottom": "#041009",
+    "atmosphereGlow": "#7CFF9B",
+    "surface": "#020704",
+    "elevatedSurface": "#05110A",
+    "content": "#A4FFB6",
+    "secondaryData": "#65B879",
+    "outline": "#246233",
+    "conditionAccent": "#7CFF9B",
+    "precipitationAccent": "#77E3FF",
+    "warning": "#FFE36E",
+    "danger": "#FF7272"
+  },
+  "surface": {"opacity": 1.0, "radiusDp": 0, "borderDp": 1},
+  "spacingDp": {"gutter": 12, "stack": 10, "grid": 8, "panel": 10},
+  "motion": {"default": "off", "supportsFull": false}
+}

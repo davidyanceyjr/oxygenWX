@@ -1,0 +1,4 @@
+PASS: 30 theme/condition mappings cover exactly the typed six-condition set
+PASS: all mapped source paths resolve and recorded source digests match
+PASS: every mark is bounded to 40 dp hero / 36 dp hourly, or explicitly no mark
+PASS: render index still covers all 32 existing SVG examples; no condition identity added
