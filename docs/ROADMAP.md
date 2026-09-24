@@ -16,6 +16,15 @@ This roadmap converts the specification into bounded, verifiable slices. It is o
   plan, worktree changes, and evidence without claiming completion.
 - **DEFERRED** — explicitly outside the 1.0 critical path.
 
+## Bounded exit rule
+
+Every unfinished roadmap entry has an **Exit** criterion in that entry. Attempt
+it within one bounded cycle. If the criterion fails or an external decision is
+missing, record the exact blocker and evidence, close the cycle without claiming
+the roadmap item complete, and stop dependent work. Do not create an automatic
+retry or prerequisite chain; continuing requires an explicit roadmap update
+with a new bounded outcome.
+
 ## Focused theme-pack roadmap
 
 `docs/theme-pack-roadmap.md` is the governing implementation sequence for the
@@ -295,11 +304,16 @@ After R1.3, apply the tested unit functions to current, hourly, daily, and
 Details presentation mapping with unavailable-value coverage. Preference
 selection and persistence remain R5.1 work.
 
+**Exit:** One mapper test matrix covers current, six hourly, five daily, and Details values under Metric/US/UK, including nulls and temperature differences; all existing fixture facts remain unchanged except their formatted units.
+
 ## R2 — Production forecast path
+
 
 ### R2.1 — Forecast provider interface — PLANNED
 
 Introduce provider-neutral forecast request/result contracts and configurable provider endpoints.
+
+**Exit:** Provider-neutral request/result contracts compile and deterministic tests cover success, unsupported fields, no result, and transport failure; no provider-specific DTO enters canonical or presentation packages.
 
 ### R2.2 — Open-Meteo primary provider — PLANNED
 
@@ -307,11 +321,15 @@ Implement the Open-Meteo request configuration, transport boundary, and
 response decoding fixtures for the required current/hourly/daily fields and
 72-hour/10-day request horizon. No canonical weather mapping occurs here.
 
+**Exit:** Recorded request fixtures and decoder tests cover required current/hourly/daily fields, timezone, nullable values, and the 72-hour/10-day horizon; no canonical mapping is added.
+
 ### R2.2A — Open-Meteo canonical forecast mapping — PLANNED
 
 After R2.2, map decoded responses into canonical current/hourly/daily records,
 preserving source provenance, location timezone, sparse/nullable/duplicate
 values, and partial horizons truthfully. Provider orchestration remains R2.3.
+
+**Exit:** Fixtures for complete, sparse, duplicate-time, and partial responses map to canonical records with source/timezone provenance intact; deterministic mapping tests pass.
 
 ### R2.3 — WeatherRepository live path — PLANNED
 
@@ -319,21 +337,30 @@ Connect the Open-Meteo mapper to a provider-neutral repository live-result
 path, including result origin/provenance but no cache restoration or Compose
 state integration.
 
+**Exit:** Repository tests prove one Open-Meteo live result path, preserved origin/provenance, and distinct success/failure outcomes; cache restoration and UI state remain absent.
+
 ### R2.3A — Live forecast application-state bridge — PLANNED
 
 After R2.3, bind the live repository result to application state and the
 existing presentation path without moving provider logic into Compose. Preserve
 selected-location request identity and honest loading/failure state mapping.
 
+**Exit:** State tests cover loading, live, and failure without data, reject a stale selected-location response, and feed the existing presentation boundary without provider logic in Compose.
+
 ### R2.4 — MET Norway fallback — PLANNED
 
 Add eligible terminal-failure fallback with provider identification, attribution, and no silent blending of provider values.
+
+**Exit:** Fallback tests cover each eligible terminal failure and prove noneligible failures do not call MET Norway; source identity/attribution stays singular and provider values are never blended.
 
 ### R2.5 — Forecast provenance/freshness UI — PLANNED
 
 Expose source, valid/fetch/update time, partial horizon, and refresh state through the established UI vocabulary.
 
+**Exit:** Installed captures of Now and Details show source, valid/fetch/update times, partial horizon, and refresh state for live, cached/stale, and failure cases; values and provenance match supplied state.
+
 ## R3 — Location and offline behavior
+
 
 ### R3.1 — Manual location search — PLANNED
 
@@ -341,10 +368,14 @@ Implement provider-neutral geocoding/search request-result contracts and the
 initial lookup adapter, including locale/timezone and no-result/error fixtures.
 No selection UI or persistence belongs here.
 
+**Exit:** Search contract/adapter fixtures pass for localized query, timezone-bearing results, empty result, and failure; no UI or persistence is introduced.
+
 ### R3.1A — Manual location search interface — PLANNED
 
 After R3.1, implement the accessible search, result, and selected-location
 handoff UI without requesting device location or persisting saved locations.
+
+**Exit:** Installed search flow supports query, progress, results, empty/error, and selected-location handoff with 48dp controls; manual search works without location permission.
 
 ### R3.2 — Selected/saved locations — PLANNED
 
@@ -352,14 +383,20 @@ Persist and restore one selected location by stable local identity, including
 repository handoff across recreation/relaunch. Saved-location collection and
 switching UI are excluded.
 
+**Exit:** Persistence tests restore one stable selected-location identity after recreation/relaunch and pass it to the repository; saved-location lists and switching UI remain absent.
+
 ### R3.2A — Saved locations and safe switching — PLANNED
 
 After R3.2, add locally saved location rows and switching behavior. Verify that
 an obsolete request cannot replace the newly selected location's forecast.
 
+**Exit:** Installed saved-location add/select/remove flow works, and a deterministic delayed-response test proves an older location result cannot overwrite the newly selected location.
+
 ### R3.3 — Optional coarse device location — PLANNED
 
 One foreground coarse point routed through the same selected-location/repository path. No background location.
+
+**Exit:** Permission tests and one installed foreground coarse-location flow prove denial/manual use remains complete and one accepted point enters the same selected-location path; no background permission/service exists.
 
 ### R3.4 — Normalized forecast cache — PLANNED
 
@@ -367,15 +404,21 @@ Define and implement normalized forecast cache serialization, keys, retention,
 and atomic read/write behavior for selected-location forecast records. Do not
 wire cache recovery into application launch in this slice.
 
+**Exit:** Serialization/key/retention tests round-trip normalized forecast records including missing fields and provenance, reject mismatched locations, and prove atomic write/read behavior; launch restoration is not wired.
+
 ### R3.4A — Cached forecast restoration — PLANNED
 
 After R3.4, restore the last useful selected-location forecast through the
 repository/application-state boundary with explicit cache origin and freshness.
 
+**Exit:** Repository tests restore exactly the last useful selected-location cache with explicit cached origin/freshness, and distinguish absent/corrupt cache without fabricating weather.
+
 ### R3.5 — Offline/stale refresh behavior — PLANNED
 
 Implement and verify cached launch plus freshness classification and visible
 cached/stale presentation without changing live-success behavior.
+
+**Exit:** Installed cold-launch/offline and stale-time fixtures show cached origin/freshness while live-success output remains unchanged; refresh-age boundary tests pass.
 
 ### R3.5A — Refresh failure and cache-write outcomes — PLANNED
 
@@ -383,11 +426,16 @@ After R3.5, implement and verify foreground refresh failure with cache, failure
 without cache, and live-success/cache-write-failure outcomes. Reuse the typed
 R1.2A presentation states; do not fabricate a successful refresh.
 
+**Exit:** Three deterministic outcomes—refresh failure with cache, failure without cache, and live success with cache-write failure—map to truthful R1.2A states and pass repository/UI evidence.
+
 ## R4 — Official safety information
+
 
 ### R4.1 — Alert provider/result contract — PLANNED
 
 Keep official alerts separate from forecast semantics and represent unsupported/no-alert/failure distinctly.
+
+**Exit:** Contract tests distinguish supported/no-alert, unsupported region, and failure, while preserving issuer/event/effective/expiry/provenance fields and keeping alerts separate from forecasts.
 
 ### R4.2 — NOAA/NWS US alert provider — PLANNED
 
@@ -395,15 +443,21 @@ Implement NWS selected-point/active-alert transport, response decoding, and
 parser fixtures into the existing official-alert contract. No application-state
 or Home rendering integration occurs here.
 
+**Exit:** NWS request/decoder fixtures cover active alerts, empty result, malformed response, and failure; normalized alert fields and attribution match source payloads.
+
 ### R4.2A — NWS alert repository integration — PLANNED
 
 After R4.2, integrate normalized official alerts with selected-location
 repository/application state, preserving supported/no-alert/unsupported/failure
 distinctions, issuer provenance, and attribution.
 
+**Exit:** Repository/state tests preserve supported/no-alert/unsupported/failure distinctions and issuer provenance for selected location; no alert copy is derived from forecast heuristics.
+
 ### R4.3 — Home alert summary — PLANNED
 
 Add concise, non-color-only summary to Now without treating forecast hazards as official alerts.
+
+**Exit:** Installed Now screenshots and semantics checks cover no-alert, one alert, unsupported, and failure summaries; severity/state is conveyed without color alone and forecast values do not create alerts.
 
 ### R4.4 — Alert detail surface — PLANNED
 
@@ -411,22 +465,31 @@ Present one selected official alert's supplied text, source, and time fields in
 an accessible detail surface. Preserve the originating Home state and do not
 refetch forecast data.
 
+**Exit:** Installed detail flow displays one supplied alert body, issuer, source URL, and available time fields, returns to the originating Home page/window, and makes no forecast refetch.
+
 ### R4.4A — Multiple-alert selection and return — PLANNED
 
 After R4.4, add accessible selection among multiple alerts and return to the
 same Home state without a forecast refetch.
 
+**Exit:** Installed selection among two alerts and Android Back returns to the same Home state; deterministic callback/state checks prove no forecast refetch.
+
 ## R5 — Settings and appearance
+
 
 ### R5.1 — Persisted unit presets — PLANNED
 
 Implement Metric/US/UK choice state and persistence, restoring the selected
 preset across recreation/relaunch without changing canonical cached data.
 
+**Exit:** Persistence tests restore Metric/US/UK across recreation/relaunch and show canonical cached values are byte/structurally unchanged.
+
 ### R5.1A — Unit-preset application regression — PLANNED
 
 After R5.1, apply the restored choice across all Home presentation surfaces and
 verify no canonical value/cache mutation or unit mismatch occurs.
+
+**Exit:** Presentation tests and installed captures cover each preset on all four Home pages; one canonical fixture maps consistently and no weather fetch/cache mutation occurs on unit switch.
 
 ### R5.2 — Persisted theme preference — PLANNED
 
@@ -434,14 +497,20 @@ Persist and restore one of Atmospheric, Glass, Minimal OLED, Instrument, or
 Terminal without changing canonical weather/cache values or causing a forecast
 refetch. Depends on the production resolver, renderer, and verification work in R0.11B–R0.11H.
 
+**Exit:** Persistence tests restore each of the five themes and verify a theme switch changes only resolved appearance, with no forecast request or canonical/cache mutation.
+
 ### R5.2A — Theme selection settings surface — PLANNED
 
 Expose the five built-in themes through accessible Appearance settings using the
 existing resolver/catalog. Selection changes presentation only.
 
+**Exit:** Installed Appearance settings expose all five themes with readable selected state and 48dp targets; selecting each updates the visible theme without a weather refetch.
+
 ### R5.3 — Contrast preference — PLANNED
 
 Standard/High contrast remains independent of theme and weather semantics.
+
+**Exit:** Preference/resolver tests cover Standard and High contrast independently for all five themes; installed samples show non-color selection/unavailable cues and unchanged facts.
 
 ### R5.4 — Effects preference — PLANNED
 
@@ -449,11 +518,15 @@ Implement persisted Off/Subtle/Full preference selection and resolver behavior.
 Off remains opaque, static, and complete; system reduced-motion policy is not
 added in this slice.
 
+**Exit:** Persistence/resolver tests cover Off/Subtle/Full for every theme; Off is opaque, static, and complete, and changing effects does not refetch or alter weather.
+
 ### R5.4A — Reduced-motion effects policy — PLANNED
 
 After R5.4, integrate system reduced-motion/disabled-animation policy and
 verify it resolves an effective appearance without rewriting the saved choice
 or changing weather meaning.
+
+**Exit:** System reduced-motion enabled/disabled cases resolve effective motion policy while persisted choice remains unchanged; installed motion is absent when the system policy disables it.
 
 ### R5.5 — Simple layout — PLANNED
 
@@ -461,10 +534,14 @@ Implement Simple layout's Home page model and navigation shell, preserving
 existing selected forecast data and no-refetch behavior. The reduced Forecast
 surface itself is excluded.
 
+**Exit:** Simple layout switches the Home shell while retaining the same selected forecast and navigation state; deterministic state check confirms no repository fetch.
+
 ### R5.5A — Simple Forecast surface — PLANNED
 
 After R5.5, implement the Simple layout Forecast choice/surface using the same
 hourly/daily weather meaning without a provider refetch or alternate forecast.
+
+**Exit:** Installed Simple Forecast presents supplied hourly/daily meaning with visible window controls and matches Standard values; switching layouts causes no fetch.
 
 ### R5.6 — Settings information architecture — PLANNED
 
@@ -472,65 +549,93 @@ Implement the Settings navigation shell plus Appearance and Units destinations,
 using the completed preference boundaries. No location, data-source, or legal
 content surfaces belong here.
 
+**Exit:** Installed Settings shell reaches Appearance and Units and returns to its prior Home state; destinations are accessible and no location/data/legal routes are included.
+
 ### R5.6A — Settings data and location destinations — PLANNED
 
 After R5.6, add Locations and Data Sources destinations using the existing
 selected/saved location and provenance contracts.
+
+**Exit:** Installed Locations and Data Sources destinations show the existing saved/selected locations and actual provenance contracts, with working return navigation.
 
 ### R5.6B — Settings legal and product-information destinations — PLANNED
 
 After R5.6A, add Privacy, Open Source Licenses, and About destinations without
 inventing policy, attribution, or license text.
 
+**Exit:** Installed Privacy, Licenses, and About pages contain only reviewed project/source text with verified links; absent policy or attribution text remains explicitly unavailable.
+
 ## R6 — Accessibility and environment verification
+
 
 ### R6.1 — Spoken semantics contract — PLANNED
 
 Implement provider-neutral concise spoken semantics for current, hourly, daily,
 and Details with resolved units and honest missing values.
 
+**Exit:** Compose semantics tests assert concise spoken labels for current/hourly/daily/Details facts under Metric/US/UK and missing values, including chronological ordering.
+
 ### R6.1A — Alert and settings spoken semantics — PLANNED
 
 After R6.1, add equivalent semantics for official alerts and Settings
 destinations, including non-color-only status and unavailable states.
+
+**Exit:** Semantics tests cover official alert severity/issuer/time and every Settings destination, including selected, unavailable, and non-color-only states.
 
 ### R6.2 — Compact and large-font resilience — PLANNED
 
 Verify the project compact baseline and large-font conditions for all four Home
 pages, including the five production themes and Effects Off states.
 
+**Exit:** Capture 20 baseline screenshots (five themes × four pages), 20 compact screenshots (all cells at 360 × 640 dp), and 20 large-font screenshots (all cells at font scale 1.3), with hierarchy evidence; no critical clipping or unreachable control remains.
+
 ### R6.2A — Settings compact and large-font resilience — PLANNED
 
 After R6.2, verify compact and large-font conditions for Settings destinations
 and each persisted appearance/layout control.
 
+**Exit:** Capture all seven Settings destinations at compact viewport and font scale 1.3 (14 screenshots) and record hierarchy for each; all controls/content remain reachable with no overlap.
+
 ### R6.3 — RTL chronology/navigation — PLANNED
 
 Preserve earliest-to-latest data order while mirroring physical layout/directional controls appropriately.
+
+**Exit:** Capture 20 Hourly/Daily screenshots (five themes × two pages × LTR/RTL) and run matching semantics checks; chronological order remains earliest-to-latest and directional controls/navigation behave correctly.
 
 ### R6.4 — Reduced-motion and appearance invariance — PLANNED
 
 Verify production-theme, contrast, and effects combinations on Home preserve weather
 semantics, controls, source/freshness, and no-refetch behavior.
 
+**Exit:** All 30 resolver combinations (five themes × two contrast modes × three effects levels) pass deterministic invariance checks; 20 installed page captures cover Effects Off/reduced-motion, and request counters remain unchanged across appearance changes.
+
 ### R6.4A — Cross-theme and layout appearance invariance — PLANNED
 
 After R6.4, extend the matrix across the five production themes, Simple layout, and Settings
 while preserving the same semantic/control invariants.
 
+**Exit:** Capture all 40 Home combinations (five themes × two layouts × four pages) and seven Settings destinations; deterministic state checks prove values, controls, provenance, and request count remain invariant.
+
 ### R6.5 — Accessibility evidence closure — PLANNED
 
 Record the exact service-level/manual accessibility checks actually performed; do not upgrade unverified boundaries into claims.
 
+**Exit:** One report records TalkBack/manual results for all four Home pages, one alert path, and all seven Settings destinations; any unrun or failed path is explicitly a release blocker, never an inferred pass.
+
 ## R7 — Release hardening
+
 
 ### R7.1 — Privacy/manifest audit — PLANNED
 
 Audit permissions, exported components, cleartext policy, backups, and retained dependencies against implemented behavior.
 
+**Exit:** A checked manifest/permission/exported-component/backup/dependency report matches implemented behavior; each unexpected permission or component is removed or explicitly justified.
+
 ### R7.2 — Data-source/license/notice audit — PLANNED
 
 Confirm current provider terms, attribution, source links, dependency notices, and replacement-repository license decision.
+
+**Exit:** A source/notice/license table links every shipped provider and dependency to current terms/attribution and records the repository license decision; unresolved legal items block release.
 
 ### R7.3 — Clean-host build matrix — PLANNED
 
@@ -541,19 +646,27 @@ Cycle 004 repaired the wrapper bootstrap and verified it on the existing host;
 that prerequisite evidence does not satisfy this clean-clone matrix. See
 `.codex/history/2026-09-20-004-gradle-wrapper-distribution-repair.md`.
 
+**Exit:** A fresh Linux clone runs documented `scripts/dev.py` workflow, contract, test, build, and check commands successfully, with toolchain versions and outputs archived.
+
 ### R7.3A — Windows clean-host build — PLANNED
 
 After R7.3, verify the equivalent clean-clone Windows flow using `gradlew.bat`
 through `scripts/dev.py` and record any platform-specific limitation.
+
+**Exit:** A fresh Windows clone runs the equivalent supported workflow through `scripts/dev.py`/`gradlew.bat`; exact results and any reproducible platform blocker are archived.
 
 ### R7.3B — macOS clean-host build — PLANNED
 
 After R7.3A, verify the equivalent clean-clone macOS flow using the repository
 Gradle wrapper and `scripts/dev.py` and record any platform-specific limitation.
 
+**Exit:** A fresh macOS clone runs the equivalent supported workflow through `scripts/dev.py`; exact results and any reproducible platform blocker are archived.
+
 ### R7.4 — Release build/signing preparation — PLANNED
 
 Prepare intentional release versioning/signing/publication configuration without committing secrets.
+
+**Exit:** A release variant builds with intentional version/package/signing configuration, no secrets in source/control history, and a documented reproducible local signing procedure.
 
 ### R7.5 — Oxygen 1.0 release gate — PLANNED
 
@@ -561,11 +674,15 @@ Run the release-candidate acceptance matrix from a clean state, triage any
 blocking failure, and assemble evidence for all specified product, safety,
 appearance, and build boundaries. Do not yet promote the candidate.
 
+**Exit:** One clean release-candidate run completes every specified product/safety/appearance/build check; a single triage pass ends PASS or BLOCKED with each failure assigned and evidence linked.
+
 ### R7.5A — Oxygen 1.0 release decision — PLANNED
 
 After R7.5, review the complete evidence/limitations record and make the sole
 release promotion decision. Only this slice may promote the project from
 candidate to 1.0 release status.
+
+**Exit:** The owner records one explicit promote/reject/hold decision against the exact R7.5 candidate digest; absent or ambiguous response closes as pending and does not promote.
 
 ## R8 — Experimental meteorological context — DEFERRED FROM 1.0 CRITICAL PATH
 
@@ -577,20 +694,28 @@ Define the historical provider/method contract: reference period, spatial
 method, local-time/day-of-year matching, minimum sample rules, limitations, and
 provenance. No network/cache implementation occurs here.
 
+**Exit:** The experiment contract names source, reference period, spatial/time matching, minimum sample, provenance, and unavailable/limitation behavior; no provider code is added. This remains experimental and outside the 1.0 gate.
+
 ### R8.1A — Historical reference provider implementation
 
 After R8.1, implement the selected archive provider, normalization, cache, and
 deterministic provenance/limitation fixtures.
+
+**Exit:** Deterministic fixtures prove the selected archive adapter, normalization, cache identity, and limitation/provenance fields; no 1.0 critical-path dependency is introduced. This remains experimental and outside the 1.0 gate.
 
 ### R8.2 — Forecast revision/surprise
 
 Retain prior normalized forecast runs with valid/retrieval identity and a
 bounded retention policy. No comparison-derived signal occurs here.
 
+**Exit:** Prior-run storage tests prove valid/retrieval identity, selected-location isolation, and the fixed retention cap; no comparison signal is produced. This remains experimental and outside the 1.0 gate.
+
 ### R8.2A — Forecast revision comparison
 
 After R8.2, compare a later forecast with the previously issued forecast at
 matched valid times and expose explicit unavailable/limitation behavior.
+
+**Exit:** Matched-time comparison tests cover changed, unchanged, missing-run, and mismatched-horizon cases and emit unavailable/limitations honestly. This remains experimental and outside the 1.0 gate.
 
 ### R8.3 — Analog-day/year engine
 
@@ -598,21 +723,29 @@ Document and test normalized features, scaling, matching distance, sample
 population, minimum evidence, and limitations. No user-visible analog output
 occurs here.
 
+**Exit:** A versioned deterministic feature/distance/sample contract has hand-calculated fixtures and minimum-evidence/unavailable rules; no user-facing analog output is added. This remains experimental and outside the 1.0 gate.
+
 ### R8.3A — Analog-day/year derivation and presentation
 
 After R8.3, implement deterministic matching/derivation and an honest
 presentation boundary that never emits placeholder analog years.
+
+**Exit:** Deterministic analog tests cover stable ties, insufficient samples, missing features, and no placeholder years; presentation remains explicitly experimental. This remains experimental and outside the 1.0 gate.
 
 ### R8.4 — Forecast uncertainty/model comparison
 
 Define explicit provider-support and semantic contracts for uncertainty/model
 comparison, including range/units, source provenance, and unavailable behavior.
 
+**Exit:** Provider-support and semantic contract defines uncertainty/comparison range, units, provenance, and missing behavior; unsupported single-model inference is rejected by tests. This remains experimental and outside the 1.0 gate.
+
 ### R8.4A — Forecast uncertainty/model comparison implementation
 
 After R8.4, implement only the provider-supported comparison/uncertainty data
 path and deterministic presentation tests; it is never inferred from one
 deterministic forecast.
+
+**Exit:** Provider-backed fixtures prove supported comparison inputs and deterministic output/limitations; absent multi-model evidence yields unavailable, never invented uncertainty. This remains experimental and outside the 1.0 gate.
 
 ## Roadmap change rule
 
