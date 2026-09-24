@@ -8,17 +8,19 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [REFERENCE_MEASUREMENT_METHOD.md](REFERENCE_MEASUREMENT_METHOD.md): proportional measurement and state-treatment derivation from reference art.
 - [CONTENT_AND_STATE_RULES.md](CONTENT_AND_STATE_RULES.md): presentation-model slots, state grammar, accessibility, RTL, and effects.
 - [SOURCE_DECISIONS.md](SOURCE_DECISIONS.md): source ledger, conflicts, asset disposition, and owner decisions.
-- [NOW.md](NOW.md): TP.1B partial A, proposed Now composition and five theme mappings; measured and checked for model coverage, awaiting integrated render review.
-- [HOURLY.md](HOURLY.md): TP.1B partial B, proposed Hourly composition, six-entry grid, date/window controls and five theme mappings; measured and checked for model coverage, awaiting integrated render review.
-- [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit passed, awaiting integrated render review.
-- [DETAILS.md](DETAILS.md): TP.1C partial B, proposed ordered metric groups, source/update/status separation, state behavior, and five theme mappings; documentation audit passed, awaiting integrated render review.
+- [NOW.md](NOW.md): TP.1B partial A, proposed Now composition and five theme mappings; measured, checked for model coverage, and reviewed in the upstream integrated renders.
+- [HOURLY.md](HOURLY.md): TP.1B partial B, proposed Hourly composition, six-entry grid, date/window controls and five theme mappings; measured, checked for model coverage, and reviewed in the upstream integrated renders.
+- [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit and partial-A individual static-render review passed; owner approval pending.
+- [DETAILS.md](DETAILS.md): TP.1C partial B, proposed ordered metric groups, source/update/status separation, state behavior, and five theme mappings; documentation audit and partial-A individual static-render review passed; owner approval pending.
 
 - [INTEGRATED_PACK.md](INTEGRATED_PACK.md): reviewed Now/Hourly upstream table,
   asset use, typed fixture, measurements and partial-A handoff; ten Daily/Details
-  cells remain pending. Ten primary SVGs and six condition examples are in the
-  [render index](renders/README.md). D28/D29 remain explicit appearance decisions.
+  cells are populated, with Daily/Details individually reviewed in partial-A. Twenty primary SVGs and twelve condition examples are in the
+  [render index](renders/README.md). D28/D29/D31 remain explicit appearance decisions.
 
-The upstream review is complete; the full pack is not approved. TP.1D-partial-A
-owns Daily/Details, cross-pack review and explicit owner approval. TP.2 stays gated.
+The upstream Now/Hourly review is complete; the full pack is not approved.
+TP.1D-partial-A completed Daily/Details integration and individual render
+review. Next TP.1D-partial-A-partial-B owns cross-pack review and explicit
+owner approval. TP.2 stays gated.
 
 All measurements called *reference* describe a review target rather than a verified installed rendering. These static design references do not claim installed app or implementation acceptance.

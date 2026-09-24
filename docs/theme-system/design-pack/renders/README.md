@@ -1,4 +1,4 @@
-# Static reference renders — upstream TP.1D
+# Static reference renders — TP.1D upstream and partial-A
 
 All images are **illustrative design references**, not installed screenshots.
 The [integrated pack](../INTEGRATED_PACK.md) defines geometry, facts, actions,
@@ -31,6 +31,23 @@ for reviewing content beyond the viewport. Static SVGs do not scroll or navigate
 | [SVG](glass-now-effects-off.svg) | glass / Now | 393 × 852 | 1 | effects-off; Off; Standard; LTR | 0.0 |
 | [SVG](instrument-hourly-high-contrast.svg) | instrument / Hourly | 393 × 852 | 1 | high-contrast; Subtle; High; LTR | 0.0 |
 
+| [SVG](atmospheric-daily.svg) | atmospheric / Daily | 393 × 852 | 1 | primary; Subtle; Standard; LTR | 202.0 |
+| [SVG](atmospheric-details.svg) | atmospheric / Details | 393 × 852 | 1 | primary; Subtle; Standard; LTR | 774.0 |
+| [SVG](glass-daily.svg) | glass / Daily | 393 × 852 | 1 | primary; Subtle; Standard; LTR | 246.0 |
+| [SVG](glass-details.svg) | glass / Details | 393 × 852 | 1 | primary; Subtle; Standard; LTR | 842.0 |
+| [SVG](minimal_oled-daily.svg) | minimal_oled / Daily | 393 × 852 | 1 | primary; Off; Standard; LTR | 218.0 |
+| [SVG](minimal_oled-details.svg) | minimal_oled / Details | 393 × 852 | 1 | primary; Off; Standard; LTR | 842.0 |
+| [SVG](instrument-daily.svg) | instrument / Daily | 393 × 852 | 1 | primary; Subtle; Standard; LTR | 166.0 |
+| [SVG](instrument-details.svg) | instrument / Details | 393 × 852 | 1 | primary; Subtle; Standard; LTR | 736.0 |
+| [SVG](terminal-daily.svg) | terminal / Daily | 393 × 852 | 1 | primary; Off; Standard; LTR | 178.0 |
+| [SVG](terminal-details.svg) | terminal / Details | 393 × 852 | 1 | primary; Off; Standard; LTR | 758.0 |
+| [SVG](glass-daily-compact.svg) | glass / Daily | 360 × 640 | 1 | compact; Subtle; Standard; LTR | 458.0 |
+| [SVG](glass-details-font-1.3.svg) | glass / Details | 393 × 852 | 1.3 | font-1.3; Subtle; Standard; LTR | 1206.0 |
+| [SVG](terminal-daily-rtl.svg) | terminal / Daily | 393 × 852 | 1 | rtl; Off; Standard; RTL | 178.0 |
+| [SVG](atmospheric-details-wide.svg) | atmospheric / Details | 840 × 900 | 1 | wide; Subtle; Standard; LTR | 726.0 |
+| [SVG](glass-daily-effects-off.svg) | glass / Daily | 393 × 852 | 1 | effects-off; Off; Standard; LTR | 246.0 |
+| [SVG](instrument-details-high-contrast.svg) | instrument / Details | 393 × 852 | 1 | high-contrast; Subtle; High; LTR | 736.0 |
+
 ## Example review
 
 - Compact: Glass Now at 360 × 640 keeps two ≥144 dp support columns and the
@@ -50,3 +67,14 @@ for reviewing content beyond the viewport. Static SVGs do not scroll or navigate
 
 Weather strings are the same per page in every example. For source rationale and
 specific unresolved font/mark decisions, see [D27–D29](../SOURCE_DECISIONS.md#integrated-upstream-review-decisions).
+
+## Daily/Details partial-A review
+
+Ten primary Daily/Details renders use the same mapper-derived fixture. The six
+additional examples cover Glass Daily compact and Effects Off, Glass Details
+font scale 1.3, Terminal Daily RTL, Atmospheric Details wide, and Instrument
+Details High contrast. Their full logical body and end-of-scroll captures are
+retained under `.codex/test-artifacts/028-tp-1d-integrated-pack-review-partial-A/`.
+The SVGs are static design targets. Android font metrics, actual interaction,
+TalkBack, translated RTL copy and installed visual matching belong to TP.3 or
+later verification.

@@ -1,6 +1,6 @@
 # Details page design — TP.1C partial B
 
-**Status:** proposed for TP.1D integrated render review. This is a design contract, not a description of the current installed renderer or a visual-match claim. Details consumes only supplied `detailGroups`, metric strings, source/update and outer status. Product meaning is **accepted by authority** from the [specification](../../SPECIFICATION.md#45-details), [adopted UI contract](../../OXYGEN_UI_SPECIFICATION_ADOPTED.md#details), [typed model](../../../app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt), and [load state](../../../app/src/main/java/com/oxygen/weather/presentation/HomeLoadState.kt). Numeric layout and theme treatments are **proposed**.
+**Status:** proposed composition individually reviewed in TP.1D-partial-A static renders; not owner-approved or installed-app acceptance. This is a design contract, not a description of the current installed renderer or a visual-match claim. Details consumes only supplied `detailGroups`, metric strings, source/update and outer status. Product meaning is **accepted by authority** from the [specification](../../SPECIFICATION.md#45-details), [adopted UI contract](../../OXYGEN_UI_SPECIFICATION_ADOPTED.md#details), [typed model](../../../app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt), and [load state](../../../app/src/main/java/com/oxygen/weather/presentation/HomeLoadState.kt). Numeric layout and theme treatments are **proposed**.
 
 ## Sources, crop locators, and limitations
 
@@ -108,4 +108,4 @@ The shared selector is the only page control on Details. In every theme it keeps
 | High contrast | Opaque resolved text/surface pairs, visible boundaries, headings and explicit status; no color-only distinction. |
 | Effects Off | Opaque static canvas and groups; no gradient, grid, blur, glow, or animation. All supplied metric/provenance/status text remains complete. |
 
-**TP.1D review criterion:** compare the static Details design surface against proposed group width, label/value hierarchy, row wrapping, and source/status separation at 393 × 852 dp, then 360 × 640 dp, font scale 1.3, RTL, High contrast and Effects Off. This design cycle runs no installation or render and makes no visual-success claim.
+**TP.1D review criterion:** compare the static Details design surface against proposed group width, label/value hierarchy, row wrapping, and source/status separation at 393 × 852 dp, then 360 × 640 dp, font scale 1.3, RTL, High contrast and Effects Off. TP.1D-partial-A rendered and reviewed static design references only. TP.3 owns installed comparison; these references make no Android visual-success claim.

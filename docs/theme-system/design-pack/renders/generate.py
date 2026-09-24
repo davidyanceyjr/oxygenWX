@@ -3,8 +3,10 @@ from pathlib import Path
 import json, math, subprocess, functools, html
 ROOT=Path(__file__).resolve().parents[4]
 OUT=Path(__file__).resolve().parent
-E=ROOT/'.codex/test-artifacts/028-tp-1d-integrated-pack-review'
-E.mkdir(parents=True,exist_ok=True)
+OLD_E=ROOT/'.codex/test-artifacts/028-tp-1d-integrated-pack-review'
+NEW_E=ROOT/'.codex/test-artifacts/028-tp-1d-integrated-pack-review-partial-A'
+OLD_E.mkdir(parents=True,exist_ok=True)
+NEW_E.mkdir(parents=True,exist_ok=True)
 F=json.loads((OUT/'fixture.json').read_text())
 THEMES=['atmospheric','glass','minimal_oled','instrument','terminal']
 NAMES=['Atmospheric','Glass','Minimal OLED','Instrument','Terminal']
@@ -25,6 +27,7 @@ def lines(s,size,width,family):
  return result
 
 def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False,off=False,hc=False):
+ E=OLD_E if page in ('Now','Hourly') else NEW_E
  t=json.loads((ROOT/f'docs/theme-system/tokens/catalog/{theme}.json').read_text())
  c=t['colors']; sp=t['spacingDp']; sf=t['surface']; off=off or theme in ['minimal_oled','terminal'];
  family='Fira Sans' if theme=='atmospheric' else ('Noto Sans Mono' if theme=='terminal' else 'Noto Sans')
@@ -105,7 +108,7 @@ def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False
     if support:text(F['current'][support],xx+pad,yy+4,cw-2*pad,12,18,secondary,field='current.'+support)
    y+=rh+gap
   y+=stack-gap
- else:
+ elif page=='Hourly':
   range_w=min(w,325 if theme=='glass' else 337 if theme=='instrument' else w);rx=(width-range_w)/2
   y+=text(F['window']['rangeLabel'],rx,y,range_w,20,28,field='window.rangeLabel')+8
   y+=button('Choose forecast date',rx,y,range_w)+stack
@@ -126,13 +129,80 @@ def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False
   cw=(w-gap)/2
   bh=max(button('Earlier · disabled',x+(cw+gap if rtl else 0),y,cw,True),button('Later',x+(0 if rtl else cw+gap),y,cw))
   y+=bh+stack
- # Exact source strings with natural wrapping. Status is illustrative mapped input, not a live claim.
- sh=2*pad+sum(len(lines(F[key],12*scale,w-2*pad,family))*18*scale+6 for key in ['sourceLine','updatedLine','status'])
- if theme not in ['minimal_oled','terminal']:rect(x,y,w,sh,c['elevatedSurface'],sf['radiusDp'],outline if hc else 'none')
- else:panel(x,y,w,sh)
- yy=y+pad
- for key in ['sourceLine','updatedLine','status']:yy+=text(F[key],x+pad,yy,w-2*pad,12,18,secondary,field=key)+6
- y+=sh+stack
+ elif page=='Daily':
+  y+=text('Daily',x,y,w,20,28,field='page.heading')+4
+  y+=text(F['dailyWindow']['rangeLabel'],x,y,w,16,24,secondary,field='dailyWindow.rangeLabel')+stack
+  if theme=='atmospheric':
+   heights=[]
+   inner=w-2*pad
+   for entry in F['dailyWindow']['entries']:
+    low_high='Low '+entry['low']+' · High '+entry['high']
+    heights.append(max(64,2*pad+20*scale+len(lines(entry['condition'],16*scale,inner,family))*24*scale+len(lines(low_high,16*scale,inner,family))*22*scale+len(lines(entry['precipitation'],14*scale,inner,family))*20*scale+12))
+   panel(x,y,w,sum(heights)+gap*(len(heights)-1))
+  for i,entry in enumerate(F['dailyWindow']['entries']):
+   inner=w-2*pad
+   condition_height=len(lines(entry['condition'],16*scale,inner,family))*24*scale
+   low_high='Low '+entry['low']+' · High '+entry['high']
+   low_high_height=len(lines(low_high,16*scale,inner,family))*22*scale
+   precip_height=len(lines(entry['precipitation'],14*scale,inner,family))*20*scale
+   row_height=max(64,2*pad+20*scale+condition_height+low_high_height+precip_height+12)
+   if theme!='atmospheric':panel(x,y,w,row_height)
+   yy=y+pad
+   yy+=text(entry['day'],x+pad,yy,inner,14,20,secondary,field=f'daily.entries.{i}.day')
+   yy+=text(entry['condition'],x+pad,yy,inner,16,24,field=f'daily.entries.{i}.condition')
+   yy+=text(low_high,x+pad,yy,inner,16,22,field=f'daily.entries.{i}.lowHigh')
+   text(entry['precipitation'],x+pad,yy+4,inner,14,20,secondary,field=f'daily.entries.{i}.precipitation')
+   if theme=='atmospheric' and i<len(F['dailyWindow']['entries'])-1:
+    parts.append(f'<path d="M{x+pad} {y+row_height+gap/2}h{w-2*pad}" stroke="{outline}"/>')
+   y+=row_height+gap
+  y+=stack-gap
+  cw=(w-gap)/2
+  bh=max(button('Earlier · disabled',x+(cw+gap if rtl else 0),y,cw,True),button('Later',x+(0 if rtl else cw+gap),y,cw))
+  y+=bh+stack
+ elif page=='Details':
+  y+=text('Details',x,y,w,20,28,field='page.heading')+stack
+ if page=='Details':
+  # Current-data provenance and outer load state precede the ordered groups.
+  for label,key in [('Source','sourceLine'),('Update time','updatedLine'),('Status','status')]:
+   value=F[key]; inner=w-2*pad
+   bh=2*pad+20*scale+4+len(lines(value,14*scale,inner,family))*20*scale
+   panel(x,y,w,bh)
+   yy=y+pad
+   yy+=text(label,x+pad,yy,inner,14,20,secondary,field=f'{key}.label')+4
+   text(value,x+pad,yy,inner,14,20,field=key)
+   y+=bh+gap
+  y+=stack-gap
+  for gi,group in enumerate(F['detailGroups']):
+   metrics=group['metrics']
+   if not metrics:continue
+   inner=w-2*pad
+   heading=len(lines(group['title'],(18 if theme=='terminal' else 20)*scale,inner,family))*(24 if theme=='terminal' else 28)*scale
+   row_heights=[]
+   for metric in metrics:
+    label_h=len(lines(metric['label'],14*scale,inner,family))*20*scale
+    value_h=len(lines(metric['value'],(16 if theme=='terminal' else 18)*scale,inner,family))*(22 if theme=='terminal' else 24)*scale
+    support_h=len(lines(metric['supporting'],14*scale,inner,family))*20*scale+4 if metric['supporting'] else 0
+    row_heights.append(max(56,label_h+4+value_h+support_h+8))
+   gh=2*pad+heading+sum(row_heights)+gap*(len(metrics)-1)
+   panel(x,y,w,gh)
+   yy=y+pad
+   yy+=text(group['title'],x+pad,yy,inner,18 if theme=='terminal' else 20,24 if theme=='terminal' else 28,field=f'detailGroups.{gi}.title')
+   for mi,metric in enumerate(metrics):
+    row_start=yy
+    yy+=text(metric['label'],x+pad,yy,inner,14,20,secondary,field=f'detailGroups.{gi}.metrics.{mi}.label')+4
+    yy+=text(metric['value'],x+pad,yy,inner,16 if theme=='terminal' else 18,22 if theme=='terminal' else 24,field=f'detailGroups.{gi}.metrics.{mi}.value')
+    if metric['supporting']:yy+=text(metric['supporting'],x+pad,yy+4,inner,14,20,secondary,field=f'detailGroups.{gi}.metrics.{mi}.supporting')+4
+    yy=row_start+row_heights[mi]
+    if mi<len(metrics)-1:yy+=gap
+   y+=gh+stack
+ else:
+  # Exact source strings with natural wrapping. Status is illustrative mapped input.
+  sh=2*pad+sum(len(lines(F[key],12*scale,w-2*pad,family))*18*scale+6 for key in ['sourceLine','updatedLine','status'])
+  if theme not in ['minimal_oled','terminal']:rect(x,y,w,sh,c['elevatedSurface'],sf['radiusDp'],outline if hc else 'none')
+  else:panel(x,y,w,sh)
+  yy=y+pad
+  for key in ['sourceLine','updatedLine','status']:yy+=text(F[key],x+pad,yy,w-2*pad,12,18,secondary,field=key)+6
+  y+=sh+stack
  fullheight=max(height,math.ceil(y+24)); body=parts[body_start:];shell=parts[:body_start]
  # At short heights, keeping both body and footer leaves < two rows: document-order fallback.
  # Each SVG captures scroll offset zero. Companion end/full captures prove reachable content.
@@ -153,12 +223,14 @@ def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False
 def main():
  records=[]
  for theme in THEMES:
-  for page in ['Now','Hourly']:records.append(render(theme,page))
+  for page in ['Now','Hourly','Daily','Details']:records.append(render(theme,page))
  records.extend([render('glass','Now','compact',360,640),render('glass','Hourly','font-1.3',scale=1.3),render('terminal','Hourly','rtl',rtl=True),render('atmospheric','Now','wide',840,900),render('glass','Now','effects-off',off=True),render('instrument','Hourly','high-contrast',hc=True)])
+ records.extend([render('glass','Daily','compact',360,640),render('glass','Details','font-1.3',scale=1.3),render('terminal','Daily','rtl',rtl=True),render('atmospheric','Details','wide',840,900),render('glass','Daily','effects-off',off=True),render('instrument','Details','high-contrast',hc=True)])
  (OUT/'index.json').write_text(json.dumps(records,indent=2)+'\n')
  for r in records:
   name=Path(r['file']).stem
-  for src,dest in [(OUT/r['file'],E/(name+'.png')),(E/(name+'-full.svg'),E/(name+'-full.png')),(E/(name+'-end.svg'),E/(name+'-end.png'))]:
+  evidence=OLD_E if r['page'] in ('Now','Hourly') else NEW_E
+  for src,dest in [(OUT/r['file'],evidence/(name+'.png')),(evidence/(name+'-full.svg'),evidence/(name+'-full.png')),(evidence/(name+'-end.svg'),evidence/(name+'-end.png'))]:
    subprocess.run(['rsvg-convert',str(src),'-o',str(dest)],check=True)
- print('Generated 10 primary references, 6 examples, and full/end review captures.')
+ print('Generated 20 primary references, 12 examples, and full/end review captures.')
 if __name__=='__main__':main()
