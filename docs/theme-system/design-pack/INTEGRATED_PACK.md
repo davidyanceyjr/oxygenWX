@@ -1,15 +1,21 @@
-# Integrated design pack — Daily and Details individual review
+# Integrated design pack — 20-cell cross-pack review
 
-Status: twenty cells populated; Now/Hourly reviewed upstream and Daily/Details individually reviewed in partial-A. Proposed design references, **not owner-approved**.
+Status: twenty cells populated and cross-reviewed in cycle 029 after the upstream
+Now/Hourly and partial-A Daily/Details individual reviews. Proposed design
+references, **not owner-approved**.
 TP.1D/TP.1 remain incomplete;
 TP.2 stays gated. This is a design-render review; TP.3 owns installed comparison.
+The [TP.3 installed comparison checklist](TP3_INSTALLED_COMPARISON.md) maps
+this proposed revision's 20 primary cells, twelve examples, and contract-only
+states to reproducible future installed evidence. It records no installed pass.
 
 ## Reproduction and fixture
 
 [Render index](renders/README.md), [machine-readable conditions](renders/index.json),
 [generator](renders/generate.py), and [exact fixture](renders/fixture.json).
-Run `python docs/theme-system/design-pack/renders/generate.py` from the repository
-root with Python 3, ImageMagick, fontconfig and librsvg (`rsvg-convert`). The
+Run `python docs/theme-system/design-pack/renders/generate.py --evidence-dir .codex/test-artifacts/<cycle-id>/` from the repository root with Python 3,
+ImageMagick, fontconfig and librsvg (`rsvg-convert`). The argument directs
+review captures to the active cycle so earlier evidence is preserved. The
 reference fonts are Fira Sans, Noto Sans and Noto Sans Mono. The generator measures
 actual text widths using the same resolved font files before wrapping. Font
 substitution against the candidate Inter/Roboto families is explicit decision D28,
@@ -158,9 +164,18 @@ and selected/disabled cues. D30 records the content-height correction.
 The review evidence and per-cell source comparison are in
 `.codex/test-artifacts/028-tp-1d-integrated-pack-review-partial-A/`.
 The earlier Now/Hourly individual review remains in
-`.codex/test-artifacts/028-tp-1d-integrated-pack-review/`; regeneration made
-no tracked change to its SVGs. The dependent TP.1D-partial-A-partial-B cycle
-owns the 20-cell cross-pack review, practical TP.3 installed checklist, frozen
-review packet and explicit owner decision. D28/D29 and the shared Atmospheric source/palette fit D31 remain bounded decisions.
+`.codex/test-artifacts/028-tp-1d-integrated-pack-review/`. Cycle 029 regenerated
+all 32 references without changing their tracked SVGs or index. Its 20-cell
+cross-page/cross-theme matrix, twelve-example review, source samples, audit,
+and full/end captures are in
+`.codex/test-artifacts/029-tp-1d-final-integrated-pack-review/`.
+The dependent TP.1D-partial-A-partial-B-partial-A cycle owns the practical
+TP.3 installed checklist, frozen review packet and explicit owner decision.
+D28 font choice, D29 mark detail and D31 Atmospheric palette/scene fit remain
+bounded owner decisions. D31's source sample corrects the earlier description:
+the scenic Now region is bright blue, while the Daily preview is dark blue;
+the current four-page proposal is consistently dark teal. See
+[D31](SOURCE_DECISIONS.md#integrated-upstream-review-decisions) for measured
+values, options and affected cells.
 No static reference establishes Android font metrics, interaction, TalkBack,
 translated RTL copy, installed visual match or owner approval. TP.2 stays gated.

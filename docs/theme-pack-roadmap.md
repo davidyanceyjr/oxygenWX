@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — TP.1D-partial-A complete; dependent review next
+## Execution head — TP.1D installed comparison checklist closure
 
 **Completed: TP.1D upstream Now/Hourly integration.** Plan:
 `.codex/plans/028-tp-1d-integrated-pack-review.md`. Its ten cells, ten primary
@@ -19,13 +19,29 @@ their individual review. Exact evidence and limitations are in
 `.codex/test-artifacts/028-tp-1d-integrated-pack-review-partial-A/`.
 This does not complete TP.1D/TP.1 or claim owner approval.
 
-**Next: TP.1D-partial-A-partial-B final review.** Initial
-plan: `.codex/plans/028-tp-1d-integrated-pack-review-partial-A-partial-B.md`.
-It owns 20-cell cross-pack review, the TP.3 installed-comparison checklist,
-the frozen review packet, and explicit design-owner approval. Expand and
-activate it in a separate cycle after partial-A's history is recorded. TP.2
-remains gated until this dependent review closes with approval. Each part
-targets at most 35% of a fresh context window and stops before 45%.
+**Completed: TP.1D-partial-A-partial-B cross-pack consistency review.** Plan:
+`.codex/plans/029-tp-1d-final-integrated-pack-review.md`. This upstream half
+audited all 20 cells and twelve examples, corrected D31's source description,
+and handed off a verified proposed revision. Evidence and limits:
+`.codex/history/2026-09-23-029-tp-1d-final-integrated-pack-review.md` and
+`.codex/test-artifacts/029-tp-1d-final-integrated-pack-review/`.
+It does not close TP.1D/TP.1 or claim owner approval.
+
+**Completed: TP.1D-partial-A-partial-B-partial-A installed comparison
+checklist.** Plan: `.codex/plans/030-tp-1d-approval-packet-decision.md`;
+evidence: `.codex/test-artifacts/030-tp-1d-approval-packet-decision/`.
+This upstream half turns the reviewed 20-cell pack and twelve examples into
+an executable [TP.3 installed comparison instrument](theme-system/design-pack/TP3_INSTALLED_COMPARISON.md).
+It does not freeze a
+packet, obtain owner approval, close TP.1D/TP.1, or release TP.2.
+
+**Next: TP.1D-partial-A-partial-B-partial-A-partial-A
+owner packet and decision.** Initial plan:
+`.codex/plans/030-tp-1d-approval-packet-decision-partial-A.md`. Review the
+cycle-030 handoff, create and activate its own `.codex` cycle, then freeze the
+exact packet and request explicit owner disposition. Each half targets
+30–35% of a fresh context window and stops before 45%. Pending, revision or
+rejection keeps TP.1D/TP.1 open and TP.2 gated.
 
 **Status:** adopted; TP.1 is ACTIVE, TP.1A, TP.1B, and TP.1C complete
 **Adopted:** 2026-09-23
@@ -166,12 +182,13 @@ before closing TP.1; TP.2 remains gated until then.
 
 Completed upstream plan: `.codex/plans/028-tp-1d-integrated-pack-review.md`.
 It integrated Now/Hourly and their static reference renders/examples; exact verification is in cycle 028 history. The dependent
-`TP.1D-partial-A` has completed Daily/Details ten-cell integration. Its
-dependent `TP.1D-partial-A-partial-B` initial plan at the execution head owns
-cross-pack review and explicit approval in a later cycle. The completed part and
-dependent review each target at most 35% of a fresh context window. Either
-upstream cycle may close without claiming TP.1D/TP.1 completion; activation
-is not approval.
+`TP.1D-partial-A` has completed Daily/Details ten-cell integration. The
+`TP.1D-partial-A-partial-B` cross-pack review is complete.
+`TP.1D-partial-A-partial-B-partial-A` completed the TP.3 installed checklist;
+dependent `TP.1D-partial-A-partial-B-partial-A-partial-A` owns the frozen
+owner packet and explicit decision. Each targets 30–35% of a fresh context
+window and stops before 45%. Neither checklist activation nor static review
+is design-owner approval.
 
 ### TP.1 shared completion criteria
 

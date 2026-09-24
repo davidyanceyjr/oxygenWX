@@ -1,16 +1,25 @@
-# Static reference renders — TP.1D upstream and partial-A
+# Static reference renders — TP.1D 20-cell cross-pack review
 
 All images are **illustrative design references**, not installed screenshots.
 The [integrated pack](../INTEGRATED_PACK.md) defines geometry, facts, actions,
 source use and open decisions. [Fixture](fixture.json), [conditions](index.json),
-and [generator](generate.py) make this set reproducible. Primary references use
-393 × 852 dp, font scale 1.0, LTR, Standard contrast, effective Subtle for
+and [generator](generate.py) make this set reproducible.
+The [TP.3 installed comparison checklist](../TP3_INSTALLED_COMPARISON.md)
+assigns evidence and result fields to all indexed renders and separately names
+installed-only states. No SVG is an installed-app pass.
+
+Primary references use 393 × 852 dp, font scale 1.0, LTR, Standard contrast, effective Subtle for
 Atmospheric/Glass/Instrument and Off for OLED/Terminal. Insets: 24/0/24/0 dp.
 No system clock or service state is fabricated in the inset regions.
 
 SVGs capture scroll offset zero. They retain the full body in a clipped group,
 not a shrunken layout. The evidence directory has `*-full.png` and `*-end.png`
 for reviewing content beyond the viewport. Static SVGs do not scroll or navigate.
+Cycle 029 regenerated all 32 tracked references without an SVG/index delta and
+retains its own viewport, full-body, end-of-scroll and bounds captures under
+`.codex/test-artifacts/029-tp-1d-final-integrated-pack-review/`. The complete
+cross-pack matrix and unresolved appearance choices are in the
+[integrated pack](../INTEGRATED_PACK.md) and its cycle evidence.
 
 | Render | Theme / page | Viewport dp | Font | Condition | Logical scroll extent dp |
 | --- | --- | --- | --- | --- | --- |

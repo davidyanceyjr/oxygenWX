@@ -1,12 +1,10 @@
 """Reproduce TP.1D static references: python .../renders/generate.py (ImageMagick + librsvg)."""
 from pathlib import Path
-import json, math, subprocess, functools, html
+import argparse, json, math, subprocess, functools, html
 ROOT=Path(__file__).resolve().parents[4]
 OUT=Path(__file__).resolve().parent
 OLD_E=ROOT/'.codex/test-artifacts/028-tp-1d-integrated-pack-review'
 NEW_E=ROOT/'.codex/test-artifacts/028-tp-1d-integrated-pack-review-partial-A'
-OLD_E.mkdir(parents=True,exist_ok=True)
-NEW_E.mkdir(parents=True,exist_ok=True)
 F=json.loads((OUT/'fixture.json').read_text())
 THEMES=['atmospheric','glass','minimal_oled','instrument','terminal']
 NAMES=['Atmospheric','Glass','Minimal OLED','Instrument','Terminal']
@@ -67,6 +65,7 @@ def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False
   rect(0,0,width,height,'url(#sky)');parts.append(f'<ellipse cx="{width*.85}" cy="260" rx="280" ry="330" fill="url(#glow)"/>')
   if theme=='instrument':
    for xx in range(0,width,32):parts.append(f'<path d="M{xx} 24V{height-24}" stroke="{c["outline"]}" stroke-opacity=".18"/>')
+ background_end=len(parts)
  # Chosen reference insets 24 top and 24 bottom; never a runtime inset constant.
  y=24
  text(F['current']['location'],x,y,w,20,28,weight=600,field='current.location')
@@ -214,13 +213,27 @@ def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False
  clip=f'<defs><clipPath id="body"><rect x="0" y="{bodytop}" width="{width}" height="{avail}"/></clipPath></defs>'
  (OUT/(name+'.svg')).write_text(svg(shell+[clip,'<g clip-path="url(#body)">']+body+['</g>'],height))
  # Entire logical scroll body plus shell, for review only (not an additional viewport target).
- full=[f'<rect width="{width}" height="{fullheight}" fill="{c["canvas"]}"/>']+parts
+ full=[f'<rect width="{width}" height="{fullheight}" fill="{c["canvas"]}"/>']
+ if not off and not hc:
+  full.extend([parts[1],f'<rect width="{width}" height="{fullheight}" fill="url(#sky)"/>',
+               f'<ellipse cx="{width*.85}" cy="260" rx="280" ry="330" fill="url(#glow)"/>'])
+  if theme=='instrument':
+   for xx in range(0,width,32):full.append(f'<path d="M{xx} 24V{fullheight-24}" stroke="{c["outline"]}" stroke-opacity=".18"/>')
+ full+=parts[background_end:]
  (E/(name+'-full.svg')).write_text(svg(full,fullheight))
  (E/(name+'-end.svg')).write_text(svg(shell+[clip,f'<g clip-path="url(#body)"><g transform="translate(0 {-overflow})">']+body+['</g></g>'],height))
  (E/(name+'-bounds.json')).write_text(json.dumps(boxes,indent=2))
  return dict(file=name+'.svg',**meta)
 
 def main():
+ global OLD_E, NEW_E
+ parser=argparse.ArgumentParser(description='Generate TP.1D static references and review captures')
+ parser.add_argument('--evidence-dir',type=Path,help='Write all PNG/full/end/bounds review captures here')
+ args=parser.parse_args()
+ if args.evidence_dir:
+  OLD_E=NEW_E=args.evidence_dir.resolve()
+ OLD_E.mkdir(parents=True,exist_ok=True)
+ NEW_E.mkdir(parents=True,exist_ok=True)
  records=[]
  for theme in THEMES:
   for page in ['Now','Hourly','Daily','Details']:records.append(render(theme,page))

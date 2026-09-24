@@ -1,4 +1,4 @@
-# Theme design pack: TP.1D upstream integration
+# Theme design pack: TP.1D cross-pack review
 
 **Status:** proposed review material, not an approved or complete design pack. TP.1A records shared decisions; TP.1B designs Now and Hourly, TP.1C designs Daily and Details, and TP.1D integrates the 20 theme/page cells and records explicit design-owner approval. TP.2 remains gated on TP.1D closure.
 
@@ -13,14 +13,19 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit and partial-A individual static-render review passed; owner approval pending.
 - [DETAILS.md](DETAILS.md): TP.1C partial B, proposed ordered metric groups, source/update/status separation, state behavior, and five theme mappings; documentation audit and partial-A individual static-render review passed; owner approval pending.
 
-- [INTEGRATED_PACK.md](INTEGRATED_PACK.md): reviewed Now/Hourly upstream table,
-  asset use, typed fixture, measurements and partial-A handoff; ten Daily/Details
-  cells are populated, with Daily/Details individually reviewed in partial-A. Twenty primary SVGs and twelve condition examples are in the
-  [render index](renders/README.md). D28/D29/D31 remain explicit appearance decisions.
+- [INTEGRATED_PACK.md](INTEGRATED_PACK.md): 20-cell cross-page/cross-theme review,
+  asset use, typed fixture, measurements and dependent packet handoff. Twenty
+  primary SVGs and twelve condition examples are in the [render index](renders/README.md).
+  D28/D29/D31 remain explicit owner appearance decisions.
+- [TP3_INSTALLED_COMPARISON.md](TP3_INSTALLED_COMPARISON.md): executable future
+  installed-app checklist for those 32 references and alternate typed states;
+  no installed result or owner approval is claimed.
 
-The upstream Now/Hourly review is complete; the full pack is not approved.
-TP.1D-partial-A completed Daily/Details integration and individual render
-review. Next TP.1D-partial-A-partial-B owns cross-pack review and explicit
-owner approval. TP.2 stays gated.
+The upstream Now/Hourly and partial-A Daily/Details individual reviews are
+complete. Cycle 029 cross-reviewed all 20 cells and 12 examples; its exact
+evidence is under `.codex/test-artifacts/029-tp-1d-final-integrated-pack-review/`.
+The dependent packet/decision cycle must freeze the proposed revision and
+obtain explicit owner disposition. The full pack is
+not approved; TP.2 stays gated.
 
 All measurements called *reference* describe a review target rather than a verified installed rendering. These static design references do not claim installed app or implementation acceptance.
