@@ -4,6 +4,20 @@ All images are **illustrative design references**, not installed screenshots.
 The [integrated pack](../INTEGRATED_PACK.md) defines geometry, facts, actions,
 source use and open decisions. [Fixture](fixture.json), [conditions](index.json),
 and [generator](generate.py) make this set reproducible.
+The proposed five-theme × six-condition mark source mapping is in
+[symbol-source-map.json](symbol-source-map.json); run
+`python docs/theme-system/design-pack/renders/audit_symbol_map.py` for its
+offline coverage, source-path, digest, and index audit. It does not change these
+existing render examples.
+The unindexed [Atmospheric Now light comparison](atmospheric-now-light-proposal.svg)
+is a derived, unapproved system-light palette proposal paired with the indexed
+dark candidate [Atmospheric Now](atmospheric-now.svg). It preserves the same
+393 × 852 dp viewport, font, fixture text, symbol source identity, and geometry.
+The [palette proposal](../proposals/atmospheric-light-palette.json) and
+`python docs/theme-system/design-pack/check_atmospheric_palette.py` document and
+audit the color-only mode mapping, role set, contrast pairs, and invariants.
+This comparison is deliberately outside the 32-reference index and does not
+change the frozen packet or resolve D31.
 The [TP.3 installed comparison checklist](../TP3_INSTALLED_COMPARISON.md)
 assigns evidence and result fields to all indexed renders and separately names
 installed-only states. No SVG is an installed-app pass.

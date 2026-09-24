@@ -78,6 +78,27 @@ These studies establish bounded mark footprint (40 dp hero, 36 dp entry); final
 personality-specific stroke detail remains D29. Off keeps those static marks and
 all text, removes backdrop effects, and resolves panels to opacity 1.
 
+The proposed [weather-symbol source map](renders/symbol-source-map.json) covers
+all six current `WeatherMarkCondition` identities across all five themes.
+Direct depictions name the theme's own source; inference is labeled as such.
+Only the established sun/cloud schematic study may be used as fallback, at the
+same 40 dp hero / 36 dp entry bounds. Where the source and fallback do not
+support a condition, the map specifies no mark. These marks remain decorative;
+visible condition text and semantics remain authoritative. The map is proposed,
+unapproved, and does not alter the existing 20 page cells or their fixtures.
+
+The separately labeled [Atmospheric light-palette proposal](proposals/atmospheric-light-palette.json)
+is derived material for review beside the unchanged dark catalog candidate. Its
+proposed system light/dark selection changes color values only; layout,
+typography, roles, facts, chronology, source mapping, and effects policy remain
+fixed. The separate unindexed [Atmospheric Now light comparison](renders/atmospheric-now-light-proposal.svg)
+uses the same fixture, mark identity, and geometry as the indexed dark Now
+reference. Approved references do not establish a complete light palette, so
+these colors are legibility-derived rather than source samples. This proposal
+does not choose D31's consistent dark-teal option A or shared blue/scenic option
+B; D31 and owner approval remain open. Its role/contrast and invariance audit is
+in `check_atmospheric_palette.py` and cycle-034 evidence.
+
 ## Twenty-cell integration table
 
 Daily/Details rows use the same shell and 24/0/24/0 dp reference insets. At the primary viewport, G/S/W are theme-specific as below; body top is 148/152/164/144/148 dp in theme order. Daily row height is `max(64, 2P + 20 + conditionLines×24 + lowHighLines×22 + precipitationLines×20 + 12)` and each row is full W; P is `spacingDp.panel`, gaps use `spacingDp.grid`. Its range and five supplied entries precede two bounded 48 dp controls and the source/update/status block. Details uses full-W source, update and status blocks before group panels. Each metric has a 56 dp minimum with content-driven wrapping; group height is `2P + headingLine + ΣmetricHeights + grid×(n−1)`. All bodies scroll vertically below the named selector. These formulas are inferred from the documented source crops and verified against the static renders, not claimed as source annotations.

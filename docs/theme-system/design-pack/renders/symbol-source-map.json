@@ -1,0 +1,318 @@
+{
+  "status": "proposed; unapproved",
+  "condition_set_source": "app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt#WeatherMarkCondition",
+  "themes": [
+    "atmospheric",
+    "glass",
+    "minimal_oled",
+    "instrument",
+    "terminal"
+  ],
+  "conditions": [
+    "CLEAR",
+    "PARTLY_CLOUDY",
+    "CLOUDY",
+    "RAIN",
+    "STORM",
+    "SNOW"
+  ],
+  "entries": [
+    {
+      "theme": "atmospheric",
+      "condition": "CLEAR",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "source_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "source_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "source_sha256": "ead18706370d65111ae6d8398f7bd7c2526c32aff000d1935ea59dae19c7e844",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "glass",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/sunny.png",
+      "source_sha256": "e72fa56b3c361252b338ddda929820692006f1cdc0a7d67ac34c168d03cabb80",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "glass",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to the established sun/cloud study; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "glass",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png",
+      "source_sha256": "ca07610cd1cc8b57035fd9cd1452aa776d1f6cf678ca4beb3d4a868d340b5ae3",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "glass",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/rain.png",
+      "source_sha256": "7f1afc5dd85d93a7ed14b46ef20331fffd6b8456b7c27a760c3166e858a10e0d",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "glass",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/storm.png",
+      "source_sha256": "645987d469f00ab2761d7a3d5a59f1dda57be2587ab0cdbc61b592485964564c",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "glass",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/03_iconography.png",
+      "source_sha256": "8ec1589c7ce3f69d086898cb367db1072f5465bef1e0ae934407cd4321e67efb",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "CLEAR",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "source_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "source_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "source_sha256": "cd0b454612bc2edcc2e3b3989dfc7445d838efed2f45fac31800ead53795517b",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "instrument",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/sunny.png",
+      "source_sha256": "255da302474f4b1a4fad8043ed2211c9d3655bd57e80ef3f0100418d5e9db16b",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "instrument",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to the established sun/cloud study; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "instrument",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png",
+      "source_sha256": "18cbea5b9ebe0992330c255ec32309b9dece74cbe13a3936675415bf434003b3",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "instrument",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/rain.png",
+      "source_sha256": "5e642bbc0a5f02a4e807306e791f686add377046f1233ba663f1bc993fdcb64d",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "instrument",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/storm.png",
+      "source_sha256": "703b959bb6fcd9270b1b5ffe242f2abbfab8caa55ce7e7ec29bdcab25b54bd77",
+      "treatment": "direct icon crop; condition family is visible in this theme-specific icon set",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "instrument",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/03_iconography.png",
+      "source_sha256": "da9396f70bee5d2f52bb2a503510896c6145ea5b80db9170c7fc5a0743bf6def",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "terminal",
+      "condition": "CLEAR",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "terminal",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "terminal",
+      "condition": "CLOUDY",
+      "source": "docs/theme-system/design-pack/INTEGRATED_PACK.md#measurable-composition",
+      "source_sha256": null,
+      "treatment": "schematic fallback; limited to sun/cloud forms already used by the integrated render studies; inference, not board detail",
+      "bounds_dp": {
+        "hero": 40,
+        "hourly": 36
+      }
+    },
+    {
+      "theme": "terminal",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "source_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "terminal",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "source_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    },
+    {
+      "theme": "terminal",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "source_sha256": "f16c891ed79df2f88d6853a3ec03312cb1d4a2b5803ab93b93a7fe27e74733f6",
+      "treatment": "no mark; approved source does not establish a theme-specific depiction and existing schematic fallback would add unsupported detail",
+      "bounds_dp": null
+    }
+  ]
+}

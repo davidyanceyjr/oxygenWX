@@ -24,10 +24,10 @@ def lines(s,size,width,family):
  assert all(measure(t,size,family)<=width+1 for t in result),(s,width)
  return result
 
-def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False,off=False,hc=False):
+def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False,off=False,hc=False,palette_override=None,suffix=''):
  E=OLD_E if page in ('Now','Hourly') else NEW_E
  t=json.loads((ROOT/f'docs/theme-system/tokens/catalog/{theme}.json').read_text())
- c=t['colors']; sp=t['spacingDp']; sf=t['surface']; off=off or theme in ['minimal_oled','terminal'];
+ c=palette_override or t['colors']; sp=t['spacingDp']; sf=t['surface']; off=off or theme in ['minimal_oled','terminal'];
  family='Fira Sans' if theme=='atmospheric' else ('Noto Sans Mono' if theme=='terminal' else 'Noto Sans')
  g=sp['gutter']; gap=sp['grid']; stack=sp['stack']; pad=sp['panel']; w=min(width-2*g,480); x=(width-w)/2
  primary=c['content']; secondary=primary if hc else c['secondaryData']; surf=c['surface']; outline=primary if hc else c['outline']
@@ -206,8 +206,9 @@ def render(theme,page,condition='primary',width=393,height=852,scale=1,rtl=False
  # At short heights, keeping both body and footer leaves < two rows: document-order fallback.
  # Each SVG captures scroll offset zero. Companion end/full captures prove reachable content.
  overflow=max(0,y-(height-24)); avail=height-24-bodytop
- name=f'{theme}-{page.lower()}'+('' if condition=='primary' else '-'+condition)
+ name=f'{theme}-{page.lower()}'+('' if condition=='primary' else '-'+condition)+suffix
  meta=dict(theme=theme,page=page,condition=condition,viewport=[width,height],fontScale=scale,rtl=rtl,effects='Off' if off else 'Subtle',contrast='High' if hc else 'Standard',insets=[24,0,24,0],bodyTop=bodytop,bodyHeight=y-bodytop,scrollMax=overflow,font=family,fixture='fixture.json',scrollOffset=0)
+ if palette_override:meta['paletteVariant']='derived-light-proposal'
  def svg(content,h):
   return f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{h}" viewBox="0 0 {width} {h}" font-family="{family}"><title>{NAMES[THEMES.index(theme)]} / {page} / {condition} — illustrative design reference</title><metadata>{html.escape(json.dumps(meta))}</metadata>'+''.join(content)+'</svg>\n'
  clip=f'<defs><clipPath id="body"><rect x="0" y="{bodytop}" width="{width}" height="{avail}"/></clipPath></defs>'
@@ -229,6 +230,7 @@ def main():
  global OLD_E, NEW_E
  parser=argparse.ArgumentParser(description='Generate TP.1D static references and review captures')
  parser.add_argument('--evidence-dir',type=Path,help='Write all PNG/full/end/bounds review captures here')
+ parser.add_argument('--atmospheric-light-proposal',action='store_true',help='Also write one unindexed Atmospheric Now comparison using the derived proposal palette')
  args=parser.parse_args()
  if args.evidence_dir:
   OLD_E=NEW_E=args.evidence_dir.resolve()
@@ -239,11 +241,26 @@ def main():
   for page in ['Now','Hourly','Daily','Details']:records.append(render(theme,page))
  records.extend([render('glass','Now','compact',360,640),render('glass','Hourly','font-1.3',scale=1.3),render('terminal','Hourly','rtl',rtl=True),render('atmospheric','Now','wide',840,900),render('glass','Now','effects-off',off=True),render('instrument','Hourly','high-contrast',hc=True)])
  records.extend([render('glass','Daily','compact',360,640),render('glass','Details','font-1.3',scale=1.3),render('terminal','Daily','rtl',rtl=True),render('atmospheric','Details','wide',840,900),render('glass','Daily','effects-off',off=True),render('instrument','Details','high-contrast',hc=True)])
+ if args.atmospheric_light_proposal:
+  proposal=json.loads((ROOT/'docs/theme-system/design-pack/proposals/atmospheric-light-palette.json').read_text())
+  render('atmospheric','Now',palette_override=proposal['light']['colors'],suffix='-light-proposal')
  (OUT/'index.json').write_text(json.dumps(records,indent=2)+'\n')
  for r in records:
   name=Path(r['file']).stem
   evidence=OLD_E if r['page'] in ('Now','Hourly') else NEW_E
   for src,dest in [(OUT/r['file'],evidence/(name+'.png')),(evidence/(name+'-full.svg'),evidence/(name+'-full.png')),(evidence/(name+'-end.svg'),evidence/(name+'-end.png'))]:
    subprocess.run(['rsvg-convert',str(src),'-o',str(dest)],check=True)
+ if args.atmospheric_light_proposal:
+  variants=[
+   render('atmospheric','Now','compact',360,640,palette_override=proposal['light']['colors'],suffix='-light-proposal'),
+   render('atmospheric','Now','font-1.3',scale=1.3,palette_override=proposal['light']['colors'],suffix='-light-proposal'),
+   render('atmospheric','Now','rtl',rtl=True,palette_override=proposal['light']['colors'],suffix='-light-proposal'),
+   render('atmospheric','Now','high-contrast',hc=True,palette_override=proposal['light']['colors'],suffix='-light-proposal'),
+   render('atmospheric','Now','effects-off',off=True,palette_override=proposal['light']['colors'],suffix='-light-proposal'),
+  ]
+  for r in variants:
+   name=Path(r['file']).stem
+   for src,dest in [(OUT/r['file'],OLD_E/(name+'.png')),(OLD_E/(name+'-full.svg'),OLD_E/(name+'-full.png')),(OLD_E/(name+'-end.svg'),OLD_E/(name+'-end.png'))]:
+    subprocess.run(['rsvg-convert',str(src),'-o',str(dest)],check=True)
  print('Generated 20 primary references, 12 examples, and full/end review captures.')
 if __name__=='__main__':main()

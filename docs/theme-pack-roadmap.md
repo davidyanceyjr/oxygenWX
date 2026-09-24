@@ -1,6 +1,25 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — TP.1D owner disposition planned
+## Execution head — TP.1D revised packet integration PLANNED
+
+**Completed: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A-partial-A — Atmospheric light palette proposal.** Plan:
+`.codex/plans/034-tp-1d-atmospheric-light-palette-proposal.md`; evidence and limitations:
+`.codex/history/2026-09-24-034-tp-1d-atmospheric-light-palette-proposal.md` and
+`.codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/`. The derived,
+unapproved light palette is paired with the unchanged dark candidate through a
+proposed system-mode color-only mapping. D31 remains open; neither scene option
+was selected. No runtime integration or packet assembly occurred.
+
+**Next planned: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A-partial-B — revised packet integration and independent audit.** Plan:
+`.codex/plans/033-tp-1d-atmospheric-variants-symbol-map-partial-B.md`. After both design-reference slices close, assemble and independently audit a new proposed packet revision. This separates the cross-pack inventory/manifest work from the design changes and keeps each slice below the 45% target. Owner disposition of that exact packet remains a later dependent step. D28, D29, and D31 stay pending unless source-backed upstream work explicitly resolves them; no approval is inferred.
+
+**Completed: TP.1D owner packet freeze, superseded for disposition.** Cycle
+031's original proposed packet remains immutable and archived at
+`.codex/test-artifacts/031-tp-1d-owner-packet-decision/packet/tp1d-proposed-r1-cycle029-checklist030/`.
+Its D28/D29/D31 disposition plan is no longer the next action because the
+owner requested a new packet revision first. Create a dependent
+owner-disposition plan against the new revision and digest after the 033B
+packet-integration and audit cycle closes.
 
 **Completed: TP.1D upstream Now/Hourly integration.** Plan:
 `.codex/plans/028-tp-1d-integrated-pack-review.md`. Its ten cells, ten primary
@@ -46,13 +65,15 @@ manifest aggregate SHA-256 is recorded in the cycle audit output. D28/D29/D31
 remain open; TP.1D/TP.1 remain open and TP.2 gated. No owner approval or
 installed-app result is claimed.
 
-**Planned dependent: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-B
+**Superseded planned dependent: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-B
 owner disposition.** Initial plan:
 `.codex/plans/032-tp-1d-owner-disposition.md`. It records explicit D28/D29/D31
-decisions against the exact frozen packet revision and digest. Only approval of
-that revision with all three decisions resolved permits TP.1D/TP.1 closure and
-TP.2 eligibility. Requested design changes return to a separately planned
-reference-revision slice. This decision record is not inferred from silence.
+decisions against the exact cycle-031 packet revision and digest. It is
+superseded as the next step because the owner requested a revised packet first;
+retain it as the historical plan, but create a fresh dependent disposition plan
+against the new packet digest after 033B closes. Only approval of that exact
+revision with all required decisions resolved permits TP.1D/TP.1 closure and
+TP.2 eligibility. This decision record is not inferred from silence.
 
 **Status:** adopted; TP.1 is ACTIVE, TP.1A, TP.1B, and TP.1C complete
 **Adopted:** 2026-09-23
