@@ -89,7 +89,7 @@ cross-pack matrix and unresolved appearance choices are in the
   surfaces/canvas and primary outlines; selection and disabled state remain textual.
 
 Weather strings are the same per page in every example. For source rationale and
-specific unresolved font/mark decisions, see [D27–D29](../SOURCE_DECISIONS.md#integrated-upstream-review-decisions).
+the source and history of the font/mark decisions, see [D27–D29](../SOURCE_DECISIONS.md#integrated-upstream-review-decisions); the separate D29 matrix is owner-approved in [WEATHER_ART.md](../WEATHER_ART.md).
 
 ## Daily/Details partial-A review
 

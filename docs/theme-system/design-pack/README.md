@@ -1,10 +1,10 @@
 # Theme design pack: TP.1D cross-pack review
 
-> **D29 weather art is partial and proposed.** [WEATHER_ART.md](WEATHER_ART.md)
-> specifies CLEAR, PARTLY_CLOUDY, and CLOUDY across five themes (15/30 cells).
-> RAIN, STORM, and SNOW plus integrated review are pending the dependent
-> `048-d29-source-mark-treatment-partial2` slice. No D29 owner approval or TP.1D
-> closure is implied.
+> **D29 weather art has a complete, owner-approved 30-cell matrix.**
+> [WEATHER_ART.md](WEATHER_ART.md) records the design owner's as-presented
+> approval, including Terminal's proposed tokens and explicit no-mark omissions.
+> This approves D29's matrix only; TP.1D packet approval, TP.1D closure, and
+> TP.2 eligibility remain pending their separate gates.
 
 **Status:** proposed review material, not an approved or complete design pack. TP.1A records shared decisions; TP.1B designs Now and Hourly, TP.1C designs Daily and Details, and TP.1D integrates the 20 theme/page cells and records explicit design-owner approval. TP.2 remains gated on TP.1D closure.
 
@@ -13,9 +13,10 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [FOUNDATION.md](FOUNDATION.md): shared canvas, shell, responsive constraints, and five-theme role/value matrix.
 - [REFERENCE_MEASUREMENT_METHOD.md](REFERENCE_MEASUREMENT_METHOD.md): proportional measurement and state-treatment derivation from reference art.
 - [CONTENT_AND_STATE_RULES.md](CONTENT_AND_STATE_RULES.md): presentation-model slots, state grammar, accessibility, RTL, and effects.
-- [WEATHER_ART.md](WEATHER_ART.md): partial D29 shared mark contract and 15 proposed theme/condition treatments; six-condition review remains open.
+- [WEATHER_ART.md](WEATHER_ART.md): complete D29 shared mark contract and owner-approved 30-cell theme/condition matrix, including direct sources, same-theme proposals, explicit omissions, and integrated review; the broader TP.1D pack remains unapproved.
 - [SOURCE_DECISIONS.md](SOURCE_DECISIONS.md): source ledger, conflicts, asset disposition, and owner decisions.
 - [D31_SOURCE_AUDIT.md](D31_SOURCE_AUDIT.md): source-traceable five-theme atmosphere inventory, measured backdrop samples, qualitative profiles, explicit source gaps, and audit limits; it does not approve page treatments.
+- [D31_PAGE_ATMOSPHERES.md](D31_PAGE_ATMOSPHERES.md): cycle 051 interim mapping of exactly five source-traceable, proposed Now atmosphere cells, one per built-in theme. Owner review is pending; the five Hourly cells are assigned to the planned dependent partial2 slice, and D31 remains open.
 - [NOW.md](NOW.md): TP.1B partial A, proposed Now composition and five theme mappings; measured, checked for model coverage, and reviewed in the upstream integrated renders.
 - [HOURLY.md](HOURLY.md): TP.1B partial B, proposed Hourly composition, six-entry grid, date/window controls and five theme mappings; measured, checked for model coverage, and reviewed in the upstream integrated renders.
 - [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit and partial-A individual static-render review passed; owner approval pending.
@@ -24,7 +25,8 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [INTEGRATED_PACK.md](INTEGRATED_PACK.md): 20-cell cross-page/cross-theme review,
   asset use, typed fixture, measurements and dependent packet handoff. Twenty
   primary SVGs and twelve condition examples are in the [render index](renders/README.md).
-  D28/D29/D31 remain explicit owner appearance decisions.
+  D28 and D31 remain explicit owner appearance decisions; the separate D29
+  weather-mark matrix is approved in [WEATHER_ART.md](WEATHER_ART.md).
 - [TP3_INSTALLED_COMPARISON.md](TP3_INSTALLED_COMPARISON.md): executable future
   installed-app checklist for those 32 references and alternate typed states;
   no installed result or owner approval is claimed.

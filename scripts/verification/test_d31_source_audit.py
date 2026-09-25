@@ -52,6 +52,25 @@ class D31SourceAuditTest(unittest.TestCase):
         def mutate(d): d["profiles"][THEMES[0]]["interpretation"] = ""
         self.assertTrue(any("profile Atmospheric: missing interpretation" in e for e in self.check(mutate)))
 
+    def test_unknown_profile_source_fails(self):
+        def mutate(d): d["profiles"]["Minimal OLED"]["sources_used"][2] = "oled-backdrop"
+        self.assertTrue(any("unknown sources_used ID 'oled-backdrop'" in e for e in self.check(mutate)))
+
+    def test_wrong_theme_profile_source_fails(self):
+        def mutate(d): d["profiles"]["Minimal OLED"]["sources_used"][2] = "terminal-backdrop"
+        self.assertTrue(any("belongs to 'Terminal'" in e for e in self.check(mutate)))
+
+    def test_non_string_and_duplicate_profile_sources_fail(self):
+        def mutate(d):
+            d["profiles"]["Atmospheric"]["sources_used"] = ["overview-board", "overview-board", 7]
+        errors = self.check(mutate)
+        self.assertTrue(any("duplicate sources_used ID 'overview-board'" in e for e in errors))
+        self.assertTrue(any("sources_used entries must be strings" in e for e in errors))
+
+    def test_profile_sources_must_be_an_array(self):
+        errors = self.check(lambda d: d["profiles"]["Atmospheric"].__setitem__("sources_used", "overview-board"))
+        self.assertTrue(any("sources_used must be a non-empty array" in e for e in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

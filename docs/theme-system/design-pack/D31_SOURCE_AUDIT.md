@@ -255,7 +255,7 @@ The JSON block is the machine-checked inventory. Locators name native-image regi
       "sources_used": [
         "overview-board",
         "minimal-oled-phone",
-        "oled-backdrop"
+        "minimal-oled-backdrop"
       ],
       "observation": "The phone crop is black-first with thin horizontal separators and no broad filled cards; a small moon/cloud image is confined to the hero. The backdrop is solid black: RGB=(0,0,0) at center-column y=400,1600,2800.",
       "interpretation": "The scene is deliberately sparse and the display field remains visually subordinate to typography and data. The tiny hero image is localized and does not imply a full-screen scenic backdrop.",

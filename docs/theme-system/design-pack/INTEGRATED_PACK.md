@@ -192,8 +192,10 @@ and full/end captures are in
 `.codex/test-artifacts/029-tp-1d-final-integrated-pack-review/`.
 The dependent TP.1D-partial-A-partial-B-partial-A cycle owns the practical
 TP.3 installed checklist, frozen review packet and explicit owner decision.
-D28 font choice, D29 mark detail and D31 Atmospheric palette/scene fit remain
-bounded owner decisions. D31's source sample corrects the earlier description:
+D28 font choice, D29 mark detail and D31 Atmospheric palette/scene fit were
+bounded owner decisions at the time of this review. On 2026-09-24, the owner
+approved the separate 30-cell D29 weather-mark matrix as presented; this does
+not approve this integrated pack or the TP.1D packet. D31's source sample corrects the earlier description:
 the scenic Now region is bright blue, while the Daily preview is dark blue;
 the current four-page proposal is consistently dark teal. See
 [D31](SOURCE_DECISIONS.md#integrated-upstream-review-decisions) for measured

@@ -1,47 +1,407 @@
-# Weather art and mark treatment — partial D29 proposal
+# Weather art and mark treatment — complete D29 proposal
 
-**Coverage:** partial. This document specifies CLEAR, PARTLY_CLOUDY, and CLOUDY for five themes (15 of 30 cells). RAIN, STORM, and SNOW remain pending the dependent part 2 review. These are proposed design decisions, not owner-approved art, D29 completion, TP.1D approval, or permission to revise the pinned packet.
+**Coverage:** complete 30-cell D29 matrix for six existing conditions × five built-in themes. The design owner approved the matrix as presented on 2026-09-24, including its same-theme proposals and explicit no-mark omissions. This approval is limited to the D29 weather-mark design; it does not approve the TP.1D packet or authorize runtime work.
 
 ## Shared mark contract
 
-The mark supplements supplied condition text; it never carries weather meaning by itself. It is decorative and noninteractive. It may be hidden from accessibility only when equivalent visible condition text and semantics are present. A null `WeatherMarkCondition` produces no mark. The only supported identities are the six enum values in `app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt#WeatherMarkCondition`; this partial matrix covers three. Theme identity is the `WeatherThemeId` catalog in `app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeCatalog.kt`: `atmospheric`, `glass`, `minimal_oled`, `instrument`, and `terminal`.
+The mark supplements supplied condition text; it never carries weather meaning by itself. It is decorative and noninteractive. It may be hidden from accessibility only when equivalent visible condition text and semantics are present. A null `WeatherMarkCondition` produces no mark. The supported identities are the six enum values in `app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt#WeatherMarkCondition`. Theme identity is the `WeatherThemeId` catalog in `app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeCatalog.kt`: `atmospheric`, `glass`, `minimal_oled`, `instrument`, and `terminal`.
 
 Marks fit within the existing component slot: up to 40 dp square in a current-condition hero and 36 dp square in an hourly or daily entry. Keep strokes and negative spaces legible at the smaller size; use no internal labels, numbers, animated particles, or tiny detail. Marks cannot imply time of day, severity, precipitation, or a more specific state than the typed condition. Do not infer a condition from the background.
 
-Use the selected theme's condition/foreground role. On image-like or gradient backdrops, retain a solid high-contrast silhouette or a subtle opaque local backing where needed; on flat surfaces use the theme's normal foreground contrast. High contrast strengthens the outline/foreground without changing shape or meaning. Effects Off removes all glow, blur, translucency, and motion from marks and keeps an opaque, static, complete mark or its text fallback. If contrast or size cannot be maintained, omit the mark and keep the visible condition text.
+Use the selected theme's condition/foreground role. On image-like or gradient backdrops, retain a solid high-contrast silhouette or a subtle opaque local backing where needed; on flat surfaces use the theme's normal foreground contrast. High contrast strengthens the outline/foreground without changing shape or meaning. Effects Off removes glow, blur, translucency, and motion from marks and keeps an opaque, static, complete mark or its text fallback. If contrast or size cannot be maintained, omit the mark and keep visible condition text. Each cell identifies its source locator, source status, proposed treatment or explicit omission, footprint, contrast behavior, and fallback.
 
-Each cell records its traceable source, locator, source status, proposed treatment, bound, background/contrast behavior, and fallback. “Direct” means a condition-specific mark is visibly present in that theme's cited source; a phone composition or palette is not direct mark art. All treatments below remain proposals pending design-owner review. The generic shared SVGs and the D32 `symbol-source-map.json` were audited as references only; neither is D29 approval or a substitute for a theme-specific source.
+“Direct” means a condition-specific mark is visibly present in that theme's cited source. “Adapted” identifies a direct source whose framing is removed or simplified. “Proposed” cites a same-theme visual basis but records that direct condition-specific mark art is absent. “Gap” records that no direct source art was found and intentionally omits the mark. The shared condition SVGs and D32 `symbol-source-map.json` are reconciliation evidence only; neither establishes D29 approval.
 
-## Partial matrix (15 cells)
+## Complete proposed matrix (30 cells)
 
 <!-- WEATHER_ART_MATRIX:BEGIN -->
 ```json
 {
-  "coverage": "partial",
-  "covered_conditions": ["CLEAR", "PARTLY_CLOUDY", "CLOUDY"],
-  "pending_conditions": ["RAIN", "STORM", "SNOW"],
-  "status": "proposed; owner review pending",
+  "coverage": "complete",
+  "covered_conditions": [
+    "CLEAR",
+    "PARTLY_CLOUDY",
+    "CLOUDY",
+    "RAIN",
+    "STORM",
+    "SNOW"
+  ],
+  "pending_conditions": [],
+  "status": "owner-approved proposed matrix",
+  "owner_decision": {
+    "date": "2026-09-24",
+    "disposition": "approved as presented",
+    "scope": "D29 30-cell weather-mark matrix only",
+    "reviewed_artifact_sha256": "e2fec17fe1fde1a18b3161aa08dc72fb520ea53769c19e9112311ea3d56b9792"
+  },
   "cells": [
-    {"theme":"atmospheric","condition":"CLEAR","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png","locator":"upper Now hero: current-condition area beside the condition label","source_status":"proposed","treatment":"Draw an open editorial sun: thin, even circular outline with eight short separated rays; no disc fill or horizon scene inside the mark.","footprint":"Hero 40 dp; forecast 36 dp square; one outline and eight rays maximum.","background_contrast":"Use the pale foreground/condition role with a restrained dark keyline over the luminous sky; use a single high-contrast outline on surfaces.","fallback":"If rays merge at 36 dp or contrast fails, use a simple outlined sun or omit it beside visible Clear text."},
-    {"theme":"glass","condition":"CLEAR","source":"docs/assets/design-references/production-themes/glass/extracted/icons/sunny.png","locator":"03_iconography crop, Sunny icon centered above its caption","source_status":"direct","treatment":"Adapt the source's fine white circular sun and separated short rays; remove the circular glass medallion and caption from the mark.","footprint":"Hero 40 dp; forecast 36 dp square; preserve open center and separated rays.","background_contrast":"Use a solid light stroke over dark glass gradients; add a small opaque local backing only where the gradient defeats contrast. High contrast removes glow and raises stroke contrast.","fallback":"If detached rays lose definition at 36 dp, reduce to a clean sun outline or omit beside visible Clear text."},
-    {"theme":"minimal_oled","condition":"CLEAR","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png","locator":"top Now hero: condition mark adjacent to the visible condition line","source_status":"proposed","treatment":"Use a spare monochrome sun outline with a small open center and four short cardinal rays; avoid gradients, glow, fill, or accent-color dependence.","footprint":"Hero 40 dp; forecast 36 dp square; one contour plus four rays.","background_contrast":"Use a white or theme foreground outline on pure black and near-black surfaces; high contrast uses the strongest available foreground.","fallback":"At small sizes collapse to the circle-and-rays outline; omit if it competes with text or loses contrast."},
-    {"theme":"instrument","condition":"CLEAR","source":"docs/assets/design-references/production-themes/instrument/extracted/icons/sunny.png","locator":"03_iconography crop, Sunny icon centered above its caption","source_status":"direct","treatment":"Adapt the source's hard-edged amber sun outline and separated rays; remove its circular panel and caption, and keep the technical geometry unfilled.","footprint":"Hero 40 dp; forecast 36 dp square; fixed stroke and at most eight rays.","background_contrast":"Use a high-contrast condition stroke on instrument panels; retain an opaque single-color outline over the grid. High contrast strengthens the outline, not the warning colors.","fallback":"If the rays crowd the forecast slot, use the source's central sun contour only or omit beside visible Clear text."},
-    {"theme":"terminal","condition":"CLEAR","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png","locator":"upper forecast/condition readout in the terminal phone crop; no dedicated sun glyph is shown","source_status":"proposed","treatment":"Use a compact text-console token `[SUN]` in monospace, with no pictographic sun, cursor blink, or decorative box.","footprint":"One line, no more than five uppercase glyphs, aligned to the existing condition text slot.","background_contrast":"Use terminal foreground green on the opaque dark canvas; high contrast keeps the same token at full foreground contrast.","fallback":"If the token cannot fit without truncating condition text, omit it and retain visible Clear text."},
-    {"theme":"atmospheric","condition":"PARTLY_CLOUDY","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png","locator":"upper Now hero: condition area beside the visible partly-cloudy label","source_status":"proposed","treatment":"Layer a small open sun behind one low, smooth cloud contour; keep the sun partly occluded and use no sky, horizon, or extra cloud wisps.","footprint":"Hero 40 dp; forecast 36 dp square; one sun and one cloud silhouette/contour only.","background_contrast":"Use a light cloud contour and differentiated warm sun accent with a restrained dark keyline over the atmospheric field; use solid high-contrast outlines on surfaces.","fallback":"Remove the sun rays first if crowded; if the sun/cloud relation is unclear, omit beside visible Partly cloudy text."},
-    {"theme":"glass","condition":"PARTLY_CLOUDY","source":"docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png","locator":"03_iconography crop, Cloudy icon centered above its caption; cited as the same-theme cloud-form basis, not a partly-cloudy source","source_status":"proposed","treatment":"Use the theme's rounded white cloud contour in front of a smaller unfilled sun with four short rays; separate layers without the source's circular glass medallion.","footprint":"Hero 40 dp; forecast 36 dp square; one cloud and one sun, with no extra layers.","background_contrast":"Use a solid light cloud line and warm sun line over dark glass gradients; no transparency in Effects Off. Add opaque local backing only if contrast needs it.","fallback":"Drop rays before reducing line weight; if the partly-cloudy relation is ambiguous, omit beside visible Partly cloudy text."},
-    {"theme":"minimal_oled","condition":"PARTLY_CLOUDY","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png","locator":"top Now hero: condition mark area adjacent to the visible condition line","source_status":"proposed","treatment":"Use a white outlined cloud overlapping a smaller thin sun circle; omit rays and accent fills to retain the OLED theme's reduced-detail language.","footprint":"Hero 40 dp; forecast 36 dp square; two contours only, with clear overlap order.","background_contrast":"Use white foreground lines on pure black; no glow, gradients, or translucent overlays. High contrast uses full foreground white.","fallback":"If the overlapping contours merge at 36 dp, show the cloud contour alone only when adjacent text retains Partly cloudy; otherwise omit."},
-    {"theme":"instrument","condition":"PARTLY_CLOUDY","source":"docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png","locator":"03_iconography crop, Cloudy icon centered above its caption; cited as the same-theme cloud-form basis, not a partly-cloudy source","source_status":"proposed","treatment":"Place a compact amber sun disc/outline behind the source's angular white cloud contour; keep the cloud frontmost and omit panel chrome, scales, or readouts.","footprint":"Hero 40 dp; forecast 36 dp square; one sun and one cloud contour, at most four sun rays.","background_contrast":"Use separated amber and light foreground strokes on the opaque instrument panel; high contrast thickens both contours without using alert colors.","fallback":"Remove sun rays if crowded; if the overlap does not read clearly, omit beside visible Partly cloudy text."},
-    {"theme":"terminal","condition":"PARTLY_CLOUDY","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png","locator":"upper condition readout in the terminal phone crop; no dedicated partly-cloudy glyph is shown","source_status":"proposed","treatment":"Use the literal monospace token `[SUN+CLOUD]`; do not draw ASCII weather art or use blinking/animated characters.","footprint":"A single text token up to 12 monospaced characters in the condition slot.","background_contrast":"Use terminal foreground green on opaque dark canvas; high contrast changes contrast only, not token content.","fallback":"If the token crowds or truncates the supplied condition, omit it and keep visible Partly cloudy text."},
-    {"theme":"atmospheric","condition":"CLOUDY","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png","locator":"upper Now hero: condition area beside the visible cloudy label","source_status":"proposed","treatment":"Use one broad, soft-edged layered cloud outline with two restrained lobes; no sun, rain, or atmospheric scene inside the mark.","footprint":"Hero 40 dp; forecast 36 dp square; one silhouette/contour with at most three lobes.","background_contrast":"Use a pale foreground cloud with a thin dark keyline over the atmospheric field; use a solid high-contrast outline on surfaces.","fallback":"Simplify to one cloud contour if internal layering blurs; omit if the outline cannot separate from a light sky region."},
-    {"theme":"glass","condition":"CLOUDY","source":"docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png","locator":"03_iconography crop, Cloudy icon centered above its caption","source_status":"direct","treatment":"Adapt the source's rounded white cloud contour; remove the circular medallion and caption, retain its smooth continuous outline and subtle interior depth only if static contrast remains clear.","footprint":"Hero 40 dp; forecast 36 dp square; one cloud with no more than three visible lobes.","background_contrast":"Use a solid light outline over dark gradients; interior depth must remain opaque/static in Effects Off. High contrast removes depth and keeps the contour.","fallback":"Use the outline alone when the interior treatment merges with the background; otherwise omit beside visible Cloudy text."},
-    {"theme":"minimal_oled","condition":"CLOUDY","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png","locator":"top Now hero: condition mark area adjacent to the visible condition line","source_status":"proposed","treatment":"Use one simple white cloud outline with two broad lobes and an open interior; no shaded fill or secondary contour.","footprint":"Hero 40 dp; forecast 36 dp square; one stroke contour, at most two lobes.","background_contrast":"Use white line on pure black or near-black surfaces; Effects Off is identical and static.","fallback":"Increase contour separation at 36 dp; omit if the outline reads as another condition or loses legibility."},
-    {"theme":"instrument","condition":"CLOUDY","source":"docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png","locator":"03_iconography crop, Cloudy icon centered above its caption","source_status":"direct","treatment":"Adapt the source's crisp white cloud outline and three-part angular contour; remove its circular panel, caption, and any icon-sheet framing.","footprint":"Hero 40 dp; forecast 36 dp square; one angular contour with at most three lobes.","background_contrast":"Use a solid foreground outline against the opaque panel/grid; high contrast increases stroke visibility without adding a status color.","fallback":"Reduce contour corners/detail if needed at 36 dp; omit rather than fill with a low-contrast gray."},
-    {"theme":"terminal","condition":"CLOUDY","source":"docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png","locator":"upper condition readout in the terminal phone crop; no dedicated cloud glyph is shown","source_status":"proposed","treatment":"Use the literal monospace token `[CLOUD]`; avoid ASCII cloud outlines, box drawing, blinking cursor, or changing the supplied condition text.","footprint":"One line of six uppercase characters in the condition slot.","background_contrast":"Use terminal foreground green on opaque dark canvas; high contrast retains the token with full foreground contrast.","fallback":"Omit the token if it displaces or truncates visible Cloudy text. Use no mark when condition is null."}
-  ]
+    {
+      "theme": "atmospheric",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "locator": "upper Now hero: current-condition area beside the condition label",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Draw an open editorial sun: thin, even circular outline with eight short separated rays; no disc fill or horizon scene inside the mark. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one outline and eight rays maximum.",
+      "background_contrast": "Use the pale foreground/condition role with a restrained dark keyline over the luminous sky; use a single high-contrast outline on surfaces.",
+      "fallback": "If rays merge at 36 dp or contrast fails, use a simple outlined sun or omit it beside visible Clear text."
+    },
+    {
+      "theme": "glass",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/sunny.png",
+      "locator": "03_iconography crop, Sunny icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the source's fine white circular sun and separated short rays; remove the circular glass medallion and caption from the mark.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; preserve open center and separated rays.",
+      "background_contrast": "Use a solid light stroke over dark glass gradients; add a small opaque local backing only where the gradient defeats contrast. High contrast removes glow and raises stroke contrast.",
+      "fallback": "If detached rays lose definition at 36 dp, reduce to a clean sun outline or omit beside visible Clear text."
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "locator": "top Now hero: condition mark adjacent to the visible condition line",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use a spare monochrome sun outline with a small open center and four short cardinal rays; avoid gradients, glow, fill, or accent-color dependence. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one contour plus four rays.",
+      "background_contrast": "Use a white or theme foreground outline on pure black and near-black surfaces; high contrast uses the strongest available foreground.",
+      "fallback": "At small sizes collapse to the circle-and-rays outline; omit if it competes with text or loses contrast."
+    },
+    {
+      "theme": "instrument",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/sunny.png",
+      "locator": "03_iconography crop, Sunny icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the source's hard-edged amber sun outline and separated rays; remove its circular panel and caption, and keep the technical geometry unfilled.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; fixed stroke and at most eight rays.",
+      "background_contrast": "Use a high-contrast condition stroke on instrument panels; retain an opaque single-color outline over the grid. High contrast strengthens the outline, not the warning colors.",
+      "fallback": "If the rays crowd the forecast slot, use the source's central sun contour only or omit beside visible Clear text."
+    },
+    {
+      "theme": "terminal",
+      "condition": "CLEAR",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "locator": "upper forecast/condition readout in the terminal phone crop; no dedicated sun glyph is shown",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use a compact text-console token `[SUN]` in monospace, with no pictographic sun, cursor blink, or decorative box. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "One line, no more than five uppercase glyphs, aligned to the existing condition text slot.",
+      "background_contrast": "Use terminal foreground green on the opaque dark canvas; high contrast keeps the same token at full foreground contrast.",
+      "fallback": "If the token cannot fit without truncating condition text, omit it and retain visible Clear text."
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "locator": "upper Now hero: condition area beside the visible partly-cloudy label",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Layer a small open sun behind one low, smooth cloud contour; keep the sun partly occluded and use no sky, horizon, or extra cloud wisps. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one sun and one cloud silhouette/contour only.",
+      "background_contrast": "Use a light cloud contour and differentiated warm sun accent with a restrained dark keyline over the atmospheric field; use solid high-contrast outlines on surfaces.",
+      "fallback": "Remove the sun rays first if crowded; if the sun/cloud relation is unclear, omit beside visible Partly cloudy text."
+    },
+    {
+      "theme": "glass",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png",
+      "locator": "03_iconography crop, Cloudy icon centered above its caption; cited as the same-theme cloud-form basis, not a partly-cloudy source",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use the theme's rounded white cloud contour in front of a smaller unfilled sun with four short rays; separate layers without the source's circular glass medallion. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one cloud and one sun, with no extra layers.",
+      "background_contrast": "Use a solid light cloud line and warm sun line over dark glass gradients; no transparency in Effects Off. Add opaque local backing only if contrast needs it.",
+      "fallback": "Drop rays before reducing line weight; if the partly-cloudy relation is ambiguous, omit beside visible Partly cloudy text."
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "locator": "top Now hero: condition mark area adjacent to the visible condition line",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use a white outlined cloud overlapping a smaller thin sun circle; omit rays and accent fills to retain the OLED theme's reduced-detail language. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; two contours only, with clear overlap order.",
+      "background_contrast": "Use white foreground lines on pure black; no glow, gradients, or translucent overlays. High contrast uses full foreground white.",
+      "fallback": "If the overlapping contours merge at 36 dp, show the cloud contour alone only when adjacent text retains Partly cloudy; otherwise omit."
+    },
+    {
+      "theme": "instrument",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png",
+      "locator": "03_iconography crop, Cloudy icon centered above its caption; cited as the same-theme cloud-form basis, not a partly-cloudy source",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Place a compact amber sun disc/outline behind the source's angular white cloud contour; keep the cloud frontmost and omit panel chrome, scales, or readouts. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one sun and one cloud contour, at most four sun rays.",
+      "background_contrast": "Use separated amber and light foreground strokes on the opaque instrument panel; high contrast thickens both contours without using alert colors.",
+      "fallback": "Remove sun rays if crowded; if the overlap does not read clearly, omit beside visible Partly cloudy text."
+    },
+    {
+      "theme": "terminal",
+      "condition": "PARTLY_CLOUDY",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "locator": "upper condition readout in the terminal phone crop; no dedicated partly-cloudy glyph is shown",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use the literal monospace token `[SUN+CLOUD]`; do not draw ASCII weather art or use blinking/animated characters. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "A single text token up to 12 monospaced characters in the condition slot.",
+      "background_contrast": "Use terminal foreground green on opaque dark canvas; high contrast changes contrast only, not token content.",
+      "fallback": "If the token crowds or truncates the supplied condition, omit it and keep visible Partly cloudy text."
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "locator": "upper Now hero: condition area beside the visible cloudy label",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use one broad, soft-edged layered cloud outline with two restrained lobes; no sun, rain, or atmospheric scene inside the mark. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one silhouette/contour with at most three lobes.",
+      "background_contrast": "Use a pale foreground cloud with a thin dark keyline over the atmospheric field; use a solid high-contrast outline on surfaces.",
+      "fallback": "Simplify to one cloud contour if internal layering blurs; omit if the outline cannot separate from a light sky region."
+    },
+    {
+      "theme": "glass",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/cloudy.png",
+      "locator": "03_iconography crop, Cloudy icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the source's rounded white cloud contour; remove the circular medallion and caption, retain its smooth continuous outline and subtle interior depth only if static contrast remains clear.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one cloud with no more than three visible lobes.",
+      "background_contrast": "Use a solid light outline over dark gradients; interior depth must remain opaque/static in Effects Off. High contrast removes depth and keeps the contour.",
+      "fallback": "Use the outline alone when the interior treatment merges with the background; otherwise omit beside visible Cloudy text."
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "locator": "top Now hero: condition mark area adjacent to the visible condition line",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use one simple white cloud outline with two broad lobes and an open interior; no shaded fill or secondary contour. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one stroke contour, at most two lobes.",
+      "background_contrast": "Use white line on pure black or near-black surfaces; Effects Off is identical and static.",
+      "fallback": "Increase contour separation at 36 dp; omit if the outline reads as another condition or loses legibility."
+    },
+    {
+      "theme": "instrument",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/cloudy.png",
+      "locator": "03_iconography crop, Cloudy icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the source's crisp white cloud outline and three-part angular contour; remove its circular panel, caption, and any icon-sheet framing.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one angular contour with at most three lobes.",
+      "background_contrast": "Use a solid foreground outline against the opaque panel/grid; high contrast increases stroke visibility without adding a status color.",
+      "fallback": "Reduce contour corners/detail if needed at 36 dp; omit rather than fill with a low-contrast gray."
+    },
+    {
+      "theme": "terminal",
+      "condition": "CLOUDY",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "locator": "upper condition readout in the terminal phone crop; no dedicated cloud glyph is shown",
+      "source_status": "proposed",
+      "treatment": "Same-theme visual basis: Use the literal monospace token `[CLOUD]`; avoid ASCII cloud outlines, box drawing, blinking cursor, or changing the supplied condition text. The cited phone crop or condition icon is a theme-style basis only; no direct condition-specific mark is shown for this cell.",
+      "footprint": "One line of six uppercase characters in the condition slot.",
+      "background_contrast": "Use terminal foreground green on opaque dark canvas; high contrast retains the token with full foreground contrast.",
+      "fallback": "Omit the token if it displaces or truncates visible Cloudy text. Use no mark when condition is null."
+    },
+    {
+      "theme": "glass",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/rain.png",
+      "locator": "03_iconography crop, Rain icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the direct source white cloud contour with separated cyan drops; remove the circular icon-sheet medallion and caption. Keep the drops/lightning static and separate from the cloud contour.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one cloud contour and at most three precipitation strokes.",
+      "background_contrast": "Use the source blue-violet source colors on the theme surface; retain a solid, high-contrast silhouette over gradients. Effects Off uses opaque static strokes; High contrast strengthens contrast without changing condition shape.",
+      "fallback": "If precipitation strokes merge at 36 dp, simplify to the cloud plus fewer strokes or omit beside visible Rain text."
+    },
+    {
+      "theme": "glass",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/icons/storm.png",
+      "locator": "03_iconography crop, Storm icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the direct source violet lightning bolt beneath a white cloud contour; remove the circular icon-sheet medallion and caption. Keep the drops/lightning static and separate from the cloud contour.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one cloud contour and at most three precipitation strokes.",
+      "background_contrast": "Use the source blue-violet source colors on the theme surface; retain a solid, high-contrast silhouette over gradients. Effects Off uses opaque static strokes; High contrast strengthens contrast without changing condition shape.",
+      "fallback": "If precipitation strokes merge at 36 dp, simplify to the cloud plus fewer strokes or omit beside visible Storm text."
+    },
+    {
+      "theme": "instrument",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/rain.png",
+      "locator": "03_iconography crop, Rain icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the direct source white cloud contour with separated cyan drops; remove the circular icon-sheet medallion and caption. Keep the drops/lightning static and separate from the cloud contour.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one cloud contour and at most three precipitation strokes.",
+      "background_contrast": "Use the source white/cyan source colors on the theme surface; retain a solid, high-contrast silhouette over gradients. Effects Off uses opaque static strokes; High contrast strengthens contrast without changing condition shape.",
+      "fallback": "If precipitation strokes merge at 36 dp, simplify to the cloud plus fewer strokes or omit beside visible Rain text."
+    },
+    {
+      "theme": "instrument",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/icons/storm.png",
+      "locator": "03_iconography crop, Storm icon centered above its caption",
+      "source_status": "direct",
+      "treatment": "Adapt the direct source white angular cloud contour and cyan lightning bolt; remove the circular icon-sheet medallion and caption. Keep the drops/lightning static and separate from the cloud contour.",
+      "footprint": "Hero 40 dp; forecast 36 dp square; one cloud contour and at most three precipitation strokes.",
+      "background_contrast": "Use the source white/cyan source colors on the theme surface; retain a solid, high-contrast silhouette over gradients. Effects Off uses opaque static strokes; High contrast strengthens contrast without changing condition shape.",
+      "fallback": "If precipitation strokes merge at 36 dp, simplify to the cloud plus fewer strokes or omit beside visible Storm text."
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "locator": "upper Now condition and weather scene crop; no isolated condition-mark set or snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Rain mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Rain condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Rain text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "locator": "upper Now condition and weather scene crop; no isolated condition-mark set or snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Storm mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Storm condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Storm text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "atmospheric",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "locator": "upper Now condition and weather scene crop; no isolated condition-mark set or snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Snow mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Snow condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Snow text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "glass",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/glass/extracted/03_iconography.png",
+      "locator": "03_iconography sheet: reviewed condition examples include Sunny, Cloudy, Rain, and Storm; no Snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Snow mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Snow condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Snow text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "locator": "Now condition and forecast crop; no isolated condition-mark set or snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Rain mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Rain condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Rain text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "locator": "Now condition and forecast crop; no isolated condition-mark set or snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Storm mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Storm condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Storm text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "minimal_oled",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "locator": "Now condition and forecast crop; no isolated condition-mark set or snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Snow mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Snow condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Snow text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "instrument",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/instrument/extracted/03_iconography.png",
+      "locator": "03_iconography sheet: reviewed condition examples include Sunny, Cloudy, Rain, and Storm; no Snow glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Snow mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Snow condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Snow text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "terminal",
+      "condition": "RAIN",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "locator": "upper condition readout and forecast crop; no dedicated snow token/glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Rain mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Rain condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Rain text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "terminal",
+      "condition": "STORM",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "locator": "upper condition readout and forecast crop; no dedicated snow token/glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Storm mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Storm condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Storm text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    },
+    {
+      "theme": "terminal",
+      "condition": "SNOW",
+      "source": "docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "locator": "upper condition readout and forecast crop; no dedicated snow token/glyph is shown",
+      "source_status": "gap",
+      "treatment": "No direct Snow mark is present in the cited same-theme source; intentionally omit the mark rather than infer unsupported theme-specific detail. Keep the supplied Snow condition text unchanged.",
+      "footprint": "None; no mark is drawn for this source gap.",
+      "background_contrast": "No mark is present, so contrast treatment does not apply; preserve the existing text contrast and Effects Off completeness.",
+      "fallback": "Retain visible Snow text and its existing semantics; show no mark until a reviewed theme-specific treatment exists."
+    }
+  ],
+  "themes": [
+    "atmospheric",
+    "glass",
+    "minimal_oled",
+    "instrument",
+    "terminal"
+  ],
+  "cell_count": 30
 }
 ```
 <!-- WEATHER_ART_MATRIX:END -->
 
-## Review boundary and next step
+## Owner decision
 
-The structural checker verifies identities, coverage, fields, and trace paths; it does not establish visual quality, licensing, installed accessibility, or approval. Part 1's next step is the dependent `048-d29-source-mark-treatment-partial2` slice: add RAIN, STORM, and SNOW across all five themes, then review all 30 cells together. D29, owner review, TP.1D, and the pinned packet remain open.
+On 2026-09-24, after being asked to approve the complete matrix as presented or
+request named changes, the design owner stated: “I like the cell matrix, I didn't
+discover any problems without use.” This is recorded as **approved as
+presented**, with no cell-specific revisions requested. The disposition covers
+all 30 cells, including the Terminal CLEAR/PARTLY_CLOUDY/CLOUDY console tokens
+and the explicit no-mark source-gap omissions.
+
+Reviewed artifact SHA-256 before recording this decision:
+`e2fec17fe1fde1a18b3161aa08dc72fb520ea53769c19e9112311ea3d56b9792`.
+
+This decision approves the D29 design matrix only. It does not approve the
+immutable TP.1D packet, resolve other D tracks, close TP.1D/TP.1, authorize
+runtime implementation, or make TP.2 eligible.
+
+## Integrated review — cycle 048 partial-B
+
+The integrated structural/source review reconciled all 30 theme-condition pairs against the six `WeatherMarkCondition` values, five theme identities, the cited per-theme iconography and overview crops, shared condition SVGs, and D32 `symbol-source-map.json`.
+
+- Coverage is exactly one cell per pair; 30 keys are unique. Every source path resolves and every locator points to a specific icon crop or named phone/overview region.
+- Eight cells use direct source art: Glass and Instrument CLEAR/CLOUDY/RAIN/STORM. Their icon-sheet framing is explicitly removed or simplified in the proposed treatment. Eleven existing cells remain same-theme proposals where the cited crop establishes theme language but no direct condition-specific mark. Eleven RAIN/STORM/SNOW cells are explicit source-gap omissions for Atmospheric, Minimal OLED, and Terminal, plus SNOW for Glass and Instrument. The visible condition text remains the fallback.
+- Reconciliation found a D32 difference in Terminal: the D29 CLEAR/PARTLY_CLOUDY/CLOUDY proposals use literal console tokens, while D32 describes schematic sun/cloud forms. The owner approved the D29 matrix as presented, including those tokens. This resolves the D29 design choice for the matrix; it does not amend or approve the separate D32 map. D32's no-mark gap handling for RAIN/STORM/SNOW aligns with the omissions added here.
+- Shared RAIN/STORM/SNOW SVGs are generic examples rather than theme-specific sources; no cell labels them as direct theme art. The reviewed Glass and Instrument icon sheets contain no Snow glyph.
+- Structural checks establish identity coverage, trace paths, and document consistency only. They do not establish visual quality, licensing, installed accessibility, or design-owner approval.
+
+**Review outcome:** documentary matrix and traceability review complete; the owner approved the D29 matrix as presented on 2026-09-24. D29 design approval does not close TP.1D/TP.1; TP.2 remains gated.

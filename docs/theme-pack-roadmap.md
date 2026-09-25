@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — D-track prerequisite gate; D29 part 1 delivered; TP.1D remains open
+## Execution head — D-track prerequisite gate; D29 matrix owner-approved; TP.1D remains open
 
 **Owner direction for pinned revision `tp1d-proposed-r2-symbol033-palette034`**
 with aggregate SHA-256
@@ -22,7 +22,8 @@ for each theme where it appears.
 This is a revise disposition, not approval of the packet. The exact packet stays
 immutable and TP.1D/TP.1 remain unresolved. **Every D track and its required
 design, review, and owner decision must be completed before TP.1/TP.1D can be
-resolved.** D28's decision is recorded above; D29 and D31 remain planned. Any
+resolved.** D28's decision is recorded above; D29's matrix is owner-approved,
+while D31 is active in its Now-atmosphere mapping slice. Any
 future D track added to this roadmap joins the same prerequisite gate. After all
 D tracks are complete, a new exact packet revision must receive explicit
 approval before TP.1/TP.1D closes or TP.2 becomes eligible.
@@ -38,23 +39,31 @@ missing-data behavior, or accessibility meaning. The resolved-appearance
 boundary and the five built-in identities remain one application with many
 looks.
 
-#### D29 — Theme-specific art and vector detail — ACTIVE (part 1 delivered; part 2 planned, 15/30 cells)
+#### D29 — Theme-specific art and vector detail — OWNER APPROVED (MATRIX)
 
-**Execution slicing:** Cycle `048-d29-source-mark-treatment` completed the
-first slice. It defines the shared mark contract and the 15 CLEAR,
-PARTLY_CLOUDY, and CLOUDY cells across the five themes. Its dependent second
-slice is planned at
-`.codex/plans/048-d29-source-mark-treatment-partial2.md`; it adds RAIN, STORM,
-and SNOW and performs the integrated 30-cell review. The D29 track remains
-open until that review and any required owner decision are recorded. Neither
-slice changes runtime artwork or releases the TP.1D packet/TP.2 gate.
+**Execution slicing:** Cycle `048-d29-source-mark-treatment` established the
+shared mark contract and the first 15 cells. Cycle
+`048-d29-source-mark-treatment-partial2` completed the 30-cell matrix, source
+reconciliation, integrated review, and deterministic structural checker. In
+cycle `049-d29-weather-mark-owner-approval`, the design owner approved that
+matrix as presented, including Terminal's proposed tokens and the explicit
+no-mark source gaps. D29's design-definition gate is complete. No cycle changed
+runtime artwork or approves/releases the TP.1D packet or TP.2 gate.
 
 Part 1 history and evidence: `.codex/history/2026-09-24-048-d29-source-mark-treatment.md`
 and `.codex/test-artifacts/048-d29-source-mark-treatment/`.
+Part 2 history and evidence: `.codex/history/2026-09-24-048-d29-source-mark-treatment-partial2.md`
+and `.codex/test-artifacts/048-d29-source-mark-treatment-partial2/`.
+Owner decision history and evidence: `.codex/history/2026-09-24-049-d29-weather-mark-owner-approval.md`
+and `.codex/test-artifacts/049-d29-weather-mark-owner-approval/`.
 
-Part 1 artifact: [`WEATHER_ART.md`](theme-system/design-pack/WEATHER_ART.md).
-Its 15 treatments are proposals; the three remaining conditions and integrated
-review belong to the planned partial2 cycle. No TP.2 eligibility is implied.
+Artifact: [`WEATHER_ART.md`](theme-system/design-pack/WEATHER_ART.md). It
+contains 30 owner-approved cells: eight direct-source adaptations, eleven
+same-theme proposals, and eleven explicit source-gap omissions. The owner
+accepted the Terminal D29 tokens as presented despite the separately proposed
+D32 schematic forms; this does not approve or amend D32. Static validation does
+not establish installed rendering/accessibility or packet approval. TP.1D/TP.1
+remain open and TP.2 remains gated.
 
 **Objective:** Specify and review theme-specific weather art and vector detail
 so each of the five built-in themes has its own coherent visual expression
@@ -92,9 +101,30 @@ deliverables.
 `.codex/history/2026-09-25-050-d31-atmosphere-source-audit.md`. It records the
 five-theme source inventory, measured atmosphere profiles, and deterministic
 inventory validator. Evidence is under
-`.codex/test-artifacts/050-d31-atmosphere-source-audit/`. The full D31 outcome
-remains open: page-specific mapping, proposed derivations, integrated review,
-and owner decisions still require later bounded work.
+`.codex/test-artifacts/050-d31-atmosphere-source-audit/`.
+
+**Completed bounded slice — Now mapping:** cycle
+`051-d31-page-atmosphere-mapping`, plan
+`.codex/plans/051-d31-page-atmosphere-mapping.md`, records exactly five
+source-traceable proposed Now cells in
+`docs/theme-system/design-pack/D31_PAGE_ATMOSPHERES.md`, repairs and guards the
+Minimal OLED source-audit profile reference, and adds source-aware validation
+with focused negative tests. Evidence and verification limitations are
+recorded in `.codex/test-artifacts/051-d31-page-atmosphere-mapping/` and the
+cycle history. This documentary slice does not claim owner approval or D31
+completion.
+
+**Planned dependent slice — Hourly mapping:** its equal second half is planned at
+`.codex/plans/051-d31-page-atmosphere-mapping-partial2.md`; it adds the five
+Hourly cells without redesigning Now and extends the check to ten cells. Both
+slices are budgeted below the 45% context hard stop. The 051 slices are
+documentary design proposals, not owner approval or runtime authorization.
+
+The full D31 outcome remains open: Daily and Details mapping, integrated review
+of all 20 cells and source reproductions, proposed derivations, and required
+owner decisions remain later bounded work. After every D track is complete and
+reviewed, a new immutable packet revision still requires explicit owner approval
+before TP.1D/TP.1 can close; TP.2 remains gated until then.
 
 **Objective:** Specify and review the distinct atmosphere of each of the five
 built-in themes, with the currently selected theme determining which atmosphere
@@ -207,8 +237,10 @@ static references and six condition examples are reviewed in
 `docs/theme-system/design-pack/INTEGRATED_PACK.md`. Exact verification and
 limitations: `.codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md`;
 evidence: `.codex/test-artifacts/028-tp-1d-integrated-pack-review/`.
-D28 font choice and D29 schematic mark detail remain explicit final-review
-decisions. This upstream closure does not complete TP.1D or TP.1.
+D28 font choice and D29 schematic mark detail were explicit final-review
+decisions at that upstream closure. The D29 matrix was subsequently approved
+as presented in cycle 049; D28 and D31 remain open. This upstream closure does
+not complete TP.1D or TP.1.
 
 **Completed: TP.1D-partial-A Daily/Details integration.** Plan:
 its completed history record. It owns the ten
@@ -377,7 +409,9 @@ selected, D29 requests theme-specific art/vector design, and D31 requests a
 revised Atmospheric direction without specifying its target. The owner-directed
 design-definition tracks at the execution head now govern that follow-up. All
 D tracks must be completed and reviewed before TP.1D/TP.1 can resolve; D28 is
-recorded as accepted, while D29 and D31 remain planned. The r2 packet remains
+recorded as accepted, D29's matrix is owner-approved, and D31 is active in its
+Now-atmosphere mapping slice.
+The r2 packet remains
 immutable and cannot be treated as approved. After the D-track gate passes, a
 new exact packet revision must receive explicit approval before another TP.1D
 closure attempt.

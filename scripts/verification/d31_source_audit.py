@@ -74,11 +74,31 @@ def validate(data: dict[str, Any], root: Path = Path("."), manifest_path: Path =
         if (theme, expected) not in found:
             errors.append(f"coverage: missing {theme} {expected} record")
     profiles = data.get("profiles", {})
+    inventory_by_id = {r.get("id"): r for r in records if isinstance(r, dict) and isinstance(r.get("id"), str)}
     for theme in THEMES:
         profile = profiles.get(theme, {})
         for field in ("sources_used", "observation", "interpretation", "unavailable_evidence"):
             if not profile.get(field):
                 errors.append(f"profile {theme}: missing {field}")
+        sources_used = profile.get("sources_used")
+        if not isinstance(sources_used, list) or not sources_used:
+            errors.append(f"profile {theme}: sources_used must be a non-empty array")
+            continue
+        seen: set[str] = set()
+        for source_id in sources_used:
+            if not isinstance(source_id, str):
+                errors.append(f"profile {theme}: sources_used entries must be strings")
+                continue
+            if source_id in seen:
+                errors.append(f"profile {theme}: duplicate sources_used ID {source_id!r}")
+            seen.add(source_id)
+            source = inventory_by_id.get(source_id)
+            if source is None:
+                errors.append(f"profile {theme}: unknown sources_used ID {source_id!r}")
+            elif source.get("theme") not in (theme, "Cross-theme"):
+                errors.append(
+                    f"profile {theme}: sources_used ID {source_id!r} belongs to {source.get('theme')!r}"
+                )
     return errors
 
 
