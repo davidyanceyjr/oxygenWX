@@ -1,22 +1,169 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — TP.1D packet disposition attempted; owner response pending
+## Execution head — D-track prerequisite gate; D29 part 1 delivered; TP.1D remains open
 
-**Completed: TP.1D pinned packet disposition attempt — PENDING, TP.1D unresolved.**
-Plan: `.codex/plans/036-tp-1d-pinned-owner-disposition.md`; history and
-evidence: `.codex/history/2026-09-24-036-tp-1d-pinned-owner-disposition.md`
-and `.codex/test-artifacts/036-tp-1d-pinned-owner-disposition/`. The exact
-revision-2 packet integrity checks passed, including its 117 manifest entries
-and aggregate digest
-`3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869`.
-The owner guide has no overall response/date and leaves D28, D29, and D31
-pending. This bounded attempt closes without approval: TP.1D and TP.1 remain
-unresolved, TP.2 remains gated, and no retry or replacement packet is created.
-Installed visual acceptance remains TP.3 work.
+**Owner direction for pinned revision `tp1d-proposed-r2-symbol033-palette034`**
+with aggregate SHA-256
+`3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869`:
 
-The next TP.1D disposition requires an explicit roadmap update and an explicit
-owner response for the exact packet under review; this roadmap does not imply
-or infer a decision from the completed pending attempt.
+- **D28 — Option 1:** accept the proposed reproducible font families used in
+  the packet.
+- **D29 — Option 2:** request a bounded, theme-specific art and vector-detail
+  design effort before accepting the mark treatment.
+- **D31 — Option 3:** revise the Atmospheric direction; the desired palette or
+  scene treatment is not yet specified.
+
+**D31 scope clarified by owner:** specify the distinct atmosphere for all five
+themes as selected-theme presentation. The one-app-many-personalities board is
+the cross-theme source and shows a unique atmosphere for each theme. The owner
+also directs that the board's shown atmosphere is the visual target to reproduce
+for each theme where it appears.
+
+This is a revise disposition, not approval of the packet. The exact packet stays
+immutable and TP.1D/TP.1 remain unresolved. **Every D track and its required
+design, review, and owner decision must be completed before TP.1/TP.1D can be
+resolved.** D28's decision is recorded above; D29 and D31 remain planned. Any
+future D track added to this roadmap joins the same prerequisite gate. After all
+D tracks are complete, a new exact packet revision must receive explicit
+approval before TP.1/TP.1D closes or TP.2 becomes eligible.
+
+### Owner-directed design-definition tracks
+
+These tracks define roadmap outcomes, requirements, and deliverables. Each
+track's work is to be divided into appropriately sized slices during planning
+and review; the roadmap does not preselect the slice count. Use the product and
+accessibility authorities above all image references. Theme artwork remains
+decorative and cannot change weather facts, navigation, chronology, provenance,
+missing-data behavior, or accessibility meaning. The resolved-appearance
+boundary and the five built-in identities remain one application with many
+looks.
+
+#### D29 — Theme-specific art and vector detail — ACTIVE (part 1 delivered; part 2 planned, 15/30 cells)
+
+**Execution slicing:** Cycle `048-d29-source-mark-treatment` completed the
+first slice. It defines the shared mark contract and the 15 CLEAR,
+PARTLY_CLOUDY, and CLOUDY cells across the five themes. Its dependent second
+slice is planned at
+`.codex/plans/048-d29-source-mark-treatment-partial2.md`; it adds RAIN, STORM,
+and SNOW and performs the integrated 30-cell review. The D29 track remains
+open until that review and any required owner decision are recorded. Neither
+slice changes runtime artwork or releases the TP.1D packet/TP.2 gate.
+
+Part 1 history and evidence: `.codex/history/2026-09-24-048-d29-source-mark-treatment.md`
+and `.codex/test-artifacts/048-d29-source-mark-treatment/`.
+
+Part 1 artifact: [`WEATHER_ART.md`](theme-system/design-pack/WEATHER_ART.md).
+Its 15 treatments are proposals; the three remaining conditions and integrated
+review belong to the planned partial2 cycle. No TP.2 eligibility is implied.
+
+**Objective:** Specify and review theme-specific weather art and vector detail
+so each of the five built-in themes has its own coherent visual expression
+within the shared Oxygen Weather application.
+
+**Source authority:** Begin with the five-theme overview board
+[`one_app_many_personalities.png`](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png),
+its theme phone crops, and the relevant per-theme iconography, component, and
+backdrop assets indexed by
+[`docs/assets/design-references/production-themes/README.md`](assets/design-references/production-themes/README.md)
+and `docs/theme-system/ASSET_MANIFEST.md`. Trace selected art to its source;
+record when a mark is adapted, newly drawn, or intentionally omitted.
+
+**Requirements:** Cover theme-specific art treatment and vector detail for
+weather marks while retaining shared typed weather identities and rendering
+contracts. Specify the appearance role, supported conditions, size/detail
+limits, contrast and background behavior, and any fallback or no-mark behavior
+needed to keep marks legible and decorative. Reconcile each theme's art with
+its personality; do not copy one theme's styling across the family merely for
+implementation convenience. Weather marks must not imply an unsupported value
+or state.
+
+**Deliverables:** A source-traceable art/vector specification across the five
+themes, a reviewed mapping from supported weather identities to each theme's
+art treatment (including explicit gaps/fallbacks), and reference examples or
+equivalent review evidence sufficient to guide later planning and implementation.
+The planning sessions determine the bounded slices and exact asset/render
+deliverables.
+
+#### D31 — Selected-theme atmospheric directions — PLANNED
+
+**Objective:** Specify and review the distinct atmosphere of each of the five
+built-in themes, with the currently selected theme determining which atmosphere
+is active. This resolves D31's scope across the theme family while leaving
+individual palette and scene decisions open for review.
+
+**Source authority:** Treat the complete five-theme board
+[`one_app_many_personalities.png`](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png),
+which presents a distinct atmosphere for each theme, as the reproduction target
+for each atmosphere it shows. The owner also selects each theme's existing
+backdrop and asset-sheet references as additional reproduction targets for the
+atmosphere they show. Use existing overview crops, theme backdrops, available
+asset sheets, and other per-theme source art first. Create a supplementary
+theme atmosphere sheet only if review identifies a specific gap that prevents
+the atmosphere from being specified or reviewed. The current repository has
+per-theme backdrops for all five themes, and theme asset-sheet boards for Glass
+and Instrument; use the manifest and reference index to maintain exact source
+identity. Preserve the Atmospheric source samples and limitations already
+recorded in
+[`SOURCE_DECISIONS.md`](theme-system/design-pack/SOURCE_DECISIONS.md).
+
+**Requirements:** Define how each theme's palette, scene/backdrop, weather art,
+and surfaces express its own atmosphere, and specify how selecting a theme
+activates that look across the app. Reproduce the board's visible atmospheric
+treatment for each theme where shown; measure and document the relevant colors,
+shapes, texture, and scene/art relationships. Bound this fidelity decision to
+the atmosphere shown: the overview's composite layout and unrelated content are
+not thereby pixel-exact targets. Pages without direct source atmosphere use a
+same-theme derivation marked proposed and included in integrated review. Keep
+theme choice presentation-only and
+preserve text contrast, Effects Off completeness, and all cross-theme product
+invariants. Specific implementation mapping and any source gaps remain for
+planning and owner review.
+
+**Source-gap rule:** Use existing sources first. Create a supplementary sheet
+only for a specific review-proven gap, recording the missing information and
+affected theme before planning that targeted work.
+
+**Page-specific direction:** The owner allows each page to have a distinct
+atmosphere within the selected theme. The D31 design specification must map
+atmospheric treatment by theme and page across Now, Hourly, Daily, and Details,
+preserving the selected theme's visual identity while allowing page variation.
+
+**Source-gap direction:** For a page/theme cell with no direct atmosphere
+shown in the existing source art, derive its treatment from that theme's sourced
+atmosphere and clearly label it as proposed. Record the source basis and
+reasoning; include all such proposals in the integrated review before they can
+be approved or used as implementation targets.
+
+**Integrated review direction:** Review all proposed page/theme atmospheres
+together in the integrated five-theme pack before packet approval. The review
+must cover the full theme/page matrix, source reproductions, and all proposed
+derivations; no individual proposal is approved by silence.
+
+**Deliverables:** A source-traceable direction specification for all five
+theme atmospheres, a selected-theme-and-page-to-atmosphere mapping, defined
+palette/scene and art treatment across each applicable page and state,
+measurements and reviewable reproductions of each atmosphere shown on the
+overview board, per-theme backdrops, and available asset sheets, plus recorded
+owner decisions for source gaps. The planning sessions determine the bounded
+slices and exact render/evidence matrix.
+
+**Dependency and gate:** Planning will establish whether D29 and D31 proceed
+sequentially or in parallel and what reference work each needs. Complete and
+review every D track, including its required owner decisions, before resolving
+TP.1D/TP.1. Only then prepare a new immutable owner packet and obtain explicit
+approval against that exact revision. TP.2 remains gated until both the D-track
+prerequisite and packet approval are satisfied. TP.3 remains responsible for
+installed application comparison.
+
+**Completed: TP.1D pinned packet disposition attempt — PENDING.** Plan:
+`.codex/plans/036-tp-1d-pinned-owner-disposition.md`; history and evidence:
+`.codex/history/2026-09-24-036-tp-1d-pinned-owner-disposition.md` and
+`.codex/test-artifacts/036-tp-1d-pinned-owner-disposition/`. The exact revision-2
+packet integrity checks passed, including 117 manifest entries and the
+aggregate digest above. At that attempt the owner fields were blank, so the
+cycle closed pending; its recorded state was correct at that time. The explicit
+owner direction above is the subsequent roadmap update and does not rewrite
+that history or imply approval.
 
 ### Prior completed upstream evidence
 
@@ -34,7 +181,7 @@ the completed cycle-033B history record; history and evidence:
 `.codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/`. Proposed packet:
 `.codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034/`.
 Its packet manifest aggregate SHA-256 is
-`3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869` (the owner-guide row is excluded from this aggregate to avoid self-reference; the full file manifest includes it). The independent audit verified the frozen cycle-031 packet, 20 primary cells, 32 indexed examples, cycle-033 mapping and its cited source assets, both Atmospheric palette modes, six explicitly inventoried unindexed proposal examples, 436 packet-local links, and pending owner fields. D28, D29, and D31 remain pending; the packet is proposed and unapproved. The next cycle is one finite disposition attempt against this exact revision and aggregate digest; if the response is missing or ambiguous, record pending, close that cycle, and keep TP.1/TP.2 gated. Do not use cycle 031's superseded disposition plan.
+`3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869` (the owner-guide row is excluded from this aggregate to avoid self-reference; the full file manifest includes it). The independent audit verified the frozen cycle-031 packet, 20 primary cells, 32 indexed examples, cycle-033 mapping and its cited source assets, both Atmospheric palette modes, six explicitly inventoried unindexed proposal examples, 436 packet-local links, and blank owner fields. At that point a finite disposition attempt against this exact revision was next. Cycle 036 completed that attempt as pending before the owner supplied the D28/D29/D31 direction now recorded at the execution head. The r2 packet remains proposed and unapproved; the roadmap-directed design tracks govern follow-up. Do not use cycle 031's superseded disposition plan.
 
 **Completed: TP.1D owner packet freeze, superseded for disposition.** Cycle
 031's original proposed packet remains immutable and archived at
@@ -212,12 +359,18 @@ contracts: `docs/theme-system/design-pack/DAILY.md` and `DETAILS.md`; evidence:
 completion does not claim installed visual success or owner approval; TP.1D
 remains required before TP.1 umbrella closure.
 
-### TP.1D — Integrated pack, responsive review, and approval — ACTIVE (one bounded disposition cycle remains)
+### TP.1D — Integrated pack, responsive review, and approval — ACTIVE (D-track prerequisite)
 
 The integrated 20-cell packet, responsive examples, and TP.3 checklist are
-complete. The only remaining TP.1D work is one owner-disposition cycle against
-the exact revision named in the execution head. No new packet, render, audit,
-or prerequisite slice may be added implicitly.
+complete. The pinned r2 packet received a revise disposition: D28 option 1 was
+selected, D29 requests theme-specific art/vector design, and D31 requests a
+revised Atmospheric direction without specifying its target. The owner-directed
+design-definition tracks at the execution head now govern that follow-up. All
+D tracks must be completed and reviewed before TP.1D/TP.1 can resolve; D28 is
+recorded as accepted, while D29 and D31 remain planned. The r2 packet remains
+immutable and cannot be treated as approved. After the D-track gate passes, a
+new exact packet revision must receive explicit approval before another TP.1D
+closure attempt.
 
 Completed upstream cycles 028–034 are documented above. Static reference
 generation and packet audits are complete but are not installed visual
@@ -226,15 +379,18 @@ own fixed capture matrix below.
 
 #### TP.1D bounded exit
 
-- In one cycle, verify the pinned r2 packet digest and record the owner's
-  explicit approve/revise/reject response for D28, D29, and D31. A missing or
-  ambiguous answer is recorded as pending; the cycle then closes with TP.1D
-  unresolved and TP.2 gated. No waiting loop or automatic replacement plan is
-  created.
-- TP.1D closes only when all three decisions explicitly approve the exact
-  pinned packet revision. A revise/reject/pending result is a terminal blocked
-  outcome for this revision; continuing requires an explicit roadmap decision
-  and a newly bounded slice.
+- A disposition applies only to the exact verified packet revision. The r2
+  disposition attempt is complete and recorded as revise; its missing D29/D31
+  design outcomes are now explicit roadmap work, not approval of r2.
+- TP.1D/TP.1 cannot resolve until every D track in the execution head is
+  complete, reviewed, and has its required owner decision recorded. A missing
+  or incomplete D-track outcome keeps TP.1D unresolved and TP.2 gated.
+- Future disposition applies to a new immutable packet only after all D-track
+  outcomes have been specified and reviewed. A missing, ambiguous,
+  revise, or reject response keeps TP.1D unresolved and TP.2 gated; follow-on
+  work requires a roadmap-defined design track and a newly bounded plan.
+- TP.1D closes only when the required decisions explicitly approve the exact
+  reviewed packet revision.
 - This exit records design-owner approval only. It makes no installed visual
   acceptance claim; TP.3 owns actual app screenshots and reference comparison.
 
