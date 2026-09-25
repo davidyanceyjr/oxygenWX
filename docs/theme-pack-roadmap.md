@@ -84,7 +84,17 @@ equivalent review evidence sufficient to guide later planning and implementation
 The planning sessions determine the bounded slices and exact asset/render
 deliverables.
 
-#### D31 — Selected-theme atmospheric directions — PLANNED
+#### D31 — Selected-theme atmospheric directions — ACTIVE (source audit complete)
+
+**Completed bounded slice:** TP.1D-D31-partial-A, cycle
+`050-d31-atmosphere-source-audit`, plan
+`.codex/plans/050-d31-atmosphere-source-audit.md`; history:
+`.codex/history/2026-09-25-050-d31-atmosphere-source-audit.md`. It records the
+five-theme source inventory, measured atmosphere profiles, and deterministic
+inventory validator. Evidence is under
+`.codex/test-artifacts/050-d31-atmosphere-source-audit/`. The full D31 outcome
+remains open: page-specific mapping, proposed derivations, integrated review,
+and owner decisions still require later bounded work.
 
 **Objective:** Specify and review the distinct atmosphere of each of the five
 built-in themes, with the currently selected theme determining which atmosphere

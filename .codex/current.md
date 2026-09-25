@@ -5,8 +5,8 @@ Cycle ID: none
 Roadmap item: none
 Plan: none
 Evidence: none
-Last updated: 2026-09-24
+Last updated: 2026-09-25
 
 ## Current objective
 
-No active cycle. Select the next item from `docs/ROADMAP.md`.
+No active cycle. Select the next bounded item from the governing roadmap.

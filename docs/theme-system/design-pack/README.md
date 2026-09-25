@@ -15,6 +15,7 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [CONTENT_AND_STATE_RULES.md](CONTENT_AND_STATE_RULES.md): presentation-model slots, state grammar, accessibility, RTL, and effects.
 - [WEATHER_ART.md](WEATHER_ART.md): partial D29 shared mark contract and 15 proposed theme/condition treatments; six-condition review remains open.
 - [SOURCE_DECISIONS.md](SOURCE_DECISIONS.md): source ledger, conflicts, asset disposition, and owner decisions.
+- [D31_SOURCE_AUDIT.md](D31_SOURCE_AUDIT.md): source-traceable five-theme atmosphere inventory, measured backdrop samples, qualitative profiles, explicit source gaps, and audit limits; it does not approve page treatments.
 - [NOW.md](NOW.md): TP.1B partial A, proposed Now composition and five theme mappings; measured, checked for model coverage, and reviewed in the upstream integrated renders.
 - [HOURLY.md](HOURLY.md): TP.1B partial B, proposed Hourly composition, six-entry grid, date/window controls and five theme mappings; measured, checked for model coverage, and reviewed in the upstream integrated renders.
 - [DAILY.md](DAILY.md): TP.1C partial A, proposed Daily composition, five-entry windows, controls, state behavior, and five theme mappings; documentation audit and partial-A individual static-render review passed; owner approval pending.
