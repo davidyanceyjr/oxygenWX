@@ -23,7 +23,7 @@ This is a revise disposition, not approval of the packet. The exact packet stays
 immutable and TP.1D/TP.1 remain unresolved. **Every D track and its required
 design, review, and owner decision must be completed before TP.1/TP.1D can be
 resolved.** D28's decision is recorded above; D29's matrix is owner-approved,
-while D31 is active in its Now-atmosphere mapping slice. Any
+while D31 is active in its Daily-atmosphere mapping slice. Any
 future D track added to this roadmap joins the same prerequisite gate. After all
 D tracks are complete, a new exact packet revision must receive explicit
 approval before TP.1/TP.1D closes or TP.2 becomes eligible.
@@ -114,17 +114,30 @@ recorded in `.codex/test-artifacts/051-d31-page-atmosphere-mapping/` and the
 cycle history. This documentary slice does not claim owner approval or D31
 completion.
 
-**Planned dependent slice — Hourly mapping:** its equal second half is planned at
-`.codex/plans/051-d31-page-atmosphere-mapping-partial2.md`; it adds the five
-Hourly cells without redesigning Now and extends the check to ten cells. Both
-slices are budgeted below the 45% context hard stop. The 051 slices are
-documentary design proposals, not owner approval or runtime authorization.
+**Completed dependent slice — Hourly mapping:** cycle
+`051-d31-page-atmosphere-mapping-partial2`, plan
+`.codex/plans/051-d31-page-atmosphere-mapping-partial2.md`, extends the
+unchanged five Now records with five source-traceable proposed Hourly cells and
+validates the ten-cell artifact. The 051 slices are documentary design
+proposals, not owner approval or runtime authorization.
 
-The full D31 outcome remains open: Daily and Details mapping, integrated review
-of all 20 cells and source reproductions, proposed derivations, and required
-owner decisions remain later bounded work. After every D track is complete and
-reviewed, a new immutable packet revision still requires explicit owner approval
-before TP.1D/TP.1 can close; TP.2 remains gated until then.
+**Completed bounded slice — Daily mapping:** cycle
+`052-d31-daily-atmosphere-mapping`, plan
+`.codex/plans/052-d31-daily-atmosphere-mapping.md`, extends the ten-cell
+Now/Hourly proposal with five source-traceable proposed Daily cells and focused
+validation. It preserves the earlier ten cell objects and the adopted
+five-day/window/control contract. Exact evidence and verification limits are
+recorded in `.codex/history/2026-09-25-052-d31-daily-atmosphere-mapping.md`
+and `.codex/test-artifacts/052-d31-daily-atmosphere-mapping/`. The fifteen
+cells remain documentary proposals; owner review and runtime authorization are
+not implied.
+
+The full D31 outcome remains open: Details mapping, the 20-cell integrated
+review, reviewable source reproductions, proposed derivations, and required
+owner decisions remain later bounded work. D31, TP.1D, and TP.1 remain open.
+After every D track is complete and reviewed, a new immutable packet revision
+still requires explicit owner approval before TP.1D/TP.1 can close; TP.2 remains
+gated until then. TP.3 installed application comparison remains a later gate.
 
 **Objective:** Specify and review the distinct atmosphere of each of the five
 built-in themes, with the currently selected theme determining which atmosphere

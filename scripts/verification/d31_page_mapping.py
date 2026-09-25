@@ -23,6 +23,7 @@ SOURCE_THEME = {
     "terminal": "Terminal",
 }
 MAPPING_THEMES = list(SOURCE_THEME)
+MAPPING_PAGES = ["now", "hourly", "daily"]
 FIELDS = ("palette", "scene_backdrop", "surfaces", "weather_art_relationship")
 STATE_FIELDS = ("effects_off", "high_contrast", "responsive_accessibility")
 CELL_KEYS = {
@@ -84,10 +85,10 @@ def validate(
         scope = {}
     if scope.get("themes") != MAPPING_THEMES:
         errors.append("mapping.scope.themes: expected canonical ordered five-theme list")
-    if scope.get("pages") != ["now"]:
-        errors.append("mapping.scope.pages: expected exactly ['now']")
-    if scope.get("cell_count") != 5:
-        errors.append("mapping.scope.cell_count: expected 5")
+    if scope.get("pages") != MAPPING_PAGES:
+        errors.append("mapping.scope.pages: expected exactly ['now', 'hourly', 'daily']")
+    if scope.get("cell_count") != 15:
+        errors.append("mapping.scope.cell_count: expected 15")
     if scope.get("coverage") != "partial":
         errors.append("mapping.scope.coverage: expected 'partial'")
     if data.get("status") != EXPECTED_STATUS:
@@ -111,12 +112,12 @@ def validate(
     if not isinstance(cells, list):
         errors.append("mapping.cells: expected array")
         cells = []
-    if len(cells) != 5:
-        errors.append(f"mapping.cells: expected exactly 5 cells, found {len(cells)}")
+    if len(cells) != 15:
+        errors.append(f"mapping.cells: expected exactly 15 cells, found {len(cells)}")
 
     seen_pairs: set[str] = set()
     seen_ids: set[str] = set()
-    expected_pairs = [(theme, "now") for theme in MAPPING_THEMES]
+    expected_pairs = [(theme, page) for page in MAPPING_PAGES for theme in MAPPING_THEMES]
     actual_pairs: list[tuple[Any, Any]] = []
     for index, cell in enumerate(cells):
         prefix = f"cells[{index}]"
@@ -132,13 +133,13 @@ def validate(
         actual_pairs.append(pair)
         if not isinstance(theme, str) or theme not in SOURCE_THEME:
             errors.append(f"{prefix}.theme: unknown theme {theme!r}")
-        if page != "now":
-            errors.append(f"{prefix}.page: expected 'now', found {page!r}")
+        if page not in MAPPING_PAGES:
+            errors.append(f"{prefix}.page: expected one of {MAPPING_PAGES!r}, found {page!r}")
         pair_key = json.dumps(pair, sort_keys=True, default=repr)
         if pair_key in seen_pairs:
             errors.append(f"{prefix}: duplicate theme/page cell {pair!r}")
         seen_pairs.add(pair_key)
-        expected_id = f"{theme}-now" if isinstance(theme, str) else ""
+        expected_id = f"{theme}-{page}" if isinstance(theme, str) and page in MAPPING_PAGES else ""
         if cell.get("id") != expected_id:
             errors.append(f"{prefix}.id: expected {expected_id!r}")
         cell_id = cell.get("id")
@@ -218,10 +219,15 @@ def validate(
                     errors.append(f"{ref_prefix}.locator: expected mapping-specific non-blank locator")
                 elif len(locator.strip()) < 24 or locator.strip() == generic:
                     errors.append(f"{ref_prefix}.locator: too generic; use a narrower mapping-specific region")
-                elif source.get("source_class") in ("phone_crop", "asset_sheet") and not re.search(
-                    r"\b(now|hero|condition|current)\b", locator, re.I
-                ):
-                    errors.append(f"{ref_prefix}.locator: phone/sheet locator must identify its Now-relevant region")
+                elif source.get("source_class") in ("phone_crop", "asset_sheet", "overview_board"):
+                    if page == "now":
+                        page_pattern, page_label = r"\b(now|hero|condition|current)\b", "Now"
+                    elif page == "hourly":
+                        page_pattern, page_label = r"\b(hourly|forecast|compact forecast row)\b", "Hourly"
+                    else:
+                        page_pattern, page_label = r"\b(daily|5[- ]day forecast|daily forecast)\b", "Daily"
+                    if not re.search(page_pattern, locator, re.I):
+                        errors.append(f"{ref_prefix}.locator: phone/sheet locator must identify its {page_label}-relevant region")
             if not _nonblank(ref.get("supports")):
                 errors.append(f"{ref_prefix}.supports: expected non-blank claim")
             if ref.get("evidence_class") not in ("direct_region", "same_theme_derivation"):
@@ -235,7 +241,7 @@ def validate(
                     errors.append(f"{prefix}.derivation_basis: {source_id!r} is not cited in source_refs")
 
     if actual_pairs != expected_pairs:
-        errors.append("mapping.cells: expected one cell per canonical theme in canonical order")
+        errors.append("mapping.cells: expected one cell per canonical theme/page pair in canonical page/theme order")
     errors.extend(_completion_claims(prose))
     return errors
 
@@ -251,7 +257,7 @@ def main() -> int:
     if errors:
         print("D31 page mapping invalid:\n" + "\n".join(f"- {error}" for error in errors), file=sys.stderr)
         return 1
-    print("D31 page mapping valid: five ordered proposed Now cells; source relationships and interim scope are valid.")
+    print("D31 page mapping valid: fifteen ordered proposed Now/Hourly/Daily cells; source relationships and interim scope are valid.")
     return 0
 
 

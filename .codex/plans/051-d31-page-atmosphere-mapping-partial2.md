@@ -1,11 +1,11 @@
 # Plan 051-partial2 — D31 Hourly atmosphere mapping across five themes
 
-Status: Planned
+Status: Completed
 Cycle ID: 051-d31-page-atmosphere-mapping-partial2
 Roadmap item: TP.1D-D31
 Dependency: completed cycle `051-d31-page-atmosphere-mapping` and its retained evidence
 Created: 2026-09-25
-Revision: 2 (dependent execution draft)
+Revision: 5 (completed)
 Difficulty: 7/10
 Context budget: target 35–40% of one agent context window; hard stop before 45%.
 
@@ -72,19 +72,25 @@ weather/product semantics. Do not create art, crops, or renders.
    non-absent `source_refs` with per-reference evidence classes, four
    observation fields, a distinct interpretation, four proposed-treatment
    fields, three state constraints, source gaps, derivation basis, rationale,
-   limitations, and proposed review status. Update
-   only scope metadata required for ordered pages `["now", "hourly"]`, ten
-   cells, and still-partial coverage. Add a combined ten-cell distinction and
-   limitation review.
-4. Extend the validator to require the exact five-theme × two-page product,
-   stable IDs, unique pairs, ordered scope, count 10, and all existing nested
-   and source-integrity rules on both pages. Preserve rejection of approval,
-   completion, and TP.2-eligibility claims.
-5. Extend focused tests with valid ten-cell coverage and Hourly-specific
-   missing/duplicate/extra pair, wrong ID/page, bad scope/order/count, invalid
-   nested field, unknown/wrong-theme/absent source, uncited derivation basis,
-   generic locator, and unsupported-claim cases. Retain the complete Now test
-   coverage and assert actionable cell/field errors.
+   limitations, and proposed review status. Update only scope metadata to
+   ordered pages `["now", "hourly"]`, `cell_count: 10`, and
+   `coverage: "partial"`. Preserve each of the five existing Now cell objects
+   unchanged. Add a combined ten-cell distinction and limitation review.
+4. Extend the validator from the Now-only product to exactly the canonical
+   five themes × ordered pages `now`, `hourly`: stable `<theme>-<page>` IDs,
+   unique pairs, exact ordered scope and cell count, and all existing nested
+   field, source compatibility, locator, derivation-basis, and status rules on
+   both pages. Keep the five existing Now cases valid. Continue rejecting
+   affirmative D31/TP.1D/TP.1 completion, packet approval, and TP.2 eligibility
+   claims in the artifact's explanatory prose.
+5. Extend focused tests to cover a valid ten-cell artifact plus missing,
+   duplicate, and extra theme/page pairs; wrong ID/page; wrong page order,
+   theme order, count, and partial coverage; malformed nested fields and
+   evidence classes; unknown, wrong-theme, and absent-sheet sources; uncited
+   derivation IDs; generic and blank locators; and unsupported completion or
+   approval claims. Keep every existing Now regression case, add assertions
+   for Hourly cell/field-specific errors, and confirm all five Now cell objects
+   remain unchanged from the pre-edit artifact during final diff review.
 6. Update README and D31 roadmap wording to the actual ten-cell proposed state.
    Name Daily, Details, source reproductions, 20-cell integrated review, owner
    decisions, new packet revision/approval, and all upstream gates as pending.
@@ -97,7 +103,7 @@ weather/product semantics. Do not create art, crops, or renders.
 
 - The artifact has exactly ten unique cells: every canonical theme × `now`
   and `hourly` pair, with stable IDs and exact partial metadata. The five Now
-  records remain semantically unchanged.
+  objects are unchanged from the completed cycle-051 artifact.
 - Every Hourly statement has a valid same-theme or permitted overview source
   and useful native locator. Observation, proposal, state behavior, rationale,
   gaps, and limitations remain separate and honest.
@@ -125,7 +131,7 @@ Retain under
 - `diff-check.txt`: `git diff --check`;
 - `source-and-review-notes.md`: exact Hourly source IDs/regions, direct versus
   proposed choices, gaps/limits, ten-cell cross-theme review, and confirmation
-  that Now records did not drift.
+  that the five Now objects did not drift.
 
 No Android or installed-app verification is in scope because no runtime
 renderer/resource changes. Record that as unrun/out of scope in history.

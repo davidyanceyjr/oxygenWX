@@ -1,36 +1,44 @@
-# D31 page atmospheres — interim Now mapping
+# D31 page atmospheres — interim Now/Hourly/Daily mapping
 
-**Status: proposed; owner review pending.** This is a five-cell documentary
-mapping proposal for Now. It records evidence, interpretation, and proposed
-application separately. The combined phone concepts and overview board are not
-full-page composition authority. Product meaning, accessibility, and
-navigation remain governed by `docs/SPECIFICATION.md` and
-`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`.
+**Status: proposed; owner review pending.** This is a fifteen-cell documentary
+mapping proposal for Now, Hourly, and Daily. It records source observations,
+interpretation, and proposed application separately. Combined phone concepts,
+screen-example mockups, and the overview board are not full-page composition
+authority. Product meaning, accessibility, and navigation remain governed by
+`docs/SPECIFICATION.md` and `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`.
 
 ## Method and limits
 
-I reviewed the five native extracted phone crops, the overview board, each
-theme's native backdrop, and the Glass and Instrument asset sheets at their
-source resolution. Phone and sheet locators below point to the Now-relevant
-hero/current-condition regions. Backdrop locators identify the audited center
-column samples. The samples are source-audit point checks, not complete palette
-measurements. No numeric appearance token is proposed here. Phone concepts
-combine Now with forecast previews; they support visible atmosphere and surface
-relationships only, not a complete page layout, data slot, or forecast
-composition. Missing theme sheets are recorded as source gaps and provide no
-visual evidence.
+I reviewed all five native phone crops and the overview board at source resolution,
+plus the Glass and Instrument sheets where their Daily regions add direct evidence,
+and each theme backdrop as a separate field-level source. Daily phone locators point
+to the visible Daily preview or selector and name what is or is not shown. The Glass
+sheet locator points to its compact “5 Day Forecast” example; the Instrument phone,
+sheet, and board show a Daily selector label but no Daily rows. Overview locators
+identify each selected theme’s Daily preview or selector and corroborate its theme
+atmosphere; they do not turn the composite into a full-page target. Backdrop locators
+support broad theme-field observations only. No numeric color or measurement is
+proposed from this qualitative mapping. The source previews vary in row count and
+some omit Daily content entirely; the adopted contract continues to require up to
+five actual chronological days per visible window, visible date, condition,
+numeric low/high or honest unavailability, precipitation meaning when available, and
+Earlier/Later controls without a nested pager. Every proposed mapping retains
+Effects Off completeness, High contrast boundaries, compact/font-scale-1.3
+readability, and earliest-to-latest RTL order. All fifteen cells remain proposed.
 
 ## Structured mapping
 
 D31_PAGE_ATMOSPHERES:BEGIN
+
+
 
 ```json
 {
   "schema_version": 1,
   "scope": {
     "themes": ["atmospheric", "glass", "minimal_oled", "instrument", "terminal"],
-    "pages": ["now"],
-    "cell_count": 5,
+    "pages": ["now", "hourly", "daily"],
+    "cell_count": 15,
     "coverage": "partial"
   },
   "status": "proposed; owner review pending",
@@ -196,6 +204,580 @@ D31_PAGE_ATMOSPHERES:BEGIN
       "derivation_basis": ["terminal-phone", "terminal-backdrop"],
       "rationale": "The proposal retains Terminal's console-like text hierarchy and explicit separators while treating the denser standalone grid as optional backdrop evidence.",
       "limitations": ["The phone is a small combined-page concept rather than a complete Now specification.", "No numeric grid or type measurements are claimed by this qualitative mapping."]
+    },
+    {
+      "id": "atmospheric-hourly",
+      "theme": "atmospheric",
+      "page": "hourly",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "atmospheric-phone",
+          "locator": "Native phone crop inner display: Hourly panel from its label and Now column through the six visible temperature values; exclude the Now hero and daily rows.",
+          "supports": "A rounded translucent blue panel groups a labeled hourly strip with six time columns, weather marks, and temperature labels over the scenic blue field.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "atmospheric-backdrop",
+          "locator": "Standalone backdrop full vertical field; compare its blue gradient with the separate scenic phone-panel treatment.",
+          "supports": "The standalone backdrop is a blue vertical field and does not include the phone crop landscape or establish the strip surface.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The strip sits over a blue scenic phone field; its translucent blue surface and white labels keep the row visually contained.",
+        "scene_backdrop": "The phone landscape remains visible around and through the forecast panel; the separate backdrop is only a blue gradient.",
+        "surfaces": "One rounded translucent panel contains the HOURLY label and six columns, with no visible divider between individual columns.",
+        "weather_art_relationship": "Each visible time has a small condition mark above a numeric temperature; the source row shows six columns including Now."
+      },
+      "interpretation": "Atmospheric carries its open blue and scenic identity into Hourly with a contained translucent strip, while the weather marks stay paired with explicit time and temperature.",
+      "proposed_treatment": {
+        "palette": "Propose a blue-led field with clear light text and restrained warm scenic accents; the reference does not define exact colors or contrast values.",
+        "scene_backdrop": "Propose retaining open sky-like space or an approved restrained scene behind Hourly; the standalone gradient and phone landscape remain distinct source treatments.",
+        "surfaces": "Propose a single readable translucent-appearing forecast region when contrast permits; use an opaque equivalent for Effects Off and high contrast.",
+        "weather_art_relationship": "Keep marks small and secondary to visible time, condition text, and temperature; the adopted six-entry page and its controls come from the product contract, not this preview."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static canvas and surface; preserve the Hourly page identity, visible date and Earlier/Later controls, and all actual entries without scenic effects.",
+        "high_contrast": "Use clear semantic text and surface boundaries while retaining the open blue Atmospheric identity; do not rely on the landscape to separate entries.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow entry content to wrap or scroll while preserving earliest-to-latest order and readable time, condition, temperature, and available precipitation."
+      },
+      "source_gaps": [
+        "No dedicated Hourly page, loading/stale/error state, or Atmospheric asset sheet is indexed.",
+        "The combined phone preview does not establish the adopted six-entry page layout, date/window controls, entry geometry, or a complete scenic asset."
+      ],
+      "derivation_basis": [
+        "atmospheric-phone",
+        "atmospheric-backdrop"
+      ],
+      "rationale": "The proposal applies the source-visible blue scenic field and contained translucent strip while leaving the adopted page composition and navigation to the written UI contract.",
+      "limitations": [
+        "The phone preview shows a compact six-column strip as part of Now, not a complete Hourly page or its navigation.",
+        "Backdrop samples are qualitative identity evidence and do not establish a composited panel color, contrast, or responsive crop."
+      ]
+    },
+    {
+      "id": "glass-hourly",
+      "theme": "glass",
+      "page": "hourly",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "glass-phone",
+          "locator": "Native phone crop inner display: Hourly tabs and forecast strip below the Now hero, including visible time labels, marks, and temperatures.",
+          "supports": "A rounded translucent forecast panel follows the Hourly/Daily/Details selector; the phone shows five time columns over a cool blue-violet field with warm light.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "glass-asset-sheet",
+          "locator": "04 CORE COMPONENTS panel, lower-right Compact Forecast Row sample; inspect its time, condition-mark, and temperature grouping.",
+          "supports": "The compact forecast-row sample uses separated time columns with small marks and temperatures inside a bounded glass-style surface.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "glass-backdrop",
+          "locator": "Standalone backdrop full vertical field, including large warm and cool light forms behind the phone concept.",
+          "supports": "The backdrop contains cool blue-violet depth with soft warm/cool light forms; it does not specify Hourly surface opacity.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The phone strip uses light text over a dark translucent-looking surface against a cool blue-violet field with warm light toward the right.",
+        "scene_backdrop": "Soft light forms remain visible around the compact strip; the phone also shows a scenic edge below the preview.",
+        "surfaces": "The phone places its five visible forecast columns in a rounded bounded panel below a separate segmented page selector; the asset sheet shows a compact row component with column groupings.",
+        "weather_art_relationship": "Small weather marks sit between each time label and temperature; the phone provides five columns, while the sheet component is a compact example rather than a page specification."
+      },
+      "interpretation": "Glass atmosphere comes from layered surfaces over cool, softly lit depth; the Hourly preview suggests a bounded row that remains visually connected to that background.",
+      "proposed_treatment": {
+        "palette": "Propose cool blue-violet roles with restrained warm highlights and readable foreground text; no complete palette or composited panel value is asserted.",
+        "scene_backdrop": "Propose a softly varied atmospheric field where supported by approved assets, with light forms subordinate to forecast legibility.",
+        "surfaces": "Use a limited translucent-appearing forecast surface only when contrast remains clear; provide opaque, static equivalents for Effects Off and high contrast.",
+        "weather_art_relationship": "Keep each decorative mark secondary to visible time, condition text, and temperature. Follow the adopted six-entry window and controls; do not copy the preview’s five-column count or nested segmented selector."
+      },
+      "state_constraints": {
+        "effects_off": "Replace transparency and background lighting with an opaque surface and static canvas while retaining all Hourly facts and window/date controls.",
+        "high_contrast": "Strengthen semantic text and surface boundaries; preserve Glass identity without relying on blur, translucency, or color alone.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, let entries wrap or scroll and retain earliest-to-latest order, controls, and visible data meaning."
+      },
+      "source_gaps": [
+        "No dedicated Hourly page or Hourly loading, stale, error, Effects Off, high-contrast, or RTL reference is available.",
+        "The phone preview shows five columns and a nested selector, neither of which defines the adopted six-entry page or its navigation."
+      ],
+      "derivation_basis": [
+        "glass-phone",
+        "glass-asset-sheet",
+        "glass-backdrop"
+      ],
+      "rationale": "The proposal retains the directly visible layered Glass surface and cool light field while replacing preview-only count/navigation with the adopted Hourly contract.",
+      "limitations": [
+        "The phone and sheet are compact composite/component examples, not an Hourly page specification.",
+        "No opacity, blur, responsive geometry, contrast ratio, or installed behavior was measured."
+      ]
+    },
+    {
+      "id": "minimal_oled-hourly",
+      "theme": "minimal_oled",
+      "page": "hourly",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "minimal-oled-phone",
+          "locator": "Native phone crop inner display: Hourly preview, NEXT 6 HOURS separator and line plot from the first Now value through the final 15 label.",
+          "supports": "The black-first phone uses thin rules, six labeled time positions, white temperature labels, and an amber line with point markers in its hourly preview.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "minimal-oled-backdrop",
+          "locator": "Standalone backdrop full black field; compare its uninterrupted field with the localized phone separators and hourly plot.",
+          "supports": "The standalone backdrop is black at audited points and contains no scenic field or broad filled forecast card.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The hourly preview uses white labels and a restrained amber plot on a black field.",
+        "scene_backdrop": "The standalone backdrop is uninterrupted black; the phone keeps the hourly visualization local between thin horizontal separators.",
+        "surfaces": "The preview does not use a filled card: a centered NEXT 6 HOURS label sits between rules, followed by an open line plot with six points and time labels.",
+        "weather_art_relationship": "The displayed hourly preview presents temperatures and time positions in a line plot, without a condition mark or visible condition text for each point."
+      },
+      "interpretation": "Minimal OLED keeps Hourly typography and values prominent, using small amber plot accents and separators instead of a broad filled surface.",
+      "proposed_treatment": {
+        "palette": "Propose a black-first canvas with readable light text and restrained semantic accents; warning and selection meanings must also use text or shape.",
+        "scene_backdrop": "Use an uninterrupted black field without full-screen scenic imagery; keep any optional accent local to forecast content.",
+        "surfaces": "Prefer spacing and thin static separators to filled cards where they support grouping; do not carry the source line plot forward without an approved typed series contract.",
+        "weather_art_relationship": "For the adopted six actual entries, show time, condition, temperature, and available precipitation as visible text; a mark may remain a secondary local accent. The preview does not establish entry count or complete page composition."
+      },
+      "state_constraints": {
+        "effects_off": "Retain the opaque black canvas, static text, separators, Hourly controls, and all actual entries; omit optional glow or motion only.",
+        "high_contrast": "Preserve the black-first identity while providing clear text, boundaries, selected states, and status cues beyond amber color alone.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow text wrapping or scrolling; preserve chronological order and readable entry facts without requiring the plot."
+      },
+      "source_gaps": [
+        "No dedicated Hourly page or state-specific Minimal OLED reference is indexed.",
+        "The preview’s plotted temperatures do not supply per-entry condition text, precipitation, series provenance, or a runtime chart contract."
+      ],
+      "derivation_basis": [
+        "minimal-oled-phone",
+        "minimal-oled-backdrop"
+      ],
+      "rationale": "The proposal preserves Minimal OLED’s black field, open spacing, thin separators, and restrained amber accent without converting an illustrative plot into an unsupported data visualization.",
+      "limitations": [
+        "The source is a compact combined concept and does not establish adopted six-entry page geometry, control placement, or date selection.",
+        "No measured typography, spacing, contrast, font-scale behavior, or installed rendering is claimed."
+      ]
+    },
+    {
+      "id": "instrument-hourly",
+      "theme": "instrument",
+      "page": "hourly",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "instrument-phone",
+          "locator": "Native phone crop inner display: HOURLY/DAILY/RADAR selector and the six-column forecast strip directly below it.",
+          "supports": "The technical phone concept places six time, condition-mark, and temperature columns in a dark bounded strip below a segmented selector.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "instrument-asset-sheet",
+          "locator": "04 CORE COMPONENTS panel, lower-right Compact Forecast Row sample; inspect technical labels, marks, and temperature columns.",
+          "supports": "The component sample groups forecast times, marks, and temperatures in a compact dark row with a defined boundary.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "instrument-backdrop",
+          "locator": "Standalone backdrop full vertical field; inspect the fine grid separately from the phone forecast module.",
+          "supports": "The standalone field uses a fine rectangular grid on near-black navy; the phone strip itself is a bounded dark module.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "Light labels and yellow/blue weather accents sit on near-black navy surfaces against a technical dark field.",
+        "scene_backdrop": "The standalone backdrop has a fine grid; the phone places the forecast strip in a bounded module rather than exposing grid detail as part of each entry.",
+        "surfaces": "Six forecast columns appear within a thinly outlined dark strip below a segmented Hourly/Daily/Radar selector. The selector is preview navigation, not the adopted global page control.",
+        "weather_art_relationship": "Each visible time position pairs a small weather mark with a numeric temperature; the phone shows six columns including Now."
+      },
+      "interpretation": "Instrument carries its technical identity through a bounded forecast module, fine structural lines, and restrained functional accents.",
+      "proposed_treatment": {
+        "palette": "Propose dark navy semantic surfaces with restrained functional accents and explicit readable labels; exact roles remain subject to integrated review.",
+        "scene_backdrop": "A subtle static grid may sit behind content where it does not compete with text; Effects Off uses a plain opaque field.",
+        "surfaces": "Use clear boundaries for forecast grouping and keep the six-entry page readable; do not reproduce unsupported chart/gauge elements or nested Hourly/Daily/Radar navigation.",
+        "weather_art_relationship": "Keep condition marks decorative and secondary to visible time, condition text, temperature, and available precipitation. Use the adopted outer page identity and visible date/window controls."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static canvas and complete forecast module; retain Hourly identity, date/window controls, and every actual entry without grid or motion.",
+        "high_contrast": "Strengthen semantic outlines, labels, selected states, and status cues; preserve distinctions without depending on the grid or accent color.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow entries to wrap or stack; preserve earliest-to-latest chronology, readable facts, and targetable controls."
+      },
+      "source_gaps": [
+        "No dedicated Hourly page or loading, stale, error, Effects Off, high-contrast, or RTL Instrument reference exists.",
+        "The concept selector and six-column preview do not establish the adopted page navigation, control positions, or responsive entry geometry."
+      ],
+      "derivation_basis": [
+        "instrument-phone",
+        "instrument-asset-sheet",
+        "instrument-backdrop"
+      ],
+      "rationale": "The proposal retains Instrument’s bounded technical grouping and optional grid identity while replacing preview-only nested navigation with the product contract.",
+      "limitations": [
+        "The compact phone is a combined concept, not an Hourly page specification or data-source contract for its decorative charts.",
+        "Grid density, outlines, colors, dp geometry, contrast, and responsive behavior were not measured for a rendered app."
+      ]
+    },
+    {
+      "id": "terminal-hourly",
+      "theme": "terminal",
+      "page": "hourly",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "terminal-phone",
+          "locator": "Native phone crop inner display: HOURLY FORECAST block from its heading through the six time, mark, and temperature columns, ending at the dashed divider.",
+          "supports": "The phone shows a labeled hourly block with six compact time columns, green text-like weather marks, temperatures, and dashed separators on black.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "terminal-backdrop",
+          "locator": "Standalone backdrop full field; inspect dense grid as separate background evidence from the phone’s sparse dashed forecast separators.",
+          "supports": "The standalone field has a dense rectangular grid, while the phone forecast block uses sparse dashed rules on a mostly flat black field.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "Green monospace-like labels and values appear on black, with no warm or scenic backdrop in the hourly block.",
+        "scene_backdrop": "The phone uses a mostly flat black forecast field; the standalone backdrop carries a denser grid and is visibly different from the phone block.",
+        "surfaces": "A HOURLY FORECAST heading, six aligned time columns, and dashed horizontal separators structure the preview without rounded cards.",
+        "weather_art_relationship": "Small text-like condition marks accompany each visible time, with a temperature beneath; the source strip shows Now plus five times."
+      },
+      "interpretation": "Terminal’s Hourly treatment uses console typography, aligned text groups, and explicit separators to keep the forecast dense and scan-friendly.",
+      "proposed_treatment": {
+        "palette": "Propose a black-first field with readable monospace-like text and restrained green accents; preserve distinct status and selection meaning with text or shape.",
+        "scene_backdrop": "Keep the forecast field mostly flat; any optional grid remains subtle and separate from the sparse content rules.",
+        "surfaces": "Use clear static separators and grouped text rather than rounded filled cards; ensure date and Earlier/Later controls remain recognizable and adequately sized.",
+        "weather_art_relationship": "Use any text-like mark only as decoration beside visible time, condition, temperature, and available precipitation. Show the adopted six actual entries and never copy values from this concept."
+      },
+      "state_constraints": {
+        "effects_off": "Keep an opaque black canvas with static text and rules; preserve the complete hourly facts and controls without texture or motion.",
+        "high_contrast": "Use semantic foreground, boundary, and status distinctions with text or shape in addition to green color.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow console groups to wrap or scroll; preserve earliest-to-latest chronology and usable controls."
+      },
+      "source_gaps": [
+        "No Terminal asset sheet or dedicated Hourly page/state source is indexed.",
+        "The combined strip does not define full-page controls, responsive layout, status states, or typography measurements."
+      ],
+      "derivation_basis": [
+        "terminal-phone",
+        "terminal-backdrop"
+      ],
+      "rationale": "The proposal preserves Terminal’s visible console hierarchy and sparse separators while treating its dense standalone grid as separate optional backdrop evidence.",
+      "limitations": [
+        "The phone preview is part of a composite screen and does not establish the adopted six-entry page composition.",
+        "No numeric grid, typography, contrast, responsive, or runtime behavior is claimed."
+      ]
+    }
+    ,
+    {
+      "id": "atmospheric-daily",
+      "theme": "atmospheric",
+      "page": "daily",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "atmospheric-phone",
+          "locator": "Daily forecast preview in the lower inner phone display, approximately x=24..285 and y=584..703 px: four date rows with condition marks and low/high values.",
+          "supports": "The compact Daily preview uses separated date rows with small condition marks and low/high values on a rounded blue panel; four mockup rows do not define the required horizon.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "overview-board",
+          "locator": "Atmospheric phone column, lower Daily forecast preview around board x=28..295 and y=584..703 px; inspect its row separators and warm scenic edge.",
+          "supports": "The overview corroborates the Atmospheric phone preview’s scenic sky-to-landscape field and contained Daily rows; its composite screen is not a complete page target.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "atmospheric-backdrop",
+          "locator": "Standalone blue backdrop full vertical field, considered separately from the Daily preview and its scenic phone background.",
+          "supports": "The standalone backdrop is a blue vertical field and does not define the Daily row surface or scene composition.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The compact list appears over a blue scenic phone field with warm horizon light; the backdrop is a separate blue gradient. No numeric palette values are taken from the preview.",
+        "scene_backdrop": "The preview sits in the lower part of a phone composition with mountain and forest imagery; the standalone field contains no landscape detail.",
+        "surfaces": "Four short date rows sit in a rounded, translucent-appearing blue forecast panel with horizontal separators.",
+        "weather_art_relationship": "Each visible date row pairs a small condition mark with low/high values; the mockup does not show the adopted five-day rows, precipitation line, or Earlier/Later controls."
+      },
+      "interpretation": "Carry Atmospheric’s open blue field, warm scenic horizon, and contained forecast surface into Daily while keeping the landscape secondary to readable rows.",
+      "proposed_treatment": {
+        "palette": "Propose a blue-led field with clear light text and restrained warm accents; exact palette and contrast values remain for integrated review.",
+        "scene_backdrop": "Propose a calm sky-like field behind the list and use scenic detail only where it does not compete with date and forecast text; no complete scene is sourced here.",
+        "surfaces": "Propose a restrained rounded, translucent-appearing group only when row text remains clear; use opaque surfaces in High contrast and Effects Off.",
+        "weather_art_relationship": "Keep optional marks beside visible date and condition text, low/high values, and available precipitation meaning. Follow the five-day window and named controls from the written contract, not the four-row preview."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static canvas and row surface; retain Daily identity, exact supplied dates and values, precipitation meaning, source/status text, and named Earlier/Later controls.",
+        "high_contrast": "Use readable semantic text and visible row boundaries without relying on the landscape or translucent panel to separate values.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, let row content wrap or scroll while preserving earliest-to-latest order, visible labels, and control names."
+      },
+      "source_gaps": [
+        "No dedicated Daily page, full five-day window, precipitation treatment, Earlier/Later control state, or Atmospheric asset sheet is indexed.",
+        "The compact phone/board preview shows four rows only and does not define responsive, loading, stale, failure, or unavailable states."
+      ],
+      "derivation_basis": [
+        "atmospheric-phone",
+        "overview-board",
+        "atmospheric-backdrop"
+      ],
+      "rationale": "This proposal uses only the source-visible scenic field and separated Daily preview rows; the complete page structure and five-day behavior remain governed by the adopted contract.",
+      "limitations": [
+        "The phone and overview are the same compact composite concept, not independent full-page references.",
+        "The backdrop is field-level evidence only; no exact panel opacity, colors, crop, or numeric appearance measurements are proposed."
+      ]
+    },
+    {
+      "id": "glass-daily",
+      "theme": "glass",
+      "page": "daily",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "glass-phone",
+          "locator": "Daily tab in the segmented selector beneath the Now hero; the visible forecast strip below it is Hourly, with no Daily rows in this phone crop.",
+          "supports": "The phone identifies a Daily destination in the selector but does not show a Daily list or establish its row treatment.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "glass-asset-sheet",
+          "locator": "08 SCREEN EXAMPLE lower-right phone mockup: the “5 Day Forecast” list below the Hourly strip, including its five visible date rows and marks.",
+          "supports": "The screen example shows a compact five-day list with dated rows, condition marks, and low/high values inside the Glass presentation; it remains a composite mockup.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "overview-board",
+          "locator": "Glass phone column, Daily tab in the segmented selector above the Hourly forecast strip; no Daily rows are visible in this board column.",
+          "supports": "The overview shows the Glass selector’s Daily label and its cool blue-violet field with warm light; it supplies no Daily list composition.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "glass-backdrop",
+          "locator": "Standalone Glass backdrop full vertical field with cool blue-violet depth and soft warm/cool light forms; field evidence only.",
+          "supports": "The backdrop carries soft cool depth and warm/cool light forms but does not define a Daily surface or row opacity.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The phone and screen example use light text over dark, translucent-looking surfaces against cool blue-violet depth with warm light; no composited Daily color is measured.",
+        "scene_backdrop": "Soft light forms remain visible around the compact screen example; the phone selector itself does not show a Daily scene or list.",
+        "surfaces": "The asset-sheet screen example groups a five-day list in a rounded bounded surface; the separate phone shows a Daily selector label but only Hourly rows.",
+        "weather_art_relationship": "The five-day screen example places small condition marks with dates and low/high values. It does not establish precipitation meaning or the product’s window controls."
+      },
+      "interpretation": "Glass Daily can extend the sourced layered-surface and softly lit depth treatment, using the five-day example only as a compact row reference.",
+      "proposed_treatment": {
+        "palette": "Propose cool blue-violet roles with restrained warm highlights and readable foreground text; exact values remain unapproved.",
+        "scene_backdrop": "Propose a softly varied field where approved assets permit, with light forms subordinate to date and forecast facts.",
+        "surfaces": "Use one restrained translucent-appearing Daily group only when text and separators remain legible; resolve High contrast and Effects Off with opaque surfaces.",
+        "weather_art_relationship": "Keep marks decorative beside visible date, condition, low/high, and available precipitation meaning. The adopted five-day windows and visible Earlier/Later controls come from the product contract, not the mockup selector."
+      },
+      "state_constraints": {
+        "effects_off": "Replace transparency and background lighting with opaque surfaces and a static canvas while retaining every supplied Daily fact, source/status text, and window control.",
+        "high_contrast": "Use opaque, clearly bounded rows and readable text; do not depend on blur, translucent layering, or color alone.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow row fields to wrap or scroll and retain earliest-to-latest order and named controls."
+      },
+      "source_gaps": [
+        "The phone crop has a Daily selector but no Daily forecast rows; only the asset-sheet composite shows a five-day list.",
+        "No dedicated page states, precipitation details, Earlier/Later behavior, large-font, RTL, High contrast, or Effects Off source reference is available."
+      ],
+      "derivation_basis": [
+        "glass-phone",
+        "glass-asset-sheet",
+        "overview-board",
+        "glass-backdrop"
+      ],
+      "rationale": "This proposal combines the sheet’s visible five-day row example with the Glass field and surface language while leaving the full page and interaction to the adopted contract.",
+      "limitations": [
+        "The screen example is one compact composite, not a complete app page or proof of all five product fields.",
+        "The standalone backdrop cannot support claims about translucency, opacity, crop, or contrast of a composed Daily screen."
+      ]
+    },
+    {
+      "id": "minimal_oled-daily",
+      "theme": "minimal_oled",
+      "page": "daily",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "minimal-oled-phone",
+          "locator": "Daily preview below the metric tiles in the lower phone display, approximately x=35..277 and y=535..666 px: four ruled rows with condition marks and low/high values.",
+          "supports": "The compact Daily preview uses a black field, thin horizontal rules, text-first date/value rows, and small marks; four rows are not a horizon target.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "overview-board",
+          "locator": "Minimal OLED phone column, lower Daily preview below the metric tiles, around board x=655..895 and y=565..700 px; inspect ruled text rows.",
+          "supports": "The board corroborates the Minimal OLED black-first, low-decoration Daily preview with thin separators and localized marks.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "minimal-oled-backdrop",
+          "locator": "Standalone OLED backdrop full uninterrupted black field, considered separately from the phone’s ruled Daily rows.",
+          "supports": "The backdrop is a solid black field and does not prescribe Daily row structure or page-state treatment.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The preview uses a black-first field with bright text and a small warm mark accent; the standalone backdrop is solid black.",
+        "scene_backdrop": "No broad scene appears behind the Daily rows; the phone’s small localized hero image is above this preview and is not a Daily scene.",
+        "surfaces": "Four text rows are separated by thin horizontal rules without broad filled cards.",
+        "weather_art_relationship": "A small condition mark precedes each visible date, with high/low values aligned at the opposite side; precipitation and window controls are absent."
+      },
+      "interpretation": "Keep Minimal OLED Daily typography- and data-dominant, extending its black field and thin ruled list without importing the preceding chart or localized hero image.",
+      "proposed_treatment": {
+        "palette": "Propose the black canvas with high-legibility theme text roles and restrained condition accents; do not infer numeric color tokens from the mockup.",
+        "scene_backdrop": "Keep the broad Daily field visually quiet and black-first; do not extend the localized hero moon/cloud into this page.",
+        "surfaces": "Propose a low-decoration full-width list with thin separators and no filled card by default; High contrast retains visible boundaries and readable text.",
+        "weather_art_relationship": "Marks remain optional and secondary to visible date, condition, low/high, and available precipitation text. Preserve the five-day window and named controls from the product contract."
+      },
+      "state_constraints": {
+        "effects_off": "Retain the same opaque black canvas and static ruled list with every supplied fact and named control present.",
+        "high_contrast": "Keep a black field with readable text and stronger visible row/control boundaries; selection, disabled, and unavailable meanings must include words or semantics.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow rows to grow or scroll; keep labels readable and chronological order earliest-to-latest."
+      },
+      "source_gaps": [
+        "No dedicated Daily page, complete ten-day horizon, precipitation line, Earlier/Later controls, or Minimal OLED asset sheet is indexed.",
+        "The composite preview’s four rows and absent state examples do not define compact, large-font, RTL, loading, or stale behavior."
+      ],
+      "derivation_basis": [
+        "minimal-oled-phone",
+        "overview-board",
+        "minimal-oled-backdrop"
+      ],
+      "rationale": "The treatment extends source-visible black canvas and thin ruled rows while excluding unrelated chart and hero content.",
+      "limitations": [
+        "Phone and overview show the same small composite, not a complete Daily page.",
+        "No exact spacing, type scale, palette measurement, or row density is proposed from the cropped concept."
+      ]
+    },
+    {
+      "id": "instrument-daily",
+      "theme": "instrument",
+      "page": "daily",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "instrument-phone",
+          "locator": "DAILY option in the HOURLY/DAILY/RADAR selector in the middle of the inner phone display; content below is an Hourly strip, not Daily rows.",
+          "supports": "The phone visibly names a Daily selector option but does not show a Daily list or establish a Daily row pattern.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "instrument-asset-sheet",
+          "locator": "08 SCREEN EXAMPLE lower-right phone: DAILY option in the HOURLY/DAILY/RADAR selector above the Hourly strip and charts; no Daily rows are shown.",
+          "supports": "The sheet repeats the Daily selector label within Instrument’s bounded technical modules but provides no Daily forecast-row example.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "overview-board",
+          "locator": "Instrument phone column, DAILY selector option above the six-column Hourly strip around board x=948..1213 and y=448..599 px; no Daily rows follow it.",
+          "supports": "The overview shows the Daily tab within Instrument’s dark technical selector and outlined modules; it does not show Daily forecast content.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "instrument-backdrop",
+          "locator": "Standalone Instrument backdrop full vertical field with a fine rectangular grid; field-level evidence, not Daily content evidence.",
+          "supports": "The backdrop has a fine grid over a dark field, supporting broad theme identity only.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The phone and sheet use a dark field, restrained colored accents, and pale text; the separate backdrop has a fine grid. No Daily-specific palette is shown.",
+        "scene_backdrop": "The backdrop is an orthogonal grid field; phone/sheet Daily selectors sit among technical modules, but no selected Daily scene is visible.",
+        "surfaces": "The selector and neighboring modules use thin outlined rectangular boundaries; the content below remains an Hourly strip and charts rather than a Daily list.",
+        "weather_art_relationship": "A Daily option is visible in the selector, but no Daily date, condition, low/high, or precipitation rows are shown. Gauge and chart art are unrelated and excluded."
+      },
+      "interpretation": "Propose a restrained Instrument Daily treatment from its dark grid and outlined-module vocabulary, while treating all row structure and forecast content as derived from the written contract.",
+      "proposed_treatment": {
+        "palette": "Propose dark technical surfaces with readable semantic text and limited accents; exact Daily colors and contrast remain for integrated review.",
+        "scene_backdrop": "Use the Instrument grid only as subtle background decoration behind bounded content; keep it absent under Effects Off.",
+        "surfaces": "Propose clearly bounded rectangular row groupings and visible separators, without gauges, chart axes, AQI tiles, or derived indicators.",
+        "weather_art_relationship": "Use optional marks only beside supplied condition text. Show the contract’s date, numeric low/high or honest unavailability, precipitation meaning, and named window controls without source-invented fields."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static canvas and bounded row surfaces with all supplied Daily facts, source/status text, and named controls present.",
+        "high_contrast": "Strengthen text and panel boundaries with opaque surfaces; grid and accent color cannot carry selection, status, or data meaning.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, let technical rows expand or scroll; preserve all visible facts, control labels, and earliest-to-latest chronology."
+      },
+      "source_gaps": [
+        "No source shows an Instrument Daily list, selected Daily state, precipitation treatment, or Earlier/Later controls; visible Daily tabs are selector labels only.",
+        "No dedicated Daily state, responsive, loading/stale, High contrast, or Effects Off reference is indexed."
+      ],
+      "derivation_basis": [
+        "instrument-phone",
+        "instrument-asset-sheet",
+        "overview-board",
+        "instrument-backdrop"
+      ],
+      "rationale": "Instrument identity is grounded in its sourced grid and outlined modules, while the Daily composition is explicitly proposed because all Daily sources stop at a selector label.",
+      "limitations": [
+        "Neither the phone, asset sheet, nor board supplies a Daily content region; no row geometry or source fidelity is claimed.",
+        "Backdrop evidence supports only a broad grid field and cannot establish module, color, or responsive behavior."
+      ]
+    },
+    {
+      "id": "terminal-daily",
+      "theme": "terminal",
+      "page": "daily",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "terminal-phone",
+          "locator": "DAILY FORECAST block in the lower inner phone display, approximately x=38..282 and y=561..671 px: four ruled monospace date rows with values and marks.",
+          "supports": "The compact Daily preview uses monospace date/value rows between dashed rules with small condition marks; four sample rows do not define the full horizon.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "overview-board",
+          "locator": "Terminal phone column, lower DAILY FORECAST block around board x=1252..1517 and y=607..713 px; inspect dashed separators and four monospace date rows.",
+          "supports": "The overview corroborates the Terminal preview’s green monospace text, dashed rules, and compact Daily date/value rows.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "terminal-backdrop",
+          "locator": "Standalone Terminal backdrop full vertical field and dense rectangular grid; inspect separately from the phone’s sparse Daily separators.",
+          "supports": "The standalone backdrop is a denser grid than the phone’s dashed row rules and does not define Daily list styling.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The Daily preview uses green monospace text on black with sparse separators; the standalone backdrop has a denser rectangular grid.",
+        "scene_backdrop": "The compact phone combines a black console field with dashed rules; the separate full-field backdrop adds a denser grid texture.",
+        "surfaces": "Four date/value rows appear between dashed horizontal rules without card surfaces.",
+        "weather_art_relationship": "Small console-like condition marks appear at the right of visible date and low/high values; no precipitation line or Earlier/Later state is shown."
+      },
+      "interpretation": "Carry Terminal’s explicit monospace rows and rule-based grouping into Daily while keeping symbols subordinate to text and keeping backdrop grid density distinct from separators.",
+      "proposed_treatment": {
+        "palette": "Propose a black-first field, readable green/neutral text roles, and restrained status accents; the source does not establish exact tokens or contrast pairs.",
+        "scene_backdrop": "Keep any denser grid subdued behind content and remove it in Effects Off; do not treat dashed list rules as backdrop evidence.",
+        "surfaces": "Propose flat rows with explicit horizontal rules and no rounded cards or fabricated prompt syntax.",
+        "weather_art_relationship": "Optional marks remain secondary to date, condition, labeled low/high, and available precipitation text. Keep the five-day window and visible named controls required by the product contract."
+      },
+      "state_constraints": {
+        "effects_off": "Keep an opaque black static layout with text, rules, all supplied values, source/status, and named controls intact; remove grid/cursor effects.",
+        "high_contrast": "Use strong text and visible separators on opaque surfaces; status, selection, and disabled states require words or semantics beyond green color.",
+        "responsive_accessibility": "At compact width, font scale 1.3, and RTL, wrap or scroll field groups without reversing chronology or hiding named controls."
+      },
+      "source_gaps": [
+        "No dedicated Daily page, complete horizon, precipitation line, Earlier/Later controls, or Terminal asset sheet is indexed.",
+        "The phone/overview preview has four rows and no large-font, RTL, loading/stale, High contrast, or Effects Off state."
+      ],
+      "derivation_basis": [
+        "terminal-phone",
+        "overview-board",
+        "terminal-backdrop"
+      ],
+      "rationale": "This proposal preserves Terminal’s source-visible console typography and sparse Daily separators while deriving the full page from written product requirements.",
+      "limitations": [
+        "The phone and overview are the same compact concept, not independent full-page evidence.",
+        "The backdrop grid is denser than the phone separators; no exact grid scale, row pitch, colors, or responsive layout is inferred."
+      ]
     }
   ]
 }
@@ -203,21 +785,25 @@ D31_PAGE_ATMOSPHERES:BEGIN
 
 D31_PAGE_ATMOSPHERES:END
 
-## Cross-theme distinction review
+## Ten-cell cross-theme distinction and limitation review
 
-The proposals retain five different atmosphere relationships: Atmospheric uses
-open blue and a proposed scenic horizon; Glass layers translucent surfaces over
-cool, softly lit depth; Minimal OLED keeps a black field and localized imagery;
-Instrument groups facts in outlined modules over optional grid texture; Terminal
-uses console text and explicit separators over a mostly flat field. These are
-documented proposals, not owner-approved treatments. No treatment changes
-weather values, provenance, alert meaning, navigation, or accessibility meaning.
+The Now and Hourly proposals retain five different atmosphere relationships:
+Atmospheric uses open blue and a proposed scenic horizon; Glass layers
+translucent surfaces over cool, softly lit depth; Minimal OLED keeps a black
+field and localized imagery; Instrument groups facts in outlined modules over
+optional grid texture; Terminal uses console text and explicit separators over
+a mostly flat field. The Hourly strips are compact preview evidence only; their
+displayed counts and selector patterns do not set the adopted page structure.
+These are documented proposals, not owner-approved treatments. No treatment
+changes weather values, provenance, alert meaning, navigation, or accessibility
+meaning.
 
 ## Remaining work
 
-This interim artifact contains only the five proposed Now cells. The dependent
-cycle `051-d31-page-atmosphere-mapping-partial2` owns the five Hourly cells.
-Daily and Details, integrated review of all twenty cells, reviewable source
-reproductions, any proposed derivations, and required owner decisions remain
-open. D31, TP.1D, and TP.1 are not complete; packet approval and TP.2 eligibility
-remain gated.
+This interim artifact contains five proposed Now cells and five proposed Hourly
+cells. Daily and Details, integrated review of all twenty cells, reviewable
+source reproductions, any proposed derivations, and required owner decisions
+remain open. A new packet revision and explicit packet approval also remain
+pending; the upstream design-pack and owner-review gates remain open. D31,
+TP.1D, and TP.1 are not complete; packet approval and TP.2 eligibility remain
+gated.

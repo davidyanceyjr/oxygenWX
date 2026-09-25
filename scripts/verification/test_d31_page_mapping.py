@@ -22,24 +22,101 @@ class D31PageMappingTest(unittest.TestCase):
     def test_repository_mapping_passes(self):
         self.assertEqual([], self.check())
 
+    def test_fifteen_cell_contract_and_prior_cells_are_stable(self):
+        self.assertEqual(["now", "hourly", "daily"], self.mapping["scope"]["pages"])
+        self.assertEqual(15, self.mapping["scope"]["cell_count"])
+        self.assertEqual(15, len(self.mapping["cells"]))
+        self.assertEqual(
+            [(theme, page) for page in ("now", "hourly", "daily") for theme in
+             ("atmospheric", "glass", "minimal_oled", "instrument", "terminal")],
+            [(cell["theme"], cell["page"]) for cell in self.mapping["cells"]],
+        )
+        baseline = self.root / ".codex/test-artifacts/052-d31-daily-atmosphere-mapping/pre-edit-cells.json"
+        if baseline.exists():
+            import json
+            self.assertEqual(json.loads(baseline.read_text(encoding="utf-8")), self.mapping["cells"][:10])
+
     def test_missing_duplicate_and_extra_cells_fail(self):
         missing = self.check(lambda d: d["cells"].pop())
-        self.assertTrue(any("expected exactly 5 cells" in error for error in missing))
+        self.assertTrue(any("expected exactly 15 cells" in error for error in missing))
         duplicate = self.check(lambda d: d["cells"].__setitem__(1, copy.deepcopy(d["cells"][0])))
         self.assertTrue(any("duplicate theme/page cell" in error for error in duplicate))
         extra = self.check(lambda d: d["cells"].append(copy.deepcopy(d["cells"][0])))
-        self.assertTrue(any("expected exactly 5 cells" in error for error in extra))
+        self.assertTrue(any("expected exactly 15 cells" in error for error in extra))
+
+    def test_daily_matrix_order_scope_and_cell_failures(self):
+        cases = [
+            (lambda d: d["cells"].pop(), "expected exactly 15 cells"),
+            (lambda d: d["cells"].__setitem__(10, copy.deepcopy(d["cells"][9])), "duplicate theme/page cell ('terminal', 'hourly')"),
+            (lambda d: d["cells"][14].__setitem__("theme", "atmospheric"), "expected 'atmospheric-daily'"),
+            (lambda d: d["cells"][10].__setitem__("id", "glass-hourly"), "expected 'atmospheric-daily'"),
+            (lambda d: d["cells"][10].__setitem__("page", "hourly"), "canonical theme/page pair"),
+            (lambda d: d["cells"].__setitem__(slice(10, 15), list(reversed(d["cells"][10:15]))), "canonical theme/page pair"),
+            (lambda d: d["scope"].__setitem__("pages", ["now", "daily", "hourly"]), "scope.pages"),
+            (lambda d: d["scope"].__setitem__("cell_count", 14), "scope.cell_count"),
+            (lambda d: d["scope"].__setitem__("coverage", "complete"), "scope.coverage"),
+        ]
+        for mutate, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertTrue(any(expected in error for error in self.check(mutate)))
+
+    def test_daily_nested_fields_evidence_sources_derivation_and_locators_fail(self):
+        cases = [
+            (lambda d: d["cells"][10]["observation"].__setitem__("surfaces", " "), "cells[10].observation.surfaces"),
+            (lambda d: d["cells"][11]["state_constraints"].__setitem__("effects_off", " "), "cells[11].state_constraints.effects_off"),
+            (lambda d: d["cells"][12]["source_refs"][0].__setitem__("evidence_class", "guess"), "cells[12].source_refs[0].evidence_class"),
+            (lambda d: d["cells"][13]["source_refs"][0].__setitem__("source_id", "unknown-source"), "unknown source ID 'unknown-source'"),
+            (lambda d: d["cells"][13]["source_refs"][0].__setitem__("source_id", "glass-phone"), "belongs to theme 'Glass'"),
+            (lambda d: d["cells"][10]["source_refs"][0].__setitem__("source_id", "atmospheric-asset-sheet-absent"), "cannot be evidence"),
+            (lambda d: d["cells"][13].__setitem__("derivation_basis", ["glass-backdrop"]), "glass-backdrop"),
+            (lambda d: d["cells"][10]["source_refs"][0].__setitem__("locator", " "), "mapping-specific non-blank locator"),
+            (lambda d: d["cells"][10]["source_refs"][0].__setitem__("locator", self.audit["inventory"][1]["locator"]), "too generic"),
+            (lambda d: d["cells"][10]["source_refs"][0].__setitem__("locator", "Native phone crop: Hourly strip under the Now hero."), "Daily-relevant region"),
+            (lambda d: d["cells"][11]["source_refs"][0].__setitem__("locator", "08 SCREEN EXAMPLE current-condition hero at top of mockup."), "Daily-relevant region"),
+            (lambda d: d["cells"][14]["source_refs"][1].__setitem__("locator", "Overview board Terminal phone: Hourly forecast columns."), "Daily-relevant region"),
+        ]
+        for mutate, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertTrue(any(expected in error for error in self.check(mutate)))
+
+    def test_daily_completion_and_approval_claims_fail(self):
+        for claim, expected in (
+            ("D31 is complete.", "D31 completion"),
+            ("TP.1D is closed.", "TP.1D completion"),
+            ("TP.1 is approved.", "TP.1 completion"),
+            ("The packet is approved.", "packet approval"),
+            ("TP.2 is eligible.", "TP.2 eligibility"),
+        ):
+            with self.subTest(claim=claim):
+                self.assertTrue(any(expected in error for error in self.check(prose=claim)))
+
+    def test_theme_page_pair_coverage_and_hourly_specific_errors_fail(self):
+        missing_hourly = self.check(lambda d: d["cells"].pop())
+        self.assertTrue(any("canonical theme/page pair" in error for error in missing_hourly))
+        duplicate_hourly = self.check(lambda d: d["cells"].__setitem__(9, copy.deepcopy(d["cells"][8])))
+        self.assertTrue(any("duplicate theme/page cell ('instrument', 'hourly')" in error for error in duplicate_hourly))
+        extra_pair = self.check(lambda d: d["cells"][9].__setitem__("theme", "atmospheric"))
+        self.assertTrue(any("expected 'atmospheric-hourly'" in error for error in extra_pair))
+        wrong_id = self.check(lambda d: d["cells"][5].__setitem__("id", "atmospheric-now"))
+        self.assertTrue(any("cells[5].id: expected 'atmospheric-hourly'" in error for error in wrong_id))
+        wrong_page = self.check(lambda d: d["cells"][5].__setitem__("page", "daily"))
+        self.assertTrue(any("canonical theme/page pair" in error for error in wrong_page))
+        bad_field = self.check(lambda d: d["cells"][5]["observation"].__setitem__("surfaces", " "))
+        self.assertTrue(any("cells[5].observation.surfaces" in error for error in bad_field))
+        bad_evidence = self.check(lambda d: d["cells"][5]["source_refs"][0].__setitem__("evidence_class", "guess"))
+        self.assertTrue(any("cells[5].source_refs[0].evidence_class" in error for error in bad_evidence))
 
     def test_scope_theme_page_id_and_order_fail(self):
         cases = [
             (lambda d: d["scope"].__setitem__("themes", list(reversed(d["scope"]["themes"]))), "scope.themes"),
-            (lambda d: d["scope"].__setitem__("pages", ["hourly"]), "scope.pages"),
-            (lambda d: d["scope"].__setitem__("cell_count", 4), "scope.cell_count"),
+            (lambda d: d["scope"].__setitem__("pages", ["hourly", "now"]), "scope.pages"),
+            (lambda d: d["scope"].__setitem__("cell_count", 9), "scope.cell_count"),
             (lambda d: d["scope"].__setitem__("coverage", "complete"), "scope.coverage"),
             (lambda d: d["cells"][0].__setitem__("theme", "unknown"), "cells[0].theme"),
-            (lambda d: d["cells"][0].__setitem__("page", "hourly"), "cells[0].page"),
+            (lambda d: d["cells"][0].__setitem__("page", "hourly"), "duplicate theme/page cell"),
             (lambda d: d["cells"][0].__setitem__("id", "wrong-id"), "cells[0].id"),
-            (lambda d: d["cells"].reverse(), "canonical order"),
+            (lambda d: d["cells"].__setitem__(slice(0, 5), list(reversed(d["cells"][:5]))), "canonical theme/page pair"),
+            (lambda d: d["cells"].__setitem__(slice(5, 10), list(reversed(d["cells"][5:10]))), "canonical theme/page pair"),
         ]
         for mutate, expected in cases:
             with self.subTest(expected=expected):
@@ -61,6 +138,22 @@ class D31PageMappingTest(unittest.TestCase):
         self.assertTrue(any("proposed_treatment.surfaces: missing field" in error for error in errors))
         errors = self.check(lambda d: d["cells"][0].__setitem__("limitations", [" "]))
         self.assertTrue(any("limitations: expected non-empty array" in error for error in errors))
+
+    def test_malformed_hourly_nested_fields_and_source_refs_fail(self):
+        cases = [
+            (lambda d: d["cells"][6]["proposed_treatment"].pop("palette"), "cells[6].proposed_treatment.palette: missing field"),
+            (lambda d: d["cells"][7]["state_constraints"].__setitem__("high_contrast", " "), "cells[7].state_constraints.high_contrast"),
+            (lambda d: d["cells"][8].__setitem__("source_gaps", []), "cells[8].source_gaps"),
+            (lambda d: d["cells"][9].__setitem__("derivation_basis", ["uncited-id"]), "uncited-id"),
+            (lambda d: d["cells"][5]["source_refs"][0].__setitem__("source_id", "unknown-source"), "unknown source ID 'unknown-source'"),
+            (lambda d: d["cells"][5]["source_refs"][0].__setitem__("source_id", "terminal-backdrop"), "belongs to theme 'Terminal'"),
+            (lambda d: d["cells"][5]["source_refs"][0].__setitem__("source_id", "atmospheric-asset-sheet-absent"), "cannot be evidence"),
+            (lambda d: d["cells"][5]["source_refs"][0].__setitem__("locator", " "), "mapping-specific non-blank locator"),
+            (lambda d: d["cells"][6]["source_refs"][0].__setitem__("locator", "Full extracted phone crop; inspect inner display from y≈35 to y≈725, excluding bezel/status frame; native pixels."), "too generic"),
+        ]
+        for mutate, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertTrue(any(expected in error for error in self.check(mutate)))
 
     def test_invalid_evidence_class_and_source_references_fail(self):
         errors = self.check(lambda d: d["cells"][0]["source_refs"][0].__setitem__("evidence_class", "inferred"))
@@ -88,7 +181,9 @@ class D31PageMappingTest(unittest.TestCase):
         self.assertTrue(any("source audit profile Minimal OLED" in error for error in errors))
         for claim, expected in (
             ("D31 is complete.", "D31 completion"),
+            ("D31 completed.", "D31 completion"),
             ("TP.1D is approved.", "TP.1D completion"),
+            ("TP.1 is closed.", "TP.1 completion"),
             ("The packet is approved.", "packet approval"),
             ("TP.2 is eligible.", "TP.2 eligibility"),
         ):
