@@ -489,7 +489,20 @@ own fixed capture matrix below.
 
 ## TP.2 — Pack-driven appearance resolution and shared rendering — ACTIVE (six bounded slices)
 
-### Immediate execution head — TP.2A catalog parity remediation PASS
+### Most recent execution head — TP.2A resolved appearance policy PASS
+
+Cycle `062-tp2a-resolved-appearance-policy` completed its bounded plan:
+`.codex/plans/062-tp2a-resolved-appearance-policy.md`. The owner selected a
+measurable 3:1 contrast requirement for opaque outlines against each actual
+adjacent component background, alongside the design-pack's 4.5:1 text floor and
+7:1 supporting-text promotion rule. Cycle 062 inventoried current production
+text/outline consumers and verified the resolver against their opaque
+component backgrounds and declared backdrop endpoints. All 60 resolver cells
+and focused/repository checks passed. High contrast makes panel/outline
+opacity opaque across effects levels; Effects Off keeps solid backdrop and no
+motion. Exact evidence and limitations:
+`.codex/history/2026-09-26-062-tp2a-resolved-appearance-policy.md` and
+`.codex/test-artifacts/062-tp2a-resolved-appearance-policy/`.
 
 TP.2A now has five sequential bounded steps: spacing alignment, catalog schema
 validation, JSON/Kotlin catalog checker, parity remediation, and resolved
@@ -514,7 +527,7 @@ workflow, contract, and repository check passed; the six JSON input hashes are
 unchanged. Exact history and evidence are in
 `.codex/history/2026-09-26-061-tp2a-catalog-parity-remediation.md` and
 `.codex/test-artifacts/061-tp2a-catalog-parity-remediation/`. Resolver policy
-remains a separate next gate. No Compose page rendering changed.
+passed as cycle 062, with no Compose page rendering changes.
 
 **Completed prerequisite — TP.2A spacing alignment (PASS):** Glass,
 Minimal OLED, and Terminal now resolve the six approved spacing targets;
@@ -542,7 +555,7 @@ Cycle 061 subsequently corrected those two typed values and passed full catalog
 parity; the historical BLOCKED result remains accurate for cycle 060. The parity
 remediation is closed PASS in
 `.codex/history/2026-09-26-061-tp2a-catalog-parity-remediation.md`. Resolved
-appearance policy and TP.2B remain gated on the next separate policy slice.
+appearance policy passed in cycle 062, completing TP.2A and unblocking TP.2B.
 
 ### Dependency
 
@@ -556,7 +569,7 @@ showcase exits.
 
 ### TP.2A — Approved tokens and resolver (five sequential bounded steps)
 
-**TP.2A catalog conformance (parity remediation PASS; resolver policy planned):**
+**TP.2A catalog conformance (parity remediation PASS; resolver policy PASS):**
 cycle 060 passed validation of the exact catalog/manifest schema, identities,
 field shapes, and value ranges. Cycle
 `060-tp2a-catalog-conformance-partial2` implemented JSON/Kotlin parity,
@@ -565,15 +578,15 @@ documentation, but its checked source has the mismatches recorded above. The
 owner chose approved JSON spacing values as authoritative on 2026-09-26; cycle
 059 aligned the corresponding runtime geometry. Cycle 061 corrected the two
 remaining typed values while leaving approved JSON unchanged. Catalog parity
-and the slice checks pass; resolver policy is the next distinct bounded item.
+and the slice checks pass; cycle 062 completed the resolver policy.
 See `.codex/history/2026-09-26-061-tp2a-catalog-parity-remediation.md`.
 
-**TP.2A-partial2 — resolved appearance policy (planned):** after both
-catalog-conformance parts pass, implement approved high-contrast opaque surfaces, WCAG text-pair
-verification and supporting-role promotion, independent layout/effects axes,
-and Effects Off precedence. Exit with deterministic tests for all 60
-combinations, policy invariants, and focused/repository checks. Do not change
-Compose page rendering. This policy slice's completion closes TP.2A.
+**TP.2A-partial2 — resolved appearance policy (PASS):** the resolver implements
+approved high-contrast opaque surfaces, WCAG text-pair verification and
+supporting-role promotion, opaque adjacent outlines at least 3:1, independent
+layout/effects axes, and Effects Off precedence. Deterministic tests cover all
+60 combinations; focused and repository checks passed. Compose page rendering
+did not change. Evidence: `.codex/history/2026-09-26-062-tp2a-resolved-appearance-policy.md`.
 
 ### TP.2B — Shared shell and current-condition components
 

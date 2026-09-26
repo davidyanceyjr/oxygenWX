@@ -76,8 +76,47 @@ definitions. The pure resolver accepts theme identity, contrast, layout, and eff
 inputs and returns a complete semantic palette, typography, geometry, render-style,
 and motion policy. It has no weather, navigation, persistence, provider, or
 Compose-runtime inputs. App composition selects the requested theme and calls
-the pure resolver. Contrast resolves through palette values; layout resolves through geometry; Effects Off resolves a
-solid backdrop, no motion, and fully opaque panels and outlines.
+the pure resolver. High contrast resolves palette roles against the opaque
+backgrounds used by current components; layout resolves through geometry; and
+effects resolve backdrop/motion and panel/outline opacity.
+
+High contrast uses the approved catalog `content` and `secondaryData` colors.
+It verifies primary/content and precipitation text at 4.5:1 on actual opaque
+component backgrounds. Supporting text keeps its catalog color only where it
+reaches 7:1 on every background where that role is rendered; otherwise the
+resolved `secondaryData` role is promoted to resolved `content`, which must
+still meet 4.5:1. The finite current inventory includes bare hero/selector
+content on `canvas` and page headers/theme-picker text on the catalog
+`atmosphereTop`/`atmosphereBottom` backdrop endpoints; the theme menu outline
+on `surface` where its width is non-zero; grouped sections on
+`surface` (Atmospheric/Instrument), `elevatedSurface` (Glass), or `canvas`
+(Minimal OLED/Terminal); disabled-button content on `elevatedSurface`; and the
+Instrument/Terminal hero divider on its grouped-section background. A section
+outline is included only where `panelBorderWidth` is non-zero. The selected
+page text is checked over its translucent action tint composited on each
+declared backdrop endpoint and `canvas`;
+selected date text and outline use the backdrop endpoints; action-button text is
+checked against the opaque `action` fill. Warning/danger are not current
+production text roles.
+
+Every resolved High contrast foreground pair is measured with WCAG 2.x sRGB
+linearization, alpha compositing, and `(Llighter + 0.05) / (Ldarker + 0.05)`.
+Text requires 4.5:1; supporting text uses the 7:1-or-promote policy; rendered
+outlines require 3:1 against their actual adjacent opaque backgrounds. A failed
+action foreground/border role is promoted to `content`; action-button text uses
+whichever of resolved `content` or `canvas` has higher contrast against the
+opaque action fill. The resolver rechecks each result and fails closed if the
+catalog content role cannot satisfy the required floor. It never mutates the
+canonical `ThemeDefinition` or Standard palette.
+
+Standard/Simple changes geometry only and keeps the 48 dp target minimum.
+Effects retain their requested identity and declared backdrop/motion behavior,
+including the catalog fallback for themes without Full-motion support. High
+contrast sets panel and outline opacity to `1f` at every effects level. Effects
+Off has final precedence for a solid canvas, no motion, and opaque panels and
+outlines for every contrast/layout choice. These axes do not alter weather
+meaning or introduce runtime state into resolution. All 60 combinations are
+covered by deterministic resolver tests.
 
 The approved JSON theme catalog is a checked design input; typed Kotlin in
 `ThemeCatalog.kt` remains runtime authority. Run `python scripts/dev.py catalog`
