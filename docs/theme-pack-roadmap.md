@@ -489,12 +489,12 @@ own fixed capture matrix below.
 
 ## TP.2 — Pack-driven appearance resolution and shared rendering — ACTIVE (six bounded slices)
 
-### Immediate execution head — TP.2A spacing alignment planned; conformance blocked
+### Immediate execution head — TP.2A spacing alignment complete; conformance next
 
 TP.2A now has three sequential bounded steps: spacing alignment, catalog
 conformance, and resolved appearance policy. Plan 058 inventoried the catalog
-schema and found six approved spacing values that differ from the corresponding
-current typed runtime geometry. Its bounded cycle closed as blocked before implementation;
+schema and found six approved spacing values that differed from the corresponding
+typed runtime geometry. Its bounded cycle closed as blocked before implementation;
 see `.codex/history/2026-09-26-058-tp2a-approved-tokens-resolver.md` and
 `.codex/test-artifacts/058-tp2a-approved-tokens-resolver/inventory-and-blocker.md`.
 On 2026-09-26, the owner chose the approved JSON spacing values as authoritative.
@@ -502,21 +502,24 @@ The six corresponding Kotlin runtime geometry values must be brought into
 conformance in a new bounded implementation plan; the approved JSON remains
 unchanged. The direct field mapping inventoried in plan 058 stands. Decision
 evidence: `.codex/test-artifacts/058-tp2a-approved-tokens-resolver/owner-decision-2026-09-26.md`.
-This resolves the authority decision but does not pass TP.2A part one or clear
-its implementation work. Do not activate `TP.2A-partial2` until part one passes.
-Only the second slice's PASS closes TP.2A and unlocks TP.2B. Neither slice
-changes Compose page rendering.
+This resolved the authority decision. The spacing-alignment prerequisite then
+passed in cycle 059; its exact scope and verification are recorded in
+`.codex/history/2026-09-26-059-tp2a-spacing-alignment.md` and
+`.codex/test-artifacts/059-tp2a-spacing-alignment/`. Catalog conformance remains
+the next gated slice. Do not activate `TP.2A-partial2` until catalog conformance
+passes. Only the second slice's PASS closes TP.2A and unlocks TP.2B. Neither
+slice changes Compose page rendering.
 
-**Next bounded slice — TP.2A-part-one-spacing-alignment (planned):** update only
-the six Kotlin runtime geometry values listed in the owner-decision evidence to
-match the unchanged approved JSON. Keep all other theme values, geometry
-properties, resolver behavior, and rendering unchanged. Add focused catalog
-assertions for the approved spacing targets. Exit when those assertions and
-focused tests pass, `python scripts/dev.py workflow`,
-`python scripts/dev.py contract`, and `git diff --check` pass, and the bounded
-cycle records any broader check result. This slice does not implement the
-catalog checker or claim TP.2A part one complete. Requires a separate activated
-plan before implementation.
+**Completed prerequisite — TP.2A spacing alignment (PASS):** Glass,
+Minimal OLED, and Terminal now resolve the six approved spacing targets;
+focused exact-value assertions and repository checks passed. This closes only
+the spacing-alignment prerequisite. It does not establish static catalog
+conformance or close TP.2A. Create a separate bounded plan for the catalog
+checker; retain the TP.2A-partial2 and TP.2B gates until their dependencies pass.
+
+**Next bounded slice — TP.2A catalog conformance:** define and validate the
+static catalog schema and JSON/Kotlin parity in a separate bounded plan before
+resolver-policy work.
 
 ### Dependency
 

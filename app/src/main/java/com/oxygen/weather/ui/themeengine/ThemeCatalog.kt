@@ -20,7 +20,7 @@ object ThemeCatalog {
         WeatherThemeId.GLASS, "Glass",
         palette("0B1220", "122B58", "281A4A", "C084FC", "31527A", "3A5E88", "F8FAFF", "C9D7EC", "A6C8FF", "60A5FA", "22D3EE", "FBBF24", "FB7185", "60A5FA", "08101F"),
         editorialTypography().copy(displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Light, fontSize = 78.sp, lineHeight = 82.sp, letterSpacing = (-1.5).sp)),
-        spaciousGeometry(26.dp),
+        spaciousGeometry(26.dp).copy(pageStackGap = 12.dp, gridGap = 10.dp, panelInset = 14.dp),
         ThemeVisualLanguage(BackdropStyle.GLASS_GRADIENT, SurfaceStyle.GLASS, HeroStyle.LAYERED, WeatherMarkStyle.SOFT_LINE, MotionStyle.SUBTLE, true, 0.42f, 1f),
     )
     val minimalOled = ThemeDefinition(
@@ -30,7 +30,13 @@ object ThemeCatalog {
             displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Light, fontSize = 88.sp, lineHeight = 92.sp, letterSpacing = (-2.5).sp),
             labelMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 15.sp, letterSpacing = 0.4.sp),
         ),
-        spaciousGeometry(16.dp).copy(pageGutter = 18.dp, pageStackGap = 18.dp, panelBorderWidth = 0.dp),
+        spaciousGeometry(16.dp).copy(
+            pageGutter = 18.dp,
+            pageStackGap = 18.dp,
+            gridGap = 12.dp,
+            panelInset = 8.dp,
+            panelBorderWidth = 0.dp,
+        ),
         ThemeVisualLanguage(BackdropStyle.PURE_BLACK, SurfaceStyle.MINIMAL, HeroStyle.MINIMAL, WeatherMarkStyle.MINIMAL_LINE, MotionStyle.OFF, false, 1f, 1f),
     )
     val instrument = ThemeDefinition(
@@ -56,7 +62,7 @@ object ThemeCatalog {
             bodyMedium = TextStyle(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Normal, fontSize = 13.sp, lineHeight = 18.sp),
             labelMedium = TextStyle(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 15.sp, letterSpacing = 0.6.sp),
         ),
-        compactGeometry(0.dp),
+        compactGeometry(0.dp).copy(pageStackGap = 10.dp),
         ThemeVisualLanguage(BackdropStyle.TERMINAL_GRID, SurfaceStyle.TERMINAL_FLAT, HeroStyle.TEXT_CONSOLE, WeatherMarkStyle.TERMINAL_GLYPH, MotionStyle.OFF, false, 1f, 1f),
     )
 

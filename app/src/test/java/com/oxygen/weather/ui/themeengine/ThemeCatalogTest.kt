@@ -1,12 +1,23 @@
 package com.oxygen.weather.ui.themeengine
 
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ThemeCatalogTest {
+    @Test
+    fun approvedJsonSpacingTargetsMatchTypedCatalog() {
+        assertEquals(12.dp, ThemeCatalog.glass.geometry.pageStackGap)
+        assertEquals(10.dp, ThemeCatalog.glass.geometry.gridGap)
+        assertEquals(14.dp, ThemeCatalog.glass.geometry.panelInset)
+        assertEquals(12.dp, ThemeCatalog.minimalOled.geometry.gridGap)
+        assertEquals(8.dp, ThemeCatalog.minimalOled.geometry.panelInset)
+        assertEquals(10.dp, ThemeCatalog.terminal.geometry.pageStackGap)
+    }
+
     @Test
     fun catalogContainsExactlyTheApprovedThemesInStableOrder() {
         assertEquals(
