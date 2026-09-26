@@ -20,6 +20,7 @@ GRADLE_TASKS = {
     "lint": [":app:lintDebug"],
     "check": [":app:testDebugUnitTest", ":app:lintDebug", ":app:assembleDebug"],
     "install": [":app:installDebug"],
+    "android-test": [":app:connectedDebugAndroidTest"],
 }
 
 
@@ -249,7 +250,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build, run, and verify Oxygen Weather on Windows, macOS, or Linux.")
     parser.add_argument(
         "command",
-        choices=["build", "test", "lint", "catalog", "contract", "workflow", "check", "install", "run", "screenshot"],
+        choices=["build", "test", "android-test", "lint", "catalog", "contract", "workflow", "check", "install", "run", "screenshot"],
         nargs="?",
         default="check",
     )

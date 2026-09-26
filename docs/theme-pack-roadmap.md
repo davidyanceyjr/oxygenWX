@@ -596,6 +596,18 @@ typed values and callbacks for all five resolved themes, with focused
 semantic/value tests and no raw-theme branching in component content or
 interactions. Keep components additive.
 
+**TP.2B (PASS; cycle 063):** The existing shared components satisfy the scoped
+typed-value, selected-tab/callback, and presentation contracts across all five
+resolved themes. Focused API 37 emulator instrumentation passed for normal
+values, verbatim unavailable text, omitted optional metric support, null
+decorative mark, 48 dp selector targets, High contrast/Subtle, Standard/Effects
+Off, 360 × 640 dp, font scale 1.3, and RTL. The audit corrected modifier
+forwarding and resolved hero-fact typography. Installed compact Now smoke
+captures were retained for Subtle and Effects Off. Exact commands, device
+identity, screenshots, and limitations are recorded in
+`.codex/history/2026-09-26-063-tp2b-shared-shell-current-components.md` and
+`.codex/test-artifacts/063-tp2b-shared-shell-current-components/`.
+
 ### TP.2C — Forecast and Details components
 
 After TP.2B, implement the hourly, daily, and Details/source component families.

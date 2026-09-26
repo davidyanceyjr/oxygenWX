@@ -164,26 +164,27 @@ fun ProductionCurrentHero(
                 HorizontalDivider(color = theme.palette.outline)
             }
             Row(horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
-                HeroFact(theme.palette, "Humidity", current.humidity, Modifier.weight(1f))
-                HeroFact(theme.palette, "Dew point", current.dewPoint, Modifier.weight(1f))
+                HeroFact(theme, "Humidity", current.humidity, Modifier.weight(1f))
+                HeroFact(theme, "Dew point", current.dewPoint, Modifier.weight(1f))
             }
         }
+        val heroModifier = modifier.semantics { contentDescription = current.spokenSummary }
         when (theme.heroStyle) {
             HeroStyle.EDITORIAL -> Column(
-                modifier.fillMaxWidth().semantics { contentDescription = current.spokenSummary }
+                heroModifier.fillMaxWidth()
                     .padding(horizontal = theme.geometry.heroPanelInset, vertical = theme.geometry.panelInset),
                 verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
                 content = heroContent,
             )
             HeroStyle.MINIMAL -> Column(
-                modifier.fillMaxWidth().semantics { contentDescription = current.spokenSummary }
+                heroModifier.fillMaxWidth()
                     .padding(vertical = theme.geometry.panelInset),
                 verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
                 content = heroContent,
             )
             HeroStyle.LAYERED, HeroStyle.INSTRUMENT, HeroStyle.TEXT_CONSOLE -> ProductionSectionSurface(
                 theme = theme,
-                modifier = modifier.semantics { contentDescription = current.spokenSummary },
+                modifier = heroModifier,
                 contentPadding = PaddingValues(theme.geometry.heroPanelInset),
                 content = heroContent,
             )
@@ -192,10 +193,10 @@ fun ProductionCurrentHero(
 }
 
 @Composable
-private fun HeroFact(palette: ThemePalette, label: String, value: String, modifier: Modifier) {
+private fun HeroFact(theme: ResolvedTheme, label: String, value: String, modifier: Modifier) {
     Column(modifier) {
-        Text(label, style = MaterialTheme.typography.labelMedium, color = palette.secondaryData)
-        Text(value, style = MaterialTheme.typography.bodyMedium, color = palette.content)
+        Text(label, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+        Text(value, style = theme.typography.bodyMedium, color = theme.palette.content)
     }
 }
 
