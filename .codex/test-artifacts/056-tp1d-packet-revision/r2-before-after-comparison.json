@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "manifest_entries": 117,
+  "manifest_file_sha256": "ae4c75cbf0bcb7c48dec5d907407da4c8932093dc00a52a4ec2a3921a592f8a1",
+  "aggregate_excluding_owner_guide_row": "3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869",
+  "before_after_manifest_bytes_identical": true
+}

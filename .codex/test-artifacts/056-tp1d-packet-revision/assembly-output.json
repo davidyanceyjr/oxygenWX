@@ -1,0 +1,11 @@
+{
+  "revision": "tp1d-proposed-r3-d28-d29-d31",
+  "staging": ".codex/test-artifacts/056-tp1d-packet-revision/staging/tp1d-proposed-r3-d28-d29-d31",
+  "final": ".codex/test-artifacts/056-tp1d-packet-revision/packet/tp1d-proposed-r3-d28-d29-d31",
+  "manifest_entries": 117,
+  "packet_files": 118,
+  "aggregate_excluding_owner_guide_row": "da0dce544cf4fb2d5263dcc6d24fbed9147ca96c52303e6d0395c29e8a57b8c5",
+  "manifest_file_sha256": "31c7db9b3916727666c8182952aeb445dca81abe88cb8ad39e837ebf05d4810e",
+  "source_inventory_entries": 117,
+  "status": "assembled in staging; audit required before freeze"
+}

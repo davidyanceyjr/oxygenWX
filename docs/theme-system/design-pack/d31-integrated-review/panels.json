@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "status": "owner_approved",
+  "manifest_source": "docs/theme-system/ASSET_MANIFEST.json",
+  "mapping_source": "docs/theme-system/design-pack/D31_PAGE_ATMOSPHERES.md",
+  "panels": [
+    {
+      "id": "overview-atmospheric",
+      "theme": "Atmospheric",
+      "source_path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "source_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "crop_bounds_px": [
+        28,
+        128,
+        264,
+        712
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/overview-atmospheric.png",
+      "output_sha256": "0eb037a7fbfdbfa76b4bf97ed8812400fbc59720a92910d17da6b8c9c8f14d72",
+      "output_dimensions_px": [
+        264,
+        712
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Overview board phone display crop at native x=28..291, y=128..839; includes phone frame/display only, excludes title/footer."
+    },
+    {
+      "id": "overview-glass",
+      "theme": "Glass",
+      "source_path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "source_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "crop_bounds_px": [
+        337,
+        128,
+        266,
+        712
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/overview-glass.png",
+      "output_sha256": "9943e835942156303f9df99baffbca15ef3648b54b9ce373c1241d5559f7190d",
+      "output_dimensions_px": [
+        266,
+        712
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Overview board phone display crop at native x=337..602, y=128..839; includes phone frame/display only, excludes title/footer."
+    },
+    {
+      "id": "overview-minimal-oled",
+      "theme": "Minimal OLED",
+      "source_path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "source_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "crop_bounds_px": [
+        644,
+        128,
+        258,
+        712
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/overview-minimal-oled.png",
+      "output_sha256": "43044695d22b9969b6882c38517b512399e4f08bf015b11b2ca9ed3dd77dde59",
+      "output_dimensions_px": [
+        258,
+        712
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Overview board phone display crop at native x=644..901, y=128..839; includes phone frame/display only, excludes title/footer."
+    },
+    {
+      "id": "overview-instrument",
+      "theme": "Instrument",
+      "source_path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "source_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "crop_bounds_px": [
+        943,
+        128,
+        272,
+        712
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/overview-instrument.png",
+      "output_sha256": "fef82e68a06e4b3a85c3a5d2df5d074b3f55da7972521f3e93a0d438ac8427af",
+      "output_dimensions_px": [
+        272,
+        712
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Overview board phone display crop at native x=943..1214, y=128..839; includes phone frame/display only, excludes title/footer."
+    },
+    {
+      "id": "overview-terminal",
+      "theme": "Terminal",
+      "source_path": "docs/assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png",
+      "source_sha256": "289f97ef8234a6e410bb4918921ba7729b3d2c3ef527f6baa210dd7365348554",
+      "source_dimensions_px": [
+        1536,
+        1024
+      ],
+      "crop_bounds_px": [
+        1257,
+        128,
+        255,
+        712
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/overview-terminal.png",
+      "output_sha256": "5ce01d607afa347f8973338ddbf03ad51f98d38d2b63bb4dfbe4236668e42e9f",
+      "output_dimensions_px": [
+        255,
+        712
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Overview board phone display crop at native x=1257..1511, y=128..839; includes phone frame/display only, excludes title/footer."
+    },
+    {
+      "id": "backdrop-atmospheric",
+      "theme": "Atmospheric",
+      "source_path": "docs/assets/design-references/production-themes/atmospheric/backgrounds/atmospheric_backdrop.png",
+      "source_sha256": "f246dd860b963654d9f96723e06b71ac0a22424a736fd403f18e79e91de97c73",
+      "source_dimensions_px": [
+        1440,
+        3200
+      ],
+      "crop_bounds_px": null,
+      "output_path": "docs/assets/design-references/production-themes/atmospheric/backgrounds/atmospheric_backdrop.png",
+      "output_sha256": "f246dd860b963654d9f96723e06b71ac0a22424a736fd403f18e79e91de97c73",
+      "output_dimensions_px": [
+        1440,
+        3200
+      ],
+      "reproduction_kind": "native_reference",
+      "locator": "Full native backdrop, linked in place without copy, recolor, or resampling."
+    },
+    {
+      "id": "backdrop-glass",
+      "theme": "Glass",
+      "source_path": "docs/assets/design-references/production-themes/glass/backgrounds/glass_backdrop.png",
+      "source_sha256": "30c81e3783c0df301360cdec0a3aa08d4970e2a473e4cf084e44b8fa79a6cb56",
+      "source_dimensions_px": [
+        1440,
+        3200
+      ],
+      "crop_bounds_px": null,
+      "output_path": "docs/assets/design-references/production-themes/glass/backgrounds/glass_backdrop.png",
+      "output_sha256": "30c81e3783c0df301360cdec0a3aa08d4970e2a473e4cf084e44b8fa79a6cb56",
+      "output_dimensions_px": [
+        1440,
+        3200
+      ],
+      "reproduction_kind": "native_reference",
+      "locator": "Full native backdrop, linked in place without copy, recolor, or resampling."
+    },
+    {
+      "id": "backdrop-minimal-oled",
+      "theme": "Minimal OLED",
+      "source_path": "docs/assets/design-references/production-themes/minimal-oled/backgrounds/oled_backdrop.png",
+      "source_sha256": "3289ae4838bd2fee459921025d00f3c3d33b96d3982efb6afd09e5f17f20ecd3",
+      "source_dimensions_px": [
+        1440,
+        3200
+      ],
+      "crop_bounds_px": null,
+      "output_path": "docs/assets/design-references/production-themes/minimal-oled/backgrounds/oled_backdrop.png",
+      "output_sha256": "3289ae4838bd2fee459921025d00f3c3d33b96d3982efb6afd09e5f17f20ecd3",
+      "output_dimensions_px": [
+        1440,
+        3200
+      ],
+      "reproduction_kind": "native_reference",
+      "locator": "Full native backdrop, linked in place without copy, recolor, or resampling."
+    },
+    {
+      "id": "backdrop-instrument",
+      "theme": "Instrument",
+      "source_path": "docs/assets/design-references/production-themes/instrument/backgrounds/instrument_backdrop.png",
+      "source_sha256": "82612a2f6abb7be342975c405634293fec81367a275f625fd04e1e1ebaf92b22",
+      "source_dimensions_px": [
+        1440,
+        3200
+      ],
+      "crop_bounds_px": null,
+      "output_path": "docs/assets/design-references/production-themes/instrument/backgrounds/instrument_backdrop.png",
+      "output_sha256": "82612a2f6abb7be342975c405634293fec81367a275f625fd04e1e1ebaf92b22",
+      "output_dimensions_px": [
+        1440,
+        3200
+      ],
+      "reproduction_kind": "native_reference",
+      "locator": "Full native backdrop, linked in place without copy, recolor, or resampling."
+    },
+    {
+      "id": "backdrop-terminal",
+      "theme": "Terminal",
+      "source_path": "docs/assets/design-references/production-themes/terminal/backgrounds/terminal_backdrop.png",
+      "source_sha256": "5cb511e9a05b7dbfb7775ea1385961d56ed2d726438d55e5c747f51a661448a2",
+      "source_dimensions_px": [
+        1440,
+        3200
+      ],
+      "crop_bounds_px": null,
+      "output_path": "docs/assets/design-references/production-themes/terminal/backgrounds/terminal_backdrop.png",
+      "output_sha256": "5cb511e9a05b7dbfb7775ea1385961d56ed2d726438d55e5c747f51a661448a2",
+      "output_dimensions_px": [
+        1440,
+        3200
+      ],
+      "reproduction_kind": "native_reference",
+      "locator": "Full native backdrop, linked in place without copy, recolor, or resampling."
+    },
+    {
+      "id": "sheet-glass-screen-example",
+      "theme": "Glass",
+      "source_path": "docs/assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png",
+      "source_sha256": "74e834c76e148d561d5f4696c9784b3e1131bd31089f13878d1863954eb85860",
+      "source_dimensions_px": [
+        1448,
+        1086
+      ],
+      "crop_bounds_px": [
+        1100,
+        365,
+        333,
+        660
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/sheet-glass-screen-example.png",
+      "output_sha256": "5cefa61735f03574c37fb0234d9c73e98e7242c8c89a7a6d615ec045716a59f1",
+      "output_dimensions_px": [
+        333,
+        660
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Asset sheet lower-right 08 SCREEN EXAMPLE panel including its title and complete phone; excludes adjacent data-visualization panel to left."
+    },
+    {
+      "id": "sheet-instrument-screen-example",
+      "theme": "Instrument",
+      "source_path": "docs/assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png",
+      "source_sha256": "0a99c3b80bef14e70358bdc4859d88791e944203d150104427a3ea43bdd39dcd",
+      "source_dimensions_px": [
+        1448,
+        1086
+      ],
+      "crop_bounds_px": [
+        1123,
+        395,
+        312,
+        639
+      ],
+      "output_path": "docs/theme-system/design-pack/d31-integrated-review/sheet-instrument-screen-example.png",
+      "output_sha256": "0d45bb3429b436f1b3b3d91cc46588cd4be326a245b7a6a635dfcbb8050f0148",
+      "output_dimensions_px": [
+        312,
+        639
+      ],
+      "reproduction_kind": "untouched_crop",
+      "locator": "Asset sheet 08 SCREEN EXAMPLE panel at native x=1123..1434, y=395..1033; includes heading, phone, and panel border; excludes adjacent data-visualization panel to left."
+    }
+  ],
+  "required_panel_ids": [
+    "backdrop-atmospheric",
+    "backdrop-glass",
+    "backdrop-instrument",
+    "backdrop-minimal-oled",
+    "backdrop-terminal",
+    "overview-atmospheric",
+    "overview-glass",
+    "overview-instrument",
+    "overview-minimal-oled",
+    "overview-terminal",
+    "sheet-glass-screen-example",
+    "sheet-instrument-screen-example"
+  ],
+  "cells": [
+    {
+      "id": "atmospheric-now",
+      "theme": "atmospheric",
+      "page": "now",
+      "panel_refs": [
+        "overview-atmospheric",
+        "backdrop-atmospheric"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "glass-now",
+      "theme": "glass",
+      "page": "now",
+      "panel_refs": [
+        "overview-glass",
+        "backdrop-glass",
+        "sheet-glass-screen-example"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "minimal_oled-now",
+      "theme": "minimal_oled",
+      "page": "now",
+      "panel_refs": [
+        "overview-minimal-oled",
+        "backdrop-minimal-oled"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "instrument-now",
+      "theme": "instrument",
+      "page": "now",
+      "panel_refs": [
+        "overview-instrument",
+        "backdrop-instrument",
+        "sheet-instrument-screen-example"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "terminal-now",
+      "theme": "terminal",
+      "page": "now",
+      "panel_refs": [
+        "overview-terminal",
+        "backdrop-terminal"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "atmospheric-hourly",
+      "theme": "atmospheric",
+      "page": "hourly",
+      "panel_refs": [
+        "overview-atmospheric",
+        "backdrop-atmospheric"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "glass-hourly",
+      "theme": "glass",
+      "page": "hourly",
+      "panel_refs": [
+        "overview-glass",
+        "backdrop-glass",
+        "sheet-glass-screen-example"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "minimal_oled-hourly",
+      "theme": "minimal_oled",
+      "page": "hourly",
+      "panel_refs": [
+        "overview-minimal-oled",
+        "backdrop-minimal-oled"
+      ],
+      "decision": "approve",
+      "rationale": "Owner typed “apporve”; interpreted as approve without correction."
+    },
+    {
+      "id": "instrument-hourly",
+      "theme": "instrument",
+      "page": "hourly",
+      "panel_refs": [
+        "overview-instrument",
+        "backdrop-instrument",
+        "sheet-instrument-screen-example"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "terminal-hourly",
+      "theme": "terminal",
+      "page": "hourly",
+      "panel_refs": [
+        "overview-terminal",
+        "backdrop-terminal"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "atmospheric-daily",
+      "theme": "atmospheric",
+      "page": "daily",
+      "panel_refs": [
+        "overview-atmospheric",
+        "backdrop-atmospheric"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "glass-daily",
+      "theme": "glass",
+      "page": "daily",
+      "panel_refs": [
+        "overview-glass",
+        "backdrop-glass",
+        "sheet-glass-screen-example"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "minimal_oled-daily",
+      "theme": "minimal_oled",
+      "page": "daily",
+      "panel_refs": [
+        "overview-minimal-oled",
+        "backdrop-minimal-oled"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "instrument-daily",
+      "theme": "instrument",
+      "page": "daily",
+      "panel_refs": [
+        "overview-instrument",
+        "backdrop-instrument",
+        "sheet-instrument-screen-example"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "terminal-daily",
+      "theme": "terminal",
+      "page": "daily",
+      "panel_refs": [
+        "overview-terminal",
+        "backdrop-terminal"
+      ],
+      "decision": "approve",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "atmospheric-details",
+      "theme": "atmospheric",
+      "page": "details",
+      "panel_refs": [
+        "overview-atmospheric",
+        "backdrop-atmospheric"
+      ],
+      "decision": "approve",
+      "source_basis": "same_theme_derivation_no_dedicated_details_source",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "glass-details",
+      "theme": "glass",
+      "page": "details",
+      "panel_refs": [
+        "overview-glass",
+        "backdrop-glass",
+        "sheet-glass-screen-example"
+      ],
+      "decision": "approve",
+      "source_basis": "same_theme_derivation_no_dedicated_details_source",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "minimal_oled-details",
+      "theme": "minimal_oled",
+      "page": "details",
+      "panel_refs": [
+        "overview-minimal-oled",
+        "backdrop-minimal-oled"
+      ],
+      "decision": "approve",
+      "source_basis": "same_theme_derivation_no_dedicated_details_source",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "instrument-details",
+      "theme": "instrument",
+      "page": "details",
+      "panel_refs": [
+        "overview-instrument",
+        "backdrop-instrument",
+        "sheet-instrument-screen-example"
+      ],
+      "decision": "approve",
+      "source_basis": "same_theme_derivation_no_dedicated_details_source",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    },
+    {
+      "id": "terminal-details",
+      "theme": "terminal",
+      "page": "details",
+      "panel_refs": [
+        "overview-terminal",
+        "backdrop-terminal"
+      ],
+      "decision": "approve",
+      "source_basis": "same_theme_derivation_no_dedicated_details_source",
+      "rationale": "Owner approved as presented during interactive review on 2026-09-25."
+    }
+  ],
+  "overall_disposition": "approve",
+  "owner_decision_path": "docs/theme-system/design-pack/D31_OWNER_DECISION.md",
+  "reviewed_mapping_sha256": "41cbf0dd2fe23eedfdc6a8b07dc46d66ab1988910ebc889c71d0f31b7ccbfa80",
+  "reviewed_guide_sha256": "1ca8aac8519e22fad61a3edf1ab32704c823deedb977768e6e179c69be796887",
+  "owner_decision_sha256": "e6930e0c24f3ca5f6e13e1a97dfb52175e275b587da30d9308aa5d734a0c1a6f"
+}

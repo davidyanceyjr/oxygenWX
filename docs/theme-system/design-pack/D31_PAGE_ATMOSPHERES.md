@@ -1,7 +1,9 @@
-# D31 page atmospheres — interim Now/Hourly/Daily mapping
+# D31 page atmospheres — owner-approved Now/Hourly/Daily/Details mapping
 
-**Status: proposed; owner review pending.** This is a fifteen-cell documentary
-mapping proposal for Now, Hourly, and Daily. It records source observations,
+**Status: owner-approved documentary proposal.** The design owner approved all
+twenty mapped cells and the overall set on 2026-09-25; the exact revision and
+decisions are recorded in [D31_OWNER_DECISION.md](D31_OWNER_DECISION.md). This
+remains a documentary design target, not installed-rendering acceptance. It records source observations,
 interpretation, and proposed application separately. Combined phone concepts,
 screen-example mockups, and the overview board are not full-page composition
 authority. Product meaning, accessibility, and navigation remain governed by
@@ -9,22 +11,7 @@ authority. Product meaning, accessibility, and navigation remain governed by
 
 ## Method and limits
 
-I reviewed all five native phone crops and the overview board at source resolution,
-plus the Glass and Instrument sheets where their Daily regions add direct evidence,
-and each theme backdrop as a separate field-level source. Daily phone locators point
-to the visible Daily preview or selector and name what is or is not shown. The Glass
-sheet locator points to its compact “5 Day Forecast” example; the Instrument phone,
-sheet, and board show a Daily selector label but no Daily rows. Overview locators
-identify each selected theme’s Daily preview or selector and corroborate its theme
-atmosphere; they do not turn the composite into a full-page target. Backdrop locators
-support broad theme-field observations only. No numeric color or measurement is
-proposed from this qualitative mapping. The source previews vary in row count and
-some omit Daily content entirely; the adopted contract continues to require up to
-five actual chronological days per visible window, visible date, condition,
-numeric low/high or honest unavailability, precipitation meaning when available, and
-Earlier/Later controls without a nested pager. Every proposed mapping retains
-Effects Off completeness, High contrast boundaries, compact/font-scale-1.3
-readability, and earliest-to-latest RTL order. All fifteen cells remain proposed.
+The Now, Hourly, and Daily cells use locators tied to their visible phone, sheet, or overview cues and distinguish preview evidence from page composition authority. Details has no dedicated indexed source: each proposed cell cites a concrete same-theme phone cue as a derivation plus that theme's backdrop as direct field-level evidence. The backdrops do not establish page overlays. No new numeric measurements are introduced. The adopted forecast contract remains authoritative where small composite previews vary or omit content. All twenty proposals preserve Effects Off completeness, High contrast boundaries, compact/font-scale-1.3 readability, RTL reading order, and the Details source/update/status and supplied-group semantics. Complete coverage means only that every canonical theme/page pair is present. The integrated review, source reproductions, derivation review, and owner decisions are complete. D31 is owner-approved; TP.1D/TP.1 closure, packet approval, and TP.2 eligibility remain pending.
 
 ## Structured mapping
 
@@ -36,12 +23,23 @@ D31_PAGE_ATMOSPHERES:BEGIN
 {
   "schema_version": 1,
   "scope": {
-    "themes": ["atmospheric", "glass", "minimal_oled", "instrument", "terminal"],
-    "pages": ["now", "hourly", "daily"],
-    "cell_count": 15,
-    "coverage": "partial"
+    "themes": [
+      "atmospheric",
+      "glass",
+      "minimal_oled",
+      "instrument",
+      "terminal"
+    ],
+    "pages": [
+      "now",
+      "hourly",
+      "daily",
+      "details"
+    ],
+    "cell_count": 20,
+    "coverage": "complete"
   },
-  "status": "proposed; owner review pending",
+  "status": "owner-approved; documentary proposal",
   "cells": [
     {
       "id": "atmospheric-now",
@@ -49,8 +47,18 @@ D31_PAGE_ATMOSPHERES:BEGIN
       "page": "now",
       "review_status": "proposed",
       "source_refs": [
-        {"source_id": "atmospheric-phone", "locator": "Phone inner display: Now hero from location header through condition text; exclude hourly panel below.", "supports": "Blue sky field, warm horizon, illustrated mountain and forest behind the Now hero; translucent forecast panels begin below it.", "evidence_class": "direct_region"},
-        {"source_id": "atmospheric-backdrop", "locator": "Backdrop center column at audited y=400, 1600, and 2800 samples; inspect full vertical field for context.", "supports": "Standalone blue field shifts from darker upper area toward a lighter lower area; it is visually distinct from the phone's illustrated landscape.", "evidence_class": "direct_region"}
+        {
+          "source_id": "atmospheric-phone",
+          "locator": "Phone inner display: Now hero from location header through condition text; exclude hourly panel below.",
+          "supports": "Blue sky field, warm horizon, illustrated mountain and forest behind the Now hero; translucent forecast panels begin below it.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "atmospheric-backdrop",
+          "locator": "Backdrop center column at audited y=400, 1600, and 2800 samples; inspect full vertical field for context.",
+          "supports": "Standalone blue field shifts from darker upper area toward a lighter lower area; it is visually distinct from the phone's illustrated landscape.",
+          "evidence_class": "direct_region"
+        }
       ],
       "observation": {
         "palette": "The phone uses a bright blue upper field with warm light near the horizon; the standalone backdrop is a vertical blue field.",
@@ -70,10 +78,19 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "high_contrast": "Select readable semantic foreground and surface roles while preserving the blue-led theme identity and all status meanings.",
         "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow content to wrap or scroll; keep temperature, condition, provenance, and chronology understandable without scene art."
       },
-      "source_gaps": ["No Atmospheric asset sheet or dedicated Now-only page source is indexed.", "No approved standalone landscape scene, weather-state variants, or page-specific surface measurements are available."],
-      "derivation_basis": ["atmospheric-phone", "atmospheric-backdrop"],
+      "source_gaps": [
+        "No Atmospheric asset sheet or dedicated Now-only page source is indexed.",
+        "No approved standalone landscape scene, weather-state variants, or page-specific surface measurements are available."
+      ],
+      "derivation_basis": [
+        "atmospheric-phone",
+        "atmospheric-backdrop"
+      ],
       "rationale": "This direction retains the blue, scenic, warm-horizon identity visible in the Atmospheric Now crop while acknowledging that its separate backdrop does not contain the illustrated landscape.",
-      "limitations": ["The phone is a small composite concept and cannot define the full Now page or exact surface geometry.", "The source review does not establish installed contrast, responsive fit, or owner acceptance."]
+      "limitations": [
+        "The phone is a small composite concept and cannot define the full Now page or exact surface geometry.",
+        "The source review does not establish installed contrast, responsive fit, or owner acceptance."
+      ]
     },
     {
       "id": "glass-now",
@@ -81,9 +98,24 @@ D31_PAGE_ATMOSPHERES:BEGIN
       "page": "now",
       "review_status": "proposed",
       "source_refs": [
-        {"source_id": "glass-phone", "locator": "Phone inner display: Now hero card from location header through condition and apparent-temperature text.", "supports": "A rounded translucent hero card places white current-condition text over a cool blue-violet field with warm light toward the right edge.", "evidence_class": "direct_region"},
-        {"source_id": "glass-backdrop", "locator": "Backdrop full vertical field, including audited center column at y=400, 1600, and 2800.", "supports": "The backdrop shifts through dark blue, blue-gray, and violet-blue regions and includes large warm and cool light forms.", "evidence_class": "direct_region"},
-        {"source_id": "glass-asset-sheet", "locator": "08 SCREEN EXAMPLE panel, lower-right; inspect the current-condition hero and visible translucent layers.", "supports": "The sheet's Now example uses translucent layered surfaces over a blue-violet atmospheric field with warm light.", "evidence_class": "direct_region"}
+        {
+          "source_id": "glass-phone",
+          "locator": "Phone inner display: Now hero card from location header through condition and apparent-temperature text.",
+          "supports": "A rounded translucent hero card places white current-condition text over a cool blue-violet field with warm light toward the right edge.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "glass-backdrop",
+          "locator": "Backdrop full vertical field, including audited center column at y=400, 1600, and 2800.",
+          "supports": "The backdrop shifts through dark blue, blue-gray, and violet-blue regions and includes large warm and cool light forms.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "glass-asset-sheet",
+          "locator": "08 SCREEN EXAMPLE panel, lower-right; inspect the current-condition hero and visible translucent layers.",
+          "supports": "The sheet's Now example uses translucent layered surfaces over a blue-violet atmospheric field with warm light.",
+          "evidence_class": "direct_region"
+        }
       ],
       "observation": {
         "palette": "Cool blue-violet tones dominate the backdrop and hero region, with localized warm light near the right side.",
@@ -103,10 +135,20 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "high_contrast": "Use stronger semantic surface boundaries and readable text roles; retain the layered Glass identity without relying on blur or color alone.",
         "responsive_accessibility": "At compact width, font scale 1.3, and RTL, let hero text wrap and surfaces grow; keep text and controls legible without relying on background separation."
       },
-      "source_gaps": ["No dedicated Now-only page or loading, stale, error, and Effects Off references are present.", "The sheet and phone do not establish responsive surface opacity or contrast behavior."],
-      "derivation_basis": ["glass-phone", "glass-backdrop", "glass-asset-sheet"],
+      "source_gaps": [
+        "No dedicated Now-only page or loading, stale, error, and Effects Off references are present.",
+        "The sheet and phone do not establish responsive surface opacity or contrast behavior."
+      ],
+      "derivation_basis": [
+        "glass-phone",
+        "glass-backdrop",
+        "glass-asset-sheet"
+      ],
       "rationale": "The proposal carries forward Glass's visible layered transparency, cool depth, and restrained warm light while defining accessible opaque fallbacks as proposed state behavior.",
-      "limitations": ["The combined concept includes other page previews and is not authority for Now composition.", "No rendered contrast, blur, or responsive values were measured in this review."]
+      "limitations": [
+        "The combined concept includes other page previews and is not authority for Now composition.",
+        "No rendered contrast, blur, or responsive values were measured in this review."
+      ]
     },
     {
       "id": "minimal_oled-now",
@@ -114,8 +156,18 @@ D31_PAGE_ATMOSPHERES:BEGIN
       "page": "now",
       "review_status": "proposed",
       "source_refs": [
-        {"source_id": "minimal-oled-phone", "locator": "Phone inner display: Now header, temperature, condition, and localized moon/cloud image above the first separator.", "supports": "The screen is black-first, uses thin horizontal separators, and confines a small moon/cloud image to the Now hero.", "evidence_class": "direct_region"},
-        {"source_id": "minimal-oled-backdrop", "locator": "Backdrop center column at the audited y=400, 1600, and 2800 samples; inspect the uninterrupted black field.", "supports": "The standalone backdrop is black at the audited points, with no scenic color field or panel treatment.", "evidence_class": "direct_region"}
+        {
+          "source_id": "minimal-oled-phone",
+          "locator": "Phone inner display: Now header, temperature, condition, and localized moon/cloud image above the first separator.",
+          "supports": "The screen is black-first, uses thin horizontal separators, and confines a small moon/cloud image to the Now hero.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "minimal-oled-backdrop",
+          "locator": "Backdrop center column at the audited y=400, 1600, and 2800 samples; inspect the uninterrupted black field.",
+          "supports": "The standalone backdrop is black at the audited points, with no scenic color field or panel treatment.",
+          "evidence_class": "direct_region"
+        }
       ],
       "observation": {
         "palette": "The phone and backdrop use a black-first field with high-contrast light text and small restrained accents.",
@@ -135,10 +187,19 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "high_contrast": "Preserve a black-first appearance with high-contrast semantic text, borders, selection, and status cues that do not rely on color alone.",
         "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow text and groups to wrap or scroll while keeping the black field and separator grouping; do not shrink critical text."
       },
-      "source_gaps": ["No Minimal OLED asset sheet is indexed.", "No dedicated Now-only source or alternate state reference specifies imagery, separators, or responsive behavior."],
-      "derivation_basis": ["minimal-oled-phone", "minimal-oled-backdrop"],
+      "source_gaps": [
+        "No Minimal OLED asset sheet is indexed.",
+        "No dedicated Now-only source or alternate state reference specifies imagery, separators, or responsive behavior."
+      ],
+      "derivation_basis": [
+        "minimal-oled-phone",
+        "minimal-oled-backdrop"
+      ],
       "rationale": "The proposal preserves the source's black canvas and typography-first hierarchy while limiting weather art to an optional local accent.",
-      "limitations": ["The concept combines several forecast periods and does not define the final Now content order.", "The backdrop samples are point checks, not full black-level or display-power measurements."]
+      "limitations": [
+        "The concept combines several forecast periods and does not define the final Now content order.",
+        "The backdrop samples are point checks, not full black-level or display-power measurements."
+      ]
     },
     {
       "id": "instrument-now",
@@ -146,9 +207,24 @@ D31_PAGE_ATMOSPHERES:BEGIN
       "page": "now",
       "review_status": "proposed",
       "source_refs": [
-        {"source_id": "instrument-phone", "locator": "Phone inner display: top current-condition module from location/time header through condition and apparent-temperature text.", "supports": "The hero uses a dark bounded module with a segmented circular condition graphic, dominant temperature, and explicit condition text.", "evidence_class": "direct_region"},
-        {"source_id": "instrument-backdrop", "locator": "Backdrop full field and audited center-column samples at y=400, 1600, and 2800, including the grid texture.", "supports": "A fine rectangular grid sits over a near-black blue field; audited transparent grid samples remain alpha-bearing source values.", "evidence_class": "direct_region"},
-        {"source_id": "instrument-asset-sheet", "locator": "08 SCREEN EXAMPLE panel, lower-right; inspect the Now module, outline, and neighboring text labels.", "supports": "The sheet repeats bounded outlined modules, dark navy surfaces, and a technical current-condition treatment.", "evidence_class": "direct_region"}
+        {
+          "source_id": "instrument-phone",
+          "locator": "Phone inner display: top current-condition module from location/time header through condition and apparent-temperature text.",
+          "supports": "The hero uses a dark bounded module with a segmented circular condition graphic, dominant temperature, and explicit condition text.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "instrument-backdrop",
+          "locator": "Backdrop full field and audited center-column samples at y=400, 1600, and 2800, including the grid texture.",
+          "supports": "A fine rectangular grid sits over a near-black blue field; audited transparent grid samples remain alpha-bearing source values.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "instrument-asset-sheet",
+          "locator": "08 SCREEN EXAMPLE panel, lower-right; inspect the Now module, outline, and neighboring text labels.",
+          "supports": "The sheet repeats bounded outlined modules, dark navy surfaces, and a technical current-condition treatment.",
+          "evidence_class": "direct_region"
+        }
       ],
       "observation": {
         "palette": "The sources use near-black navy fields with light text and restrained amber, green, and blue accents.",
@@ -168,10 +244,20 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "high_contrast": "Strengthen semantic outlines, text, and status cues; preserve distinctions without depending on the grid or accent color.",
         "responsive_accessibility": "At compact width, font scale 1.3, and RTL, let modules stack and labels wrap; maintain readable text and avoid requiring a gauge for weather meaning."
       },
-      "source_gaps": ["The reference gauge and chart do not provide typed measurements or valid runtime ranges.", "No page-state references establish grid density, module behavior, or a dedicated Now layout."],
-      "derivation_basis": ["instrument-phone", "instrument-backdrop", "instrument-asset-sheet"],
+      "source_gaps": [
+        "The reference gauge and chart do not provide typed measurements or valid runtime ranges.",
+        "No page-state references establish grid density, module behavior, or a dedicated Now layout."
+      ],
+      "derivation_basis": [
+        "instrument-phone",
+        "instrument-backdrop",
+        "instrument-asset-sheet"
+      ],
       "rationale": "The proposal keeps Instrument distinct through grid texture, outlined modules, and technical grouping while explicitly preventing decorative instruments from implying unsupported measurements.",
-      "limitations": ["The phone concept is a composite and includes unsupported chart and gauge examples outside this proposal.", "The transparent grid sample is not a composited display color or a contrast measurement."]
+      "limitations": [
+        "The phone concept is a composite and includes unsupported chart and gauge examples outside this proposal.",
+        "The transparent grid sample is not a composited display color or a contrast measurement."
+      ]
     },
     {
       "id": "terminal-now",
@@ -179,8 +265,18 @@ D31_PAGE_ATMOSPHERES:BEGIN
       "page": "now",
       "review_status": "proposed",
       "source_refs": [
-        {"source_id": "terminal-phone", "locator": "Phone inner display: Now block from WX location/time header through the condition text and first dashed divider.", "supports": "The Now block uses green monospace text, a localized ASCII-like weather mark, and dashed horizontal separators on a black field.", "evidence_class": "direct_region"},
-        {"source_id": "terminal-backdrop", "locator": "Backdrop full field and audited center-column samples at y=400, 1600, and 2800, including the dense rectangular grid.", "supports": "The standalone backdrop uses a dense grid over black; the phone display uses a visibly different sparse dashed-rule treatment.", "evidence_class": "direct_region"}
+        {
+          "source_id": "terminal-phone",
+          "locator": "Phone inner display: Now block from WX location/time header through the condition text and first dashed divider.",
+          "supports": "The Now block uses green monospace text, a localized ASCII-like weather mark, and dashed horizontal separators on a black field.",
+          "evidence_class": "direct_region"
+        },
+        {
+          "source_id": "terminal-backdrop",
+          "locator": "Backdrop full field and audited center-column samples at y=400, 1600, and 2800, including the dense rectangular grid.",
+          "supports": "The standalone backdrop uses a dense grid over black; the phone display uses a visibly different sparse dashed-rule treatment.",
+          "evidence_class": "direct_region"
+        }
       ],
       "observation": {
         "palette": "The phone uses green monospace text and marks on black; the standalone backdrop is black with a fine pale grid.",
@@ -200,10 +296,19 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "high_contrast": "Use semantic foreground, border, and status distinctions with text or shape cues in addition to green color.",
         "responsive_accessibility": "At compact width, font scale 1.3, and RTL, allow console text groups to wrap or scroll, keep controls targetable, and preserve chronological text order."
       },
-      "source_gaps": ["No Terminal asset sheet or dedicated Now-only page source is indexed.", "No source defines grid density, accessible console control treatment, or alternate page states."],
-      "derivation_basis": ["terminal-phone", "terminal-backdrop"],
+      "source_gaps": [
+        "No Terminal asset sheet or dedicated Now-only page source is indexed.",
+        "No source defines grid density, accessible console control treatment, or alternate page states."
+      ],
+      "derivation_basis": [
+        "terminal-phone",
+        "terminal-backdrop"
+      ],
       "rationale": "The proposal retains Terminal's console-like text hierarchy and explicit separators while treating the denser standalone grid as optional backdrop evidence.",
-      "limitations": ["The phone is a small combined-page concept rather than a complete Now specification.", "No numeric grid or type measurements are claimed by this qualitative mapping."]
+      "limitations": [
+        "The phone is a small combined-page concept rather than a complete Now specification.",
+        "No numeric grid or type measurements are claimed by this qualitative mapping."
+      ]
     },
     {
       "id": "atmospheric-hourly",
@@ -473,8 +578,7 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "The phone preview is part of a composite screen and does not establish the adopted six-entry page composition.",
         "No numeric grid, typography, contrast, responsive, or runtime behavior is claimed."
       ]
-    }
-    ,
+    },
     {
       "id": "atmospheric-daily",
       "theme": "atmospheric",
@@ -778,32 +882,288 @@ D31_PAGE_ATMOSPHERES:BEGIN
         "The phone and overview are the same compact concept, not independent full-page evidence.",
         "The backdrop grid is denser than the phone separators; no exact grid scale, row pitch, colors, or responsive layout is inferred."
       ]
+    },
+    {
+      "id": "atmospheric-details",
+      "theme": "atmospheric",
+      "page": "details",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "atmospheric-phone",
+          "locator": "Phone crop, Now hero: blue sky field and warm horizon behind current-condition text; this is a same-theme cue, not a Details screen.",
+          "supports": "The source shows blue upper field and warm horizon light; apply only this visible theme cue as a same-theme derivation for proposed Details grouping.",
+          "evidence_class": "same_theme_derivation"
+        },
+        {
+          "source_id": "atmospheric-backdrop",
+          "locator": "Standalone Atmospheric backdrop field, including the audited center-column samples; field-level atmosphere only, not a Details composition.",
+          "supports": "The standalone backdrop supplies the Atmospheric field treatment independently of the phone composition.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The same-theme phone cue uses blue upper field and warm horizon light; the separate backdrop is a field-only reference.",
+        "scene_backdrop": "The cited phone is a combined concept and contains no dedicated Details screen; the backdrop supports only its own field treatment.",
+        "surfaces": "The visible cue is blue upper field and warm horizon light; no source shows a Details group or provenance panel.",
+        "weather_art_relationship": "The phone cue is part of a Now hero or block; no weather art is proposed as a Details fact, metric, status, chart, or action."
+      },
+      "interpretation": "Atmospheric atmosphere can carry into Details through the cited field or grouping cue, but this is a proposed same-theme derivation rather than direct Details evidence.",
+      "proposed_treatment": {
+        "palette": "open blue atmosphere with restrained warm horizon; keep group surfaces light and bounded. Preserve semantic text/status contrast; exact colors remain proposed.",
+        "scene_backdrop": "Use a restrained Atmospheric field treatment only as decoration; Details facts remain understandable without it.",
+        "surfaces": "Apply open blue atmosphere with restrained warm horizon; keep group surfaces light and bounded to full-width ordered groups without changing supplied strings or order.",
+        "weather_art_relationship": "Keep weather art absent or strictly decorative; render only supplied source/update/status and ordered metric groups, with no invented data or actions."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static theme canvas and complete supplied Details content; remove optional texture, light, transparency, and motion.",
+        "high_contrast": "Use opaque readable semantic text and visible boundaries; status and selection meaning cannot rely on color alone.",
+        "responsive_accessibility": "At compact width and font scale 1.3, wrap and scroll all content; in RTL mirror alignment while preserving supplied group/metric order and source/update/status separation."
+      },
+      "source_gaps": [
+        "No indexed source is a dedicated Details screen; phone, sheet, and overview references do not establish Details composition.",
+        "No source establishes Details-specific group surfaces, provenance treatment, loading/stale state, or responsive behavior."
+      ],
+      "derivation_basis": [
+        "atmospheric-phone",
+        "atmospheric-backdrop"
+      ],
+      "rationale": "The proposal carries the Atmospheric identity through the concrete same-theme cue and its separately cited backdrop while preserving the Details audit contract.",
+      "limitations": [
+        "This is a proposed same-theme derivation, not direct Details visual evidence or owner approval.",
+        "Source references do not establish installed contrast, responsive fit, or runtime rendering."
+      ]
+    },
+    {
+      "id": "glass-details",
+      "theme": "glass",
+      "page": "details",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "glass-phone",
+          "locator": "Phone crop, Now hero card: translucent surface against cool blue-violet field and warm light; this is a same-theme cue, not a Details screen.",
+          "supports": "The source shows cool blue-violet field, warm light, and layered translucent hero surface; apply only this visible theme cue as a same-theme derivation for proposed Details grouping.",
+          "evidence_class": "same_theme_derivation"
+        },
+        {
+          "source_id": "glass-backdrop",
+          "locator": "Standalone Glass backdrop field, including the audited center-column samples; field-level atmosphere only, not a Details composition.",
+          "supports": "The standalone backdrop supplies the Glass field treatment independently of the phone composition.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The same-theme phone cue uses cool blue-violet field, warm light, and layered translucent hero surface; the separate backdrop is a field-only reference.",
+        "scene_backdrop": "The cited phone is a combined concept and contains no dedicated Details screen; the backdrop supports only its own field treatment.",
+        "surfaces": "The visible cue is cool blue-violet field, warm light, and layered translucent hero surface; no source shows a Details group or provenance panel.",
+        "weather_art_relationship": "The phone cue is part of a Now hero or block; no weather art is proposed as a Details fact, metric, status, chart, or action."
+      },
+      "interpretation": "Glass atmosphere can carry into Details through the cited field or grouping cue, but this is a proposed same-theme derivation rather than direct Details evidence.",
+      "proposed_treatment": {
+        "palette": "cool blue-violet depth with restrained warm highlights; use readable layered surfaces with opaque fallbacks. Preserve semantic text/status contrast; exact colors remain proposed.",
+        "scene_backdrop": "Use a restrained Glass field treatment only as decoration; Details facts remain understandable without it.",
+        "surfaces": "Apply cool blue-violet depth with restrained warm highlights; use readable layered surfaces with opaque fallbacks to full-width ordered groups without changing supplied strings or order.",
+        "weather_art_relationship": "Keep weather art absent or strictly decorative; render only supplied source/update/status and ordered metric groups, with no invented data or actions."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static theme canvas and complete supplied Details content; remove optional texture, light, transparency, and motion.",
+        "high_contrast": "Use opaque readable semantic text and visible boundaries; status and selection meaning cannot rely on color alone.",
+        "responsive_accessibility": "At compact width and font scale 1.3, wrap and scroll all content; in RTL mirror alignment while preserving supplied group/metric order and source/update/status separation."
+      },
+      "source_gaps": [
+        "No indexed source is a dedicated Details screen; phone, sheet, and overview references do not establish Details composition.",
+        "No source establishes Details-specific group surfaces, provenance treatment, loading/stale state, or responsive behavior."
+      ],
+      "derivation_basis": [
+        "glass-phone",
+        "glass-backdrop"
+      ],
+      "rationale": "The proposal carries the Glass identity through the concrete same-theme cue and its separately cited backdrop while preserving the Details audit contract.",
+      "limitations": [
+        "This is a proposed same-theme derivation, not direct Details visual evidence or owner approval.",
+        "Source references do not establish installed contrast, responsive fit, or runtime rendering."
+      ]
+    },
+    {
+      "id": "minimal_oled-details",
+      "theme": "minimal_oled",
+      "page": "details",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "minimal-oled-phone",
+          "locator": "Phone crop, Now header and hero through first separator: black-first field and thin rule; this is a same-theme cue, not a Details screen.",
+          "supports": "The source shows black-first phone field with thin horizontal separators; apply only this visible theme cue as a same-theme derivation for proposed Details grouping.",
+          "evidence_class": "same_theme_derivation"
+        },
+        {
+          "source_id": "minimal-oled-backdrop",
+          "locator": "Standalone Minimal OLED backdrop field, including the audited center-column samples; field-level atmosphere only, not a Details composition.",
+          "supports": "The standalone backdrop supplies the Minimal OLED field treatment independently of the phone composition.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The same-theme phone cue uses black-first phone field with thin horizontal separators; the separate backdrop is a field-only reference.",
+        "scene_backdrop": "The cited phone is a combined concept and contains no dedicated Details screen; the backdrop supports only its own field treatment.",
+        "surfaces": "The visible cue is black-first phone field with thin horizontal separators; no source shows a Details group or provenance panel.",
+        "weather_art_relationship": "The phone cue is part of a Now hero or block; no weather art is proposed as a Details fact, metric, status, chart, or action."
+      },
+      "interpretation": "Minimal OLED atmosphere can carry into Details through the cited field or grouping cue, but this is a proposed same-theme derivation rather than direct Details evidence.",
+      "proposed_treatment": {
+        "palette": "black-first field with typography and thin rules carrying group boundaries; avoid broad filled cards. Preserve semantic text/status contrast; exact colors remain proposed.",
+        "scene_backdrop": "Use a restrained Minimal OLED field treatment only as decoration; Details facts remain understandable without it.",
+        "surfaces": "Apply black-first field with typography and thin rules carrying group boundaries; avoid broad filled cards to full-width ordered groups without changing supplied strings or order.",
+        "weather_art_relationship": "Keep weather art absent or strictly decorative; render only supplied source/update/status and ordered metric groups, with no invented data or actions."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static theme canvas and complete supplied Details content; remove optional texture, light, transparency, and motion.",
+        "high_contrast": "Use opaque readable semantic text and visible boundaries; status and selection meaning cannot rely on color alone.",
+        "responsive_accessibility": "At compact width and font scale 1.3, wrap and scroll all content; in RTL mirror alignment while preserving supplied group/metric order and source/update/status separation."
+      },
+      "source_gaps": [
+        "No indexed source is a dedicated Details screen; phone, sheet, and overview references do not establish Details composition.",
+        "No source establishes Details-specific group surfaces, provenance treatment, loading/stale state, or responsive behavior."
+      ],
+      "derivation_basis": [
+        "minimal-oled-phone",
+        "minimal-oled-backdrop"
+      ],
+      "rationale": "The proposal carries the Minimal OLED identity through the concrete same-theme cue and its separately cited backdrop while preserving the Details audit contract.",
+      "limitations": [
+        "This is a proposed same-theme derivation, not direct Details visual evidence or owner approval.",
+        "Source references do not establish installed contrast, responsive fit, or runtime rendering."
+      ]
+    },
+    {
+      "id": "instrument-details",
+      "theme": "instrument",
+      "page": "details",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "instrument-phone",
+          "locator": "Phone crop, top current-condition module: bounded dark surface and fine outline; this is a same-theme cue, not a Details screen.",
+          "supports": "The source shows bounded dark module with fine technical outlines and grid field; apply only this visible theme cue as a same-theme derivation for proposed Details grouping.",
+          "evidence_class": "same_theme_derivation"
+        },
+        {
+          "source_id": "instrument-backdrop",
+          "locator": "Standalone Instrument backdrop field, including the audited center-column samples; field-level atmosphere only, not a Details composition.",
+          "supports": "The standalone backdrop supplies the Instrument field treatment independently of the phone composition.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The same-theme phone cue uses bounded dark module with fine technical outlines and grid field; the separate backdrop is a field-only reference.",
+        "scene_backdrop": "The cited phone is a combined concept and contains no dedicated Details screen; the backdrop supports only its own field treatment.",
+        "surfaces": "The visible cue is bounded dark module with fine technical outlines and grid field; no source shows a Details group or provenance panel.",
+        "weather_art_relationship": "The phone cue is part of a Now hero or block; no weather art is proposed as a Details fact, metric, status, chart, or action."
+      },
+      "interpretation": "Instrument atmosphere can carry into Details through the cited field or grouping cue, but this is a proposed same-theme derivation rather than direct Details evidence.",
+      "proposed_treatment": {
+        "palette": "near-black navy field, restrained grid texture, and ordered outlined panels; no gauge or chart. Preserve semantic text/status contrast; exact colors remain proposed.",
+        "scene_backdrop": "Use a restrained Instrument field treatment only as decoration; Details facts remain understandable without it.",
+        "surfaces": "Apply near-black navy field, restrained grid texture, and ordered outlined panels; no gauge or chart to full-width ordered groups without changing supplied strings or order.",
+        "weather_art_relationship": "Keep weather art absent or strictly decorative; render only supplied source/update/status and ordered metric groups, with no invented data or actions."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static theme canvas and complete supplied Details content; remove optional texture, light, transparency, and motion.",
+        "high_contrast": "Use opaque readable semantic text and visible boundaries; status and selection meaning cannot rely on color alone.",
+        "responsive_accessibility": "At compact width and font scale 1.3, wrap and scroll all content; in RTL mirror alignment while preserving supplied group/metric order and source/update/status separation."
+      },
+      "source_gaps": [
+        "No indexed source is a dedicated Details screen; phone, sheet, and overview references do not establish Details composition.",
+        "No source establishes Details-specific group surfaces, provenance treatment, loading/stale state, or responsive behavior."
+      ],
+      "derivation_basis": [
+        "instrument-phone",
+        "instrument-backdrop"
+      ],
+      "rationale": "The proposal carries the Instrument identity through the concrete same-theme cue and its separately cited backdrop while preserving the Details audit contract.",
+      "limitations": [
+        "This is a proposed same-theme derivation, not direct Details visual evidence or owner approval.",
+        "Source references do not establish installed contrast, responsive fit, or runtime rendering."
+      ]
+    },
+    {
+      "id": "terminal-details",
+      "theme": "terminal",
+      "page": "details",
+      "review_status": "proposed",
+      "source_refs": [
+        {
+          "source_id": "terminal-phone",
+          "locator": "Phone crop, Now block through first dashed divider: green monospace text and rule on black; this is a same-theme cue, not a Details screen.",
+          "supports": "The source shows green monospace text and dashed group separators on black; apply only this visible theme cue as a same-theme derivation for proposed Details grouping.",
+          "evidence_class": "same_theme_derivation"
+        },
+        {
+          "source_id": "terminal-backdrop",
+          "locator": "Standalone Terminal backdrop field, including the audited center-column samples; field-level atmosphere only, not a Details composition.",
+          "supports": "The standalone backdrop supplies the Terminal field treatment independently of the phone composition.",
+          "evidence_class": "direct_region"
+        }
+      ],
+      "observation": {
+        "palette": "The same-theme phone cue uses green monospace text and dashed group separators on black; the separate backdrop is a field-only reference.",
+        "scene_backdrop": "The cited phone is a combined concept and contains no dedicated Details screen; the backdrop supports only its own field treatment.",
+        "surfaces": "The visible cue is green monospace text and dashed group separators on black; no source shows a Details group or provenance panel.",
+        "weather_art_relationship": "The phone cue is part of a Now hero or block; no weather art is proposed as a Details fact, metric, status, chart, or action."
+      },
+      "interpretation": "Terminal atmosphere can carry into Details through the cited field or grouping cue, but this is a proposed same-theme derivation rather than direct Details evidence.",
+      "proposed_treatment": {
+        "palette": "black console-like field with green semantic accents and static rules; do not add console content fields. Preserve semantic text/status contrast; exact colors remain proposed.",
+        "scene_backdrop": "Use a restrained Terminal field treatment only as decoration; Details facts remain understandable without it.",
+        "surfaces": "Apply black console-like field with green semantic accents and static rules; do not add console content fields to full-width ordered groups without changing supplied strings or order.",
+        "weather_art_relationship": "Keep weather art absent or strictly decorative; render only supplied source/update/status and ordered metric groups, with no invented data or actions."
+      },
+      "state_constraints": {
+        "effects_off": "Use an opaque static theme canvas and complete supplied Details content; remove optional texture, light, transparency, and motion.",
+        "high_contrast": "Use opaque readable semantic text and visible boundaries; status and selection meaning cannot rely on color alone.",
+        "responsive_accessibility": "At compact width and font scale 1.3, wrap and scroll all content; in RTL mirror alignment while preserving supplied group/metric order and source/update/status separation."
+      },
+      "source_gaps": [
+        "No indexed source is a dedicated Details screen; phone, sheet, and overview references do not establish Details composition.",
+        "No source establishes Details-specific group surfaces, provenance treatment, loading/stale state, or responsive behavior."
+      ],
+      "derivation_basis": [
+        "terminal-phone",
+        "terminal-backdrop"
+      ],
+      "rationale": "The proposal carries the Terminal identity through the concrete same-theme cue and its separately cited backdrop while preserving the Details audit contract.",
+      "limitations": [
+        "This is a proposed same-theme derivation, not direct Details visual evidence or owner approval.",
+        "Source references do not establish installed contrast, responsive fit, or runtime rendering."
+      ]
     }
   ]
 }
+
 ```
 
 D31_PAGE_ATMOSPHERES:END
 
-## Ten-cell cross-theme distinction and limitation review
+## Cross-theme distinction and Details limitation review
 
-The Now and Hourly proposals retain five different atmosphere relationships:
-Atmospheric uses open blue and a proposed scenic horizon; Glass layers
-translucent surfaces over cool, softly lit depth; Minimal OLED keeps a black
-field and localized imagery; Instrument groups facts in outlined modules over
-optional grid texture; Terminal uses console text and explicit separators over
-a mostly flat field. The Hourly strips are compact preview evidence only; their
-displayed counts and selector patterns do not set the adopted page structure.
-These are documented proposals, not owner-approved treatments. No treatment
+The five theme directions remain distinct: Atmospheric uses open blue and a
+proposed scenic horizon; Glass layers translucent surfaces over cool, softly lit
+depth; Minimal OLED keeps a black field and localized imagery; Instrument groups
+facts in outlined modules over optional grid texture; Terminal uses console text
+and explicit separators over a mostly flat field. Phone, sheet, and overview
+cues are limited to the atmosphere they visibly show and do not define full-page
+composition. Details proposals apply those cues by same-theme derivation only;
+none treats the source as a Details screen. Each preserves exact supplied source,
+update, and outer status separation and supplied group/metric order. No treatment
 changes weather values, provenance, alert meaning, navigation, or accessibility
 meaning.
 
-## Remaining work
+## Owner review and remaining gates
 
-This interim artifact contains five proposed Now cells and five proposed Hourly
-cells. Daily and Details, integrated review of all twenty cells, reviewable
-source reproductions, any proposed derivations, and required owner decisions
-remain open. A new packet revision and explicit packet approval also remain
-pending; the upstream design-pack and owner-review gates remain open. D31,
-TP.1D, and TP.1 are not complete; packet approval and TP.2 eligibility remain
-gated.
+All twenty canonical cells remain proposal records, and the integrated owner
+review approved them as presented, including the five same-theme Details
+derivations. The exact decisions are in [D31_OWNER_DECISION.md](D31_OWNER_DECISION.md).
+The documentary review and owner decisions are complete. TP.1D/TP.1 closure, a
+new exact packet revision and its explicit approval, and TP.2 eligibility remain
+pending. No installed rendering or accessibility-service acceptance is claimed.

@@ -1,32 +1,31 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — D-track prerequisite gate; D29 matrix owner-approved; TP.1D remains open
+## Execution head — r3 packet prepared; exact-revision disposition pending; TP.1D remains open
 
-**Owner direction for pinned revision `tp1d-proposed-r2-symbol033-palette034`**
-with aggregate SHA-256
-`3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869`:
+**Current proposed packet:** `tp1d-proposed-r3-d28-d29-d31`
 
-- **D28 — Option 1:** accept the proposed reproducible font families used in
-  the packet.
-- **D29 — Option 2:** request a bounded, theme-specific art and vector-detail
-  design effort before accepting the mark treatment.
-- **D31 — Option 3:** revise the Atmospheric direction; the desired palette or
-  scene treatment is not yet specified.
+- Complete manifest entries: **117**; packet files including manifest: **118**.
+- Aggregate SHA-256 (sorted manifest rows excluding `OWNER_GUIDE.md`):
+  `da0dce544cf4fb2d5263dcc6d24fbed9147ca96c52303e6d0395c29e8a57b8c5`.
+- Full `SHA256SUMS.txt` file SHA-256:
+  `31c7db9b3916727666c8182952aeb445dca81abe88cb8ad39e837ebf05d4810e`.
+- Packet and verification: `.codex/test-artifacts/056-tp1d-packet-revision/`; the
+  independent audit passed with 117 manifest rows, 430 relative links, source
+  inventory coverage, and the r2 comparison.
 
-**D31 scope clarified by owner:** specify the distinct atmosphere for all five
-themes as selected-theme presentation. The one-app-many-personalities board is
-the cross-theme source and shows a unique atmosphere for each theme. The owner
-also directs that the board's shown atmosphere is the visual target to reproduce
-for each theme where it appears.
+D28 Option 1 is accepted as the proposed reproducible font-family choice; installed
+font rendering is unverified. D29's 30-cell matrix is owner-approved as presented,
+including Terminal tokens and explicit no-mark gaps; D32, runtime artwork, and TP.2
+are outside that decision. D31's twenty theme/page documentary proposals and overall
+set are approved, including the five same-theme Details derivations; this does not
+establish installed visual/accessibility acceptance. The packet's exact-r3 overall
+response remains blank and pending.
 
-This is a revise disposition, not approval of the packet. The exact packet stays
-immutable and TP.1D/TP.1 remain unresolved. **Every D track and its required
-design, review, and owner decision must be completed before TP.1/TP.1D can be
-resolved.** D28's decision is recorded above; D29's matrix is owner-approved,
-while D31 is active in its Daily-atmosphere mapping slice. Any
-future D track added to this roadmap joins the same prerequisite gate. After all
-D tracks are complete, a new exact packet revision must receive explicit
-approval before TP.1/TP.1D closes or TP.2 becomes eligible.
+**Next action:** create a separate bounded cycle for explicit owner disposition of
+this exact revision and digest. Keep TP.1D/TP.1 unresolved and TP.2 gated until that
+disposition explicitly approves this exact packet. The earlier r2 revise disposition
+remains historical and unchanged in cycle 036. No installed acceptance is claimed;
+TP.3 owns the installed screenshot comparison.
 
 ### Owner-directed design-definition tracks
 
@@ -93,7 +92,7 @@ equivalent review evidence sufficient to guide later planning and implementation
 The planning sessions determine the bounded slices and exact asset/render
 deliverables.
 
-#### D31 — Selected-theme atmospheric directions — ACTIVE (source audit complete)
+#### D31 — Selected-theme atmospheric directions — OWNER-APPROVED
 
 **Completed bounded slice:** TP.1D-D31-partial-A, cycle
 `050-d31-atmosphere-source-audit`, plan
@@ -132,17 +131,49 @@ and `.codex/test-artifacts/052-d31-daily-atmosphere-mapping/`. The fifteen
 cells remain documentary proposals; owner review and runtime authorization are
 not implied.
 
-The full D31 outcome remains open: Details mapping, the 20-cell integrated
-review, reviewable source reproductions, proposed derivations, and required
-owner decisions remain later bounded work. D31, TP.1D, and TP.1 remain open.
-After every D track is complete and reviewed, a new immutable packet revision
-still requires explicit owner approval before TP.1D/TP.1 can close; TP.2 remains
-gated until then. TP.3 installed application comparison remains a later gate.
+**Completed bounded slice — Details mapping:** cycle
+`053-d31-details-atmosphere-mapping`, plan
+`.codex/plans/053-d31-details-atmosphere-mapping.md`, extends the unchanged
+fifteen Now/Hourly/Daily cells with five proposed Details cells and validates
+the complete twenty-cell theme/page matrix. With no dedicated Details source,
+those five cells are explicitly proposed same-theme derivations; complete
+coverage reports structural presence only. Exact evidence and verification
+limits are recorded in `.codex/history/2026-09-25-053-d31-details-atmosphere-mapping.md`
+and `.codex/test-artifacts/053-d31-details-atmosphere-mapping/`.
+
+The twenty cells remain documentary proposal records. Their integrated owner
+review, source reproductions, derivation review, all twenty cell decisions, and
+the overall D31 disposition are approved in cycle 055. D31’s documentary
+design-definition gate is complete. TP.1D/TP.1 closure, approval of a new exact
+packet revision, and TP.2 eligibility remain pending; TP.3 installed application
+comparison remains a later gate.
+
+**Prepared owner-review package:** cycle `054-d31-integrated-atmosphere-review-package`,
+plan `.codex/plans/054-d31-integrated-atmosphere-review-package.md`, produced
+source-traceable atmosphere panels, a twenty-cell review guide, and focused
+artifact-integrity validation. Package readiness checks passed; explicit owner review was next at cycle close.
+Cycle 055 recorded approval of all twenty proposals and the overall D31
+disposition. This does not approve the packet, close TP.1D/TP.1, or unblock TP.2.
+Exact verification and limitations are recorded in the cycle-054 history and
+`.codex/test-artifacts/054-d31-integrated-atmosphere-review-package/`.
+
+**Integrated owner disposition — OWNER-APPROVED:** cycle
+`055-d31-integrated-owner-disposition` recorded approval of all twenty
+theme/page proposals, including the five same-theme Details derivations, and
+the explicit overall response “approve the overall set.” The exact reviewed
+mapping and guide digests, per-cell decisions, and verification are recorded in
+`.codex/history/2026-09-25-055-d31-integrated-owner-disposition.md`,
+`.codex/test-artifacts/055-d31-integrated-owner-disposition/`, and
+[`D31_OWNER_DECISION.md`](theme-system/design-pack/D31_OWNER_DECISION.md).
+D31 is complete as a documentary design-definition track. A new immutable
+packet revision still needs explicit exact-revision approval before TP.1D/TP.1
+can close or TP.2 can start. No installed-rendering or accessibility-service
+acceptance is claimed.
 
 **Objective:** Specify and review the distinct atmosphere of each of the five
 built-in themes, with the currently selected theme determining which atmosphere
-is active. This resolves D31's scope across the theme family while leaving
-individual palette and scene decisions open for review.
+is active. The D31 documentary proposals and overall set are approved at the
+reviewed revision; installed acceptance remains a separate TP.3 gate.
 
 **Source authority:** Treat the complete five-theme board
 [`one_app_many_personalities.png`](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png),
@@ -414,20 +445,14 @@ contracts: `docs/theme-system/design-pack/DAILY.md` and `DETAILS.md`; evidence:
 completion does not claim installed visual success or owner approval; TP.1D
 remains required before TP.1 umbrella closure.
 
-### TP.1D — Integrated pack, responsive review, and approval — ACTIVE (D-track prerequisite)
+### TP.1D — Integrated pack, responsive review, and approval — ACTIVE (exact-r3 disposition pending)
 
 The integrated 20-cell packet, responsive examples, and TP.3 checklist are
-complete. The pinned r2 packet received a revise disposition: D28 option 1 was
-selected, D29 requests theme-specific art/vector design, and D31 requests a
-revised Atmospheric direction without specifying its target. The owner-directed
-design-definition tracks at the execution head now govern that follow-up. All
-D tracks must be completed and reviewed before TP.1D/TP.1 can resolve; D28 is
-recorded as accepted, D29's matrix is owner-approved, and D31 is active in its
-Now-atmosphere mapping slice.
-The r2 packet remains
-immutable and cannot be treated as approved. After the D-track gate passes, a
-new exact packet revision must receive explicit approval before another TP.1D
-closure attempt.
+complete. The pinned r2 packet received a revise disposition, recorded in cycle
+036; that historical outcome is unchanged. D28 Option 1, the D29 matrix, and the
+D31 integrated set have since received their scoped decisions. Cycle 056 prepared
+immutable revision `tp1d-proposed-r3-d28-d29-d31`; its exact overall disposition
+is the next action. The r2 packet remains immutable and unapproved.
 
 Completed upstream cycles 028–034 are documented above. Static reference
 generation and packet audits are complete but are not installed visual
@@ -437,15 +462,12 @@ own fixed capture matrix below.
 #### TP.1D bounded exit
 
 - A disposition applies only to the exact verified packet revision. The r2
-  disposition attempt is complete and recorded as revise; its missing D29/D31
-  design outcomes are now explicit roadmap work, not approval of r2.
-- TP.1D/TP.1 cannot resolve until every D track in the execution head is
-  complete, reviewed, and has its required owner decision recorded. A missing
-  or incomplete D-track outcome keeps TP.1D unresolved and TP.2 gated.
-- Future disposition applies to a new immutable packet only after all D-track
-  outcomes have been specified and reviewed. A missing, ambiguous,
-  revise, or reject response keeps TP.1D unresolved and TP.2 gated; follow-on
-  work requires a roadmap-defined design track and a newly bounded plan.
+  disposition attempt is complete and recorded as revise; D28/D29/D31 outcomes
+  are now settled within the scopes recorded in the r3 owner guide.
+- TP.1D/TP.1 cannot resolve until the exact r3 packet receives explicit owner
+  approval. Missing, ambiguous, revise, or reject responses keep TP.1D unresolved
+  and TP.2 gated; follow-on work requires a roadmap-defined outcome and a new
+  bounded plan.
 - TP.1D closes only when the required decisions explicitly approve the exact
   reviewed packet revision.
 - This exit records design-owner approval only. It makes no installed visual

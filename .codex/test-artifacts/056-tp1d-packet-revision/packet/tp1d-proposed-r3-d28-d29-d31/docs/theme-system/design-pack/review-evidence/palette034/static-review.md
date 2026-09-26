@@ -1,0 +1,9 @@
+# Cycle 034 static reference review
+
+- Compared the indexed Atmospheric Now dark candidate with the separate unindexed light proposal at 393 × 852 dp, Fira Sans, font scale 1.0, LTR, Standard contrast, and Subtle effects. The light reference keeps all weather/source text, the existing schematic partly-cloudy mark identity, selector position, support-grid geometry, panel sizes, and vertical coordinates. Only resolved color values differ.
+- Compact 360 × 640 dp: same two-column support layout and named selector; 84 dp of body extends below the viewport. The end capture exposes all four metrics and the source/update/status block. No facts are removed or condensed to fit.
+- Font scale 1.3: support metrics switch to one column and the body scroll extent is 117.8 dp. Text grows rather than shrinking; the full/end captures show source and freshness remain reachable. Android font metrics and actual scroll interaction remain unverified.
+- RTL: header alignment, selector order and support columns mirror; weather text and values remain visible. The fixture copy is English and remains LTR inside mirrored layout boxes; this does not verify localization or chronological forecast ordering.
+- High contrast: the static generator uses opaque surfaces and promotes supporting text and outlines to the primary content role. The visible names remain; no color is the sole carrier of meaning.
+- Effects Off: the same fixture and geometry render on the light opaque canvas with opaque panels, no gradient or glow, and no motion. The decorative mark remains static and optional; all facts remain visible.
+- These are generated SVG/PNG design references. At the time this static review was prepared, no Android/runtime system-mode, installed viewport, TalkBack, or owner review had occurred. The later D31 integrated documentary proposal is approved as recorded, but this derived light-palette proposal itself is not separately approved. No installed result is claimed.

@@ -22,12 +22,12 @@ class D31PageMappingTest(unittest.TestCase):
     def test_repository_mapping_passes(self):
         self.assertEqual([], self.check())
 
-    def test_fifteen_cell_contract_and_prior_cells_are_stable(self):
-        self.assertEqual(["now", "hourly", "daily"], self.mapping["scope"]["pages"])
-        self.assertEqual(15, self.mapping["scope"]["cell_count"])
-        self.assertEqual(15, len(self.mapping["cells"]))
+    def test_twenty_cell_contract_and_prior_cells_are_stable(self):
+        self.assertEqual(["now", "hourly", "daily", "details"], self.mapping["scope"]["pages"])
+        self.assertEqual(20, self.mapping["scope"]["cell_count"])
+        self.assertEqual(20, len(self.mapping["cells"]))
         self.assertEqual(
-            [(theme, page) for page in ("now", "hourly", "daily") for theme in
+            [(theme, page) for page in ("now", "hourly", "daily", "details") for theme in
              ("atmospheric", "glass", "minimal_oled", "instrument", "terminal")],
             [(cell["theme"], cell["page"]) for cell in self.mapping["cells"]],
         )
@@ -36,17 +36,44 @@ class D31PageMappingTest(unittest.TestCase):
             import json
             self.assertEqual(json.loads(baseline.read_text(encoding="utf-8")), self.mapping["cells"][:10])
 
+    def test_details_cells_and_prior_fifteen_are_stable(self):
+        self.assertEqual("complete", self.mapping["scope"]["coverage"])
+        baseline = self.root / ".codex/test-artifacts/053-d31-details-atmosphere-mapping/pre-edit-cells.json"
+        import json
+        import hashlib
+        prior = json.loads(baseline.read_text(encoding="utf-8"))
+        self.assertEqual(prior, self.mapping["cells"][:15])
+        digest = hashlib.sha256(json.dumps(prior, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        self.assertEqual("eabb49818e217d7301fa0a3775f57041e394ec38165bd1ad275d475418ede5b7", digest)
+        self.assertEqual([f"{theme}-details" for theme in ("atmospheric", "glass", "minimal_oled", "instrument", "terminal")], [c["id"] for c in self.mapping["cells"][15:]])
+
+    def test_details_locator_and_evidence_rules(self):
+        cases = [
+            (lambda d: d["cells"][15]["source_refs"][0].__setitem__("evidence_class", "direct_region"), "same_theme_derivation"),
+            (lambda d: d["cells"][15]["source_refs"][0].__setitem__("locator", "Phone crop is a dedicated Details screen with all groups."), "concrete visible cue"),
+            (lambda d: d["cells"][15]["source_refs"][0].__setitem__("locator", "Phone crop, dedicated Details screen shows all metrics."), "must not assert a dedicated Details screen"),
+            (lambda d: d["cells"][15]["source_refs"][1].__setitem__("evidence_class", "same_theme_derivation"), "backdrop field evidence must be direct_region"),
+            (lambda d: d["cells"][19]["source_refs"][0].__setitem__("source_id", "terminal-asset-sheet-absent"), "cannot be evidence"),
+            (lambda d: d["cells"][17]["source_refs"][0].__setitem__("locator", "Phone crop around the current panel content."), "concrete visible cue"),
+        ]
+        for mutate, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertTrue(any(expected in error for error in self.check(mutate)))
+
+    def test_details_same_theme_cue_derivation_and_backdrop_are_accepted(self):
+        self.assertEqual([], self.check())
+
     def test_missing_duplicate_and_extra_cells_fail(self):
         missing = self.check(lambda d: d["cells"].pop())
-        self.assertTrue(any("expected exactly 15 cells" in error for error in missing))
+        self.assertTrue(any("expected exactly 20 cells" in error for error in missing))
         duplicate = self.check(lambda d: d["cells"].__setitem__(1, copy.deepcopy(d["cells"][0])))
         self.assertTrue(any("duplicate theme/page cell" in error for error in duplicate))
         extra = self.check(lambda d: d["cells"].append(copy.deepcopy(d["cells"][0])))
-        self.assertTrue(any("expected exactly 15 cells" in error for error in extra))
+        self.assertTrue(any("expected exactly 20 cells" in error for error in extra))
 
     def test_daily_matrix_order_scope_and_cell_failures(self):
         cases = [
-            (lambda d: d["cells"].pop(), "expected exactly 15 cells"),
+            (lambda d: d["cells"].pop(), "expected exactly 20 cells"),
             (lambda d: d["cells"].__setitem__(10, copy.deepcopy(d["cells"][9])), "duplicate theme/page cell ('terminal', 'hourly')"),
             (lambda d: d["cells"][14].__setitem__("theme", "atmospheric"), "expected 'atmospheric-daily'"),
             (lambda d: d["cells"][10].__setitem__("id", "glass-hourly"), "expected 'atmospheric-daily'"),
@@ -54,7 +81,7 @@ class D31PageMappingTest(unittest.TestCase):
             (lambda d: d["cells"].__setitem__(slice(10, 15), list(reversed(d["cells"][10:15]))), "canonical theme/page pair"),
             (lambda d: d["scope"].__setitem__("pages", ["now", "daily", "hourly"]), "scope.pages"),
             (lambda d: d["scope"].__setitem__("cell_count", 14), "scope.cell_count"),
-            (lambda d: d["scope"].__setitem__("coverage", "complete"), "scope.coverage"),
+            (lambda d: d["scope"].__setitem__("coverage", "partial"), "scope.coverage"),
         ]
         for mutate, expected in cases:
             with self.subTest(expected=expected):
@@ -111,7 +138,7 @@ class D31PageMappingTest(unittest.TestCase):
             (lambda d: d["scope"].__setitem__("themes", list(reversed(d["scope"]["themes"]))), "scope.themes"),
             (lambda d: d["scope"].__setitem__("pages", ["hourly", "now"]), "scope.pages"),
             (lambda d: d["scope"].__setitem__("cell_count", 9), "scope.cell_count"),
-            (lambda d: d["scope"].__setitem__("coverage", "complete"), "scope.coverage"),
+            (lambda d: d["scope"].__setitem__("coverage", "partial"), "scope.coverage"),
             (lambda d: d["cells"][0].__setitem__("theme", "unknown"), "cells[0].theme"),
             (lambda d: d["cells"][0].__setitem__("page", "hourly"), "duplicate theme/page cell"),
             (lambda d: d["cells"][0].__setitem__("id", "wrong-id"), "cells[0].id"),

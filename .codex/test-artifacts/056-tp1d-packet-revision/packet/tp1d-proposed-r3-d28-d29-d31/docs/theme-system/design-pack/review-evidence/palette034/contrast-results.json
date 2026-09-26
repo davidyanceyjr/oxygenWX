@@ -1,0 +1,466 @@
+{
+  "method": "WCAG 2.x relative luminance for sRGB hex colors; alpha-composite surface/elevatedSurface over canvas, atmosphereTop, and atmosphereBottom before measuring. Ratios round only for display; pass/fail uses full precision.",
+  "text_status_action_minimum": 4.5,
+  "decorative_accent_minimum": 3.0,
+  "results": [
+    {
+      "foreground": "content",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 12.17209874514981,
+      "minimum": 4.5,
+      "ratio_display": "12.17:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.607439841888105,
+      "minimum": 4.5,
+      "ratio_display": "6.61:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.428622837653797,
+      "minimum": 4.5,
+      "ratio_display": "6.43:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.327327723443281,
+      "minimum": 4.5,
+      "ratio_display": "6.33:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.592718485617379,
+      "minimum": 3.0,
+      "ratio_display": "6.59:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "surface",
+      "backdrop": "canvas",
+      "effective_surface": "#F3F9F9",
+      "ratio": 12.80275685639425,
+      "minimum": 4.5,
+      "ratio_display": "12.80:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "surface",
+      "backdrop": "canvas",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.94978306618267,
+      "minimum": 4.5,
+      "ratio_display": "6.95:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "surface",
+      "backdrop": "canvas",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.7617012345336365,
+      "minimum": 4.5,
+      "ratio_display": "6.76:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "surface",
+      "backdrop": "canvas",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.655157840076319,
+      "minimum": 4.5,
+      "ratio_display": "6.66:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "surface",
+      "backdrop": "canvas",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.934298970228752,
+      "minimum": 3.0,
+      "ratio_display": "6.93:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "elevatedSurface",
+      "backdrop": "canvas",
+      "effective_surface": "#FCFDFE",
+      "ratio": 13.381101293265484,
+      "minimum": 4.5,
+      "ratio_display": "13.38:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "elevatedSurface",
+      "backdrop": "canvas",
+      "effective_surface": "#FCFDFE",
+      "ratio": 7.263728602981739,
+      "minimum": 4.5,
+      "ratio_display": "7.26:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "elevatedSurface",
+      "backdrop": "canvas",
+      "effective_surface": "#FCFDFE",
+      "ratio": 7.067150469932086,
+      "minimum": 4.5,
+      "ratio_display": "7.07:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "elevatedSurface",
+      "backdrop": "canvas",
+      "effective_surface": "#FCFDFE",
+      "ratio": 6.955794144934812,
+      "minimum": 4.5,
+      "ratio_display": "6.96:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "elevatedSurface",
+      "backdrop": "canvas",
+      "effective_surface": "#FCFDFE",
+      "ratio": 7.247545037307714,
+      "minimum": 3.0,
+      "ratio_display": "7.25:1"
+    },
+    {
+      "foreground": "conditionAccent",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 5.558877916336603,
+      "minimum": 3.0,
+      "ratio_display": "5.56:1"
+    },
+    {
+      "foreground": "precipitationAccent",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.3318374742147245,
+      "minimum": 3.0,
+      "ratio_display": "6.33:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "canvas",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#EAF4F5",
+      "ratio": 12.17209874514981,
+      "minimum": 4.5,
+      "ratio_display": "12.17:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "canvas",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.607439841888105,
+      "minimum": 4.5,
+      "ratio_display": "6.61:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "canvas",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.428622837653797,
+      "minimum": 4.5,
+      "ratio_display": "6.43:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "canvas",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.327327723443281,
+      "minimum": 4.5,
+      "ratio_display": "6.33:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "canvas",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.592718485617379,
+      "minimum": 3.0,
+      "ratio_display": "6.59:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "surface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#F3F9F9",
+      "ratio": 12.80275685639425,
+      "minimum": 4.5,
+      "ratio_display": "12.80:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "surface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.94978306618267,
+      "minimum": 4.5,
+      "ratio_display": "6.95:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "surface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.7617012345336365,
+      "minimum": 4.5,
+      "ratio_display": "6.76:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "surface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.655157840076319,
+      "minimum": 4.5,
+      "ratio_display": "6.66:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "surface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#F3F9F9",
+      "ratio": 6.934298970228752,
+      "minimum": 3.0,
+      "ratio_display": "6.93:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#FCFDFE",
+      "ratio": 13.381101293265484,
+      "minimum": 4.5,
+      "ratio_display": "13.38:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#FCFDFE",
+      "ratio": 7.263728602981739,
+      "minimum": 4.5,
+      "ratio_display": "7.26:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#FCFDFE",
+      "ratio": 7.067150469932086,
+      "minimum": 4.5,
+      "ratio_display": "7.07:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#FCFDFE",
+      "ratio": 6.955794144934812,
+      "minimum": 4.5,
+      "ratio_display": "6.96:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereTop",
+      "effective_surface": "#FCFDFE",
+      "ratio": 7.247545037307714,
+      "minimum": 3.0,
+      "ratio_display": "7.25:1"
+    },
+    {
+      "foreground": "conditionAccent",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 5.558877916336603,
+      "minimum": 3.0,
+      "ratio_display": "5.56:1"
+    },
+    {
+      "foreground": "precipitationAccent",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.3318374742147245,
+      "minimum": 3.0,
+      "ratio_display": "6.33:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "canvas",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#DCECEF",
+      "ratio": 11.218459103035695,
+      "minimum": 4.5,
+      "ratio_display": "11.22:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "canvas",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#DCECEF",
+      "ratio": 6.08977097491317,
+      "minimum": 4.5,
+      "ratio_display": "6.09:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "canvas",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#DCECEF",
+      "ratio": 5.924963632241119,
+      "minimum": 4.5,
+      "ratio_display": "5.92:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "canvas",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#DCECEF",
+      "ratio": 5.831604621613571,
+      "minimum": 4.5,
+      "ratio_display": "5.83:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "canvas",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#DCECEF",
+      "ratio": 6.076202983334876,
+      "minimum": 3.0,
+      "ratio_display": "6.08:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "surface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#F2F8F8",
+      "ratio": 12.691628982068346,
+      "minimum": 4.5,
+      "ratio_display": "12.69:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "surface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#F2F8F8",
+      "ratio": 6.8894589791259575,
+      "minimum": 4.5,
+      "ratio_display": "6.89:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "surface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#F2F8F8",
+      "ratio": 6.703009696964892,
+      "minimum": 4.5,
+      "ratio_display": "6.70:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "surface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#F2F8F8",
+      "ratio": 6.597391098712197,
+      "minimum": 4.5,
+      "ratio_display": "6.60:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "surface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#F2F8F8",
+      "ratio": 6.874109285058173,
+      "minimum": 3.0,
+      "ratio_display": "6.87:1"
+    },
+    {
+      "foreground": "content",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#FAFCFD",
+      "ratio": 13.242865104037895,
+      "minimum": 4.5,
+      "ratio_display": "13.24:1"
+    },
+    {
+      "foreground": "secondaryData",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#FAFCFD",
+      "ratio": 7.188689176879719,
+      "minimum": 4.5,
+      "ratio_display": "7.19:1"
+    },
+    {
+      "foreground": "warning",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#FAFCFD",
+      "ratio": 6.994141834226365,
+      "minimum": 4.5,
+      "ratio_display": "6.99:1"
+    },
+    {
+      "foreground": "danger",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#FAFCFD",
+      "ratio": 6.883935898399358,
+      "minimum": 4.5,
+      "ratio_display": "6.88:1"
+    },
+    {
+      "foreground": "outline",
+      "surface": "elevatedSurface",
+      "backdrop": "atmosphereBottom",
+      "effective_surface": "#FAFCFD",
+      "ratio": 7.172672798823355,
+      "minimum": 3.0,
+      "ratio_display": "7.17:1"
+    },
+    {
+      "foreground": "conditionAccent",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 5.558877916336603,
+      "minimum": 3.0,
+      "ratio_display": "5.56:1"
+    },
+    {
+      "foreground": "precipitationAccent",
+      "surface": "canvas",
+      "backdrop": "canvas",
+      "effective_surface": "#EAF4F5",
+      "ratio": 6.3318374742147245,
+      "minimum": 3.0,
+      "ratio_display": "6.33:1"
+    }
+  ]
+}

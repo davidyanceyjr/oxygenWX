@@ -1,0 +1,1 @@
+Source-contract check passed: new Oxygen UI only, one outer pager, presentation-only Compose boundary, Oxygen app identity present.

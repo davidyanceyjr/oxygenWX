@@ -1,0 +1,79 @@
+# Hourly page design — TP.1B partial B
+
+**Status:** proposed for TP.1D integrated render review. This document specifies a future production layout, not the currently installed renderer. Hourly meaning, six-entry windows, represented-date jump, and single outer swipe owner are **accepted by authority** from [the specification](../../SPECIFICATION.md#43-hourly), [the adopted UI contract](../../OXYGEN_UI_SPECIFICATION_ADOPTED.md#hourly), and [the typed model](../../../app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt). Layout numbers and theme treatments are **proposed**.
+
+## Sources, measurements, and shell
+
+Use the shared coordinate system in [NOW.md](NOW.md): 393 × 852 dp, dynamic system insets, theme gutter `G`, content width `W=393-I_l-I_r-2G`, 56 dp minimum location/status header, 48 dp minimum four-name selector, 480 dp maximum readable width, and body scroll below the named selector. `spacingDp.stack` separates major groups. The selector and page identity stay visible; the outer Home pager alone owns horizontal swipes. Hourly has no horizontal grid, date-strip, or nested pager gesture.
+
+The five combined overview crops are [Atmospheric](../../assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png), [Glass](../../assets/design-references/production-themes/one-app-many-personalities/extracted/glass_phone.png), [Minimal OLED](../../assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png), [Instrument](../../assets/design-references/production-themes/one-app-many-personalities/extracted/instrument_phone.png), and [Terminal](../../assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png). They are 302 × 745 px except Terminal, 315 × 745 px. Approximate inner screen widths are 288 px and Terminal 285 px, excluding the frame. Hourly preview regions are Atmospheric `x=23..284,y=364..476`, Glass `x=30..289,y=324..482`, OLED `x=38..279,y=270..414`, Instrument `x=31..294,y=345..498`, Terminal `x=38..282,y=365..507`. The [Glass core components crop](../../assets/design-references/production-themes/glass/extracted/04_core_components.png) has a compact forecast row at `x≈272..545,y≈275..351`; the [Instrument crop](../../assets/design-references/production-themes/instrument/extracted/04_core_components.png) has one at `x≈273..546,y≈295..368`. They establish per-entry time/mark/temperature hierarchy and panel anatomy, but their single horizontal row is not a page layout. The product contract requires a two-column, three-row normal-phone page, so the six supplied entries are reflowed without changing order.
+
+| Reference measure / decision | Calculation at 393 dp, zero horizontal insets | Proposed value |
+| --- | --- | --- |
+| Atmospheric preview `261/288=0.906` screen width | `0.906 × W(361)=327.2 dp` | Preview's restrained surface width is **328 dp** if a centered panel is used; the dedicated Hourly grid uses full `W` for readable cards. |
+| Glass preview `259/288=0.899` | `0.899 × W(361)=324.6 dp` | **325 dp** maximum for an inset Glass range/control surface; grid still uses full `W`. |
+| Glass compact-row entry pitch approximately `54 px` from five repeated cells across 273 px | `54/273 × 361=71.5 dp` | A two-column card should exceed **2 × 72=144 dp** minimum readable width. |
+| Instrument preview `263/288=0.913` | `0.913 × W(369)=336.9 dp` | **337 dp** bounded range/control surface; full-width grid cards. |
+| Atmospheric grid with catalog gap `spacingDp.grid=8` | `(361-8)/2=176.5 dp` | Two **176.5 dp** flexible columns, three rows for six entries. Glass `(361-10)/2=175.5`; OLED `(357-12)/2=172.5`; Instrument/Terminal `(369-8)/2=180.5`. |
+| Compact 360 dp Glass with 16 dp gutters and 10 dp gap | `(360-32-10)/2=159 dp` | Two columns remain possible at font 1.0; if measured text needs over 159 dp, switch to one column. |
+| Repeated reference time-to-temperature stack about 55–70 px high in compact rows | `60/288 × 361=75.2 dp` plus wrap, padding, precipitation support | **112 dp minimum** entry card at font 1.0; content can grow. Six cards occupy about `3×112+2×10=356 dp` on Glass. |
+
+The 48 dp minimum date button and 48 dp Earlier/Later targets come from the product accessibility guidance; the phone crops have no usable date-jump or two-window control measurement. They are **proposed component anatomy**, derived from the measured control bands and the required target. Type sizes use the [Glass type crop](../../assets/design-references/production-themes/glass/extracted/02_typography.png) and [Instrument type crop](../../assets/design-references/production-themes/instrument/extracted/02_typography.png): page title 20/28 sp, time label 14/20 sp (12/18 in Glass only when space allows), condition 16/24 sp, temperature 20/28 sp, precipitation 12/18 sp. Terminal uses 14/20 mono labels and 18/24 temperature. Text grows with system font scale; raster cap height alone is not an sp value.
+
+## Ordered composition, controls, and model map
+
+Below the shared header and selector, the Hourly body order is: (1) visible `Hourly` page heading and selected window `rangeLabel`; (2) represented-date button/menu when dates exist; (3) six-entry grid; (4) Earlier/Later control row; (5) source/update and exact load status. The date button and window controls remain reachable if the grid scrolls; in compact height the grid/source region scrolls vertically, while the 48 dp Earlier/Later row remains at the safe bottom. If vertical room is too small for a stable footer, the whole body scrolls and controls remain in document order. No overlay covers weather text. Approximate 393 dp normal-height budget after insets: 56 header + 48 selector + 2 major stack gaps + 56 heading + 48 date + 356 grid + 48 controls + 64 provenance/status = 696 dp plus actual wrapped text; overflow scrolls. This is a fit estimate, not a forced screen height.
+
+| Slot or action | Typed source | Visible and accessibility rule |
+| --- | --- | --- |
+| Shared header/page selector | Current nested presentation when supplied; global selected page | Show `Hourly` by name, selected semantics, location only if supplied. No location claim in `Loading`/`FailedWithoutData`. |
+| Heading and range | `HourlyWindowPresentation.rangeLabel` | Heading remains “Hourly”; range is exact supplied string. If windows are empty, show “Hourly forecast unavailable”, no fabricated range. |
+| Date button/menu | `hourlyDateJumps: List<DateJumpPresentation>` with `label` and `windowIndex` | Show one 48 dp button labeled “Choose forecast date”, opening a vertical menu/list of **only supplied** jump labels. Selecting sets the window index to `jump.windowIndex`, the first window for that represented date. The selected jump is marked in text/semantics when its index equals the selected window; other windows need no inferred date. No date strip or unrepresented day. |
+| Entry card `i` | `window.entries[i]` in supplied order | Row-major placement: indices 0–1, 2–3, 4–5. Display `time`, `condition`, `temperature`, optional `precipitation`; card speaks `spokenSummary`. Keep labeled `Unavailable`; omit null precipitation subline and null mark. A reported zero may have null precipitation display and still be available in `fieldAvailability`. |
+| Decorative entry mark | nullable `conditionIdentity` | Optional, non-speaking, non-interactive. Never infer rain, severity, or an official alert from the mark. |
+| Earlier/Later | selected window index and window count | Both are named 48 dp buttons with enabled/disabled semantics and visible disabled text/outline. Earlier decrements one window; Later increments one window. At boundaries keep buttons visible but disabled. No wraparound or page change. |
+| Source/update/status | `HomePresentation.sourceLine`, `updatedLine`, outer `HomeLoadState.status` | Show exact supplied text, distinct from range and window controls. Partial horizon note names the partial hourly side without invented count. |
+
+If a window has **one to five** entries, lay them in row-major order with no blank card, filler icon, duplicated forecast, or stretched last entry. A lone final entry uses one normal card; the remaining column is empty canvas. If the selected window has zero entries, replace the grid with “Hourly forecast unavailable” and keep valid window controls; date controls show only supplied represented dates. If `hourlyWindows` itself is empty, show that message and omit date/window controls. A date jump with an index outside actual windows is invalid presentation input; no control should be drawn for it. Do not parse date or time from display strings to create extra choices.
+
+## Five theme mappings
+
+All token keys below resolve from `docs/theme-system/tokens/catalog/<theme>.json` and `theme_manifest.json`; the values are transcribed in [FOUNDATION.md](FOUNDATION.md). `colors.content` is primary text, `colors.secondaryData` supporting text, `colors.conditionAccent` selected control cue, `colors.precipitationAccent` optional precipitation cue, and `colors.outline` a boundary cue. Selected and disabled states also use text/semantics. High contrast chooses opaque verified pairs while keeping the same roles and order. Entry card internal inset is `spacingDp.panel` except Glass uses **14 dp** and OLED **8 dp** as catalog; minimum 112 dp height, content-driven beyond that.
+
+| Theme / Hourly reference locator | Range, cards, type | Mark, backdrop, controls/status, Effects Off |
+| --- | --- | --- |
+| **Atmospheric** — `atmospheric_phone.png` `y=364..476` | Restrained cards in `colors.surface`, `surface.radiusDp=24`, `borderDp=1`, candidate `surface.opacity=.86`, `spacingDp.grid=8`; 20/28 temperature, 16/24 condition, humanist label. Range is readable text above grid. | `illustrative_line` mark, `atmosphere` backdrop from `colors.atmosphereTop/Bottom/Glow`. Selected date/window uses text plus `colors.conditionAccent` outline. Status in `colors.elevatedSurface`. Off uses opaque `colors.canvas/surface`, no glow/gradient/motion. |
+| **Glass** — `glass_phone.png` `y=324..482`, Glass core row | 325 dp bounded range/control panel, full-width two-column grid; luminous `colors.surface`, `surface.radiusDp=26`, `borderDp=1`, opacity .42 with enabled effects; Inter 20/28 temperature and 12/18 time label. | `soft_line` mark, `glass_gradient` background. Selected control has text plus elevated fill/outline, disabled is explicitly disabled with muted text. Exact status in `colors.elevatedSurface` panel. Off removes blur/gradient/highlight and uses opaque surfaces. |
+| **Minimal OLED** — `minimal_oled_phone.png` `y=270..414` | `colors.canvas=#000000`, `surface=minimal`; cards are low-decoration text groups with `colors.outline` separator and `surface.radiusDp=16` only if boxed for focus; `spacingDp.grid=12`, 20/28 temperature, 14/20 time. No reference graph. | `minimal_line` mark is optional; `pure_black` backdrop. Selected date/window uses text and a thin visible rule; disabled controls keep their label and disabled semantics with muted outline. Status text is on opaque black. Off is static black with all text/controls. |
+| **Instrument** — `instrument_phone.png` `y=345..498`, Instrument core row | `instrument_panel` bounded cards, `colors.surface`, `surface.radiusDp=8`, `borderDp=1`, opacity .98 with effects, `spacingDp.grid=8`; Roboto Mono 14/20 time/data, Roboto 20/28 temperature. No temperature chart. | `instrument_line` mark and optional `instrument_grid` backdrop. Controls have explicit labels and selected outline/fill, not dial rotation. Status in bordered panel. Off uses opaque panel/canvas, no grid/glow/motion. |
+| **Terminal** — `terminal_phone.png` `y=365..507` | `terminal_flat` text groups with 1 dp `colors.outline` rules, zero radius, `spacingDp.grid=8`; mono 18/24 temperature and 14/20 time/condition. Two columns remain visual groups; Compose semantics stay row-major. | `terminal_glyph` mark and subdued `terminal_grid` when enabled. Date and Earlier/Later are explicit bracketed text buttons at least 48 dp, selected text includes “Selected”; disabled text remains legible. Off uses opaque `colors.canvas/surface`, no grid or cursor animation. |
+
+`colors.warning`/`colors.danger` may accompany exact stale/failure status wording but cannot turn a forecast into an official alert. Proposed effective fallback for unsupported Full is Off on OLED and Terminal, Subtle on Instrument, matching each catalog's `motion.default` and `motion.supportsFull=false`. High contrast uses opaque `colors.canvas` behind `colors.content` and `colors.secondaryData`, opaque `colors.surface` for cards, and text plus `colors.outline` for selected/disabled states; TP.1D checks resolved pairs. No reference graph, radar, UV, AQI, or artificial six-hour forecast is a live Hourly slot.
+
+## State and environment examples
+
+| Case | Hourly treatment |
+| --- | --- |
+| Complete live | Use six actual entries per supplied window, exact range/date labels, source/update and `LiveData.status.visibleText`; up to twelve windows for a full 72-hour horizon, never synthesized. |
+| Partial/sparse | Use only supplied windows and entries. Mark the hourly horizon partial from `Partial.horizon`; do not claim 72 hours or a missing count. One-to-five and empty rules above apply. |
+| Missing field | Required condition/temperature text reads typed `Unavailable`; null mark/precipitation subline is omitted. Do not substitute 0. |
+| Loading | Named page and exact loading status; no range, entries, dates, source, or fixture placeholders. |
+| Saved/stale | Retain supplied windows/source/update, show exact `CachedData.status.visibleText` with saved/freshness language. |
+| Refresh failure with retained data | Retain windows and show exact failure/origin/freshness status; do not change update time or imply successful refresh. |
+| Failed without data / nested unavailable | Outer failure: named page plus exact failure status only. Nested unavailable: supplied location/source/update and message, no fabricated windows. |
+| 360 × 640 dp | Recalculate cards from `W`; use two columns while each is at least 144 dp, else one column. Grid/source scroll vertically, controls remain reachable and named. |
+| Font scale 1.3 | Let cards grow and wrap condition/precipitation; move to one column if either card needs over its half width. Do not shrink text or clip controls. |
+| RTL | Mirror physical alignment/control placement, retain list index row-major reading order earliest-to-latest and exact Earlier/Later meaning. Do not reverse the data list. |
+| Effects Off / High contrast | Opaque static canvas/cards, no blur, grid, gradient, glow, or animation; selected/disabled wording and all weather/status/source text remain. High contrast uses verified role pairs and non-color cues. |
+
+**Review criterion:** TP.1D compares the static 393 × 852 dp design layout with measured card pitch, row hierarchy, panel anatomy, and controls, then checks 360 × 640 dp, 1.3 font, RTL, High contrast, and Effects Off. This page records no installed screenshot or pixel-match result.
+
+
+## Integrated render fit refinement
+
+The upstream [integrated pack](INTEGRATED_PACK.md#measurable-composition) records
+D27's actual text-driven heights and fixed reference insets, plus the later
+D28/D29 decisions and their implementation limits. Those measured refinements supersede
+the nominal fit estimates above for the ten upstream references. See
+[SOURCE_DECISIONS.md](SOURCE_DECISIONS.md#integrated-upstream-review-decisions)
+for old/new values and affected cells. TP.3 owns installed comparison.

@@ -1,0 +1,6 @@
+Initial status entries: 18
+Final status entries: 18
+Unrelated initial worktree entries preserved exactly: yes
+Expected lifecycle status transition: ` M .codex/current.md` was cleared when cycle 056 closed to IDLE.
+Expected new cycle record: `?? .codex/history/2026-09-25-056-tp1d-packet-revision.md`.
+No other status entry was added or removed.

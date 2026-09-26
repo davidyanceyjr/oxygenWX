@@ -1,0 +1,79 @@
+{
+  "status": "derived proposal; unapproved",
+  "theme": "atmospheric",
+  "purpose": "Review a system-light color variant alongside the retained dark candidate. Values are derived for legibility and are not sampled source colors.",
+  "source_constraints": {
+    "approved_light_specific_source_found": false,
+    "derivation": "Retain Atmospheric semantic roles and component geometry. Derive a pale cool neutral field, opaque-looking light surfaces, and dark role colors; then adjust each foreground role to meet the documented WCAG contrast checks. No source-pixel transcription is claimed."
+  },
+  "system_mode_mapping": {
+    "light": "light",
+    "dark": "dark",
+    "unknown_or_unavailable": "dark",
+    "selection_effect": "colors only; preserve theme identity, layout, typography, weather facts, chronology, provenance, navigation, persistence, and refresh behavior"
+  },
+  "contrast_contract": {
+    "method": "WCAG 2.x relative luminance for sRGB hex colors; alpha-composite surface/elevatedSurface over canvas, atmosphereTop, and atmosphereBottom before measuring. Ratios round only for display; pass/fail uses full precision.",
+    "text_minimum": 4.5,
+    "status_label_minimum": 4.5,
+    "action_label_minimum": 4.5,
+    "decorative_accent_minimum": 3.0,
+    "role_pairing": {
+      "primary_and_supporting_text": [
+        "content",
+        "secondaryData"
+      ],
+      "status_labels": [
+        "warning",
+        "danger"
+      ],
+      "action_label": "content",
+      "action_boundary": "outline",
+      "decorative_marks": [
+        "conditionAccent",
+        "precipitationAccent"
+      ]
+    }
+  },
+  "dark": {
+    "status": "retained existing candidate; unchanged",
+    "catalog_colors": {
+      "canvas": "#07151D",
+      "atmosphereTop": "#07151D",
+      "atmosphereBottom": "#153444",
+      "atmosphereGlow": "#86E4F0",
+      "surface": "#23414D",
+      "elevatedSurface": "#17313C",
+      "content": "#F2FBFC",
+      "secondaryData": "#B9D5DA",
+      "outline": "#7FC1CE",
+      "conditionAccent": "#8DE7F1",
+      "precipitationAccent": "#79BFFF",
+      "warning": "#FFD56A",
+      "danger": "#FF6B6B"
+    }
+  },
+  "light": {
+    "status": "derived proposal; unapproved",
+    "colors": {
+      "canvas": "#EAF4F5",
+      "atmosphereTop": "#EAF4F5",
+      "atmosphereBottom": "#DCECEF",
+      "atmosphereGlow": "#FFFFFF",
+      "surface": "#F5FAFA",
+      "elevatedSurface": "#FFFFFF",
+      "content": "#17313C",
+      "secondaryData": "#405966",
+      "outline": "#365B66",
+      "conditionAccent": "#006B78",
+      "precipitationAccent": "#005D8F",
+      "warning": "#765000",
+      "danger": "#A52A2A"
+    },
+    "surface_behavior": "Keep current surface opacity, radius, border, spacing, type, and effects policy; color values alone vary by system mode."
+  },
+  "open_decisions": [
+    "D31 remains open: no selection between consistent dark-teal option A and shared blue/scenic option B. This light proposal selects neither scene direction.",
+    "D28 and D29 remain open. Owner approval and TP.1D/TP.1 closure remain pending; TP.2 eligibility is not implied."
+  ]
+}

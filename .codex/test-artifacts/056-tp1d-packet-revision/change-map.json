@@ -1,0 +1,140 @@
+{
+  "changed_paths": [
+    "OWNER_GUIDE.md",
+    "REVISION_CHANGELOG.md",
+    "SOURCE_INVENTORY.json",
+    "docs/theme-system/design-pack/CHANGELOG.md",
+    "docs/theme-system/design-pack/HOURLY.md",
+    "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+    "docs/theme-system/design-pack/NOW.md",
+    "docs/theme-system/design-pack/OWNER_GUIDE.md",
+    "docs/theme-system/design-pack/PACKET_INDEX.md",
+    "docs/theme-system/design-pack/README.md",
+    "docs/theme-system/design-pack/SOURCE_ATTRIBUTION.md",
+    "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+    "docs/theme-system/design-pack/TP3_INSTALLED_COMPARISON.md",
+    "docs/theme-system/design-pack/renders/README.md",
+    "docs/theme-system/design-pack/review-evidence/palette034/static-review.md"
+  ],
+  "changes": {
+    "OWNER_GUIDE.md": {
+      "why": "Publish the settled D28/D29/D31 outcomes without reopening them and request only exact-r3 overall disposition.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "REVISION_CHANGELOG.md": {
+      "why": "Publish the settled D28/D29/D31 outcomes without reopening them and request only exact-r3 overall disposition.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "SOURCE_INVENTORY.json": {
+      "why": "Regenerate complete inventory, r2 ancestry, transformations, and r3 revision metadata.",
+      "source": [
+        "r2 packet SHA256SUMS.txt",
+        "cycle 056 packet assembly inputs"
+      ]
+    },
+    "docs/theme-system/design-pack/CHANGELOG.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/HOURLY.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/INTEGRATED_PACK.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/NOW.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/OWNER_GUIDE.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/PACKET_INDEX.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/README.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/SOURCE_ATTRIBUTION.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/SOURCE_DECISIONS.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/TP3_INSTALLED_COMPARISON.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/renders/README.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    },
+    "docs/theme-system/design-pack/review-evidence/palette034/static-review.md": {
+      "why": "Replace stale packet-local D28/D29/D31 status wording and preserve decision scope/verification limits.",
+      "source": [
+        ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+        ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+        "docs/theme-system/design-pack/D31_OWNER_DECISION.md"
+      ]
+    }
+  }
+}

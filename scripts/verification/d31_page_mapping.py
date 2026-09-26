@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MAPPING = ROOT / "docs/theme-system/design-pack/D31_PAGE_ATMOSPHERES.md"
 BEGIN = "D31_PAGE_ATMOSPHERES:BEGIN"
 END = "D31_PAGE_ATMOSPHERES:END"
-EXPECTED_STATUS = "proposed; owner review pending"
+EXPECTED_STATUS = "owner-approved; documentary proposal"
 SOURCE_THEME = {
     "atmospheric": "Atmospheric",
     "glass": "Glass",
@@ -23,7 +23,7 @@ SOURCE_THEME = {
     "terminal": "Terminal",
 }
 MAPPING_THEMES = list(SOURCE_THEME)
-MAPPING_PAGES = ["now", "hourly", "daily"]
+MAPPING_PAGES = ["now", "hourly", "daily", "details"]
 FIELDS = ("palette", "scene_backdrop", "surfaces", "weather_art_relationship")
 STATE_FIELDS = ("effects_off", "high_contrast", "responsive_accessibility")
 CELL_KEYS = {
@@ -86,11 +86,11 @@ def validate(
     if scope.get("themes") != MAPPING_THEMES:
         errors.append("mapping.scope.themes: expected canonical ordered five-theme list")
     if scope.get("pages") != MAPPING_PAGES:
-        errors.append("mapping.scope.pages: expected exactly ['now', 'hourly', 'daily']")
-    if scope.get("cell_count") != 15:
-        errors.append("mapping.scope.cell_count: expected 15")
-    if scope.get("coverage") != "partial":
-        errors.append("mapping.scope.coverage: expected 'partial'")
+        errors.append("mapping.scope.pages: expected exactly ['now', 'hourly', 'daily', 'details']")
+    if scope.get("cell_count") != 20:
+        errors.append("mapping.scope.cell_count: expected 20")
+    if scope.get("coverage") != "complete":
+        errors.append("mapping.scope.coverage: expected 'complete'")
     if data.get("status") != EXPECTED_STATUS:
         errors.append(f"mapping.status: expected {EXPECTED_STATUS!r}")
 
@@ -112,8 +112,8 @@ def validate(
     if not isinstance(cells, list):
         errors.append("mapping.cells: expected array")
         cells = []
-    if len(cells) != 15:
-        errors.append(f"mapping.cells: expected exactly 15 cells, found {len(cells)}")
+    if len(cells) != 20:
+        errors.append(f"mapping.cells: expected exactly 20 cells, found {len(cells)}")
 
     seen_pairs: set[str] = set()
     seen_ids: set[str] = set()
@@ -219,11 +219,24 @@ def validate(
                     errors.append(f"{ref_prefix}.locator: expected mapping-specific non-blank locator")
                 elif len(locator.strip()) < 24 or locator.strip() == generic:
                     errors.append(f"{ref_prefix}.locator: too generic; use a narrower mapping-specific region")
+                elif page == "details" and source.get("source_class") in ("phone_crop", "asset_sheet", "overview_board", "backdrop"):
+                    if source.get("source_class") == "backdrop":
+                        if ref.get("evidence_class") != "direct_region":
+                            errors.append(f"{ref_prefix}.evidence_class: Details backdrop field evidence must be direct_region")
+                    else:
+                        if ref.get("evidence_class") != "same_theme_derivation":
+                            errors.append(f"{ref_prefix}.evidence_class: Details phone/sheet/overview cue must be same_theme_derivation")
+                        if not re.search(r"\b(field|surface|rule|light|texture|separator|outline|grid|monospace|atmosphere)\b", locator, re.I):
+                            errors.append(f"{ref_prefix}.locator: Details derivation must identify a concrete visible cue")
+                        if re.search(r"\bdedicated\s+Details\s+(?:screen|page)\b|\bDetails\s+(?:screen|page)\s+(?:shows|contains|depicts)\b", locator, re.I):
+                            errors.append(f"{ref_prefix}.locator: must not assert a dedicated Details screen")
                 elif source.get("source_class") in ("phone_crop", "asset_sheet", "overview_board"):
                     if page == "now":
                         page_pattern, page_label = r"\b(now|hero|condition|current)\b", "Now"
                     elif page == "hourly":
                         page_pattern, page_label = r"\b(hourly|forecast|compact forecast row)\b", "Hourly"
+                    elif page == "daily":
+                        page_pattern, page_label = r"\b(daily|5[- ]day forecast|daily forecast)\b", "Daily"
                     else:
                         page_pattern, page_label = r"\b(daily|5[- ]day forecast|daily forecast)\b", "Daily"
                     if not re.search(page_pattern, locator, re.I):
@@ -257,7 +270,7 @@ def main() -> int:
     if errors:
         print("D31 page mapping invalid:\n" + "\n".join(f"- {error}" for error in errors), file=sys.stderr)
         return 1
-    print("D31 page mapping valid: fifteen ordered proposed Now/Hourly/Daily cells; source relationships and interim scope are valid.")
+    print("D31 page mapping valid: twenty ordered owner-approved documentary proposals; source relationships and complete structural coverage are valid.")
     return 0
 
 

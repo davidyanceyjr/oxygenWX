@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "revision": "tp1d-proposed-r3-d28-d29-d31",
+  "manifest_entries": 117,
+  "packet_files": 118,
+  "owner_guide_aggregate_excluding_guide_row": "da0dce544cf4fb2d5263dcc6d24fbed9147ca96c52303e6d0395c29e8a57b8c5",
+  "source_inventory_entries": 117,
+  "changed_from_r2": [
+    "OWNER_GUIDE.md",
+    "REVISION_CHANGELOG.md",
+    "SOURCE_INVENTORY.json",
+    "docs/theme-system/design-pack/CHANGELOG.md",
+    "docs/theme-system/design-pack/HOURLY.md",
+    "docs/theme-system/design-pack/INTEGRATED_PACK.md",
+    "docs/theme-system/design-pack/NOW.md",
+    "docs/theme-system/design-pack/OWNER_GUIDE.md",
+    "docs/theme-system/design-pack/PACKET_INDEX.md",
+    "docs/theme-system/design-pack/README.md",
+    "docs/theme-system/design-pack/SOURCE_ATTRIBUTION.md",
+    "docs/theme-system/design-pack/SOURCE_DECISIONS.md",
+    "docs/theme-system/design-pack/TP3_INSTALLED_COMPARISON.md",
+    "docs/theme-system/design-pack/renders/README.md",
+    "docs/theme-system/design-pack/review-evidence/palette034/static-review.md"
+  ],
+  "relative_links_checked": 430,
+  "errors": []
+}

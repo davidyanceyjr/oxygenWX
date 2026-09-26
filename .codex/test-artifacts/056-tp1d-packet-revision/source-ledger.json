@@ -1,0 +1,94 @@
+{
+  "base_packet_revision": "tp1d-proposed-r2-symbol033-palette034",
+  "base_manifest_entries": 117,
+  "base_source_inventory_entries": 117,
+  "base_manifest_file_sha256": "ae4c75cbf0bcb7c48dec5d907407da4c8932093dc00a52a4ec2a3921a592f8a1",
+  "base_aggregate_excluding_owner_guide_row": "3122ef7dc96961b7bacc1f35ae44c1494e59dff4fbfd3bedcc8c2dc09f6a4869",
+  "inputs": [
+    {
+      "path": ".codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034/SHA256SUMS.txt",
+      "sha256": "ae4c75cbf0bcb7c48dec5d907407da4c8932093dc00a52a4ec2a3921a592f8a1",
+      "role": "r2_packet_manifest"
+    },
+    {
+      "path": ".codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034/SOURCE_INVENTORY.json",
+      "sha256": "0d5dd9b3a849be97ad6992d9fb5105bf5a4256117d5cd701f030983306ed7086",
+      "role": "r2_source_inventory"
+    },
+    {
+      "path": ".codex/history/2026-09-23-028-tp-1d-integrated-pack-review.md",
+      "sha256": "58ef8caa7640b915ca257013b2e639e3288445d97c5e03742003851ffa95b5c5",
+      "role": "d28_review_record"
+    },
+    {
+      "path": ".codex/test-artifacts/049-d29-weather-mark-owner-approval/owner-decision.md",
+      "sha256": "678e7a4feac05f9daa61aec7e05c9667917065942dd74e474e438b5f5950e21a",
+      "role": "d29_owner_decision"
+    },
+    {
+      "path": "docs/theme-system/design-pack/WEATHER_ART.md",
+      "sha256": "e40f3c240cdd3d60840aa006a627f8b5d17c290ce77959b0b20739b6bd5e6002",
+      "role": "d29_current_matrix"
+    },
+    {
+      "path": "docs/theme-system/design-pack/D31_OWNER_DECISION.md",
+      "sha256": "e6930e0c24f3ca5f6e13e1a97dfb52175e275b587da30d9308aa5d734a0c1a6f",
+      "role": "d31_owner_decision"
+    },
+    {
+      "path": "docs/theme-system/design-pack/D31_INTEGRATED_REVIEW.md",
+      "sha256": "e3af91fbd3c5b6eae9652e8c7f4ff90e994888bd3678920f9e6ea27588239b4d",
+      "role": "d31_integrated_guide"
+    },
+    {
+      "path": "docs/theme-system/design-pack/D31_PAGE_ATMOSPHERES.md",
+      "sha256": "97e2eaa56c99cfa6c18f6ad9003bfd0351bfdc18f4b80c0a513cba8a72c354d8",
+      "role": "d31_mapping"
+    },
+    {
+      "path": ".codex/history/2026-09-25-055-d31-integrated-owner-disposition.md",
+      "sha256": "20b7f7d65ac24f420792c39e80ca0eb415fb82f556831a6e68bedc40b5dc007a",
+      "role": "d31_history"
+    },
+    {
+      "path": "docs/theme-pack-roadmap.md",
+      "sha256": "dff8c2890a042b0fc709019379662967103214d87471d110ab3adf29fc6036a3",
+      "role": "r2_execution_head"
+    },
+    {
+      "path": "docs/SPECIFICATION.md",
+      "sha256": "895aeb54f0e1339d154276b6965b6bfb18a2b2261a3b03d130c5226de75b88a4",
+      "role": "specification"
+    },
+    {
+      "path": "docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md",
+      "sha256": "bff50508d223627ac577864b81b0d17108e53c90480ce53345527abcad9dea0b",
+      "role": "adopted_ui_specification"
+    },
+    {
+      "path": ".codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034/OWNER_GUIDE.md",
+      "sha256": "73c059dd556b2844c7298ca84456d27d4c5b7a0d1fa97e1f16c77a7ebeebdce6",
+      "role": "r2_packet_owner_guide"
+    },
+    {
+      "path": ".codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map-partial-B/packet/tp1d-proposed-r2-symbol033-palette034/REVISION_CHANGELOG.md",
+      "sha256": "debc294e4aeebdae4ddefb457f58dfa877db3f99cd1657bc75827bee3795bb4f",
+      "role": "r2_packet_changelog"
+    },
+    {
+      "path": "docs/theme-system/design-pack/WEATHER_ART.md",
+      "reviewed_content_sha256": "e2fec17fe1fde1a18b3161aa08dc72fb520ea53769c19e9112311ea3d56b9792",
+      "role": "D29 exact owner-reviewed matrix content; current metadata-bearing file digest recorded above"
+    },
+    {
+      "path": "docs/theme-system/design-pack/D31_PAGE_ATMOSPHERES.md",
+      "reviewed_content_sha256": "41cbf0dd2fe23eedfdc6a8b07dc46d66ab1988910ebc889c71d0f31b7ccbfa80",
+      "role": "D31 exact owner-reviewed mapping content"
+    },
+    {
+      "path": "docs/theme-system/design-pack/D31_INTEGRATED_REVIEW.md",
+      "reviewed_content_sha256": "1ca8aac8519e22fad61a3edf1ab32704c823deedb977768e6e179c69be796887",
+      "role": "D31 exact owner-reviewed integrated guide content"
+    }
+  ]
+}

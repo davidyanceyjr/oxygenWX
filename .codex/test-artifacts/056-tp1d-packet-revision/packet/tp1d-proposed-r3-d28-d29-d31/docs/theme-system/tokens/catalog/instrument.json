@@ -1,0 +1,21 @@
+{
+  "id": "instrument",
+  "colors": {
+    "canvas": "#0B0F14",
+    "atmosphereTop": "#0B0F14",
+    "atmosphereBottom": "#111A22",
+    "atmosphereGlow": "#7CFF9B",
+    "surface": "#141A21",
+    "elevatedSurface": "#1B232C",
+    "content": "#E6EDF3",
+    "secondaryData": "#8B96A3",
+    "outline": "#2B3742",
+    "conditionAccent": "#F4B400",
+    "precipitationAccent": "#4FC3F7",
+    "warning": "#FFD65A",
+    "danger": "#EF4444"
+  },
+  "surface": {"opacity": 0.98, "radiusDp": 8, "borderDp": 1},
+  "spacingDp": {"gutter": 12, "stack": 8, "grid": 8, "panel": 10},
+  "motion": {"default": "subtle", "supportsFull": false}
+}
