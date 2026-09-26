@@ -489,37 +489,60 @@ own fixed capture matrix below.
 
 ## TP.2 — Pack-driven appearance resolution and shared rendering — ACTIVE (six bounded slices)
 
-### Immediate execution head — TP.2A spacing alignment complete; conformance next
+### Immediate execution head — TP.2A catalog parity remediation PASS
 
-TP.2A now has three sequential bounded steps: spacing alignment, catalog
-conformance, and resolved appearance policy. Plan 058 inventoried the catalog
+TP.2A now has five sequential bounded steps: spacing alignment, catalog schema
+validation, JSON/Kotlin catalog checker, parity remediation, and resolved
+appearance policy. Plan 058 inventoried the catalog
 schema and found six approved spacing values that differed from the corresponding
 typed runtime geometry. Its bounded cycle closed as blocked before implementation;
 see `.codex/history/2026-09-26-058-tp2a-approved-tokens-resolver.md` and
 `.codex/test-artifacts/058-tp2a-approved-tokens-resolver/inventory-and-blocker.md`.
 On 2026-09-26, the owner chose the approved JSON spacing values as authoritative.
-The six corresponding Kotlin runtime geometry values must be brought into
-conformance in a new bounded implementation plan; the approved JSON remains
-unchanged. The direct field mapping inventoried in plan 058 stands. Decision
+The six corresponding Kotlin runtime geometry values were brought into
+conformance in cycle 059; the approved JSON remains unchanged. The direct field mapping inventoried in plan 058 stands. Decision
 evidence: `.codex/test-artifacts/058-tp2a-approved-tokens-resolver/owner-decision-2026-09-26.md`.
-This resolved the authority decision. The spacing-alignment prerequisite then
-passed in cycle 059; its exact scope and verification are recorded in
+This resolved the authority decision. The spacing-alignment prerequisite passed
+in cycle 059; its exact scope and verification are recorded in
 `.codex/history/2026-09-26-059-tp2a-spacing-alignment.md` and
-`.codex/test-artifacts/059-tp2a-spacing-alignment/`. Catalog conformance remains
-the next gated slice. Do not activate `TP.2A-partial2` until catalog conformance
-passes. Only the second slice's PASS closes TP.2A and unlocks TP.2B. Neither
-slice changes Compose page rendering.
+`.codex/test-artifacts/059-tp2a-spacing-alignment/`. Cycle 060 passed the
+structural/schema-validation part. Its dependent parity-checker slice added the
+checker, command, and authority documentation but closed BLOCKED on two runtime
+palette mismatches. Cycle 061 aligned only Glass `actionContent` and Minimal OLED
+`action` with approved JSON. The full checker, focused typed-value assertions,
+workflow, contract, and repository check passed; the six JSON input hashes are
+unchanged. Exact history and evidence are in
+`.codex/history/2026-09-26-061-tp2a-catalog-parity-remediation.md` and
+`.codex/test-artifacts/061-tp2a-catalog-parity-remediation/`. Resolver policy
+remains a separate next gate. No Compose page rendering changed.
 
 **Completed prerequisite — TP.2A spacing alignment (PASS):** Glass,
 Minimal OLED, and Terminal now resolve the six approved spacing targets;
 focused exact-value assertions and repository checks passed. This closes only
 the spacing-alignment prerequisite. It does not establish static catalog
-conformance or close TP.2A. Create a separate bounded plan for the catalog
-checker; retain the TP.2A-partial2 and TP.2B gates until their dependencies pass.
+conformance or close TP.2A. Cycle 060 and its dependent partial2 plan own the
+catalog checker; retain resolver policy and TP.2B gates until their dependencies pass.
 
-**Next bounded slice — TP.2A catalog conformance:** define and validate the
-static catalog schema and JSON/Kotlin parity in a separate bounded plan before
-resolver-policy work.
+**Completed bounded slice — TP.2A catalog schema validation (PASS):** cycle 060
+validates the exact JSON/manifest structure, identities, field shapes, and
+value ranges with focused fixtures. It does not claim JSON/Kotlin parity.
+Evidence and limits: `.codex/history/2026-09-26-060-tp2a-catalog-conformance.md`.
+
+**Previously blocked slice — TP.2A catalog parity checker:** cycle
+`060-tp2a-catalog-conformance-partial2` implemented the static checker,
+developer command, and architecture boundary, but closed BLOCKED because the
+unchanged runtime catalog has three JSON parity mismatches: Glass
+`actionContent` versus canvas and Minimal OLED `action` versus manifest accent
+(reported against both the JSON color and manifest mapping). Approved JSON and
+runtime Kotlin were left unchanged as required by the plan. The checker proved
+the remaining mapped values and reported these mismatches at that cycle’s close.
+Exact evidence and verification are in `.codex/history/2026-09-26-060-tp2a-catalog-conformance-partial2.md`
+and `.codex/test-artifacts/060-tp2a-catalog-conformance-partial2/`.
+Cycle 061 subsequently corrected those two typed values and passed full catalog
+parity; the historical BLOCKED result remains accurate for cycle 060. The parity
+remediation is closed PASS in
+`.codex/history/2026-09-26-061-tp2a-catalog-parity-remediation.md`. Resolved
+appearance policy and TP.2B remain gated on the next separate policy slice.
 
 ### Dependency
 
@@ -531,23 +554,26 @@ Make the resolved appearance and shared theme components express the approved
 pack through typed semantic roles, with finite resolver, component, and installed
 showcase exits.
 
-### TP.2A — Approved tokens and resolver (three sequential bounded steps)
+### TP.2A — Approved tokens and resolver (five sequential bounded steps)
 
-**TP.2A part one — catalog conformance (blocked):** define the exact catalog
-schema/mapping, add a deterministic static checker for all five theme files and
-the manifest, and add clean and negative fixture tests for schema, identity,
-range, and parity failures. It may begin after the spacing-alignment slice
-passes. The owner chose approved JSON spacing values as authoritative on
-2026-09-26. Keep approved JSON unchanged and document the runtime/design-input
-boundary. Exit with checker, focused tests, workflow, contract, and diff
-evidence. Resolver behavior is unchanged. See decision evidence linked above.
+**TP.2A catalog conformance (parity remediation PASS; resolver policy planned):**
+cycle 060 passed validation of the exact catalog/manifest schema, identities,
+field shapes, and value ranges. Cycle
+`060-tp2a-catalog-conformance-partial2` implemented JSON/Kotlin parity,
+including manifest styles, the developer command, and architecture
+documentation, but its checked source has the mismatches recorded above. The
+owner chose approved JSON spacing values as authoritative on 2026-09-26; cycle
+059 aligned the corresponding runtime geometry. Cycle 061 corrected the two
+remaining typed values while leaving approved JSON unchanged. Catalog parity
+and the slice checks pass; resolver policy is the next distinct bounded item.
+See `.codex/history/2026-09-26-061-tp2a-catalog-parity-remediation.md`.
 
-**TP.2A-partial2 — resolved appearance policy (planned):** after part one
-passes, implement approved high-contrast opaque surfaces, WCAG text-pair
+**TP.2A-partial2 — resolved appearance policy (planned):** after both
+catalog-conformance parts pass, implement approved high-contrast opaque surfaces, WCAG text-pair
 verification and supporting-role promotion, independent layout/effects axes,
 and Effects Off precedence. Exit with deterministic tests for all 60
 combinations, policy invariants, and focused/repository checks. Do not change
-Compose page rendering. The second slice's completion closes TP.2A.
+Compose page rendering. This policy slice's completion closes TP.2A.
 
 ### TP.2B — Shared shell and current-condition components
 

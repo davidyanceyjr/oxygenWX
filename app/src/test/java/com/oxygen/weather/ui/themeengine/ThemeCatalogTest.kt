@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui.themeengine
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import org.junit.Assert.assertEquals
@@ -16,6 +17,12 @@ class ThemeCatalogTest {
         assertEquals(12.dp, ThemeCatalog.minimalOled.geometry.gridGap)
         assertEquals(8.dp, ThemeCatalog.minimalOled.geometry.panelInset)
         assertEquals(10.dp, ThemeCatalog.terminal.geometry.pageStackGap)
+    }
+
+    @Test
+    fun jsonOwnedActionPaletteRolesMatchApprovedCatalog() {
+        assertEquals(Color(0xFF0B1220), ThemeCatalog.glass.palette.actionContent)
+        assertEquals(Color(0xFFF5C451), ThemeCatalog.minimalOled.palette.action)
     }
 
     @Test

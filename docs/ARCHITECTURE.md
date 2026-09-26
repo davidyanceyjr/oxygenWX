@@ -79,6 +79,15 @@ Compose-runtime inputs. App composition selects the requested theme and calls
 the pure resolver. Contrast resolves through palette values; layout resolves through geometry; Effects Off resolves a
 solid backdrop, no motion, and fully opaque panels and outlines.
 
+The approved JSON theme catalog is a checked design input; typed Kotlin in
+`ThemeCatalog.kt` remains runtime authority. Run `python scripts/dev.py catalog`
+to validate its schema and compare palette roles (including the intentional
+`content` to `primaryData`, manifest `accent` to `action`, and `canvas` to
+`actionContent` mappings), effective panel opacity/radius/border and spacing,
+preferred motion/full-motion support, theme identity/name, and manifest
+backdrop/surface/weather-mark styles. Manifest typography is descriptive
+metadata and is not compared with Kotlin typography definitions.
+
 The production boundary is:
 
 ```text

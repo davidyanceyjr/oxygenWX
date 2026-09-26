@@ -249,7 +249,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build, run, and verify Oxygen Weather on Windows, macOS, or Linux.")
     parser.add_argument(
         "command",
-        choices=["build", "test", "lint", "contract", "workflow", "check", "install", "run", "screenshot"],
+        choices=["build", "test", "lint", "catalog", "contract", "workflow", "check", "install", "run", "screenshot"],
         nargs="?",
         default="check",
     )
@@ -261,6 +261,10 @@ def main() -> int:
         help="Screenshot output path for the screenshot command.",
     )
     args = parser.parse_args()
+
+    if args.command == "catalog":
+        checker = ROOT / "scripts" / "verification" / "theme_catalog_conformance.py"
+        return subprocess.run([sys.executable, str(checker)], cwd=ROOT, check=False).returncode
 
     if args.command == "contract":
         return source_contract()

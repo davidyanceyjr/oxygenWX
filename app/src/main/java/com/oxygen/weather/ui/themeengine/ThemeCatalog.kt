@@ -18,14 +18,14 @@ object ThemeCatalog {
     )
     val glass = ThemeDefinition(
         WeatherThemeId.GLASS, "Glass",
-        palette("0B1220", "122B58", "281A4A", "C084FC", "31527A", "3A5E88", "F8FAFF", "C9D7EC", "A6C8FF", "60A5FA", "22D3EE", "FBBF24", "FB7185", "60A5FA", "08101F"),
+        palette("0B1220", "122B58", "281A4A", "C084FC", "31527A", "3A5E88", "F8FAFF", "C9D7EC", "A6C8FF", "60A5FA", "22D3EE", "FBBF24", "FB7185", "60A5FA", "0B1220"),
         editorialTypography().copy(displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Light, fontSize = 78.sp, lineHeight = 82.sp, letterSpacing = (-1.5).sp)),
         spaciousGeometry(26.dp).copy(pageStackGap = 12.dp, gridGap = 10.dp, panelInset = 14.dp),
         ThemeVisualLanguage(BackdropStyle.GLASS_GRADIENT, SurfaceStyle.GLASS, HeroStyle.LAYERED, WeatherMarkStyle.SOFT_LINE, MotionStyle.SUBTLE, true, 0.42f, 1f),
     )
     val minimalOled = ThemeDefinition(
         WeatherThemeId.MINIMAL_OLED, "Minimal OLED",
-        palette("000000", "000000", "050505", "303030", "080808", "0D0D0D", "F5F5F5", "9CA3AF", "2B2B2B", "F5C451", "67E8F9", "FBBF24", "F87171", "F5F5F5", "000000"),
+        palette("000000", "000000", "050505", "303030", "080808", "0D0D0D", "F5F5F5", "9CA3AF", "2B2B2B", "F5C451", "67E8F9", "FBBF24", "F87171", "F5C451", "000000"),
         editorialTypography().copy(
             displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Light, fontSize = 88.sp, lineHeight = 92.sp, letterSpacing = (-2.5).sp),
             labelMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 15.sp, letterSpacing = 0.4.sp),
