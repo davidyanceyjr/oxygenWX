@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet prepared; exact-revision disposition pending; TP.1D remains open
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2 eligible
 
 **Current proposed packet:** `tp1d-proposed-r3-d28-d29-d31`
 
@@ -18,14 +18,15 @@ font rendering is unverified. D29's 30-cell matrix is owner-approved as presente
 including Terminal tokens and explicit no-mark gaps; D32, runtime artwork, and TP.2
 are outside that decision. D31's twenty theme/page documentary proposals and overall
 set are approved, including the five same-theme Details derivations; this does not
-establish installed visual/accessibility acceptance. The packet's exact-r3 overall
-response remains blank and pending.
-
-**Next action:** create a separate bounded cycle for explicit owner disposition of
-this exact revision and digest. Keep TP.1D/TP.1 unresolved and TP.2 gated until that
-disposition explicitly approves this exact packet. The earlier r2 revise disposition
-remains historical and unchanged in cycle 036. No installed acceptance is claimed;
-TP.3 owns the installed screenshot comparison.
+establish installed visual/accessibility acceptance. The owner explicitly approved
+this exact r3 revision and aggregate digest on 2026-09-25 after reviewing the
+five-theme direction, four-page structure, and compact/large-font/RTL/effects
+requirements. The packet remains unchanged. This closes TP.1D and the TP.1 umbrella
+and makes TP.2 eligible. The earlier r2 revise disposition remains historical and
+unchanged in cycle 036. No installed acceptance is claimed; TP.3 owns installed
+screenshot comparison and responsive verification. Disposition evidence:
+`.codex/history/2026-09-25-057-tp1d-r3-owner-disposition.md` and
+`.codex/test-artifacts/057-tp1d-r3-owner-disposition/`.
 
 ### Owner-directed design-definition tracks
 
@@ -445,14 +446,15 @@ contracts: `docs/theme-system/design-pack/DAILY.md` and `DETAILS.md`; evidence:
 completion does not claim installed visual success or owner approval; TP.1D
 remains required before TP.1 umbrella closure.
 
-### TP.1D — Integrated pack, responsive review, and approval — ACTIVE (exact-r3 disposition pending)
+### TP.1D — Integrated pack, responsive review, and approval — DONE (exact-r3 approved)
 
 The integrated 20-cell packet, responsive examples, and TP.3 checklist are
 complete. The pinned r2 packet received a revise disposition, recorded in cycle
 036; that historical outcome is unchanged. D28 Option 1, the D29 matrix, and the
-D31 integrated set have since received their scoped decisions. Cycle 056 prepared
-immutable revision `tp1d-proposed-r3-d28-d29-d31`; its exact overall disposition
-is the next action. The r2 packet remains immutable and unapproved.
+D31 integrated set have since received their scoped decisions. The owner approved
+immutable revision `tp1d-proposed-r3-d28-d29-d31` with aggregate digest
+`da0dce544cf4fb2d5263dcc6d24fbed9147ca96c52303e6d0395c29e8a57b8c5` in cycle
+057. The r2 packet remains immutable and unapproved.
 
 Completed upstream cycles 028–034 are documented above. Static reference
 generation and packet audits are complete but are not installed visual
@@ -464,12 +466,10 @@ own fixed capture matrix below.
 - A disposition applies only to the exact verified packet revision. The r2
   disposition attempt is complete and recorded as revise; D28/D29/D31 outcomes
   are now settled within the scopes recorded in the r3 owner guide.
-- TP.1D/TP.1 cannot resolve until the exact r3 packet receives explicit owner
-  approval. Missing, ambiguous, revise, or reject responses keep TP.1D unresolved
-  and TP.2 gated; follow-on work requires a roadmap-defined outcome and a new
-  bounded plan.
+- TP.1D/TP.1 resolved when the exact r3 packet received explicit owner approval,
+  recorded in cycle 057. TP.2 is now eligible to begin under its own bounded plan.
 - TP.1D closes only when the required decisions explicitly approve the exact
-  reviewed packet revision.
+  reviewed packet revision; that condition is met for r3.
 - This exit records design-owner approval only. It makes no installed visual
   acceptance claim; TP.3 owns actual app screenshots and reference comparison.
 
@@ -487,7 +487,36 @@ own fixed capture matrix below.
   design-owner approval are retained in the relevant evidence and history.
 - No slice claims TP.1 completion before TP.1D closes with approval.
 
-## TP.2 — Pack-driven appearance resolution and shared rendering — PLANNED (five bounded slices)
+## TP.2 — Pack-driven appearance resolution and shared rendering — ACTIVE (six bounded slices)
+
+### Immediate execution head — TP.2A spacing alignment planned; conformance blocked
+
+TP.2A now has three sequential bounded steps: spacing alignment, catalog
+conformance, and resolved appearance policy. Plan 058 inventoried the catalog
+schema and found six approved spacing values that differ from the corresponding
+current typed runtime geometry. Its bounded cycle closed as blocked before implementation;
+see `.codex/history/2026-09-26-058-tp2a-approved-tokens-resolver.md` and
+`.codex/test-artifacts/058-tp2a-approved-tokens-resolver/inventory-and-blocker.md`.
+On 2026-09-26, the owner chose the approved JSON spacing values as authoritative.
+The six corresponding Kotlin runtime geometry values must be brought into
+conformance in a new bounded implementation plan; the approved JSON remains
+unchanged. The direct field mapping inventoried in plan 058 stands. Decision
+evidence: `.codex/test-artifacts/058-tp2a-approved-tokens-resolver/owner-decision-2026-09-26.md`.
+This resolves the authority decision but does not pass TP.2A part one or clear
+its implementation work. Do not activate `TP.2A-partial2` until part one passes.
+Only the second slice's PASS closes TP.2A and unlocks TP.2B. Neither slice
+changes Compose page rendering.
+
+**Next bounded slice — TP.2A-part-one-spacing-alignment (planned):** update only
+the six Kotlin runtime geometry values listed in the owner-decision evidence to
+match the unchanged approved JSON. Keep all other theme values, geometry
+properties, resolver behavior, and rendering unchanged. Add focused catalog
+assertions for the approved spacing targets. Exit when those assertions and
+focused tests pass, `python scripts/dev.py workflow`,
+`python scripts/dev.py contract`, and `git diff --check` pass, and the bounded
+cycle records any broader check result. This slice does not implement the
+catalog checker or claim TP.2A part one complete. Requires a separate activated
+plan before implementation.
 
 ### Dependency
 
@@ -499,13 +528,23 @@ Make the resolved appearance and shared theme components express the approved
 pack through typed semantic roles, with finite resolver, component, and installed
 showcase exits.
 
-### TP.2A — Approved tokens and resolver
+### TP.2A — Approved tokens and resolver (three sequential bounded steps)
 
-Reconcile all five theme catalogs and implement exhaustive typed resolution for
-Standard/High contrast, Standard/Simple layout, and Off/Subtle/Full effects.
-Exit with deterministic tests covering every declared combination, missing
-values, and Effects Off opacity/static/completeness. This slice does not change
-Compose page rendering.
+**TP.2A part one — catalog conformance (blocked):** define the exact catalog
+schema/mapping, add a deterministic static checker for all five theme files and
+the manifest, and add clean and negative fixture tests for schema, identity,
+range, and parity failures. It may begin after the spacing-alignment slice
+passes. The owner chose approved JSON spacing values as authoritative on
+2026-09-26. Keep approved JSON unchanged and document the runtime/design-input
+boundary. Exit with checker, focused tests, workflow, contract, and diff
+evidence. Resolver behavior is unchanged. See decision evidence linked above.
+
+**TP.2A-partial2 — resolved appearance policy (planned):** after part one
+passes, implement approved high-contrast opaque surfaces, WCAG text-pair
+verification and supporting-role promotion, independent layout/effects axes,
+and Effects Off precedence. Exit with deterministic tests for all 60
+combinations, policy invariants, and focused/repository checks. Do not change
+Compose page rendering. The second slice's completion closes TP.2A.
 
 ### TP.2B — Shared shell and current-condition components
 
