@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1 PASS; TP.2D-partial2 PASS (cycle 067)
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1/partial2/partial3 PASS; partial4 PLANNED
 
 **Previous completed slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
 cycle `065-tp2d-weather-marks-backdrops`, PASS. Its 30-cell matrix, installed
@@ -704,14 +704,24 @@ history, and evidence: `.codex/plans/067-tp2d-effects-off-backdrop-resume.md`,
 `.codex/history/2026-09-27-067-tp2d-effects-off-backdrop-resume.md`, and
 `.codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/`.
 
-#### TP.2D-partial3 — Atmospheric and Glass backdrop rendering — PLANNED
+#### TP.2D-partial3 — Atmospheric and Glass backdrop rendering — PASS
 
-After partial2 passes, verify only Atmospheric and Glass non-Off backdrop
-rendering against their approved shared field-level direction. Exercise
-Standard/Subtle on both styles and one High-contrast case per style. Preserve
-caller content, semantics, contrast, and pointer behavior. Include one
-representative completed D29 mark over a backdrop. Do not alter Effects Off,
-page compositions, or the other three theme styles.
+Cycle `068-tp2d-atmospheric-glass-backdrops` verified both standalone source
+asset digests and four installed 360 × 640 dp Standard/High, Subtle cases.
+Initial captures exposed an unsupported Atmospheric ridge field and hard
+circle treatment, plus Glass's purple-heavy field and hard circles. One
+correction pass stayed within the two backdrop branches. The final four
+captures were inspected against the indexed standalone assets and passed the
+scoped blue-field / blue-violet-field direction. The `PARTLY_CLOUDY` and
+`RAIN` D29 marks, caller text/semantics, 48 dp action and exact-once callback,
+opaque High surfaces, and resolved content/outline contrast checks passed.
+Focused JVM and installed instrumentation, repository `test`, `build`,
+`contract`, `workflow`, `check`, and `git diff --check` passed. Exact commands,
+source identity, initial/final captures, per-case findings, and excluded
+boundaries are retained in `.codex/test-artifacts/068-tp2d-atmospheric-glass-backdrops/`
+and `.codex/history/2026-09-27-068-tp2d-atmospheric-glass-backdrops.md`.
+This is field-level component evidence, not page matching. Partial4 remains a
+separate planned slice.
 
 #### TP.2D-partial4 — Minimal OLED and Instrument backdrop rendering — PLANNED
 

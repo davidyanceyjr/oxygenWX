@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.WeatherMarkCondition
@@ -190,50 +191,32 @@ fun ProductionBackdrop(
                 when (style) {
                     BackdropStyle.SOLID -> Unit
                     BackdropStyle.ATMOSPHERE -> {
-                        drawRect(Brush.verticalGradient(listOf(theme.palette.atmosphereTop, theme.palette.atmosphereBottom)))
-                        drawCircle(theme.palette.atmosphereGlow.copy(alpha = 0.18f), size.minDimension * 0.54f,
-                            Offset(size.width * 0.82f, size.height * 0.18f))
-                        // Low contrast, condition-neutral landscape gives Atmospheric a full-bleed
-                        // illustrated field without turning decoration into a weather claim.
-                        val distantRidge = Path().apply {
-                            moveTo(0f, size.height * 0.70f)
-                            lineTo(size.width * 0.20f, size.height * 0.55f)
-                            lineTo(size.width * 0.34f, size.height * 0.66f)
-                            lineTo(size.width * 0.56f, size.height * 0.48f)
-                            lineTo(size.width * 0.78f, size.height * 0.68f)
-                            lineTo(size.width, size.height * 0.53f)
-                            lineTo(size.width, size.height)
-                            lineTo(0f, size.height)
-                            close()
-                        }
-                        drawPath(distantRidge, theme.palette.atmosphereTop.copy(alpha = 0.50f))
-                        val foregroundRidge = Path().apply {
-                            moveTo(0f, size.height * 0.84f)
-                            lineTo(size.width * 0.24f, size.height * 0.68f)
-                            lineTo(size.width * 0.44f, size.height * 0.82f)
-                            lineTo(size.width * 0.72f, size.height * 0.66f)
-                            lineTo(size.width, size.height * 0.80f)
-                            lineTo(size.width, size.height)
-                            lineTo(0f, size.height)
-                            close()
-                        }
-                        drawPath(foregroundRidge, theme.palette.surface.copy(alpha = 0.30f))
-                        drawLine(
-                            theme.palette.conditionAccent.copy(alpha = 0.20f),
-                            Offset(0f, size.height * 0.84f),
-                            Offset(size.width * 0.24f, size.height * 0.68f),
-                            strokeWidth = 1.dp.toPx(),
-                        )
+                        drawRect(Brush.verticalGradient(listOf(
+                            lerp(theme.palette.atmosphereTop, theme.palette.precipitationAccent, 0.20f),
+                            lerp(theme.palette.atmosphereBottom, theme.palette.precipitationAccent, 0.48f),
+                        )))
+                        drawRect(Brush.radialGradient(
+                            listOf(Color(0xFFFFDDA5).copy(alpha = 0.12f), Color.Transparent),
+                            center = Offset(size.width * 0.82f, size.height * 0.16f),
+                            radius = size.minDimension * 0.82f,
+                        ))
                     }
                     BackdropStyle.GLASS_GRADIENT -> {
-                        drawRect(Brush.linearGradient(
-                            listOf(theme.palette.atmosphereTop, theme.palette.atmosphereBottom, theme.palette.canvas),
-                            start = Offset.Zero, end = Offset(size.width, size.height),
+                        drawRect(Brush.verticalGradient(listOf(
+                            theme.palette.atmosphereTop,
+                            lerp(theme.palette.atmosphereTop, theme.palette.atmosphereBottom, 0.40f),
+                            lerp(theme.palette.atmosphereBottom, theme.palette.elevatedSurface, 0.55f),
+                        )))
+                        drawRect(Brush.radialGradient(
+                            listOf(Color(0xFFFFC8A0).copy(alpha = 0.16f), Color.Transparent),
+                            center = Offset(size.width * 0.92f, size.height * 0.16f),
+                            radius = size.minDimension * 0.94f,
                         ))
-                        drawCircle(theme.palette.atmosphereGlow.copy(alpha = 0.14f), size.minDimension * 0.42f,
-                            Offset(size.width * 0.14f, size.height * 0.20f))
-                        drawCircle(theme.palette.conditionAccent.copy(alpha = 0.08f), size.minDimension * 0.50f,
-                            Offset(size.width * 0.90f, size.height * 0.66f))
+                        drawRect(Brush.radialGradient(
+                            listOf(theme.palette.conditionAccent.copy(alpha = 0.16f), Color.Transparent),
+                            center = Offset(size.width * 0.06f, size.height * 0.78f),
+                            radius = size.minDimension * 0.96f,
+                        ))
                     }
                     BackdropStyle.PURE_BLACK -> drawRect(Color.Black)
                     BackdropStyle.INSTRUMENT_GRID, BackdropStyle.TERMINAL_GRID -> {
