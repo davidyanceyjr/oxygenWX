@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1/partial2/partial3 PASS; partial4 PLANNED
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1/partial2/partial3/partial4 PASS; partial5 PLANNED
 
 **Previous completed slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
 cycle `065-tp2d-weather-marks-backdrops`, PASS. Its 30-cell matrix, installed
@@ -720,10 +720,10 @@ Focused JVM and installed instrumentation, repository `test`, `build`,
 source identity, initial/final captures, per-case findings, and excluded
 boundaries are retained in `.codex/test-artifacts/068-tp2d-atmospheric-glass-backdrops/`
 and `.codex/history/2026-09-27-068-tp2d-atmospheric-glass-backdrops.md`.
-This is field-level component evidence, not page matching. Partial4 remains a
-separate planned slice.
+This is field-level component evidence, not page matching. Partial4 was
+verified separately in cycle 069.
 
-#### TP.2D-partial4 — Minimal OLED and Instrument backdrop rendering — PLANNED
+#### TP.2D-partial4 — Minimal OLED and Instrument backdrop rendering — PASS
 
 After partial3 passes, verify only Minimal OLED and Instrument non-Off backdrop
 rendering against their approved shared field-level direction. Exercise
@@ -731,6 +731,17 @@ Standard/Subtle on both styles and one High-contrast case per style. Preserve
 caller content, semantics, contrast, and pointer behavior. Include one
 representative intentional D29 no-mark gap with caller condition text. Do not
 alter Effects Off, page compositions, or the other three theme styles.
+
+Cycle `069-tp2d-minimal-oled-instrument-backdrops` passed the four installed
+Standard/High Subtle cases at 360 × 640 dp. One Instrument High grid-opacity
+correction kept the technical field subordinate to resolved text and opaque
+panel boundaries. The D29 Minimal OLED/Rain no-mark cell retained visible
+caller condition text; Instrument/Clear rendered its approved mark. Source
+identity, initial and final captures, per-case findings, exact checks, and
+unverified boundaries are retained in
+`.codex/test-artifacts/069-tp2d-minimal-oled-instrument-backdrops/` and
+`.codex/history/2026-09-27-069-tp2d-minimal-oled-instrument-backdrops.md`.
+This is shared-field component evidence, not page or pixel matching.
 
 #### TP.2D-partial5 — Terminal backdrop and bounded integration — PLANNED
 

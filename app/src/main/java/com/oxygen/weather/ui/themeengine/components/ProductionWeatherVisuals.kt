@@ -223,7 +223,11 @@ fun ProductionBackdrop(
                         val isTerminal = style == BackdropStyle.TERMINAL_GRID
                         drawRect(theme.palette.canvas)
                         val gap = if (isTerminal) 24.dp.toPx() else 32.dp.toPx()
-                        val grid = theme.palette.outline.copy(alpha = if (isTerminal) 0.3f else 0.22f)
+                        val grid = theme.palette.outline.copy(alpha = when {
+                            isTerminal -> 0.3f
+                            theme.contrast == ContrastLevel.HIGH -> 0.10f
+                            else -> 0.22f
+                        })
                         var x = 0f
                         while (x <= size.width) { drawLine(grid, Offset(x, 0f), Offset(x, size.height), 1.dp.toPx()); x += gap }
                         var y = 0f
