@@ -1,15 +1,26 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1 PASS; TP.2D-partial2 planned
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1 PASS; TP.2D-partial2 PASS (cycle 067)
 
-**Most recent slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
+**Previous completed slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
 cycle `065-tp2d-weather-marks-backdrops`, PASS. Its 30-cell matrix, installed
 captures, exact checks, and unverified boundaries are recorded in
 `.codex/history/2026-09-27-065-tp2d-weather-marks-backdrops.md` and
-`.codex/test-artifacts/065-tp2d-weather-marks-backdrops/`. The five shared
-backdrops remain the dependent planned slice in
-`.codex/plans/065-tp2d-weather-marks-backdrops-partial2.md`. Each slice targets
-at most 35% of a fresh context window and must stop before 45%.
+`.codex/test-artifacts/065-tp2d-weather-marks-backdrops/`. The shared backdrop
+work is divided into focused dependent slices, each targeting at most 35% of a
+fresh context window and stopping before 45%.
+
+**Most recent slice:** `TP.2D-partial2` — Effects Off backdrop guarantee,
+cycle `067-tp2d-effects-off-backdrop-resume`, PASS. Its five-theme pixel,
+semantics, and interaction checks, targeted large-font/RTL case, and six
+installed captures are recorded in `.codex/history/2026-09-27-067-tp2d-effects-off-backdrop-resume.md`
+and `.codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/`.
+
+**Prior attempt:** cycle `066-tp2d-weather-marks-backdrops-partial2` closed
+BLOCKED before implementation because the SDK/emulator path and display were
+not discovered from the default shell environment. That exact host evidence
+remains in `.codex/history/2026-09-27-066-tp2d-weather-marks-backdrops-partial2.md`
+and `.codex/test-artifacts/066-tp2d-weather-marks-backdrops-partial2/`.
 
 **Most recent plan:** TP.2C-partial2 Details/source components passed in cycle
 `064-tp2c-forecast-details-components-partial2`; plan and cycle evidence are
@@ -661,11 +672,12 @@ TP.2C passes only after both bounded slices pass. A missing instrumentation
 environment or failed acceptance ends that slice BLOCKED and stops the
 dependency chain; compilation alone is not component behavior evidence.
 
-### TP.2D — Weather marks and backdrops (two bounded slices)
+### TP.2D — Weather marks and backdrops (five bounded slices)
 
-After TP.2C, complete both dependent slices below. Shared theme backdrops are
-the selected TP.2D scope; page-specific D31 atmosphere compositions remain in
-TP.3. No page composition changes occur in TP.2D.
+After TP.2C, complete partial1 through partial5 below in dependency order.
+Shared theme backdrops are the selected TP.2D scope; page-specific D31
+atmosphere compositions remain in TP.3. No page composition changes occur in
+TP.2D.
 
 #### TP.2D-partial1 — D29 theme-specific weather marks — PASS
 
@@ -682,19 +694,49 @@ Evidence and the exact verification record are in
 establish component rendering only; they do not establish backdrop or page
 composition acceptance.
 
-#### TP.2D-partial2 — Shared theme backdrops — PLANNED
+#### TP.2D-partial2 — Effects Off backdrop guarantee — PASS
 
-Plan `.codex/plans/065-tp2d-weather-marks-backdrops-partial2.md`; dependency:
-TP.2D-partial1 PASS. Implement and verify the five shared `ResolvedTheme`
-backdrop styles, Effects Off opacity/static behavior, and caller-content/input
-preservation. Include a bounded integrated check that partial1's mark mapping
-and omissions remain intact. Do not add page-specific atmosphere routing or
-page composition.
+Cycle `067-tp2d-effects-off-backdrop-resume` passed installed verification
+for the opaque solid canvas, no backdrop drawing, caller semantics/content, and
+foreground click delivery across all five themes. One compact, large-font, RTL
+case also passed. Cycle 066 remains a separately recorded blocked attempt. Plan,
+history, and evidence: `.codex/plans/067-tp2d-effects-off-backdrop-resume.md`,
+`.codex/history/2026-09-27-067-tp2d-effects-off-backdrop-resume.md`, and
+`.codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/`.
 
-TP.2D closes only after both partials pass their focused, installed, and
-repository checks and their evidence/limitations are recorded. A failed or
-unavailable installed gate blocks that partial and stops the dependency chain;
-source inspection or compilation alone does not establish visual success.
+#### TP.2D-partial3 — Atmospheric and Glass backdrop rendering — PLANNED
+
+After partial2 passes, verify only Atmospheric and Glass non-Off backdrop
+rendering against their approved shared field-level direction. Exercise
+Standard/Subtle on both styles and one High-contrast case per style. Preserve
+caller content, semantics, contrast, and pointer behavior. Include one
+representative completed D29 mark over a backdrop. Do not alter Effects Off,
+page compositions, or the other three theme styles.
+
+#### TP.2D-partial4 — Minimal OLED and Instrument backdrop rendering — PLANNED
+
+After partial3 passes, verify only Minimal OLED and Instrument non-Off backdrop
+rendering against their approved shared field-level direction. Exercise
+Standard/Subtle on both styles and one High-contrast case per style. Preserve
+caller content, semantics, contrast, and pointer behavior. Include one
+representative intentional D29 no-mark gap with caller condition text. Do not
+alter Effects Off, page compositions, or the other three theme styles.
+
+#### TP.2D-partial5 — Terminal backdrop and bounded integration — PLANNED
+
+After partial4 passes, verify the Terminal non-Off backdrop against its
+approved shared field-level direction at Standard/Subtle and High contrast.
+Preserve caller content, semantics, contrast, and pointer behavior. Include one
+null-condition example with caller text and confirm the complete D29 matrix
+test remains unchanged. Review the five resolved style mappings and all TP.2D
+partial evidence together; record exact limits and close TP.2D only if every
+child passed its focused, installed, and repository checks. This is not a
+five-theme page-composition or pixel-comparison gate.
+
+TP.2D closes only after partial1 through partial5 pass their scoped focused,
+installed, and repository checks and their evidence/limitations are recorded.
+A failed or unavailable installed gate blocks that partial and stops dependent
+work; source inspection or compilation alone does not establish visual success.
 
 ### TP.2E — Installed shared-component showcase
 
