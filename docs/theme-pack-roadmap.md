@@ -1,6 +1,15 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D eligible
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1 PASS; TP.2D-partial2 planned
+
+**Most recent slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
+cycle `065-tp2d-weather-marks-backdrops`, PASS. Its 30-cell matrix, installed
+captures, exact checks, and unverified boundaries are recorded in
+`.codex/history/2026-09-27-065-tp2d-weather-marks-backdrops.md` and
+`.codex/test-artifacts/065-tp2d-weather-marks-backdrops/`. The five shared
+backdrops remain the dependent planned slice in
+`.codex/plans/065-tp2d-weather-marks-backdrops-partial2.md`. Each slice targets
+at most 35% of a fresh context window and must stop before 45%.
 
 **Most recent plan:** TP.2C-partial2 Details/source components passed in cycle
 `064-tp2c-forecast-details-components-partial2`; plan and cycle evidence are
@@ -652,12 +661,40 @@ TP.2C passes only after both bounded slices pass. A missing instrumentation
 environment or failed acceptance ends that slice BLOCKED and stops the
 dependency chain; compilation alone is not component behavior evidence.
 
-### TP.2D — Weather marks and backdrops
+### TP.2D — Weather marks and backdrops (two bounded slices)
 
-After TP.2C, implement the approved theme-specific decorative weather marks and
-backdrops. Exit when each theme's declared mark/backdrop style renders from the
-resolved appearance, remains noninteractive, and passes missing-mark and
-Effects Off checks. No page composition changes occur here.
+After TP.2C, complete both dependent slices below. Shared theme backdrops are
+the selected TP.2D scope; page-specific D31 atmosphere compositions remain in
+TP.3. No page composition changes occur in TP.2D.
+
+#### TP.2D-partial1 — D29 theme-specific weather marks — PASS
+
+Cycle `065-tp2d-weather-marks-backdrops`; plan
+`.codex/plans/065-tp2d-weather-marks-backdrops.md`. Implemented the exact
+owner-approved D29 matrix across all 30 theme-condition cells, including eleven
+intentional no-mark gaps and null conditions. Focused JVM and installed Compose
+checks pass. Marks use the five resolved treatments, remain decorative, retain
+visible supplied condition text, fit 40 dp hero/36 dp forecast artwork bounds,
+and apply Terminal token omissions when the existing width cannot fit them.
+Evidence and the exact verification record are in
+`.codex/test-artifacts/065-tp2d-weather-marks-backdrops/` and
+`.codex/history/2026-09-27-065-tp2d-weather-marks-backdrops.md`. The captures
+establish component rendering only; they do not establish backdrop or page
+composition acceptance.
+
+#### TP.2D-partial2 — Shared theme backdrops — PLANNED
+
+Plan `.codex/plans/065-tp2d-weather-marks-backdrops-partial2.md`; dependency:
+TP.2D-partial1 PASS. Implement and verify the five shared `ResolvedTheme`
+backdrop styles, Effects Off opacity/static behavior, and caller-content/input
+preservation. Include a bounded integrated check that partial1's mark mapping
+and omissions remain intact. Do not add page-specific atmosphere routing or
+page composition.
+
+TP.2D closes only after both partials pass their focused, installed, and
+repository checks and their evidence/limitations are recorded. A failed or
+unavailable installed gate blocks that partial and stops the dependency chain;
+source inspection or compilation alone does not establish visual success.
 
 ### TP.2E — Installed shared-component showcase
 
