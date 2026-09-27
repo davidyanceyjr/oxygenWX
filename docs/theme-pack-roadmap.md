@@ -1,6 +1,12 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2 eligible
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D eligible
+
+**Most recent plan:** TP.2C-partial2 Details/source components passed in cycle
+`064-tp2c-forecast-details-components-partial2`; plan and cycle evidence are
+recorded in `.codex/plans/064-tp2c-forecast-details-components-partial2.md`,
+`.codex/history/2026-09-26-064-tp2c-forecast-details-components-partial2.md`,
+and `.codex/test-artifacts/064-tp2c-forecast-details-components-partial2/`.
 
 **Current proposed packet:** `tp1d-proposed-r3-d28-d29-d31`
 
@@ -610,10 +616,41 @@ identity, screenshots, and limitations are recorded in
 
 ### TP.2C — Forecast and Details components
 
-After TP.2B, implement the hourly, daily, and Details/source component families.
-Exit when all three render typed values and callbacks for all five resolved
-themes, preserving chronology and provenance, with focused value/semantics
-tests and no raw-theme branching. Keep components additive.
+TP.2C is split into two dependent bounded slices to stay below the 45% context
+budget. Both remain additive and preserve the existing resolved-theme and
+typed-presentation boundaries.
+
+**TP.2C forecast components — PASS (cycle 064):** The Hourly entry, Daily
+row, Earlier/Later controls, and Hourly date selector preserve supplied values,
+caller-owned chronology/window state, callback meaning, and 48 dp targets.
+Focused installed Compose tests passed across all five resolved themes,
+including Standard/Subtle, High contrast/Subtle, Standard/Effects Off, compact
+360 × 640 dp, font scale 1.3, and RTL cases. No raw-theme branch exists in the
+component content/interactions; no production correction was necessary. Exact
+verification and boundaries: `.codex/history/2026-09-26-064-tp2c-forecast-details-components.md`
+and `.codex/test-artifacts/064-tp2c-forecast-details-components/`. Plan:
+`.codex/plans/064-tp2c-forecast-details-components.md`.
+
+**TP.2C-partial2 Details/source components — PASS (cycle 064):** Installed
+contract tests passed across all five themes at Standard/Subtle, High
+contrast/Subtle, and Standard/Effects Off, plus the five named compact,
+large-font, RTL, and long-text cases. They preserve exact source/update facts,
+group/metric order, headings, support/unavailable text, and omit empty groups.
+The contract audit found an initial conflict between the bounded plan wording
+and `docs/theme-system/design-pack/DETAILS.md`; the higher-authority sparse-group
+rule was followed, and the component now omits empty metric groups. Ten
+condition-labeled instrumentation PNGs are retained as rendering evidence,
+not pixel or visual-match acceptance. No other production correction was
+necessary. Exact verification and limits are in
+`.codex/history/2026-09-26-064-tp2c-forecast-details-components-partial2.md`
+and `.codex/test-artifacts/064-tp2c-forecast-details-components-partial2/`.
+
+**TP.2C umbrella — PASS:** both forecast and Details/source bounded slices
+passed with installed component tests and recorded evidence.
+
+TP.2C passes only after both bounded slices pass. A missing instrumentation
+environment or failed acceptance ends that slice BLOCKED and stops the
+dependency chain; compilation alone is not component behavior evidence.
 
 ### TP.2D — Weather marks and backdrops
 

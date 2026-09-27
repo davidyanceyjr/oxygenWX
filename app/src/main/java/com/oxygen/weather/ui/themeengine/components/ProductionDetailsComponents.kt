@@ -39,6 +39,7 @@ fun ProductionInspectionMetricGroup(
     group: MetricGroupPresentation,
     modifier: Modifier = Modifier,
 ) {
+    if (group.metrics.isEmpty()) return
     MaterialTheme(typography = theme.typography) {
         ProductionSectionSurface(theme, modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
