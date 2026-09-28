@@ -1,6 +1,6 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D-partial1/partial2/partial3/partial4 PASS; partial5 PLANNED
+## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D complete (partial1–partial5 PASS)
 
 **Previous completed slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
 cycle `065-tp2d-weather-marks-backdrops`, PASS. Its 30-cell matrix, installed
@@ -743,16 +743,35 @@ unverified boundaries are retained in
 `.codex/history/2026-09-27-069-tp2d-minimal-oled-instrument-backdrops.md`.
 This is shared-field component evidence, not page or pixel matching.
 
-#### TP.2D-partial5 — Terminal backdrop and bounded integration — PLANNED
+#### TP.2D-partial5 — Terminal backdrop and bounded integration — PASS
 
 After partial4 passes, verify the Terminal non-Off backdrop against its
-approved shared field-level direction at Standard/Subtle and High contrast.
-Preserve caller content, semantics, contrast, and pointer behavior. Include one
-null-condition example with caller text and confirm the complete D29 matrix
-test remains unchanged. Review the five resolved style mappings and all TP.2D
-partial evidence together; record exact limits and close TP.2D only if every
-child passed its focused, installed, and repository checks. This is not a
-five-theme page-composition or pixel-comparison gate.
+approved shared field-level direction in two installed Subtle cases: Standard
+contrast with the approved Terminal CLEAR mark and High contrast with a null
+condition/no-mark state. Preserve caller text, semantics, contrast, and pointer
+behavior. Keep the approved D29 30-cell matrix unchanged and run its existing
+focused test. Review all five resolved style mappings and the five TP.2D child
+records together; cite each child's focused, installed, and repository result,
+and close TP.2D only when all required evidence passes. Missing or failed
+evidence keeps the umbrella open and names the exact gate. This is not a
+five-theme page-composition or pixel-comparison gate. Cycle `070-tp2d-terminal-backdrop-integration`
+passed after one Terminal-only grid-spacing correction (24 dp to 16 dp). Its
+two installed cases, contrast/semantics/interaction results, exact checks, and
+limitations are recorded in `.codex/history/2026-09-27-070-tp2d-terminal-backdrop-integration.md`
+and `.codex/test-artifacts/070-tp2d-terminal-backdrop-integration/`.
+
+**TP.2D — COMPLETE.** Cycles 065, 067, 068, 069, and 070 each record scoped
+focused, installed, and repository PASS evidence. Cycle 066 remains a blocked
+earlier attempt for partial2 and is superseded by cycle 067; it is not counted
+as a pass. The five resolved backdrop styles and Effects Off guarantee were
+reviewed against the focused resolver checks and the child records. This closes
+shared-component field verification only; it does not claim page composition,
+pixel parity, TP.2E, or TP.3 acceptance. The audit is retained in cycle 070's
+`tp2d-child-audit.md`.
+
+Plan and evidence:
+`.codex/plans/070-tp2d-terminal-backdrop-integration.md` and
+`.codex/test-artifacts/070-tp2d-terminal-backdrop-integration/`.
 
 TP.2D closes only after partial1 through partial5 pass their scoped focused,
 installed, and repository checks and their evidence/limitations are recorded.
