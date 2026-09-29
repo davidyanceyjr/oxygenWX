@@ -1,0 +1,36 @@
+TP.2E per-family installed Subtle showcase
+Device: sdk_gphone64_x86_64; manufacturer=Google; API=37; release=17; build=google/sdk_gphone64_x86_64/emu64xa:17/CE2A.260420.019/15611780:userdebug/dev-keys
+Display px: 360x640; densityDpi=160; density=1.0
+Host dp: 360x640; font scale=1.0; direction=LTR; contrast=Standard; effects=Subtle
+SDK platform 37.0; emulator 37.1.11.0; build tools 36.0.0; JDK 27; Gradle 9.7.0
+Application: com.oxygen.weather; version=1.0.0-alpha01
+atmospheric-page-identity-subtle-360x640-font1.0-ltr-standard.png: page=PAGE_IDENTITY; theme=ATMOSPHERIC; 360x640px; sha256=485b51eb3fd0ed4fe41454c6588f7a75cd85fdbe20ff32d9a8f5b30d16d4d474
+glass-page-identity-subtle-360x640-font1.0-ltr-standard.png: page=PAGE_IDENTITY; theme=GLASS; 360x640px; sha256=f411b6422f00458a3a6762899c084abbb989004b311bbf7f22f611069f48de9a
+minimal_oled-page-identity-subtle-360x640-font1.0-ltr-standard.png: page=PAGE_IDENTITY; theme=MINIMAL_OLED; 360x640px; sha256=7646ce26bc5504039f61462ddeb056a011b6e2f33221c32b89bbc0692930707b
+instrument-page-identity-subtle-360x640-font1.0-ltr-standard.png: page=PAGE_IDENTITY; theme=INSTRUMENT; 360x640px; sha256=7f7b53ce0e625f3e76424c880363df4629eeb3187719c11fd4747b734a4729cf
+terminal-page-identity-subtle-360x640-font1.0-ltr-standard.png: page=PAGE_IDENTITY; theme=TERMINAL; 360x640px; sha256=7680baf00141143c500938b8ba096c167307710e484eddebba5ec1598668c26f
+atmospheric-current-conditions-subtle-360x640-font1.0-ltr-standard.png: page=CURRENT_CONDITIONS; theme=ATMOSPHERIC; 360x640px; sha256=d612df08297808ff078e928d4af57fd9d6d2d24773e6fd43808b5098e07fc8b3
+glass-current-conditions-subtle-360x640-font1.0-ltr-standard.png: page=CURRENT_CONDITIONS; theme=GLASS; 360x640px; sha256=f08ed34829ea03ef267abf581a2c9a75ae345f430e727f4b16d91871b661b5e9
+minimal_oled-current-conditions-subtle-360x640-font1.0-ltr-standard.png: page=CURRENT_CONDITIONS; theme=MINIMAL_OLED; 360x640px; sha256=0a57bb2a6e305724743fc9fb072ad1f623c3557265866b199feec681e9879400
+instrument-current-conditions-subtle-360x640-font1.0-ltr-standard.png: page=CURRENT_CONDITIONS; theme=INSTRUMENT; 360x640px; sha256=5aeb3682d89af339b1572aeb1b0ef08b8fc9ede8052422fa4c3471eac3323161
+terminal-current-conditions-subtle-360x640-font1.0-ltr-standard.png: page=CURRENT_CONDITIONS; theme=TERMINAL; 360x640px; sha256=cdc1428f9bacdf09ec448f37ee633d77648eb8c29cc548147acb5e2f13ddc76d
+atmospheric-forecast-windows-subtle-360x640-font1.0-ltr-standard.png: page=FORECAST_WINDOWS; theme=ATMOSPHERIC; 360x640px; sha256=baf45dc2b056ca05c74288cdca764ae1cf39944897f6b2eee60f52414c3a8339
+glass-forecast-windows-subtle-360x640-font1.0-ltr-standard.png: page=FORECAST_WINDOWS; theme=GLASS; 360x640px; sha256=6e8a3415446948e9bee52821dfeab0b851629949f1b54c2e7c53edf39db3f1a6
+minimal_oled-forecast-windows-subtle-360x640-font1.0-ltr-standard.png: page=FORECAST_WINDOWS; theme=MINIMAL_OLED; 360x640px; sha256=0271eb35b0b99d13173fe5fa217d84512f3a2893ec56c22c20d358eaccb97d0d
+instrument-forecast-windows-subtle-360x640-font1.0-ltr-standard.png: page=FORECAST_WINDOWS; theme=INSTRUMENT; 360x640px; sha256=d0766341ea91aab019c3b70695b88c4d7bbd37fae43bb751077f1c1f4def3dfd
+terminal-forecast-windows-subtle-360x640-font1.0-ltr-standard.png: page=FORECAST_WINDOWS; theme=TERMINAL; 360x640px; sha256=668a40b4057a85174a0aaee005a086d79ca4b5844e3696c4f350077e569f3bb5
+atmospheric-source-inspection-subtle-360x640-font1.0-ltr-standard.png: page=SOURCE_INSPECTION; theme=ATMOSPHERIC; 360x640px; sha256=ff76864badeb7aeb3f986f72d76f8cc0a65018918100f812a47f549874587b3f
+glass-source-inspection-subtle-360x640-font1.0-ltr-standard.png: page=SOURCE_INSPECTION; theme=GLASS; 360x640px; sha256=baf2f2818e045d9bb613eaf950b73b241e80a318bb3fdfd4c99eacb5c22cfa0f
+minimal_oled-source-inspection-subtle-360x640-font1.0-ltr-standard.png: page=SOURCE_INSPECTION; theme=MINIMAL_OLED; 360x640px; sha256=4dbf314ffff643c4ef6b7a5eb0192c14eb5e3e2a94d452d73a2137d7c97478e2
+instrument-source-inspection-subtle-360x640-font1.0-ltr-standard.png: page=SOURCE_INSPECTION; theme=INSTRUMENT; 360x640px; sha256=da6e3b9fefa012c3355608775d587ee81066ca159276ed7bcaffcc57133d147e
+terminal-source-inspection-subtle-360x640-font1.0-ltr-standard.png: page=SOURCE_INSPECTION; theme=TERMINAL; 360x640px; sha256=407b37913c39e53fd8489e416631c9ab3c59a77334bb3e292d466bee8ea45976
+atmospheric-weather-mark-subtle-360x640-font1.0-ltr-standard.png: page=WEATHER_MARK; theme=ATMOSPHERIC; 360x640px; sha256=7a5a90691e239a20a7fa27f6f459bff687f2c9e82822fbd4cb0498b616559e37
+glass-weather-mark-subtle-360x640-font1.0-ltr-standard.png: page=WEATHER_MARK; theme=GLASS; 360x640px; sha256=9b7e29f613cd60d749af257934f068d61bf4e0c409fccb539798843fb799fb6f
+minimal_oled-weather-mark-subtle-360x640-font1.0-ltr-standard.png: page=WEATHER_MARK; theme=MINIMAL_OLED; 360x640px; sha256=92f775ab287b8872996a6ddba5fdf6dcbfd1c604553ef39501dc732c901a2c4e
+instrument-weather-mark-subtle-360x640-font1.0-ltr-standard.png: page=WEATHER_MARK; theme=INSTRUMENT; 360x640px; sha256=5c326318340f3e7f24a18cd67ce9cfca0d7c272b4abd4953f29fa7b1a3505a97
+terminal-weather-mark-subtle-360x640-font1.0-ltr-standard.png: page=WEATHER_MARK; theme=TERMINAL; 360x640px; sha256=7e4417b3e8eff027e87fa406e919e7bcc9781235cc636ac21a74888aab6d6b55
+atmospheric-backdrop-subtle-360x640-font1.0-ltr-standard.png: page=BACKDROP; theme=ATMOSPHERIC; 360x640px; sha256=cab1c9b1cb1d685e19169ad93678989d6cced8a0013652e322262b416fe5f35c
+glass-backdrop-subtle-360x640-font1.0-ltr-standard.png: page=BACKDROP; theme=GLASS; 360x640px; sha256=b0873b1d8440b5079fe756ec569a1569b52741fc91778cd573b27cb100f75006
+minimal_oled-backdrop-subtle-360x640-font1.0-ltr-standard.png: page=BACKDROP; theme=MINIMAL_OLED; 360x640px; sha256=af5cd1fb945082d4abb34f5de3cbb58d8cf2fa53afc40fa584b73a2d34534aab
+instrument-backdrop-subtle-360x640-font1.0-ltr-standard.png: page=BACKDROP; theme=INSTRUMENT; 360x640px; sha256=1abefba77bb33e70ecd1e61ec0ab062fb4751a53c00b08d5ae9250789cf5d78b
+terminal-backdrop-subtle-360x640-font1.0-ltr-standard.png: page=BACKDROP; theme=TERMINAL; 360x640px; sha256=532805a65797c306c9dc85530897b1b2b8b8ff97b56a9708973a5faf466586ab

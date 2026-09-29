@@ -1,5 +1,15 @@
 # Oxygen Weather Theme Pack Roadmap
 
+## Owner-directed revision — TP.2E per-family showcase pages
+
+Cycle `071-tp2e-installed-shared-component-showcase` established that the six-family composite cannot fit the approved compact viewport. The owner has directed that each component family be presented on its own test-only showcase screen. This changes the showcase composition only; Standard Home remains Now → Hourly → Daily → Details. The earlier 072–074 composite-dependent plans are superseded and are not eligible to start.
+
+The revised bounded outcome is to render six independent test-only screens—page identity, current conditions, forecast windows, source/inspection, weather mark, and backdrop—and capture each screen for Atmospheric, Glass, Minimal OLED, Instrument, and Terminal at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle effects. This yields 30 individual installed captures. Every screen keeps the same typed fixture facts and must fit without scrolling or clipping. Effects Off, comparative review, production correction, and repository closure need new bounded plans after this Subtle page set passes.
+
+Prior cycle 071 disposition and measured composite failure remain historical:
+`.codex/history/2026-09-28-071-tp2e-installed-shared-component-showcase.md` and
+`.codex/test-artifacts/071-tp2e-installed-shared-component-showcase/`.
+
 ## Execution head — r3 packet approved; TP.1D/TP.1 complete; TP.2C complete; TP.2D complete (partial1–partial5 PASS)
 
 **Previous completed slice:** `TP.2D-partial1` — D29 theme-specific weather marks,
@@ -778,14 +788,22 @@ installed, and repository checks and their evidence/limitations are recorded.
 A failed or unavailable installed gate blocks that partial and stops dependent
 work; source inspection or compilation alone does not establish visual success.
 
-### TP.2E — Installed shared-component showcase
+### TP.2E — Installed shared-component showcase — REVISED (individual family screens)
 
-After TP.2D, exercise the shared component families in the debug showcase.
-Exit with ten installed screenshots: one composite containing all six families
-for each theme at Subtle effects and one for each theme at Effects Off. Retain
-hierarchy and callback checks. One correction pass is allowed. Remaining
-deviations are blockers and stop TP.2; no unbounded refinement cycle is
-implied.
+The six shared-component families are reviewed on separate test-only screens so each family can use the full approved viewport. This does not add product pages or change the four-page Home contract. The exact owner-directed revision and bounded execution plan are recorded at the top of this document and under `.codex/plans/075-tp2e-per-family-showcase-pages.md`.
+
+#### TP.2E — Subtle per-family installed pages — PASS
+
+Cycle `075-tp2e-per-family-showcase-pages` passed the installed six-family ×
+five-theme matrix (30 PNGs) at 360 × 640 dp, font scale 1.0, LTR, Standard
+contrast, and Subtle effects. All screens fit without scrolling or clipping,
+and the exact typed component fixtures and resolver were reused. No normal app
+or production source changed.
+
+The previous composite-dependent plans 072–074 are superseded by this
+owner-directed direction. The next eligible slice is a newly bounded Effects
+Off per-family page matrix. TP.2E and TP.3 remain open until their remaining
+work is planned and accepted.
 
 ### Shared invariants and out of scope
 

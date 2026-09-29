@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oxygen.weather.ui.themeengine.ProductionWeatherVisualsTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-29T01:24:31.737Z" hostname="marriot" time="0.083">
+  <properties/>
+  <testcase name="approvedD29ThirtyCellMatrixAndNullMapExactly" classname="com.oxygen.weather.ui.themeengine.ProductionWeatherVisualsTest" time="0.03"/>
+  <testcase name="effectsOffAlwaysResolvesSolidBackdropAndStaticPolicy" classname="com.oxygen.weather.ui.themeengine.ProductionWeatherVisualsTest" time="0.036"/>
+  <testcase name="everyBackdropStyleHasAResolvedRenderingCase" classname="com.oxygen.weather.ui.themeengine.ProductionWeatherVisualsTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

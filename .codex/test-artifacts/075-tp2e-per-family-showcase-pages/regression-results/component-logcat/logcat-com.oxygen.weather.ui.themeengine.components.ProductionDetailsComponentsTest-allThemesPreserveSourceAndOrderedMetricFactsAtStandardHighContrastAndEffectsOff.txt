@@ -1,0 +1,292 @@
+09-28 20:22:47.003  6821  6835 I TestRunner: started: allThemesPreserveSourceAndOrderedMetricFactsAtStandardHighContrastAndEffectsOff(com.oxygen.weather.ui.themeengine.components.ProductionDetailsComponentsTest)
+09-28 20:22:47.015  6821  6835 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@bc77b85]
+09-28 20:22:47.021  6821  6835 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-28 20:22:47.035   645  1441 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10252, packageName = null, attributionTag = null, token = android.os.Binder@7520e84, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-28 20:22:47.036  1031  1031 D RecentsView: onTaskRemoved: 39, not handling task stack changes
+09-28 20:22:47.036  1031  1031 D RecentsView: onTaskRemoved: 39, not handling task stack changes
+09-28 20:22:47.044  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:47.059  1031  1031 D RecentsView: onTaskDisplayChanged: 41, new displayId = 0
+09-28 20:22:47.086  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] -[]
+09-28 20:22:47.087  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused] -[state_user_active]
+09-28 20:22:47.087   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:22:47.087  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_window_focused] -[state_resumed|state_deferred_resumed]
+09-28 20:22:47.087  1031  1031 W SplitSelectStateCtor: Missing session instanceIds
+09-28 20:22:47.087  1031  1031 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+09-28 20:22:47.114  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:47.114   905  1054 D SplashScreenView: Build android.window.SplashScreenView{e08030 V.E...... ......ID 0,0-0,0}
+09-28 20:22:47.114   905  1054 D SplashScreenView: Icon: view: null drawable: null size: 0
+09-28 20:22:47.114   905  1054 D SplashScreenView: Branding: view: android.view.View{bc564a9 G.ED..... ......I. 0,0-0,0 #1020574 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+09-28 20:22:47.115  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:47.120  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: PRE_ON_CREATE
+09-28 20:22:47.121  6821  6821 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+09-28 20:22:47.128  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: CREATED
+09-28 20:22:47.134   645  1441 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:47.141  6821  6821 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=androidx.activity.ComponentActivity@279f8df
+09-28 20:22:47.143  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: STARTED
+09-28 20:22:47.145   905  1050 I Surface : Creating surface for consumer unnamed-905-37 with slotExpansion=1 for 64 slots
+09-28 20:22:47.145   905  1050 I Surface : Creating surface for consumer VRI[weather]#37(BLAST Consumer)37 with slotExpansion=1 for 64 slots
+09-28 20:22:47.173  6821  6821 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=androidx.activity.ComponentActivity@279f8df
+09-28 20:22:47.173  6821  6821 D AutofillManager: Fill dialog is enabled:false, hints=[]
+09-28 20:22:47.174  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: RESUMED
+09-28 20:22:47.174  6821  6821 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=androidx.activity.ComponentActivity@279f8df
+09-28 20:22:47.183   645   956 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:47.192  6821  6821 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@a4f255c
+09-28 20:22:47.194  6821  6821 D VRI[ComponentActivity]: WindowInsets changed: 360x640 statusBars:[0,24,0,0] mandatorySystemGestures:[0,24,0,0]
+09-28 20:22:47.208   547   633 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:47.217  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:47.219  1031  1031 D BaseActivity: Launcher flags updated: [state_started] -[state_window_focused]
+09-28 20:22:47.222  6821  6821 I Surface : Creating surface for consumer unnamed-6821-6 with slotExpansion=1 for 64 slots
+09-28 20:22:47.222  6853  6853 D VRI[InstrumentationActivityInvoker$EmptyActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:22:47.229  6821  6821 I Surface : Creating surface for consumer VRI[ComponentActivity]#6(BLAST Consumer)6 with slotExpansion=1 for 64 slots
+09-28 20:22:47.248  1031  1031 D WorkspaceRevealAnim: onAnimationEnd: workspace alpha = 1.0
+09-28 20:22:47.254  6853  6853 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null
+09-28 20:22:47.262  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=40 windowingMode=1 user=0 lastActiveTime=3250277] null, [id=41 windowingMode=1 user=0 lastActiveTime=3250579] null]
+09-28 20:22:47.264  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:47.265  6853  6853 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:22:47.265   645   666 I ActivityTaskManager: Displayed com.oxygen.weather/androidx.activity.ComponentActivity for user 0: +228ms
+09-28 20:22:47.281  1031  1031 D RecentsView: onTaskRemoved: 40, not handling task stack changes
+09-28 20:22:47.281  1031  1031 D RecentsView: onTaskRemoved: 40, not handling task stack changes
+09-28 20:22:47.301  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:47.311   645   763 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:47.312  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259
+09-28 20:22:47.316  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+09-28 20:22:47.316  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.oxygen.weather, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+09-28 20:22:47.317  1446  1446 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+09-28 20:22:47.321  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+09-28 20:22:47.419   645   808 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+09-28 20:22:47.420   645   808 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+09-28 20:22:47.420   645   808 D InetDiagMessage: Destroyed live tcp sockets for uids={10225} in 1ms
+09-28 20:22:47.566  1031  1031 D VRI[NexusLauncherActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:22:47.566   905  1428 D WallpaperService: onVisibilityChanged(false): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@75a1289
+09-28 20:22:47.570   645   878 I Surface : Creating surface for consumer unnamed-645-25 with slotExpansion=1 for 64 slots
+09-28 20:22:47.570   645   878 I Surface : Creating surface for consumer ImageReader-288x512f1m1-645-25 with slotExpansion=1 for 64 slots
+09-28 20:22:47.572   645   878 W ImageReader_JNI: Unable to acquire a buffer item, very likely client tried to acquire more than maxImages buffers
+09-28 20:22:47.578   645   878 E ConsumerBase: [ImageReader-288x512f1m1-645-25] abandonLocked: ConsumerBase is abandoned!
+09-28 20:22:47.579  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=7}
+09-28 20:22:47.583  1031  1031 D BaseActivity: Launcher flags updated: [] -[state_started]
+09-28 20:22:47.583  1031  1031 D BaseDepthController: setSurface:
+09-28 20:22:47.583  1031  1031 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+09-28 20:22:47.583  1031  1031 D BaseDepthController: 	mBaseSurface: null
+09-28 20:22:47.584  1031  1031 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+09-28 20:22:47.585  1031  1031 D LauncherStateManager: StateManager.goToState: fromState: Normal, toState: Normal, partial trace:
+09-28 20:22:47.585  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:26)
+09-28 20:22:47.585  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:35)
+09-28 20:22:47.585  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:31)
+09-28 20:22:47.585  1031  1031 D LauncherStateManager: StateManager.onRepeatStateSetAborted: state: Normal
+09-28 20:22:47.585  1031  1031 D KeyboardStateManager: hideKeyboard
+09-28 20:22:47.585  1031  1031 D KeyboardStateManager: isImeShown: false
+09-28 20:22:47.585  1031  1031 D StatsLog: LAUNCHER_ONSTOP
+09-28 20:22:47.587  1031  1031 D StatsLog: LAUNCHER_GOOGLE_SEARCH_RESTORE_LIST_SIZE_AFTER_ACTIVITY_RESTART
+09-28 20:22:47.608  1031  1044 W System  : A resource failed to call release.
+09-28 20:22:47.609  1031  1044 W System  : A resource failed to call release.
+09-28 20:22:47.609  1031  1044 W System  : A resource failed to call release.
+09-28 20:22:47.609  1031  1044 W System  : A resource failed to call release.
+09-28 20:22:47.609  1031  1044 W System  : A resource failed to call release.
+09-28 20:22:47.609  1031  1044 W System  : A resource failed to call release.
+09-28 20:22:49.186   645   802 D WifiClientModeImpl[16445:wlan0]: updateLinkLayerStatsRssiSpeedFrequencyCapabilities rssi=-50 TxLinkspeed=5 freq=2447 RxLinkSpeed=2
+09-28 20:22:49.187   645   802 D WifiClientModeImpl[16445:wlan0]: reported txKbps 12000 rxKbps 30000
+09-28 20:22:49.187   645   802 D WifiDataStall: tx tput in kbps: 11000
+09-28 20:22:49.187   645   802 D WifiDataStall: rx tput in kbps: 11000
+09-28 20:22:49.187   645   802 V WifiConfigManager: Updating scan detail cache freq=2447 BSSID=00:13:10:85:fe:01 RSSI=-50 for "AndroidWifi"NONE
+09-28 20:22:49.187   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:49.187   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:49.187   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:49.187   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:49.188   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:49.188   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:49.188   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:49.188   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:49.191   645   802 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+09-28 20:22:49.193   645   802 D WifiScoreCard: BSSID update SIGNAL_POLL ID: 1117419319 SSID: "AndroidWifi", BSSID: 00:13:10:85:fe:01, MAC: 02:15:b2:00:00:00, IP: /10.0.2.16, Security type: 0, Supplicant state: COMPLETED, Wi-Fi standard: legacy, RSSI: -50, Link speed: 5Mbps, Tx Link speed: 5Mbps, Max Supported Tx Link speed: 11Mbps, Calculated Tx : 0Mbps, Rx Link speed: 2Mbps, Max Supported Rx Link speed: 11Mbps, Calculated Rx : 0Mbps, Frequency: 2447MHz, Net ID: 0, Metered hint: false, score: 100, isUsable: true, CarrierMerged: false, SubscriptionId: -1, IsPrimary: 1, Trusted: true, Restricted: false, Ephemeral: false, OEM paid: false, OEM private: false, OSU AP: false, FQDN: <none>, Provider friendly name: <none>, Requesting package name: <none>"AndroidWifi"openMLO Information: , Is TID-To-Link negotiation supported by the AP: false, AP MLD Address: <none>, AP MLO Link Id: <none>, AP MLO Affiliated links: <none>, Vendor Data: <none>
+09-28 20:22:49.193   645   802 D WifiScoreCard: txRate: 1 txSpeed: 5
+09-28 20:22:49.193   645   802 D WifiScoreCard: network update SIGNAL_POLL "AndroidWifi" ID: 503645946 RSSI -50 txSpeed -1
+09-28 20:22:49.193   645  1514 I WifiService: getWifiEnabledState uid=10201 state=3
+09-28 20:22:49.195  1228  1246 I NullBinder: NullBinder for android.net.action.RECOMMEND_NETWORKS triggering remote TransactionTooLargeException due to Service without Chimera impl, calling uid: 1000, calling pid: 0
+09-28 20:22:49.195   645   802 D WifiClientModeImpl[16445:wlan0]:  ClientModeImpl$L2ConnectedState screen=on 1 0 "AndroidWifi" 00:13:10:85:fe:01 rssi=-50 f=2447 sc=100 link=5 tx=0.0, 0.0, 0.0 rx=0.0 bcn=0 [on:0 tx:0 rx:0 period:3010] from screen [on:0 period:-356393237] score=100
+09-28 20:22:49.198  1228  1246 W libbinder.Binder: Large reply transaction of 1056768 bytes, interface descriptor , function: UNKNOWN_FUNCTION_NAME, code: 1, flags: 17
+09-28 20:22:49.201   645   808 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:49.201   645   808 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:49.201   645   808 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:49.201   645   808 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:49.201   645   808 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:49.201   645   808 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:49.201   645  1514 I WifiService: getConnectionInfo uid=10213
+09-28 20:22:49.201   645  1514 V WifiService: Clearing REDACT_FOR_LOCAL_MAC_ADDRESS for com.google.android.gms(uid=10213)
+09-28 20:22:49.202   645  1514 V WifiPermissionsUtil: checkCallersLocationPermission(com.google.android.gms): ok because uid 10213 has app-op android:fine_location
+09-28 20:22:49.202   645  1514 V WifiService: Clearing REDACT_FOR_ACCESS_FINE_LOCATION for com.google.android.gms(uid=10213)
+09-28 20:22:50.577   433   471 I netd    : tetherGetStats() -> {[]} <0.39ms>
+09-28 20:22:50.594  1716  2837 W JobInfo : Requested important-while-foreground flag for job555000056 is ignored and takes no effect
+09-28 20:22:50.614   645  1514 D ConnectivityService: requestNetwork for uid/pid:10168/1716 activeRequest: null callbackRequest: 183 [NetworkRequest [ REQUEST id=184, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10168 RequestorUid: 10168 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false declaredMethods: AVAIL|LOST|NC|BLK
+09-28 20:22:50.620   645   808 D ConnectivityService: NetReassign [184 : null → 101] [c 1] [a 2] [i 1]
+09-28 20:22:50.625   645   802 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=184, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10168 RequestorUid: 10168 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+09-28 20:22:50.625   645   802 V WifiNetworkFactory: Accepted network request NetworkRequest [ REQUEST id=184, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10168 RequestorUid: 10168 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+09-28 20:22:50.625   645   802 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=184, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10168 RequestorUid: 10168 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+09-28 20:22:50.625   645   802 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=184, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10168 RequestorUid: 10168 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+09-28 20:22:50.625   645   802 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=184, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10168 RequestorUid: 10168 RequestorPkg: com.google.android.apps.photos UnderlyingNetworks: Null] ]
+09-28 20:22:50.749   645  1953 W JobInfo : Job 'com.google.android.apps.photos/com.google.android.libraries.social.async.BackgroundTaskJobService#1043' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+09-28 20:22:50.824  1716  6923 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.824  1716  6922 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.831  1716  6924 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.831  1716  6923 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.838  1716  6922 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.842  1716  6923 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.848  1716  6924 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.851  1716  6922 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.855  1716  6923 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.861  1716  6924 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.864  1716  6922 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.870  1716  6923 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.873  1716  6924 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.886  1716  6922 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.886  1716  6924 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.896  1716  6923 I XmpUtil : XMP parse: only JPEG file is supported
+09-28 20:22:50.928  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.928  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.928  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.928  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:50.929  1716  1739 W System  : A resource failed to call close.
+09-28 20:22:51.164   645  1953 W JobInfo : Job 'com.google.android.apps.photos/com.google.android.libraries.social.async.BackgroundTaskJobService#1043' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+09-28 20:22:51.173  6821  6826 I .oxygen.weather: Background young concurrent mark compact GC freed 4876KB AllocSpace bytes, 0(0B) LOS objects, 37% free, 5766KB/9279KB, paused 1.387ms,2.605ms total 139.757ms
+09-28 20:22:51.437  1228  6921 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.ipa.base.IpaGcmTaskService started execution. cause:9 exec_start_elapsed_seconds: 3254 [CONTEXT service_id=218 ]
+09-28 20:22:51.441  1228  5745 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.ipa.base.IpaGcmTaskService finished executing. cause:9 result: 1 elapsed_millis: 15 uptime_millis: 15 exec_start_elapsed_seconds: 3254 [CONTEXT service_id=218 ]
+09-28 20:22:52.194   645   802 D WifiClientModeImpl[16445:wlan0]: updateLinkLayerStatsRssiSpeedFrequencyCapabilities rssi=-50 TxLinkspeed=5 freq=2447 RxLinkSpeed=2
+09-28 20:22:52.195   645   802 D WifiDataStall: tx tput in kbps: 11000
+09-28 20:22:52.195   645   802 D WifiDataStall: rx tput in kbps: 11000
+09-28 20:22:52.195   645   802 V WifiConfigManager: Updating scan detail cache freq=2447 BSSID=00:13:10:85:fe:01 RSSI=-50 for "AndroidWifi"NONE
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:52.195   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:52.197   645   802 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+09-28 20:22:52.197   645   802 D WifiScoreCard: BSSID update SIGNAL_POLL ID: 1117419319 SSID: "AndroidWifi", BSSID: 00:13:10:85:fe:01, MAC: 02:15:b2:00:00:00, IP: /10.0.2.16, Security type: 0, Supplicant state: COMPLETED, Wi-Fi standard: legacy, RSSI: -50, Link speed: 5Mbps, Tx Link speed: 5Mbps, Max Supported Tx Link speed: 11Mbps, Calculated Tx : 0Mbps, Rx Link speed: 2Mbps, Max Supported Rx Link speed: 11Mbps, Calculated Rx : 0Mbps, Frequency: 2447MHz, Net ID: 0, Metered hint: false, score: 100, isUsable: true, CarrierMerged: false, SubscriptionId: -1, IsPrimary: 1, Trusted: true, Restricted: false, Ephemeral: false, OEM paid: false, OEM private: false, OSU AP: false, FQDN: <none>, Provider friendly name: <none>, Requesting package name: <none>"AndroidWifi"openMLO Information: , Is TID-To-Link negotiation supported by the AP: false, AP MLD Address: <none>, AP MLO Link Id: <none>, AP MLO Affiliated links: <none>, Vendor Data: <none>
+09-28 20:22:52.197   645   802 D WifiScoreCard: txRate: 1 txSpeed: 5
+09-28 20:22:52.197   645   802 D WifiScoreCard: network update SIGNAL_POLL "AndroidWifi" ID: 503645946 RSSI -50 txSpeed -1
+09-28 20:22:52.197   645   802 D WifiClientModeImpl[16445:wlan0]:  ClientModeImpl$L2ConnectedState screen=on 1 0 "AndroidWifi" 00:13:10:85:fe:01 rssi=-50 f=2447 sc=100 link=5 tx=0.0, 0.0, 0.0 rx=0.0 bcn=0 [on:0 tx:0 rx:0 period:3002] from screen [on:0 period:-356390235] score=100
+09-28 20:22:52.760   645   982 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10253, packageName = null, attributionTag = null, token = android.os.Binder@7520e84, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-28 20:22:52.762  1031  1031 D RecentsView: onTaskDisplayChanged: 42, new displayId = 0
+09-28 20:22:52.765   905  1054 D SplashScreenView: Build android.window.SplashScreenView{4bd43cb V.E...... ......ID 0,0-0,0}
+09-28 20:22:52.765   905  1054 D SplashScreenView: Icon: view: null drawable: null size: 0
+09-28 20:22:52.765   905  1054 D SplashScreenView: Branding: view: android.view.View{93fe7a8 G.ED..... ......I. 0,0-0,0 #1020574 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+09-28 20:22:52.767   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:22:52.767   645  2039 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:52.768  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: PAUSED
+09-28 20:22:52.768  6821  6821 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=androidx.activity.ComponentActivity@279f8df
+09-28 20:22:52.770  6853  6867 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+09-28 20:22:52.770  6853  6867 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv2_emulation.so
+09-28 20:22:52.771  6853  6867 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-28 20:22:52.781  6853  6867 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+09-28 20:22:52.785  6853  6853 D AutofillManager: Fill dialog is enabled:false, hints=[]
+09-28 20:22:52.786   433   471 I netd    : tetherGetStats() -> {[]} <0.37ms>
+09-28 20:22:52.788   905  1050 I Surface : Creating surface for consumer unnamed-905-38 with slotExpansion=1 for 64 slots
+09-28 20:22:52.790   905  1050 I Surface : Creating surface for consumer VRI[test]#38(BLAST Consumer)38 with slotExpansion=1 for 64 slots
+09-28 20:22:52.790   547   633 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:52.798   645  2039 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:52.807  6853  6853 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@5acbb73
+09-28 20:22:52.807  6853  6853 D VRI[InstrumentationActivityInvoker$EmptyActivity]: WindowInsets changed: 360x640 statusBars:[0,24,0,0] mandatorySystemGestures:[0,24,0,0]
+09-28 20:22:52.816   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:22:52.823  6853  6853 I Surface : Creating surface for consumer unnamed-6853-6 with slotExpansion=1 for 64 slots
+09-28 20:22:52.826  6853  6853 I Surface : Creating surface for consumer VRI[InstrumentationActivityInvoker$EmptyActivity]#6(BLAST Consumer)6 with slotExpansion=1 for 64 slots
+09-28 20:22:52.912  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:52.912  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:52.912  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:52.932   645   666 I ActivityTaskManager: Displayed com.oxygen.weather.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +170ms
+09-28 20:22:52.934  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:52.934   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:22:52.935  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=41 windowingMode=1 user=0 lastActiveTime=3256252] null, [id=42 windowingMode=1 user=0 lastActiveTime=3256257] null]
+09-28 20:22:52.949  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:52.951  1031  1031 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:22:52.951  1031  1031 D BaseActivity: Launcher flags updated: [state_started] +[state_started]
+09-28 20:22:52.951  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_user_active] +[state_resumed|state_user_active]
+09-28 20:22:52.952  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_user_active] +[]
+09-28 20:22:52.952  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_user_active] +[state_deferred_resumed]
+09-28 20:22:52.953  1031  1031 D StatsLog: LAUNCHER_ONRESUME
+09-28 20:22:52.953  1031  1094 D QuickstepModelDelegate: notifyAppTargetEvent action=1 launchLocation=workspace/0/[-1,-1]/[1,1]
+09-28 20:22:52.956  1593  1812 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+09-28 20:22:52.956  1593  1812 I AiAiEcho: EchoTargets:
+09-28 20:22:52.956  1593  1812 I AiAiEcho: Filtered by AiAi flag check:
+09-28 20:22:52.956  1593  1812 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+09-28 20:22:52.956  1593  1812 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+09-28 20:22:52.957  1593  1812 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+09-28 20:22:52.957  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=6}
+09-28 20:22:52.963  1031  1031 I Surface : Creating surface for consumer unnamed-1031-31 with slotExpansion=1 for 64 slots
+09-28 20:22:52.965  1031  1031 I Surface : Creating surface for consumer VRI[NexusLauncherActivity]#21(BLAST Consumer)21 with slotExpansion=1 for 64 slots
+09-28 20:22:52.969  1031  1031 D BaseDepthController: setSurface:
+09-28 20:22:52.969  1031  1031 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+09-28 20:22:52.969  1031  1031 D BaseDepthController: 	mBaseSurface: Surface(name=VRI-com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity#715)/@0x59e5325
+09-28 20:22:52.969  1031  1031 V BaseDepthController: Applying blur: 0 to Surface(name=VRI-com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity#715)/@0x59e5325 applyImmediately: false
+09-28 20:22:52.969   905  1428 D WallpaperService: onVisibilityChanged(true): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@75a1289
+09-28 20:22:52.970  1031  1031 D BaseDepthController: shouldBlurWorkspace: false targetState: Normal currentStableState: Normal mCurrentBlur: 0 mLauncher.getDepthBlurTargets(): [com.android.launcher3.Workspace{a2725da V.ED..... .......D 0,0-360,640 #7f0a0486 app:id/workspace}, com.android.launcher3.Hotseat{cfba0b V.ED..... .......D 0,467-360,640 #7f0a01f6 app:id/hotseat}]
+09-28 20:22:52.987   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:22:52.987   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:22:52.989  1023  1192 D SatelliteController: isInCarrierRoamingNbIotNtn: satellite is disabled
+09-28 20:22:52.989  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+09-28 20:22:52.989  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:22:52.989  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:22:52.989  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:22:52.990  1023  1192 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+09-28 20:22:52.990  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+09-28 20:22:52.991  1031  1031 D ShortcutAndWidgetContainer: appWidgetScale - [x,y]: [1.0,1.0]
+09-28 20:22:52.991  1031  1031 D NavigableAppWidgetHostView: updateScale - [fitScale,bounceScale]: [1.0,1.0]
+09-28 20:22:52.991  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:52.991  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:52.991  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:52.991  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:52.991  1031  1031 I SsBaseTemplateCard: Secondary card pane is null
+09-28 20:22:52.992  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:22:52.992  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:22:52.992  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+09-28 20:22:52.993  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+09-28 20:22:52.993  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:22:52.993  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:22:52.993  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:22:52.994  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+09-28 20:22:52.994  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:22:52.994  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:22:52.994  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:22:52.994  1023  1192 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+09-28 20:22:52.994  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+09-28 20:22:52.994  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:22:52.994  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:22:52.994  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+09-28 20:22:52.994  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+09-28 20:22:52.994  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:22:52.994  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:22:52.994  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:22:53.006  6821  6821 D VRI[ComponentActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:22:53.023  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: STOPPED
+09-28 20:22:53.023  6821  6821 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=androidx.activity.ComponentActivity@279f8df
+09-28 20:22:53.038  6821  6821 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null
+09-28 20:22:53.039  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@279f8df in: DESTROYED
+09-28 20:22:53.039  6821  6821 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+09-28 20:22:53.047  6821  6835 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@bc77b85]
+09-28 20:22:53.051  6821  6821 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:22:53.053  1031  1031 D LauncherStateManager: StateManager.cancelAnimation: animation ongoing: false, partial trace:
+09-28 20:22:53.053  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.setCurrentAnimation(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:59)
+09-28 20:22:53.053  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:712)
+09-28 20:22:53.053  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager$WallpaperOpenLauncherAnimationRunner.onAnimationStart(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:135)
+09-28 20:22:53.054  1031  1031 D LauncherStateManager: StateManager.createAtomicAnimation: fromState: Normal, toState: Normal, partial trace:
+09-28 20:22:53.054  1031  1031 D LauncherStateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.prepareToAnimate(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:19)
+09-28 20:22:53.054  1031  1031 D LauncherStateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.<init>(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:10)
+09-28 20:22:53.054  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:753)
+09-28 20:22:53.054  1031  1031 D AllAppsTransitionController: shouldProtectHeader: false skipScrim: true state: Normal stateManager.getState(): Normal
+09-28 20:22:53.054  1031  1031 D KeyboardInsetsHandler: removePendingImeController: pendingImeController=null
+09-28 20:22:53.055  1031  1031 D b/311077782: LauncherAnimationRunner.setAnimation
+09-28 20:22:53.061  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:53.063  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] +[state_window_focused]
+09-28 20:22:53.094  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=41 windowingMode=1 user=0 lastActiveTime=3256252] null, [id=42 windowingMode=1 user=0 lastActiveTime=3256416] null]
+09-28 20:22:53.102  6821  6835 I TestRunner: finished: allThemesPreserveSourceAndOrderedMetricFactsAtStandardHighContrastAndEffectsOff(com.oxygen.weather.ui.themeengine.components.ProductionDetailsComponentsTest)

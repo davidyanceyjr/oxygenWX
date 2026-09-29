@@ -1,0 +1,326 @@
+09-28 20:22:33.485  6821  6835 I TestRunner: started: allThemesEffectsOffAreOpaqueStaticAndPreserveCallerContent(com.oxygen.weather.ui.themeengine.components.ProductionBackdropEffectsOffTest)
+09-28 20:22:33.485  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259
+09-28 20:22:33.486  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+09-28 20:22:33.487  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.google.android.apps.nexuslauncher, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+09-28 20:22:33.487  1446  1446 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+09-28 20:22:33.498  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+09-28 20:22:33.502  6821  6835 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@1d1d05d]
+09-28 20:22:33.505  6821  6835 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-28 20:22:33.519   645   982 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10252, packageName = null, attributionTag = null, token = android.os.Binder@7520e84, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-28 20:22:33.588  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] -[]
+09-28 20:22:33.624   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:22:33.634  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused] -[state_user_active]
+09-28 20:22:33.634  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_window_focused] -[state_resumed|state_deferred_resumed]
+09-28 20:22:33.634  1031  1031 W SplitSelectStateCtor: Missing session instanceIds
+09-28 20:22:33.634  1031  1031 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+09-28 20:22:33.646  1031  1031 D RecentsView: onTaskRemoved: 29, not handling task stack changes
+09-28 20:22:33.646  1031  1031 D RecentsView: onTaskRemoved: 29, not handling task stack changes
+09-28 20:22:33.646  1031  1031 D RecentsView: onTaskDisplayChanged: 31, new displayId = 0
+09-28 20:22:33.647  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:33.647  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:33.647  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:33.650  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: PRE_ON_CREATE
+09-28 20:22:33.651  6821  6821 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+09-28 20:22:33.658  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: CREATED
+09-28 20:22:33.658  6821  6821 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=androidx.activity.ComponentActivity@46e1691
+09-28 20:22:33.659  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: STARTED
+09-28 20:22:33.659  6821  6821 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=androidx.activity.ComponentActivity@46e1691
+09-28 20:22:33.662  6821  6821 D AutofillManager: Fill dialog is enabled:false, hints=[]
+09-28 20:22:33.662  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: RESUMED
+09-28 20:22:33.662  6821  6821 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=androidx.activity.ComponentActivity@46e1691
+09-28 20:22:33.697   645  1100 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:33.701  1031  1031 D BaseActivity: Launcher flags updated: [state_started] -[state_window_focused]
+09-28 20:22:33.704   905  1054 D SplashScreenView: Build android.window.SplashScreenView{34715e0 V.E...... ......ID 0,0-0,0}
+09-28 20:22:33.704   905  1054 D SplashScreenView: Icon: view: null drawable: null size: 0
+09-28 20:22:33.704   905  1054 D SplashScreenView: Branding: view: android.view.View{92ec099 G.ED..... ......I. 0,0-0,0 #1020574 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+09-28 20:22:33.706   645  1100 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:33.712  6821  6821 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@331afe8
+09-28 20:22:33.713  6821  6821 D VRI[ComponentActivity]: WindowInsets changed: 360x640 statusBars:[0,24,0,0] mandatorySystemGestures:[0,24,0,0]
+09-28 20:22:33.752  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:33.755  6821  6821 I Surface : Creating surface for consumer unnamed-6821-1 with slotExpansion=1 for 64 slots
+09-28 20:22:33.764  6821  6821 I Surface : Creating surface for consumer VRI[ComponentActivity]#1(BLAST Consumer)1 with slotExpansion=1 for 64 slots
+09-28 20:22:33.766   905  1050 I Surface : Creating surface for consumer unnamed-905-27 with slotExpansion=1 for 64 slots
+09-28 20:22:33.771   905  1050 I Surface : Creating surface for consumer VRI[weather]#27(BLAST Consumer)27 with slotExpansion=1 for 64 slots
+09-28 20:22:33.772  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=30 windowingMode=1 user=0 lastActiveTime=3236690] null, [id=31 windowingMode=1 user=0 lastActiveTime=3237125] null]
+09-28 20:22:33.790  1031  1031 D WorkspaceRevealAnim: onAnimationEnd: workspace alpha = 1.0
+09-28 20:22:33.805   547  4283 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:33.809   645   666 I ActivityTaskManager: Displayed com.oxygen.weather/androidx.activity.ComponentActivity for user 0: +290ms
+09-28 20:22:33.828  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:33.831  6853  6853 D VRI[InstrumentationActivityInvoker$EmptyActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_APPLICATION, vsyncId: 97079, totalDuration: 100170219, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_APPLICATION, vsyncId: 97087, totalDuration: 133454695, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_APPLICATION, vsyncId: 97087, totalDuration: 133454695, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_NONE, vsyncId: 97216, totalDuration: 15520807, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: UNKNOWN: 3, vsyncId: 97223, totalDuration: 33698567, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: UNKNOWN: 3, vsyncId: 97223, totalDuration: 33698567, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: UNKNOWN: 3, vsyncId: 97268, totalDuration: 32797391, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: UNKNOWN: 3, vsyncId: 97268, totalDuration: 32797391, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_NONE, vsyncId: 97291, totalDuration: 33444871, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_NONE, vsyncId: 97305, totalDuration: 31290810, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_NONE, vsyncId: 97321, totalDuration: 24898024, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.852  1031  1031 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_NONE, vsyncId: 97329, totalDuration: 33415370, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+09-28 20:22:33.875  6853  6853 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null
+09-28 20:22:33.890   645   763 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:33.890  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259
+09-28 20:22:33.891  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+09-28 20:22:33.892  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.oxygen.weather, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+09-28 20:22:33.892  1446  1446 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+09-28 20:22:33.902  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+09-28 20:22:33.905  6853  6853 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed App frame:jankTypeLegacy: JANK_APPLICATION, jankTypeExperimental: JANK_NONE, vsyncId: 97057, totalDuration: 39514621, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_APPLICATION, vsyncId: 97072, totalDuration: 29953713, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_NONE, vsyncId: 97109, totalDuration: 50109045, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_NONE, vsyncId: 97109, totalDuration: 50109045, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_NONE, vsyncId: 97146, totalDuration: 31291820, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_NONE, vsyncId: 97146, totalDuration: 31291820, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_APPLICATION, vsyncId: 97161, totalDuration: 51201065, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.924   905  1050 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_APPLICATION, vsyncId: 97161, totalDuration: 51201065, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.925   905  1050 W FrameTracker: Missed SF frame:jankTypeLegacy: JANK_COMPOSER, jankTypeExperimental: JANK_COMPOSER, vsyncId: 97169, totalDuration: 34687801, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.925   905  1050 W FrameTracker: Missed App frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_NONE, vsyncId: 97261, totalDuration: 26682413, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.925   905  1050 W FrameTracker: Missed SF frame:jankTypeLegacy: UNKNOWN: 3, jankTypeExperimental: JANK_NONE, vsyncId: 97261, totalDuration: 26682413, CUJ=J<SPLASHSCREEN_EXIT_ANIM>
+09-28 20:22:33.995   645   670 W system_server: Long monitor contention with owner binder:645_F (1514) at void com.android.server.wm.WindowManagerService$LocalService.updateImeTargetWindow(android.os.IBinder)(WindowManagerService.java:8642) waiters=1 in void com.android.server.wm.WindowSurfacePlacer$Traverser.run() for 101ms
+09-28 20:22:34.038  1031  1031 D RecentsView: onTaskRemoved: 30, not handling task stack changes
+09-28 20:22:34.038  1031  1031 D RecentsView: onTaskRemoved: 30, not handling task stack changes
+09-28 20:22:34.040  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:34.101   645   802 D WifiClientModeImpl[16445:wlan0]: updateLinkLayerStatsRssiSpeedFrequencyCapabilities rssi=-50 TxLinkspeed=11 freq=2447 RxLinkSpeed=2
+09-28 20:22:34.101   645   802 D WifiDataStall: tx tput in kbps: 11000
+09-28 20:22:34.101   645   802 D WifiDataStall: rx tput in kbps: 11000
+09-28 20:22:34.101   645   802 V WifiConfigManager: Updating scan detail cache freq=2447 BSSID=00:13:10:85:fe:01 RSSI=-50 for "AndroidWifi"NONE
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  utilization (LLS) 80 isBluetoothConnected: false final utilization: 80
+09-28 20:22:34.101   645   802 D WifiThroughputPredictor:  BW: 0 RSSI: -50 Nss: 1 Mode: 1 symDur: 4000 snrDb 30 bitPerTone: 4500 rate: 54 throughput: 11
+09-28 20:22:34.102   645   802 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
+09-28 20:22:34.102   645   802 D WifiScoreCard: BSSID update SIGNAL_POLL ID: 1117419319 SSID: "AndroidWifi", BSSID: 00:13:10:85:fe:01, MAC: 02:15:b2:00:00:00, IP: /10.0.2.16, Security type: 0, Supplicant state: COMPLETED, Wi-Fi standard: legacy, RSSI: -50, Link speed: 11Mbps, Tx Link speed: 11Mbps, Max Supported Tx Link speed: 11Mbps, Calculated Tx : 0Mbps, Rx Link speed: 2Mbps, Max Supported Rx Link speed: 11Mbps, Calculated Rx : 0Mbps, Frequency: 2447MHz, Net ID: 0, Metered hint: false, score: 100, isUsable: true, CarrierMerged: false, SubscriptionId: -1, IsPrimary: 1, Trusted: true, Restricted: false, Ephemeral: false, OEM paid: false, OEM private: false, OSU AP: false, FQDN: <none>, Provider friendly name: <none>, Requesting package name: <none>"AndroidWifi"openMLO Information: , Is TID-To-Link negotiation supported by the AP: false, AP MLD Address: <none>, AP MLO Link Id: <none>, AP MLO Affiliated links: <none>, Vendor Data: <none>
+09-28 20:22:34.103   645   802 D WifiScoreCard: txRate: 1 txSpeed: 11
+09-28 20:22:34.103   645   802 D WifiScoreCard: network update SIGNAL_POLL "AndroidWifi" ID: 503645946 RSSI -50 txSpeed -1
+09-28 20:22:34.103   645   802 D WifiClientModeImpl[16445:wlan0]:  ClientModeImpl$L2ConnectedState screen=on 1 0 "AndroidWifi" 00:13:10:85:fe:01 rssi=-50 f=2447 sc=100 link=11 tx=0.0, 0.0, 0.0 rx=0.0 bcn=0 [on:0 tx:0 rx:0 period:3003] from screen [on:0 period:-356408329] score=100
+09-28 20:22:34.130  1031  1031 D VRI[NexusLauncherActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:22:34.130   905  1428 D WallpaperService: onVisibilityChanged(false): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@75a1289
+09-28 20:22:34.136   645   878 I Surface : Creating surface for consumer unnamed-645-20 with slotExpansion=1 for 64 slots
+09-28 20:22:34.136   645   878 I Surface : Creating surface for consumer ImageReader-288x512f1m1-645-20 with slotExpansion=1 for 64 slots
+09-28 20:22:34.136   645   878 W ImageReader_JNI: Unable to acquire a buffer item, very likely client tried to acquire more than maxImages buffers
+09-28 20:22:34.139   645   878 E ConsumerBase: [ImageReader-288x512f1m1-645-20] abandonLocked: ConsumerBase is abandoned!
+09-28 20:22:34.143  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=7}
+09-28 20:22:34.147  1031  1031 D BaseActivity: Launcher flags updated: [] -[state_started]
+09-28 20:22:34.147  1031  1031 D BaseDepthController: setSurface:
+09-28 20:22:34.147  1031  1031 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+09-28 20:22:34.147  1031  1031 D BaseDepthController: 	mBaseSurface: null
+09-28 20:22:34.148  1031  1031 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+09-28 20:22:34.148  1031  1031 D LauncherStateManager: StateManager.goToState: fromState: Normal, toState: Normal, partial trace:
+09-28 20:22:34.148  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:26)
+09-28 20:22:34.148  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:35)
+09-28 20:22:34.148  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:31)
+09-28 20:22:34.148  1031  1031 D LauncherStateManager: StateManager.onRepeatStateSetAborted: state: Normal
+09-28 20:22:34.148  1031  1031 D KeyboardStateManager: hideKeyboard
+09-28 20:22:34.148  1031  1031 D KeyboardStateManager: isImeShown: false
+09-28 20:22:34.148  1031  1031 D StatsLog: LAUNCHER_ONSTOP
+09-28 20:22:34.149  1031  1031 D StatsLog: LAUNCHER_GOOGLE_SEARCH_RESTORE_LIST_SIZE_AFTER_ACTIVITY_RESTART
+09-28 20:22:34.237  6821  6880 D ProfileInstaller: Installing profile for com.oxygen.weather
+09-28 20:22:34.520  6853  6857 I en.weather.test: Compiler allocated 5239KB to compile void android.view.ViewRootImpl.performTraversals(long)
+09-28 20:22:34.563   645  1176 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:34.564   645   956 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:34.612  1559  5171 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:22:34.618  1559  1804 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-effects-off-067/effects-off-atmospheric (3).png. Uid: 10252
+09-28 20:22:34.621  1559  1727 D WM-SystemJobScheduler: Scheduling work ID 39b80cfa-19c2-4f35-818c-d7e11253f503Job ID 167
+09-28 20:22:34.622  1559  1727 D WM-GreedyScheduler: Ignoring {WorkSpec: 9680399b-1675-49e7-b86d-150d9863e920}. Requires device idle.
+09-28 20:22:34.622  1559  1727 D WM-GreedyScheduler: Ignoring {WorkSpec: e89412db-6da0-49ea-af99-b663a82e733f}. Requires device idle.
+09-28 20:22:34.622  1559  1727 D WM-GreedyScheduler: Ignoring {WorkSpec: 3805c28b-4a41-43b9-ad0c-d84302a848db}. Requires device idle.
+09-28 20:22:34.635  6821  6835 I System.out: Installed Effects Off capture: /storage/emulated/0/Android/data/com.oxygen.weather/files/067-tp2d-effects-off-backdrop-resume/effects-off-atmospheric.png
+09-28 20:22:34.636  6821  6835 I System.out: Effects Off ATMOSPHERIC: pixel=0xFF07151D, alpha=255, text+semantics=PASS, click=1
+09-28 20:22:34.641  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/166 [CONTEXT service_id=218 ]
+09-28 20:22:34.793   494   563 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+09-28 20:22:34.847   645  1760 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:34.849   645   956 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:34.899  1559  1804 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:22:34.909  1559  1804 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-effects-off-067/effects-off-glass (3).png. Uid: 10252
+09-28 20:22:34.936  6821  6835 I System.out: Installed Effects Off capture: /storage/emulated/0/Android/data/com.oxygen.weather/files/067-tp2d-effects-off-backdrop-resume/effects-off-glass.png
+09-28 20:22:34.937  6821  6835 I System.out: Effects Off GLASS: pixel=0xFF0B1220, alpha=255, text+semantics=PASS, click=1
+09-28 20:22:34.960  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/167 [CONTEXT service_id=218 ]
+09-28 20:22:35.062   494   563 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+09-28 20:22:35.113   645  1176 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.114   645  1814 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.157  1559  1804 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:22:35.162  1559  5171 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-effects-off-067/effects-off-minimal-oled (3).png. Uid: 10252
+09-28 20:22:35.176  6821  6835 I System.out: Installed Effects Off capture: /storage/emulated/0/Android/data/com.oxygen.weather/files/067-tp2d-effects-off-backdrop-resume/effects-off-minimal-oled.png
+09-28 20:22:35.176  6821  6835 I System.out: Effects Off MINIMAL_OLED: pixel=0xFF000000, alpha=255, text+semantics=PASS, click=1
+09-28 20:22:35.183  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/168 [CONTEXT service_id=218 ]
+09-28 20:22:35.334   494   563 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+09-28 20:22:35.347   645  1100 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.347   645  1176 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.391  1559  5171 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:22:35.394  1559  5171 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-effects-off-067/effects-off-instrument (3).png. Uid: 10252
+09-28 20:22:35.409  6821  6835 I System.out: Installed Effects Off capture: /storage/emulated/0/Android/data/com.oxygen.weather/files/067-tp2d-effects-off-backdrop-resume/effects-off-instrument.png
+09-28 20:22:35.409  6821  6835 I System.out: Effects Off INSTRUMENT: pixel=0xFF0B0F14, alpha=255, text+semantics=PASS, click=1
+09-28 20:22:35.420  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/169 [CONTEXT service_id=218 ]
+09-28 20:22:35.561   494   563 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+09-28 20:22:35.580   645  1176 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.581   645   956 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.625  1559  5171 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:22:35.631  1559  5171 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-effects-off-067/effects-off-terminal (3).png. Uid: 10252
+09-28 20:22:35.645  6821  6835 I System.out: Installed Effects Off capture: /storage/emulated/0/Android/data/com.oxygen.weather/files/067-tp2d-effects-off-backdrop-resume/effects-off-terminal.png
+09-28 20:22:35.645  6821  6835 I System.out: Effects Off TERMINAL: pixel=0xFF020704, alpha=255, text+semantics=PASS, click=1
+09-28 20:22:35.656  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/170 [CONTEXT service_id=218 ]
+09-28 20:22:35.810   494   563 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+09-28 20:22:35.846   645  1176 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.846   645  1760 W AS.PlaybackActivityMon: No piid assigned for invalid/internal port id 16
+09-28 20:22:35.892  1559  5171 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:22:35.897  1559  5171 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-effects-off-067/effects-off-glass-rtl-large-font (3).png. Uid: 10252
+09-28 20:22:35.914  6821  6835 I System.out: Installed Effects Off capture: /storage/emulated/0/Android/data/com.oxygen.weather/files/067-tp2d-effects-off-backdrop-resume/effects-off-glass-rtl-large-font.png
+09-28 20:22:35.915  6821  6835 I System.out: Effects Off GLASS: pixel=0xFF0B1220, alpha=255, text+semantics=PASS, click=1
+09-28 20:22:35.918   645   956 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10253, packageName = null, attributionTag = null, token = android.os.Binder@7520e84, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-28 20:22:35.920  1031  1031 D RecentsView: onTaskDisplayChanged: 32, new displayId = 0
+09-28 20:22:35.930  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: PAUSED
+09-28 20:22:35.930  6821  6821 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=androidx.activity.ComponentActivity@46e1691
+09-28 20:22:35.933   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:22:35.935  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/171 [CONTEXT service_id=218 ]
+09-28 20:22:35.945  6853  6867 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+09-28 20:22:35.945  6853  6867 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv2_emulation.so
+09-28 20:22:35.946  6853  6867 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-28 20:22:35.947   905  1054 D SplashScreenView: Build android.window.SplashScreenView{8db47f4 V.E...... ......ID 0,0-0,0}
+09-28 20:22:35.947   905  1054 D SplashScreenView: Icon: view: null drawable: null size: 0
+09-28 20:22:35.947   905  1054 D SplashScreenView: Branding: view: android.view.View{22b1d G.ED..... ......I. 0,0-0,0 #1020574 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+09-28 20:22:35.948  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:35.948  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:35.950   645  1176 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:35.966   905  1050 I Surface : Creating surface for consumer unnamed-905-28 with slotExpansion=1 for 64 slots
+09-28 20:22:35.966   905  1050 I Surface : Creating surface for consumer VRI[test]#28(BLAST Consumer)28 with slotExpansion=1 for 64 slots
+09-28 20:22:35.971   547  4283 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:22:35.973   433   471 I netd    : tetherGetStats() -> {[]} <0.49ms>
+09-28 20:22:35.979  6853  6867 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+09-28 20:22:35.983  6853  6853 D AutofillManager: Fill dialog is enabled:false, hints=[]
+09-28 20:22:35.987   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:22:35.995   645   956 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:35.998  6853  6853 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@582f45a
+09-28 20:22:36.000  6853  6853 D VRI[InstrumentationActivityInvoker$EmptyActivity]: WindowInsets changed: 360x640 statusBars:[0,24,0,0] mandatorySystemGestures:[0,24,0,0]
+09-28 20:22:36.016  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:36.022  6853  6853 I Surface : Creating surface for consumer unnamed-6853-1 with slotExpansion=1 for 64 slots
+09-28 20:22:36.022  6853  6853 I Surface : Creating surface for consumer VRI[InstrumentationActivityInvoker$EmptyActivity]#1(BLAST Consumer)1 with slotExpansion=1 for 64 slots
+09-28 20:22:36.047  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=31 windowingMode=1 user=0 lastActiveTime=3239411] null, [id=32 windowingMode=1 user=0 lastActiveTime=3239427] null]
+09-28 20:22:36.092  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:36.124  1559  1559 D WM-DelayedWorkTracker: Scheduling work 39b80cfa-19c2-4f35-818c-d7e11253f503
+09-28 20:22:36.124  1559  1559 D WM-GreedyScheduler: Starting tracking for 39b80cfa-19c2-4f35-818c-d7e11253f503
+09-28 20:22:36.125   494   563 I APM_AudioPolicyManager: getNewOutputDevices io 13 recent device override {AUDIO_DEVICE_OUT_SPEAKER, @:}
+09-28 20:22:36.136  1559  1839 D WM-ConstraintTracker: BatteryNotLowTracker: initial state = true
+09-28 20:22:36.136  1559  1839 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: registering receiver
+09-28 20:22:36.137  1559  1839 D WM-GreedyScheduler: Constraints met: Scheduling work ID WorkGenerationalId(workSpecId=39b80cfa-19c2-4f35-818c-d7e11253f503, generation=0)
+09-28 20:22:36.138  1559  1839 D WM-Processor: Processor: processing WorkGenerationalId(workSpecId=39b80cfa-19c2-4f35-818c-d7e11253f503, generation=0)
+09-28 20:22:36.138   645   666 I ActivityTaskManager: Displayed com.oxygen.weather.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +221ms
+09-28 20:22:36.142  1559  1559 D WM-WorkerWrapper: Starting work for com.android.providers.media.photopicker.sync.ProactiveSyncWorker
+09-28 20:22:36.143  1559  6885 I PSyncWorker: Starting proactive picker sync from sync source: 1
+09-28 20:22:36.143  1559  6885 I PickerSyncTracker: Created new sync future java.util.concurrent.CompletableFuture@c7b5265[Not completed, 1 dependents]. Future map: {39b80cfa-19c2-4f35-818c-d7e11253f503=java.util.concurrent.CompletableFuture@c7b5265[Not completed, 1 dependents]}
+09-28 20:22:36.144  1559  6885 D PickerSyncController: syncAllMediaFromProvider() LOCAL, auth=com.android.providers.media.photopicker, retry=true
+09-28 20:22:36.144  1559  6885 D PickerSyncController: getSyncRequestParams() LOCAL, auth=com.android.providers.media.photopicker
+09-28 20:22:36.146  1559  6885 D PickerSyncController:    Latest ID/Gen=b818c55954eb62a0:external_primary/1229
+09-28 20:22:36.147  1559  6885 D PickerSyncController:    Cached ID/Gen=b818c55954eb62a0:external_primary/1195
+09-28 20:22:36.147  1559  6885 D PickerSyncController:    RESULT=SyncRequestParams{type=MEDIA_INCREMENTAL, gen=1195, latest=Bundle[{last_media_sync_generation=1229, media_collection_id=b818c55954eb62a0:external_primary}], pageSize=1000}
+09-28 20:22:36.147  1559  6885 I PickerSyncController: Executing SyncAdd. isLocal: true. authority: com.android.providers.media.photopicker
+09-28 20:22:36.147  1559  6885 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:22:36.147  1559  6885 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-38]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.147  1559  6885 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.147  1559  6885 D ExternalDbFacade: Token received for queryMedia = null
+09-28 20:22:36.142   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:22:36.151  1559  6885 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:22:36.151  1559  6885 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-38]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.151  1559  6885 D PickerSyncController: Saving next page token: 1790644954000|166 for key: local_provider:media_add:resume
+09-28 20:22:36.151  1559  6885 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.151  1559  6885 D PickerNotificationSender: Sending a notification for media update
+09-28 20:22:36.151  1559  6885 D PickerNotificationSender: Sending a notification for merged album media update Videos
+09-28 20:22:36.151  1559  6885 D PickerNotificationSender: Sending a notification for album media update Videos
+09-28 20:22:36.152  1559  6885 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+09-28 20:22:36.152  1559  6885 D PickerNotificationSender: Sending a notification for album media update Favorites
+09-28 20:22:36.153  1031  1031 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:22:36.153  1031  1031 D BaseActivity: Launcher flags updated: [state_started] +[state_started]
+09-28 20:22:36.153  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_user_active] +[state_resumed|state_user_active]
+09-28 20:22:36.154  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_user_active] +[]
+09-28 20:22:36.154  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_user_active] +[state_deferred_resumed]
+09-28 20:22:36.154  1031  1031 D StatsLog: LAUNCHER_ONRESUME
+09-28 20:22:36.154  1559  6885 D ExternalDbFacade: Token received for queryMedia = 1790644954000|166
+09-28 20:22:36.154  1031  1094 D QuickstepModelDelegate: notifyAppTargetEvent action=1 launchLocation=workspace/0/[-1,-1]/[1,1]
+09-28 20:22:36.156  1593  1812 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+09-28 20:22:36.156  1593  1812 I AiAiEcho: EchoTargets:
+09-28 20:22:36.156  1593  1812 I AiAiEcho: Filtered by AiAi flag check:
+09-28 20:22:36.156  1593  1812 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+09-28 20:22:36.156  1593  1812 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+09-28 20:22:36.156  1593  1812 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+09-28 20:22:36.156  1559  6885 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:22:36.156  1559  6885 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-38]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.156  1559  6885 D PickerSyncController: Clearing next page token for key: local_provider:media_add:resume
+09-28 20:22:36.156  1559  6885 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.156  1559  6885 D PickerNotificationSender: Sending a notification for media update
+09-28 20:22:36.158  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=6}
+09-28 20:22:36.158  1031  1031 I Surface : Creating surface for consumer unnamed-1031-26 with slotExpansion=1 for 64 slots
+09-28 20:22:36.159  1031  1031 I Surface : Creating surface for consumer VRI[NexusLauncherActivity]#16(BLAST Consumer)16 with slotExpansion=1 for 64 slots
+09-28 20:22:36.159  1031  1031 D BaseDepthController: setSurface:
+09-28 20:22:36.159  1031  1031 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+09-28 20:22:36.159  1031  1031 D BaseDepthController: 	mBaseSurface: Surface(name=VRI-com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity#535)/@0x59e5325
+09-28 20:22:36.159  1031  1031 V BaseDepthController: Applying blur: 0 to Surface(name=VRI-com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity#535)/@0x59e5325 applyImmediately: false
+09-28 20:22:36.159  1031  1031 D BaseDepthController: shouldBlurWorkspace: false targetState: Normal currentStableState: Normal mCurrentBlur: 0 mLauncher.getDepthBlurTargets(): [com.android.launcher3.Workspace{a2725da V.ED..... .......D 0,0-360,640 #7f0a0486 app:id/workspace}, com.android.launcher3.Hotseat{cfba0b V.ED..... .......D 0,467-360,640 #7f0a01f6 app:id/hotseat}]
+09-28 20:22:36.160  1559  6885 D PickerNotificationSender: Sending a notification for merged album media update Videos
+09-28 20:22:36.160  1559  6885 D PickerNotificationSender: Sending a notification for album media update Videos
+09-28 20:22:36.163  1559  6885 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+09-28 20:22:36.163  1559  6885 D PickerNotificationSender: Sending a notification for album media update Favorites
+09-28 20:22:36.163  1559  6885 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1790644954000|166, android.provider.extra.SYNC_GENERATION=1195, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 6
+09-28 20:22:36.163  1559  6885 I PickerSyncController: Executing SyncRemove. isLocal: true. authority: com.android.providers.media.photopicker
+09-28 20:22:36.163  1559  6885 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:22:36.163  1559  6885 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-38]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.163  1559  6885 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.173  1559  6885 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:22:36.174  1559  6885 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-38]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.174  1559  6885 D PickerSyncController: Clearing next page token for key: local_provider:media_remove:resume
+09-28 20:22:36.174  1559  6885 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:22:36.174  1559  6885 D PickerNotificationSender: Sending a notification for media update
+09-28 20:22:36.179  1559  6885 D PickerNotificationSender: Sending a notification for merged album media update Videos
+09-28 20:22:36.179  1559  6885 D PickerNotificationSender: Sending a notification for album media update Videos
+09-28 20:22:36.180  1559  6885 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+09-28 20:22:36.180  1559  6885 D PickerNotificationSender: Sending a notification for album media update Favorites
+09-28 20:22:36.180  1559  6885 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1790644954000|166, android.provider.extra.SYNC_GENERATION=1195, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 0
+09-28 20:22:36.180  1559  6885 I PickerSyncTracker: Marked sync future complete for work id: 39b80cfa-19c2-4f35-818c-d7e11253f503. Future map: {}
+09-28 20:22:36.180  1559  6885 I PSyncWorker: Completed picker proactive sync complete from local provider.
+09-28 20:22:36.181  1559  1727 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=39b80cfa-19c2-4f35-818c-d7e11253f503, tags={ com.android.providers.media.photopicker.sync.ProactiveSyncWorker } ]
+09-28 20:22:36.184  1559  1559 D WM-Processor: Processor 39b80cfa-19c2-4f35-818c-d7e11253f503 executed; reschedule = false
+09-28 20:22:36.184  1559  1559 D WM-GreedyScheduler: Stopping tracking for WorkGenerationalId(workSpecId=39b80cfa-19c2-4f35-818c-d7e11253f503, generation=0)
+09-28 20:22:36.187  1559  1727 D WM-GreedyScheduler: Cancelling work ID 39b80cfa-19c2-4f35-818c-d7e11253f503
+09-28 20:22:36.189  1559  1727 D WM-GreedyScheduler: Ignoring {WorkSpec: 9680399b-1675-49e7-b86d-150d9863e920}. Requires device idle.
+09-28 20:22:36.189  1559  1727 D WM-GreedyScheduler: Ignoring {WorkSpec: e89412db-6da0-49ea-af99-b663a82e733f}. Requires device idle.
+09-28 20:22:36.189  1559  1727 D WM-GreedyScheduler: Ignoring {WorkSpec: 3805c28b-4a41-43b9-ad0c-d84302a848db}. Requires device idle.
+09-28 20:22:36.190  1559  1727 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: unregistering receiver
+09-28 20:22:36.191  1031  1031 D ShortcutAndWidgetContainer: appWidgetScale - [x,y]: [1.0,1.0]
+09-28 20:22:36.191  1031  1031 D NavigableAppWidgetHostView: updateScale - [fitScale,bounceScale]: [1.0,1.0]
+09-28 20:22:36.191  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:36.191  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:36.191  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:36.191  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:22:36.191  1031  1031 I SsBaseTemplateCard: Secondary card pane is null
+09-28 20:22:36.203   905  1428 D WallpaperService: onVisibilityChanged(true): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@75a1289
+09-28 20:22:36.204  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:36.221   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:22:36.222   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:22:36.237  6821  6821 D VRI[ComponentActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:22:36.248  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: STOPPED
+09-28 20:22:36.248  6821  6821 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=androidx.activity.ComponentActivity@46e1691
+09-28 20:22:36.251  1031  1031 D LauncherStateManager: StateManager.cancelAnimation: animation ongoing: false, partial trace:
+09-28 20:22:36.251  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.setCurrentAnimation(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:59)
+09-28 20:22:36.251  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:712)
+09-28 20:22:36.251  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager$WallpaperOpenLauncherAnimationRunner.onAnimationStart(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:135)
+09-28 20:22:36.252  1031  1031 D LauncherStateManager: StateManager.createAtomicAnimation: fromState: Normal, toState: Normal, partial trace:
+09-28 20:22:36.252  1031  1031 D LauncherStateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.prepareToAnimate(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:19)
+09-28 20:22:36.252  1031  1031 D LauncherStateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.<init>(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:10)
+09-28 20:22:36.252  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:753)
+09-28 20:22:36.252  1031  1031 D AllAppsTransitionController: shouldProtectHeader: false skipScrim: true state: Normal stateManager.getState(): Normal
+09-28 20:22:36.252  1031  1031 D KeyboardInsetsHandler: removePendingImeController: pendingImeController=null
+09-28 20:22:36.253  1031  1031 D b/311077782: LauncherAnimationRunner.setAnimation
+09-28 20:22:36.255  6821  6821 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null
+09-28 20:22:36.256  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@46e1691 in: DESTROYED
+09-28 20:22:36.256  6821  6821 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+09-28 20:22:36.261  6821  6835 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@1d1d05d]
+09-28 20:22:36.263  6821  6821 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:22:36.266  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:22:36.267  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] +[state_window_focused]
+09-28 20:22:36.273   645   763 W InputChannel-JNI: Channel already disposed.
+09-28 20:22:36.273  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259
+09-28 20:22:36.276  6821  6835 I TestRunner: finished: allThemesEffectsOffAreOpaqueStaticAndPreserveCallerContent(com.oxygen.weather.ui.themeengine.components.ProductionBackdropEffectsOffTest)

@@ -60,7 +60,7 @@ class ProductionSharedComponentsTest {
                     ProductionPageHeader(theme, "Now", "Example location · Unknown source")
                     ProductionPageSelector(theme, pageNames, selectedPage, onSelected = { selectedPage = it })
                     ProductionCurrentHero(theme, sampleCurrent)
-                    ProductionMetricTile(theme, "WIND LABEL", "Unavailable (source withheld)", "Exact supporting detail")
+                    ProductionMetricTile(theme, sampleMetricLabel, sampleMetricHeadline, sampleMetricSupport)
                     ProductionMetricTile(theme, "OPTIONAL", "0%", null)
                 }
             }
@@ -129,7 +129,7 @@ class ProductionSharedComponentsTest {
                     ProductionPageHeader(theme, "Now", "Example location · Unknown source")
                     ProductionPageSelector(theme, pageNames, 0, {})
                     ProductionCurrentHero(theme, sampleCurrent)
-                    ProductionMetricTile(theme, "WIND LABEL", "Unavailable (source withheld)", null)
+                    ProductionMetricTile(theme, sampleMetricLabel, sampleMetricHeadline, null)
                 }
             }
         }
@@ -157,7 +157,10 @@ class ProductionSharedComponentsTest {
         compose.onNodeWithText("Supporting detail").assertDoesNotExist()
     }
 
-    private companion object {
+    companion object {
+        const val sampleMetricLabel = "WIND LABEL"
+        const val sampleMetricHeadline = "Unavailable (source withheld)"
+        const val sampleMetricSupport = "Exact supporting detail"
         val sampleCurrent = CurrentPresentation(
             location = "Example location",
             temperature = "Unavailable",

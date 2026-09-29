@@ -219,7 +219,7 @@ class ProductionDetailsComponentsTest {
         File(directory, "manifest.txt").writeText(content)
     }
 
-    private companion object {
+    companion object {
         const val source = "Model estimate · Open-Meteo"
         const val updated = "Updated Sep 26, 2026 at 14:35 CDT"
         const val support = "Relative humidity from the normalized source"

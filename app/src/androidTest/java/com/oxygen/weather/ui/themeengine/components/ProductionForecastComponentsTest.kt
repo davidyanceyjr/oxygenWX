@@ -205,7 +205,7 @@ class ProductionForecastComponentsTest {
         }
     }
 
-    private companion object {
+    companion object {
         val hourlyEntries = listOf(
             HourlyEntryPresentation(
                 time = "06:00",

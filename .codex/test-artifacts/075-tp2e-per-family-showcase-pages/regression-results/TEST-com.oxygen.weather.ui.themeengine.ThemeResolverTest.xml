@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.oxygen.weather.ui.themeengine.ThemeResolverTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-09-29T01:24:31.825Z" hostname="marriot" time="0.032">
+  <properties/>
+  <testcase name="simpleLayoutChangesGeometryOnlyAndNeverShrinksTouchTargets" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.012"/>
+  <testcase name="resolvingEverySupportedCombinationIsDeterministicAndRetainsIdentity" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.005"/>
+  <testcase name="allSixtyCellsMeetActualHighContrastPairsAndOpacityRules" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.008"/>
+  <testcase name="highContrastPreservesAppearanceIdentityAndAppliesOpacityPolicy" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.002"/>
+  <testcase name="effectsLevelsFollowEachThemeDeclaredMotionPolicy" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.003"/>
+  <testcase name="effectsOffIsSolidStaticOpaqueAndCompleteForEveryTheme" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.001"/>
+  <testcase name="wcagContrastMathCoversKnownValuesCompositingAndThresholdNeighbors" classname="com.oxygen.weather.ui.themeengine.ThemeResolverTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

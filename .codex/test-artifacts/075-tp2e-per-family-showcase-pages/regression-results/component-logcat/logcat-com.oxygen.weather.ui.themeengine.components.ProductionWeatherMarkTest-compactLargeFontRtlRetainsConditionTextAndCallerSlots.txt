@@ -1,0 +1,264 @@
+09-28 20:23:32.004  6821  6835 I TestRunner: started: compactLargeFontRtlRetainsConditionTextAndCallerSlots(com.oxygen.weather.ui.themeengine.components.ProductionWeatherMarkTest)
+09-28 20:23:32.004  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=57 windowingMode=1 user=0 lastActiveTime=3294942] null, [id=58 windowingMode=1 user=0 lastActiveTime=3295252] null]
+09-28 20:23:32.012  6821  6835 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@1ce6c4a]
+09-28 20:23:32.015  6821  6835 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-28 20:23:32.022   645  1177 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10252, packageName = null, attributionTag = null, token = android.os.Binder@7520e84, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-28 20:23:32.044   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:23:32.046  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.062  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] -[]
+09-28 20:23:32.062  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused] -[state_user_active]
+09-28 20:23:32.062  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_window_focused] -[state_resumed|state_deferred_resumed]
+09-28 20:23:32.062  1031  1031 W SplitSelectStateCtor: Missing session instanceIds
+09-28 20:23:32.062  1031  1031 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+09-28 20:23:32.072  1031  1031 D RecentsView: onTaskRemoved: 57, not handling task stack changes
+09-28 20:23:32.072  1031  1031 D RecentsView: onTaskRemoved: 57, not handling task stack changes
+09-28 20:23:32.072  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.072  1031  1031 D RecentsView: onTaskDisplayChanged: 59, new displayId = 0
+09-28 20:23:32.072  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.076  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: PRE_ON_CREATE
+09-28 20:23:32.076  6821  6821 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+09-28 20:23:32.080  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: CREATED
+09-28 20:23:32.080  6821  6821 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=androidx.activity.ComponentActivity@2ed321c
+09-28 20:23:32.081  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: STARTED
+09-28 20:23:32.081  6821  6821 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=androidx.activity.ComponentActivity@2ed321c
+09-28 20:23:32.082  6821  6821 D AutofillManager: Fill dialog is enabled:false, hints=[]
+09-28 20:23:32.082  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: RESUMED
+09-28 20:23:32.082  6821  6821 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=androidx.activity.ComponentActivity@2ed321c
+09-28 20:23:32.086   645   722 W InputChannel-JNI: Channel already disposed.
+09-28 20:23:32.092   905  1054 D SplashScreenView: Build android.window.SplashScreenView{bd5fb5c V.E...... ......ID 0,0-0,0}
+09-28 20:23:32.092   905  1054 D SplashScreenView: Icon: view: null drawable: null size: 0
+09-28 20:23:32.092   905  1054 D SplashScreenView: Branding: view: android.view.View{1da3e65 G.ED..... ......I. 0,0-0,0 #1020574 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+09-28 20:23:32.103  6821  6821 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@2b4ca95
+09-28 20:23:32.104  6821  6821 D VRI[ComponentActivity]: WindowInsets changed: 360x640 statusBars:[0,24,0,0] mandatorySystemGestures:[0,24,0,0]
+09-28 20:23:32.115  6821  6821 I Surface : Creating surface for consumer unnamed-6821-15 with slotExpansion=1 for 64 slots
+09-28 20:23:32.115  6821  6821 I Surface : Creating surface for consumer VRI[ComponentActivity]#15(BLAST Consumer)15 with slotExpansion=1 for 64 slots
+09-28 20:23:32.134   645   722 W InputChannel-JNI: Channel already disposed.
+09-28 20:23:32.146   905  1050 I Surface : Creating surface for consumer unnamed-905-54 with slotExpansion=1 for 64 slots
+09-28 20:23:32.147   905  1050 I Surface : Creating surface for consumer VRI[weather]#54(BLAST Consumer)54 with slotExpansion=1 for 64 slots
+09-28 20:23:32.168  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.213  1031  1031 D BaseActivity: Launcher flags updated: [state_started] -[state_window_focused]
+09-28 20:23:32.222  1559  1559 D WM-DelayedWorkTracker: Scheduling work 550aac91-9167-45e6-a837-8e63341843e3
+09-28 20:23:32.223  1559  1559 D WM-GreedyScheduler: Starting tracking for 550aac91-9167-45e6-a837-8e63341843e3
+09-28 20:23:32.229  1559  1727 D WM-ConstraintTracker: BatteryNotLowTracker: initial state = true
+09-28 20:23:32.229  1559  1727 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: registering receiver
+09-28 20:23:32.231  1559  1839 D WM-GreedyScheduler: Constraints met: Scheduling work ID WorkGenerationalId(workSpecId=550aac91-9167-45e6-a837-8e63341843e3, generation=0)
+09-28 20:23:32.232  1559  1839 D WM-Processor: Processor: processing WorkGenerationalId(workSpecId=550aac91-9167-45e6-a837-8e63341843e3, generation=0)
+09-28 20:23:32.237  1559  1559 D WM-WorkerWrapper: Starting work for com.android.providers.media.photopicker.sync.ProactiveSyncWorker
+09-28 20:23:32.239  1559  7038 I PSyncWorker: Starting proactive picker sync from sync source: 1
+09-28 20:23:32.241  1559  7038 I PickerSyncTracker: Created new sync future java.util.concurrent.CompletableFuture@742fa00[Not completed, 1 dependents]. Future map: {550aac91-9167-45e6-a837-8e63341843e3=java.util.concurrent.CompletableFuture@742fa00[Not completed, 1 dependents]}
+09-28 20:23:32.251  1559  7038 D PickerSyncController: syncAllMediaFromProvider() LOCAL, auth=com.android.providers.media.photopicker, retry=true
+09-28 20:23:32.252  1559  7038 D PickerSyncController: getSyncRequestParams() LOCAL, auth=com.android.providers.media.photopicker
+09-28 20:23:32.259  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.266  1559  7038 D PickerSyncController:    Latest ID/Gen=b818c55954eb62a0:external_primary/1485
+09-28 20:23:32.267  1559  7038 D PickerSyncController:    Cached ID/Gen=b818c55954eb62a0:external_primary/1461
+09-28 20:23:32.267  1559  7038 D PickerSyncController:    RESULT=SyncRequestParams{type=MEDIA_INCREMENTAL, gen=1461, latest=Bundle[{last_media_sync_generation=1485, media_collection_id=b818c55954eb62a0:external_primary}], pageSize=1000}
+09-28 20:23:32.271  1559  7038 I PickerSyncController: Executing SyncAdd. isLocal: true. authority: com.android.providers.media.photopicker
+09-28 20:23:32.273  1559  7038 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:23:32.273  1559  7038 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-52]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.274  1559  7038 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.274  1559  7038 D ExternalDbFacade: Token received for queryMedia = null
+09-28 20:23:32.278  1559  7038 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:23:32.289   645   666 I ActivityTaskManager: Displayed com.oxygen.weather/androidx.activity.ComponentActivity for user 0: +126ms
+09-28 20:23:32.295  1559  7038 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-52]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.298  1559  7038 D PickerSyncController: Saving next page token: 1790645010000|209 for key: local_provider:media_add:resume
+09-28 20:23:32.298  1559  7038 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.301  1559  7038 D PickerNotificationSender: Sending a notification for media update
+09-28 20:23:32.302  1559  7038 D PickerNotificationSender: Sending a notification for merged album media update Videos
+09-28 20:23:32.303  1559  7038 D PickerNotificationSender: Sending a notification for album media update Videos
+09-28 20:23:32.304  1559  7038 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+09-28 20:23:32.305  1559  7038 D PickerNotificationSender: Sending a notification for album media update Favorites
+09-28 20:23:32.308  1031  1031 D WorkspaceRevealAnim: onAnimationEnd: workspace alpha = 1.0
+09-28 20:23:32.309  1559  7038 D ExternalDbFacade: Token received for queryMedia = 1790645010000|209
+09-28 20:23:32.313   547  2545 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:23:32.319  1559  7038 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:23:32.319  1559  7038 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-52]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.322  1559  7038 D PickerSyncController: Clearing next page token for key: local_provider:media_add:resume
+09-28 20:23:32.322  1559  7038 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.322  1559  7038 D PickerNotificationSender: Sending a notification for media update
+09-28 20:23:32.323  1559  7038 D PickerNotificationSender: Sending a notification for merged album media update Videos
+09-28 20:23:32.323  1559  7038 D PickerNotificationSender: Sending a notification for album media update Videos
+09-28 20:23:32.323  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=58 windowingMode=1 user=0 lastActiveTime=3295252] null, [id=59 windowingMode=1 user=0 lastActiveTime=3295556] null]
+09-28 20:23:32.329  1559  7038 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+09-28 20:23:32.329  1559  7038 D PickerNotificationSender: Sending a notification for album media update Favorites
+09-28 20:23:32.330  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.332  6853  6853 D VRI[InstrumentationActivityInvoker$EmptyActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:23:32.333  1559  7038 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1790645010000|209, android.provider.extra.SYNC_GENERATION=1461, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 3
+09-28 20:23:32.333  1559  7038 I PickerSyncController: Executing SyncRemove. isLocal: true. authority: com.android.providers.media.photopicker
+09-28 20:23:32.333  1559  7038 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:23:32.333  1559  7038 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-52]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.333  1559  7038 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.340  1559  7038 D PickerSyncLockManager: Trying to acquire lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = [] with timeout.
+09-28 20:23:32.340  1559  7038 D CloseableReentrantLock: Successfully acquired lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Locked by thread pool-4-thread-52]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.340  1559  7038 D PickerSyncController: Clearing next page token for key: local_provider:media_remove:resume
+09-28 20:23:32.340  1559  7038 D CloseableReentrantLock: Successfully released lock com.android.providers.media.photopicker.sync.CloseableReentrantLock@a25c5f2[Unlocked]. Lock Name = CLOUD_PROVIDER_LOCK. Threads that may be waiting to acquire this lock = []
+09-28 20:23:32.340  1559  7038 D PickerNotificationSender: Sending a notification for media update
+09-28 20:23:32.345  1559  7038 D PickerNotificationSender: Sending a notification for merged album media update Videos
+09-28 20:23:32.345  1559  7038 D PickerNotificationSender: Sending a notification for album media update Videos
+09-28 20:23:32.345  1559  7038 D PickerNotificationSender: Sending a notification for merged album media update Favorites
+09-28 20:23:32.345  1559  7038 D PickerNotificationSender: Sending a notification for album media update Favorites
+09-28 20:23:32.347  1559  7038 I PickerSyncController: Paged sync successful. QueryArgs: Bundle[{android.provider.extra.PAGE_TOKEN=1790645010000|209, android.provider.extra.SYNC_GENERATION=1461, android.provider.extra.PAGE_SIZE=1000}] Total Rows: 0
+09-28 20:23:32.347  1559  7038 I PickerSyncTracker: Marked sync future complete for work id: 550aac91-9167-45e6-a837-8e63341843e3. Future map: {}
+09-28 20:23:32.347  1559  7038 I PSyncWorker: Completed picker proactive sync complete from local provider.
+09-28 20:23:32.348  1559  1727 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=550aac91-9167-45e6-a837-8e63341843e3, tags={ com.android.providers.media.photopicker.sync.ProactiveSyncWorker } ]
+09-28 20:23:32.349  1559  1559 D WM-Processor: Processor 550aac91-9167-45e6-a837-8e63341843e3 executed; reschedule = false
+09-28 20:23:32.349  1559  1559 D WM-GreedyScheduler: Stopping tracking for WorkGenerationalId(workSpecId=550aac91-9167-45e6-a837-8e63341843e3, generation=0)
+09-28 20:23:32.351  1559  1839 D WM-GreedyScheduler: Cancelling work ID 550aac91-9167-45e6-a837-8e63341843e3
+09-28 20:23:32.352  1559  1839 D WM-GreedyScheduler: Ignoring {WorkSpec: 9680399b-1675-49e7-b86d-150d9863e920}. Requires device idle.
+09-28 20:23:32.352  1559  1839 D WM-GreedyScheduler: Ignoring {WorkSpec: e89412db-6da0-49ea-af99-b663a82e733f}. Requires device idle.
+09-28 20:23:32.352  1559  1839 D WM-GreedyScheduler: Ignoring {WorkSpec: 3805c28b-4a41-43b9-ad0c-d84302a848db}. Requires device idle.
+09-28 20:23:32.354  1559  1727 D WM-BrdcstRcvrCnstrntTrc: BatteryNotLowTracker: unregistering receiver
+09-28 20:23:32.355  6853  6853 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null
+09-28 20:23:32.355  6853  6853 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:23:32.368  1031  1031 D RecentsView: onTaskRemoved: 58, not handling task stack changes
+09-28 20:23:32.368  1031  1031 D RecentsView: onTaskRemoved: 58, not handling task stack changes
+09-28 20:23:32.371  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:32.386   645   763 W InputChannel-JNI: Channel already disposed.
+09-28 20:23:32.387  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2259
+09-28 20:23:32.388  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+09-28 20:23:32.389  1446  1446 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1446 onStartInput(EditorInfo{EditorInfo{packageName=com.oxygen.weather, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+09-28 20:23:32.389  1446  1446 W AndroidIME: LatinIMEBase.updateInputViewCoverNavigation():327 Null input view, cannot update padding!
+09-28 20:23:32.396  1446  1446 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+09-28 20:23:32.652   905  1428 D WallpaperService: onVisibilityChanged(false): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@75a1289
+09-28 20:23:32.652  1031  1031 D VRI[NexusLauncherActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:23:32.655  1031  1031 D BaseActivity: Launcher flags updated: [] -[state_started]
+09-28 20:23:32.655  1031  1031 D BaseDepthController: setSurface:
+09-28 20:23:32.655  1031  1031 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+09-28 20:23:32.655  1031  1031 D BaseDepthController: 	mBaseSurface: null
+09-28 20:23:32.656  1031  1031 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+09-28 20:23:32.662  1031  1031 D LauncherStateManager: StateManager.goToState: fromState: Normal, toState: Normal, partial trace:
+09-28 20:23:32.662  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:26)
+09-28 20:23:32.662  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:35)
+09-28 20:23:32.662  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:31)
+09-28 20:23:32.662  1031  1031 D LauncherStateManager: StateManager.onRepeatStateSetAborted: state: Normal
+09-28 20:23:32.662  1031  1031 D KeyboardStateManager: hideKeyboard
+09-28 20:23:32.662  1031  1031 D KeyboardStateManager: isImeShown: false
+09-28 20:23:32.662  1031  1031 D StatsLog: LAUNCHER_ONSTOP
+09-28 20:23:32.664  1031  1031 D StatsLog: LAUNCHER_GOOGLE_SEARCH_RESTORE_LIST_SIZE_AFTER_ACTIVITY_RESTART
+09-28 20:23:32.664  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=7}
+09-28 20:23:32.665  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=7}
+09-28 20:23:32.680   645   878 I Surface : Creating surface for consumer unnamed-645-34 with slotExpansion=1 for 64 slots
+09-28 20:23:32.680   645   878 I Surface : Creating surface for consumer ImageReader-288x512f1m1-645-34 with slotExpansion=1 for 64 slots
+09-28 20:23:32.681   645   878 W ImageReader_JNI: Unable to acquire a buffer item, very likely client tried to acquire more than maxImages buffers
+09-28 20:23:32.682   645   878 E ConsumerBase: [ImageReader-288x512f1m1-645-34] abandonLocked: ConsumerBase is abandoned!
+09-28 20:23:32.801   645   685 I WifiService: isFeatureSupported uid=1000 returns [WIFI_FEATURE_INFRA, WIFI_FEATURE_P2P, WIFI_FEATURE_MOBILE_HOTSPOT, WIFI_FEATURE_WPA3_SAE, WIFI_FEATURE_WPA3_SUITE_B, WIFI_FEATURE_OWE, WIFI_FEATURE_DPP, WIFI_FEATURE_AP_RAND_MAC, WIFI_FEATURE_MBO, WIFI_FEATURE_FILS_SHA256, WIFI_FEATURE_FILS_SHA384, WIFI_FEATURE_SAE_PK, WIFI_FEATURE_DPP_ENROLLEE_RESPONDER, WIFI_FEATURE_PASSPOINT_TERMS_AND_CONDITIONS, WIFI_FEATURE_WFD_R2, WIFI_FEATURE_DECORATED_IDENTITY, WIFI_FEATURE_TRUST_ON_FIRST_USE, WIFI_FEATURE_SET_TLS_MINIMUM_VERSION, WIFI_FEATURE_TLS_V1_3, WIFI_FEATURE_WEP, WIFI_FEATURE_WPA_PERSONAL]
+09-28 20:23:32.987  1023  1192 D SatelliteController: isInCarrierRoamingNbIotNtn: satellite is disabled
+09-28 20:23:32.988  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+09-28 20:23:32.989  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:23:32.990  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:23:32.990  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:23:32.991  1023  1192 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+09-28 20:23:32.992  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+09-28 20:23:32.992  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:23:32.993  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:23:32.993  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+09-28 20:23:32.993  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+09-28 20:23:32.993  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:23:32.993  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:23:32.993  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:23:32.993  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Checking connect type from PLMN config for subId: 1
+09-28 20:23:32.993  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:23:32.993  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:23:32.993  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:23:32.993  1023  1192 D SatelliteController: getSatellitePerPlmnConfiguration: invalid subId or not supported via carrier.
+09-28 20:23:32.993  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: config: null
+09-28 20:23:32.993  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:23:32.993  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:23:32.993  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectTypeViaConfigUpdater: return null (satelliteConfig is null)
+09-28 20:23:32.996  1023  1192 D SatelliteController: getCarrierRoamingNtnConnectType: Falling back to global carrier config connect type: 0
+09-28 20:23:32.996  1023  1192 D TelephonyConfigUpdateInstallReceiver: getConfigParser: domain=satellite
+09-28 20:23:32.997  1023  1192 V SatelliteController: satelliteConfigParser is not ready
+09-28 20:23:32.997  1023  1192 D SatelliteController: isSatelliteAttachSupportedViaConfigupdater: return null (satelliteConfig is null)
+09-28 20:23:33.152  1559  5171 W MediaProvider: isAppCloneUserPair for user 0: false
+09-28 20:23:33.159  1559  5171 I MediaProvider: Open with lower FS for /storage/emulated/0/Download/oxygen-weather-d29/weather-marks-hero-40dp-compact-font-rtl-effects-off (7).png. Uid: 10252
+09-28 20:23:33.161  1559  1839 D WM-SystemJobScheduler: Scheduling work ID 6ce4b8ea-aa3b-47a9-962b-27c6b674a29eJob ID 182
+09-28 20:23:33.164  1559  1839 D WM-GreedyScheduler: Ignoring {WorkSpec: 9680399b-1675-49e7-b86d-150d9863e920}. Requires device idle.
+09-28 20:23:33.164  1559  1839 D WM-GreedyScheduler: Ignoring {WorkSpec: e89412db-6da0-49ea-af99-b663a82e733f}. Requires device idle.
+09-28 20:23:33.164  1559  1839 D WM-GreedyScheduler: Ignoring {WorkSpec: 3805c28b-4a41-43b9-ad0c-d84302a848db}. Requires device idle.
+09-28 20:23:33.208   645  1956 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10253, packageName = null, attributionTag = null, token = android.os.Binder@7520e84, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-28 20:23:33.209  1228  3535 I UriTaskContentObserver: Throttling content uri change event for content://media/external/file/212 [CONTEXT service_id=218 ]
+09-28 20:23:33.213  1031  1031 D RecentsView: onTaskDisplayChanged: 60, new displayId = 0
+09-28 20:23:33.223   905  1054 D SplashScreenView: Build android.window.SplashScreenView{cdf0da7 V.E...... ......ID 0,0-0,0}
+09-28 20:23:33.223   905  1054 D SplashScreenView: Icon: view: null drawable: null size: 0
+09-28 20:23:33.223   905  1054 D SplashScreenView: Branding: view: android.view.View{74be254 G.ED..... ......I. 0,0-0,0 #1020574 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+09-28 20:23:33.227   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:23:33.229  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:33.230  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: PAUSED
+09-28 20:23:33.230  6821  6821 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=androidx.activity.ComponentActivity@2ed321c
+09-28 20:23:33.231   547  2545 W libbinder.IPCThreadState: Sending oneway calls to frozen process.
+09-28 20:23:33.232  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:33.234   645  1953 W InputChannel-JNI: Channel already disposed.
+09-28 20:23:33.238  6853  6867 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv1_CM_emulation.so
+09-28 20:23:33.239  6853  6867 I GFXSTREAM: [eglDisplay.cpp(297)] Opening libGLESv2_emulation.so
+09-28 20:23:33.243  6853  6867 W libc    : Access denied finding property "vendor.mesa.virtgpu.kumquat"
+09-28 20:23:33.251   905  1050 I Surface : Creating surface for consumer unnamed-905-55 with slotExpansion=1 for 64 slots
+09-28 20:23:33.252   905  1050 I Surface : Creating surface for consumer VRI[test]#55(BLAST Consumer)55 with slotExpansion=1 for 64 slots
+09-28 20:23:33.264  6853  6853 D AutofillManager: Fill dialog is enabled:false, hints=[]
+09-28 20:23:33.267  6853  6867 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+09-28 20:23:33.285   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:23:33.293   645  1176 W InputChannel-JNI: Channel already disposed.
+09-28 20:23:33.297  6853  6853 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@bd74319
+09-28 20:23:33.298  6853  6853 D VRI[InstrumentationActivityInvoker$EmptyActivity]: WindowInsets changed: 360x640 statusBars:[0,24,0,0] mandatorySystemGestures:[0,24,0,0]
+09-28 20:23:33.306  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:33.307  6853  6853 I Surface : Creating surface for consumer unnamed-6853-15 with slotExpansion=1 for 64 slots
+09-28 20:23:33.308  6853  6853 I Surface : Creating surface for consumer VRI[InstrumentationActivityInvoker$EmptyActivity]#15(BLAST Consumer)15 with slotExpansion=1 for 64 slots
+09-28 20:23:33.360  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:33.361  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=59 windowingMode=1 user=0 lastActiveTime=3296709] null, [id=60 windowingMode=1 user=0 lastActiveTime=3296726] null]
+09-28 20:23:33.380   447  7000 D android.hardware.audio@7.1-impl.ranchu: 544 frames of silence written
+09-28 20:23:33.423   645   666 I ActivityTaskManager: Displayed com.oxygen.weather.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +214ms
+09-28 20:23:33.431   905   959 W DisconnectHandler: No disconnect change found in the transition, not handling request.
+09-28 20:23:33.451  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:33.455  1031  1031 D BaseActivity: Launcher flags updated: [state_started] +[state_started]
+09-28 20:23:33.456  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_user_active] +[state_resumed|state_user_active]
+09-28 20:23:33.462  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_user_active] +[]
+09-28 20:23:33.463  1031  1031 D SmartspaceInteractor: notifySmartspaceEvent: SmartspaceTargetEvent{mSmartspaceTarget=null, mSmartspaceActionId='null', mEventType=6}
+09-28 20:23:33.467  1031  1031 I Surface : Creating surface for consumer unnamed-1031-40 with slotExpansion=1 for 64 slots
+09-28 20:23:33.468  1031  1031 I Surface : Creating surface for consumer VRI[NexusLauncherActivity]#30(BLAST Consumer)30 with slotExpansion=1 for 64 slots
+09-28 20:23:33.471  1031  1031 D BaseDepthController: setSurface:
+09-28 20:23:33.471  1031  1031 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+09-28 20:23:33.471  1031  1031 D BaseDepthController: 	mBaseSurface: Surface(name=VRI-com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity#1039)/@0x59e5325
+09-28 20:23:33.472  1031  1031 V BaseDepthController: Applying blur: 0 to Surface(name=VRI-com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity#1039)/@0x59e5325 applyImmediately: false
+09-28 20:23:33.473  1031  1031 D BaseDepthController: shouldBlurWorkspace: false targetState: Normal currentStableState: Normal mCurrentBlur: 0 mLauncher.getDepthBlurTargets(): [com.android.launcher3.Workspace{a2725da V.ED..... .......D 0,0-360,640 #7f0a0486 app:id/workspace}, com.android.launcher3.Hotseat{cfba0b V.ED..... .......D 0,467-360,640 #7f0a01f6 app:id/hotseat}]
+09-28 20:23:33.487   905  1428 D WallpaperService: onVisibilityChanged(true): com.android.systemui.wallpapers.ImageWallpaper$CanvasEngine@75a1289
+09-28 20:23:33.506  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_user_active] +[state_deferred_resumed]
+09-28 20:23:33.512  1031  1031 D StatsLog: LAUNCHER_ONRESUME
+09-28 20:23:33.513  1593  1812 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
+09-28 20:23:33.513  1593  1812 I AiAiEcho: EchoTargets:
+09-28 20:23:33.513  1593  1812 I AiAiEcho: Filtered by AiAi flag check:
+09-28 20:23:33.513  1593  1812 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
+09-28 20:23:33.514  1593  1812 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
+09-28 20:23:33.514  1593  1812 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
+09-28 20:23:33.522  1031  1094 D QuickstepModelDelegate: notifyAppTargetEvent action=1 launchLocation=workspace/0/[-1,-1]/[1,1]
+09-28 20:23:33.525  1031  1031 D ShortcutAndWidgetContainer: appWidgetScale - [x,y]: [1.0,1.0]
+09-28 20:23:33.525  1031  1031 D NavigableAppWidgetHostView: updateScale - [fitScale,bounceScale]: [1.0,1.0]
+09-28 20:23:33.525  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:23:33.525  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:23:33.525  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:23:33.525  1031  1031 D SsBaseTemplateCard: Passed-in item info is null
+09-28 20:23:33.525  1031  1031 I SsBaseTemplateCard: Secondary card pane is null
+09-28 20:23:33.567   433   471 I netd    : tetherGetStats() -> {[]} <0.45ms>
+09-28 20:23:33.574   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:23:33.574   499   533 W skia    : AGTM parsing failed flags.readFromStream(s) at 159
+09-28 20:23:33.596  6821  6821 D VRI[ComponentActivity]: visibilityChanged oldVisibility=true newVisibility=false
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: StateManager.cancelAnimation: animation ongoing: false, partial trace:
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: 	at com.android.launcher3.statemanager.StateManager.setCurrentAnimation(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:59)
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:712)
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager$WallpaperOpenLauncherAnimationRunner.onAnimationStart(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:135)
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: StateManager.createAtomicAnimation: fromState: Normal, toState: Normal, partial trace:
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.prepareToAnimate(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:19)
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.<init>(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:10)
+09-28 20:23:33.605  1031  1031 D LauncherStateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(go/retraceme dc5b05c43537c6aa1d671c685c710819682fcc95b6af33c0ce7f88e1808452b7:753)
+09-28 20:23:33.605  1031  1031 D AllAppsTransitionController: shouldProtectHeader: false skipScrim: true state: Normal stateManager.getState(): Normal
+09-28 20:23:33.606  1031  1031 D KeyboardInsetsHandler: removePendingImeController: pendingImeController=null
+09-28 20:23:33.606  1031  1031 D b/311077782: LauncherAnimationRunner.setAnimation
+09-28 20:23:33.619  1031  1031 D BaseActivity: Launcher flags updated: [state_started|state_resumed|state_deferred_resumed|state_window_focused|state_user_active] +[state_window_focused]
+09-28 20:23:33.622  1031  1089 D PreloadThumbnailUseCase: Preloading thumbnails for task ids: [[id=59 windowingMode=1 user=0 lastActiveTime=3296709] null, [id=60 windowingMode=1 user=0 lastActiveTime=3296917] null]
+09-28 20:23:33.624  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: STOPPED
+09-28 20:23:33.625  6821  6821 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=androidx.activity.ComponentActivity@2ed321c
+09-28 20:23:33.632   645   763 W InputChannel-JNI: Channel already disposed.
+09-28 20:23:33.634  6821  6821 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null
+09-28 20:23:33.635  6821  6821 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@2ed321c in: DESTROYED
+09-28 20:23:33.635  6821  6821 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+09-28 20:23:33.639  6821  6835 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@1ce6c4a]
+09-28 20:23:33.642  6821  6821 D ViewRootImpl: Skipping stats log for color mode
+09-28 20:23:33.644  1031  1031 D RecentTasksList: invalidateLoadedTasks - previous requestLoadId: -1
+09-28 20:23:33.653  6821  6835 I TestRunner: finished: compactLargeFontRtlRetainsConditionTextAndCallerSlots(com.oxygen.weather.ui.themeengine.components.ProductionWeatherMarkTest)
