@@ -64,6 +64,25 @@ class ProductionSharedShowcaseTest {
 
     @Test
     fun allFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes() {
+        runShowcase(ThemeEffectsLevel.SUBTLE, ShowcasePage.entries.toSet(), "subtle", 30)
+    }
+
+    @Test
+    fun effectsOffFirstThreeFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes() {
+        runShowcase(
+            ThemeEffectsLevel.OFF,
+            setOf(ShowcasePage.PAGE_IDENTITY, ShowcasePage.CURRENT_CONDITIONS, ShowcasePage.FORECAST_WINDOWS),
+            "effects-off",
+            15,
+        )
+    }
+
+    private fun runShowcase(
+        effects: ThemeEffectsLevel,
+        selectedPages: Set<ShowcasePage>,
+        effectKey: String,
+        expectedCaptures: Int,
+    ) {
         var activeTheme by mutableIntStateOf(0)
         var activePage by mutableIntStateOf(0)
         var pageCallbacks = 0
@@ -80,8 +99,14 @@ class ProductionSharedShowcaseTest {
             val theme = resolveTheme(
                 WeatherThemeId.entries[activeTheme],
                 contrast = ContrastLevel.STANDARD,
-                effects = ThemeEffectsLevel.SUBTLE,
+                effects = effects,
             )
+            check(theme.effects == effects)
+            if (effects == ThemeEffectsLevel.OFF) {
+                check(theme.backdropStyle == com.oxygen.weather.ui.themeengine.BackdropStyle.SOLID)
+                check(theme.motionStyle == com.oxygen.weather.ui.themeengine.MotionStyle.OFF)
+                check(theme.panelOpacity == 1f && theme.outlineOpacity == 1f)
+            }
             val page = ShowcasePage.entries[activePage]
             ProductionBackdrop(theme, Modifier.requiredSize(360.dp, 640.dp).testTag(ROOT_TAG)) {
                 ShowcasePageContent(
@@ -109,7 +134,7 @@ class ProductionSharedShowcaseTest {
         assertEquals("root height must be 640 dp", 640f, root.height / compose.density.density, 0.5f)
 
         val semanticBaselines = mutableMapOf<ShowcasePage, List<String>>()
-        ShowcasePage.entries.forEach { page ->
+        selectedPages.forEach { page ->
             WeatherThemeId.entries.forEachIndexed { themeIndex, id ->
                 compose.runOnIdle {
                     activeTheme = themeIndex
@@ -135,25 +160,30 @@ class ProductionSharedShowcaseTest {
                     foregroundCalls = { foregroundClicks },
                 )
 
-                val filename = "${id.name.lowercase()}-${page.fileKey}-subtle-360x640-font1.0-ltr-standard.png"
+                val filename = "${id.name.lowercase()}-${page.fileKey}-$effectKey-360x640-font1.0-ltr-standard.png"
                 val bitmap = compose.onNode(isRoot()).captureToImage().asAndroidBitmap()
                 val expectedWidth = (root.width * compose.density.density).roundToInt()
                 val expectedHeight = (root.height * compose.density.density).roundToInt()
                 assertEquals("$filename pixel width", expectedWidth, bitmap.width)
                 assertEquals("$filename pixel height", expectedHeight, bitmap.height)
                 assertTrue("$filename is empty", bitmap.width > 0 && bitmap.height > 0)
-                val file = File(captureDirectory(), filename)
+                if (effects == ThemeEffectsLevel.OFF) {
+                    for (y in 0 until bitmap.height) for (x in 0 until bitmap.width) {
+                        assertEquals("$filename pixel ($x,$y) must be opaque", 255, bitmap.getPixel(x, y) ushr 24)
+                    }
+                }
+                val file = File(captureDirectory(effectKey), filename)
                 file.outputStream().use { output -> check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)) }
-                exportToDownloads(bitmap, filename)
+                exportToDownloads(bitmap, filename, effectKey)
                 captures += CaptureRecord(id, page, filename, bitmap.width, bitmap.height, sha256(file))
             }
         }
 
-        assertEquals("expected six pages per theme", 6, semanticBaselines.size)
-        assertEquals("expected exactly 30 installed page/theme captures", 30, captures.size)
+        assertEquals("expected selected page families", selectedPages.size, semanticBaselines.size)
+        assertEquals("expected installed page/theme captures", expectedCaptures, captures.size)
         assertEquals(WeatherThemeId.entries.toSet(), captures.map { it.theme }.toSet())
-        assertEquals(ShowcasePage.entries.toSet(), captures.map { it.page }.toSet())
-        writeManifest(captures)
+        assertEquals(selectedPages, captures.map { it.page }.toSet())
+        writeManifest(captures, effectKey)
     }
 
     private fun assertPageContent(page: ShowcasePage, theme: String) {
@@ -318,19 +348,19 @@ class ProductionSharedShowcaseTest {
         return own + node.children.flatMap(::collectSemanticFacts)
     }
 
-    private fun captureDirectory(): File {
+    private fun captureDirectory(effectKey: String): File {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        return File(context.getExternalFilesDir(null), "tp2e-per-family-subtle").also {
+        return File(context.getExternalFilesDir(null), "tp2e-per-family-$effectKey").also {
             check(it.mkdirs() || it.isDirectory) { "Cannot create capture directory: $it" }
         }
     }
 
-    private fun exportToDownloads(bitmap: Bitmap, filename: String) {
+    private fun exportToDownloads(bitmap: Bitmap, filename: String, effectKey: String) {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/oxygen-weather-tp2e-075")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, if (effectKey == "effects-off") "Download/oxygen-weather-tp2e-076-partial1" else "Download/oxygen-weather-tp2e-075")
         }
         val uri = requireNotNull(context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values))
         context.contentResolver.openOutputStream(uri, "w")!!.use { output ->
@@ -338,31 +368,31 @@ class ProductionSharedShowcaseTest {
         }
     }
 
-    private fun writeManifest(captures: List<CaptureRecord>) {
+    private fun writeManifest(captures: List<CaptureRecord>, effectKey: String) {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val metrics = context.resources.displayMetrics
         val manifest = buildString {
-            appendLine("TP.2E per-family installed Subtle showcase")
+            appendLine("TP.2E per-family installed ${effectKey} showcase")
             appendLine("Device: ${Build.MODEL}; manufacturer=${Build.MANUFACTURER}; API=${Build.VERSION.SDK_INT}; release=${Build.VERSION.RELEASE}; build=${Build.FINGERPRINT}")
             appendLine("Display px: ${metrics.widthPixels}x${metrics.heightPixels}; densityDpi=${metrics.densityDpi}; density=${metrics.density}")
-            appendLine("Host dp: 360x640; font scale=1.0; direction=LTR; contrast=Standard; effects=Subtle")
+            appendLine("Host dp: 360x640; measured root dp=${360}x${640}; font scale=1.0; direction=LTR; contrast=Standard; effects=$effectKey")
             appendLine("SDK platform 37.0; emulator 37.1.11.0; build tools 36.0.0; JDK 27; Gradle 9.7.0")
             appendLine("Application: ${context.packageName}; version=${context.packageManager.getPackageInfo(context.packageName, 0).versionName}")
             captures.forEach { capture ->
                 appendLine("${capture.filename}: page=${capture.page}; theme=${capture.theme}; ${capture.widthPx}x${capture.heightPx}px; sha256=${capture.sha256}")
             }
         }
-        File(captureDirectory(), "manifest.txt").writeText(manifest)
-        exportTextToDownloads(manifest, "manifest.txt")
+        File(captureDirectory(effectKey), "manifest.txt").writeText(manifest)
+        exportTextToDownloads(manifest, "manifest.txt", effectKey)
         println(manifest)
     }
 
-    private fun exportTextToDownloads(contents: String, filename: String) {
+    private fun exportTextToDownloads(contents: String, filename: String, effectKey: String) {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/oxygen-weather-tp2e-075")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, if (effectKey == "effects-off") "Download/oxygen-weather-tp2e-076-partial1" else "Download/oxygen-weather-tp2e-075")
         }
         val uri = requireNotNull(context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values))
         context.contentResolver.openOutputStream(uri, "w")!!.bufferedWriter().use { it.write(contents) }

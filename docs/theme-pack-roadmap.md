@@ -4,7 +4,14 @@
 
 Cycle `071-tp2e-installed-shared-component-showcase` established that the six-family composite cannot fit the approved compact viewport. The owner has directed that each component family be presented on its own test-only showcase screen. This changes the showcase composition only; Standard Home remains Now → Hourly → Daily → Details. The earlier 072–074 composite-dependent plans are superseded and are not eligible to start.
 
-The revised bounded outcome is to render six independent test-only screens—page identity, current conditions, forecast windows, source/inspection, weather mark, and backdrop—and capture each screen for Atmospheric, Glass, Minimal OLED, Instrument, and Terminal at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle effects. This yields 30 individual installed captures. Every screen keeps the same typed fixture facts and must fit without scrolling or clipping. Effects Off, comparative review, production correction, and repository closure need new bounded plans after this Subtle page set passes.
+The Subtle outcome is six independent test-only screens—page identity, current conditions, forecast windows, source/inspection, weather mark, and backdrop—with captures for Atmospheric, Glass, Minimal OLED, Instrument, and Terminal at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle effects. Cycle 075 retained 30 individual installed captures; every screen fits without scrolling or clipping and reuses the same typed fixture facts. The dependent Effects Off set has two bounded plans below. Comparative review, production correction, and repository closure still require separate plans.
+
+The Effects Off capture matrix is split to stay within the context budget:
+[`076-tp2e-effects-off-per-family-pages.md`](../.codex/plans/076-tp2e-effects-off-per-family-pages.md)
+covers page identity, current conditions, and forecast windows (15 cases);
+[`076-tp2e-effects-off-per-family-pages-partial2.md`](../.codex/plans/076-tp2e-effects-off-per-family-pages-partial2.md)
+covers source/inspection, weather mark, and backdrop (15 dependent cases).
+Partial 2 starts only after partial 1 passes.
 
 Prior cycle 071 disposition and measured composite failure remain historical:
 `.codex/history/2026-09-28-071-tp2e-installed-shared-component-showcase.md` and
@@ -804,6 +811,27 @@ The previous composite-dependent plans 072–074 are superseded by this
 owner-directed direction. The next eligible slice is a newly bounded Effects
 Off per-family page matrix. TP.2E and TP.3 remain open until their remaining
 work is planned and accepted.
+
+#### TP.2E — Effects Off per-family installed pages — PARTIAL 1 PASS (split)
+
+**Partial 1 — PASS:** cycle `076-tp2e-effects-off-per-family-pages` captured
+page identity, current conditions, and forecast windows for all five themes
+(15 installed cases). Effects Off policy, fixture text/semantics, fit,
+selector/date callbacks, chronology, and image opacity passed. Evidence and
+limitations are in `.codex/history/2026-09-28-076-tp2e-effects-off-per-family-pages.md`
+and `.codex/test-artifacts/076-tp2e-effects-off-per-family-pages/`.
+
+**Partial 2 — PLANNED, ELIGIBLE:**
+`076-tp2e-effects-off-per-family-pages-partial2` covers source/inspection,
+weather mark, and backdrop for all five themes (15 installed cases), using
+`.codex/plans/076-tp2e-effects-off-per-family-pages-partial2.md`. It may start
+now that partial 1 passed and `.codex/current.md` is IDLE.
+
+Both parts use 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Effects
+Off. The cumulative 30-case matrix verifies opaque/static/complete behavior in
+the showcase compositions. Cross-effects comparison, production correction,
+and TP.2E closure remain separate bounded work; these two capture parts alone
+do not close TP.2E.
 
 ### Shared invariants and out of scope
 
