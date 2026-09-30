@@ -1,17 +1,26 @@
 # Oxygen Weather Theme Pack Roadmap
 
+## TP.2E cross-effects comparison — partial 1 PASS; partial 2 eligible
+
+Cycle 078-tp2e-cross-effects-comparison-review passed its 15-pair review of Page identity, Current conditions, and Forecast windows across five themes. Twelve pairs passed; three record the already known Rain glyph mapping gap while preserving visible Rain text. Source inventory, hashes, pair dispositions, and limitations are in .codex/history/2026-09-29-078-tp2e-cross-effects-comparison-review.md and .codex/test-artifacts/078-tp2e-cross-effects-comparison-review/. The dependent [078-tp2e-cross-effects-comparison-review-partial2.md](../.codex/plans/078-tp2e-cross-effects-comparison-review-partial2.md) is now eligible and covers Source and inspection, Weather mark, and Backdrop (15 pairs). Both review slices are evidence-only; any production correction requires a separate plan. TP.2E remains open until the full comparison, any accepted correction, and a separate closure slice are complete.
+
 ## Owner-directed revision — TP.2E per-family showcase pages
 
 Cycle `071-tp2e-installed-shared-component-showcase` established that the six-family composite cannot fit the approved compact viewport. The owner has directed that each component family be presented on its own test-only showcase screen. This changes the showcase composition only; Standard Home remains Now → Hourly → Daily → Details. The earlier 072–074 composite-dependent plans are superseded and are not eligible to start.
 
-The Subtle outcome is six independent test-only screens—page identity, current conditions, forecast windows, source/inspection, weather mark, and backdrop—with captures for Atmospheric, Glass, Minimal OLED, Instrument, and Terminal at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle effects. Cycle 075 retained 30 individual installed captures; every screen fits without scrolling or clipping and reuses the same typed fixture facts. The dependent Effects Off set has two bounded plans below. Comparative review, production correction, and repository closure still require separate plans.
+The Subtle outcome is six independent test-only screens—page identity, current conditions, forecast windows, source/inspection, weather mark, and backdrop—with captures for Atmospheric, Glass, Minimal OLED, Instrument, and Terminal at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle effects. Cycle 075 retained 30 individual installed captures; every screen fits without scrolling or clipping and reuses the same typed fixture facts. The Effects Off capture set was verified in two bounded parts below. Comparative review, production correction, and repository closure still require separate plans.
 
-The Effects Off capture matrix is split to stay within the context budget:
+The Effects Off capture matrix was split to stay within the context budget:
 [`076-tp2e-effects-off-per-family-pages.md`](../.codex/plans/076-tp2e-effects-off-per-family-pages.md)
 covers page identity, current conditions, and forecast windows (15 cases);
 [`076-tp2e-effects-off-per-family-pages-partial2.md`](../.codex/plans/076-tp2e-effects-off-per-family-pages-partial2.md)
 covers source/inspection, weather mark, and backdrop (15 dependent cases).
-Partial 2 starts only after partial 1 passes.
+Partial 1 passed. The first partial 2 attempt (cycle 076) blocked before
+implementation because the emulator did not register; cycle
+`077-tp2e-effects-off-remaining-family-pages` completed those 15 cases using
+the existing test-harness checks and a separate export path. Evidence is in
+`.codex/history/2026-09-29-077-tp2e-effects-off-remaining-family-pages.md` and
+`.codex/test-artifacts/077-tp2e-effects-off-remaining-family-pages/`.
 
 Prior cycle 071 disposition and measured composite failure remain historical:
 `.codex/history/2026-09-28-071-tp2e-installed-shared-component-showcase.md` and
@@ -808,11 +817,11 @@ and the exact typed component fixtures and resolver were reused. No normal app
 or production source changed.
 
 The previous composite-dependent plans 072–074 are superseded by this
-owner-directed direction. The next eligible slice is a newly bounded Effects
-Off per-family page matrix. TP.2E and TP.3 remain open until their remaining
-work is planned and accepted.
+owner-directed direction. The Effects Off per-family page matrix is now
+verified in the two bounded parts below. TP.2E and TP.3 remain open pending
+cross-effects comparison, any accepted correction, and TP.2E closure work.
 
-#### TP.2E — Effects Off per-family installed pages — PARTIAL 1 PASS (split)
+#### TP.2E — Effects Off per-family installed pages — 30 CASES PASS; TP.2E OPEN
 
 **Partial 1 — PASS:** cycle `076-tp2e-effects-off-per-family-pages` captured
 page identity, current conditions, and forecast windows for all five themes
@@ -821,17 +830,32 @@ selector/date callbacks, chronology, and image opacity passed. Evidence and
 limitations are in `.codex/history/2026-09-28-076-tp2e-effects-off-per-family-pages.md`
 and `.codex/test-artifacts/076-tp2e-effects-off-per-family-pages/`.
 
-**Partial 2 — PLANNED, ELIGIBLE:**
-`076-tp2e-effects-off-per-family-pages-partial2` covers source/inspection,
-weather mark, and backdrop for all five themes (15 installed cases), using
-`.codex/plans/076-tp2e-effects-off-per-family-pages-partial2.md`. It may start
-now that partial 1 passed and `.codex/current.md` is IDLE.
+**Partial 2 — PASS:** cycle `077-tp2e-effects-off-remaining-family-pages`
+captured source/inspection, weather mark, and backdrop for all five themes
+(15 installed cases). Fixture text, semantic stability, fit, backdrop input,
+and Effects Off opacity passed; all PNGs matched the measured dimensions and
+manifest hashes and received visual review. The Rain glyph is absent in three
+themes whose existing styles have no Rain mark mapping; caller-visible text and
+decorative semantics remain intact. The initial blocked attempt remains in
+`.codex/history/2026-09-29-076-tp2e-effects-off-per-family-pages-partial2.md`.
+Cycle 077 evidence is in
+`.codex/history/2026-09-29-077-tp2e-effects-off-remaining-family-pages.md` and
+`.codex/test-artifacts/077-tp2e-effects-off-remaining-family-pages/`.
 
 Both parts use 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Effects
 Off. The cumulative 30-case matrix verifies opaque/static/complete behavior in
 the showcase compositions. Cross-effects comparison, production correction,
 and TP.2E closure remain separate bounded work; these two capture parts alone
 do not close TP.2E.
+
+**Cross-effects comparison — partial 1 PASS:** Cycle
+078-tp2e-cross-effects-comparison-review reviewed the first 15 Subtle/Effects
+Off pairs. Twelve passed; the three Forecast Windows theme pairs with the
+existing Rain glyph mapping gap are recorded as KNOWN-LIMITATION, with Rain
+text preserved. Full matrix and limitations are in
+.codex/test-artifacts/078-tp2e-cross-effects-comparison-review/. Partial 2 is
+eligible for the remaining 15 pairs. The cross-effects review does not close
+TP.2E; closure work remains separately bounded.
 
 ### Shared invariants and out of scope
 

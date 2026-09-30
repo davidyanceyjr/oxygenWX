@@ -77,6 +77,16 @@ class ProductionSharedShowcaseTest {
         )
     }
 
+    @Test
+    fun effectsOffRemainingFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes() {
+        runShowcase(
+            ThemeEffectsLevel.OFF,
+            setOf(ShowcasePage.SOURCE_INSPECTION, ShowcasePage.WEATHER_MARK, ShowcasePage.BACKDROP),
+            "effects-off-partial2",
+            15,
+        )
+    }
+
     private fun runShowcase(
         effects: ThemeEffectsLevel,
         selectedPages: Set<ShowcasePage>,
@@ -183,7 +193,7 @@ class ProductionSharedShowcaseTest {
         assertEquals("expected installed page/theme captures", expectedCaptures, captures.size)
         assertEquals(WeatherThemeId.entries.toSet(), captures.map { it.theme }.toSet())
         assertEquals(selectedPages, captures.map { it.page }.toSet())
-        writeManifest(captures, effectKey)
+        writeManifest(captures, effectKey, root, compose.density.density, compose.density.fontScale)
     }
 
     private fun assertPageContent(page: ShowcasePage, theme: String) {
@@ -360,7 +370,11 @@ class ProductionSharedShowcaseTest {
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, if (effectKey == "effects-off") "Download/oxygen-weather-tp2e-076-partial1" else "Download/oxygen-weather-tp2e-075")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, when (effectKey) {
+                "effects-off" -> "Download/oxygen-weather-tp2e-076-partial1"
+                "effects-off-partial2" -> "Download/oxygen-weather-tp2e-077-partial2"
+                else -> "Download/oxygen-weather-tp2e-075"
+            })
         }
         val uri = requireNotNull(context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values))
         context.contentResolver.openOutputStream(uri, "w")!!.use { output ->
@@ -368,16 +382,24 @@ class ProductionSharedShowcaseTest {
         }
     }
 
-    private fun writeManifest(captures: List<CaptureRecord>, effectKey: String) {
+    private fun writeManifest(
+        captures: List<CaptureRecord>,
+        effectKey: String,
+        root: Rect,
+        density: Float,
+        fontScale: Float,
+    ) {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val metrics = context.resources.displayMetrics
+        val apkSha256 = sha256(File(context.applicationInfo.sourceDir))
+        val effectsLabel = if (effectKey.startsWith("effects-off")) "Effects Off" else effectKey
         val manifest = buildString {
-            appendLine("TP.2E per-family installed ${effectKey} showcase")
+            appendLine("TP.2E per-family installed $effectsLabel showcase ($effectKey)")
             appendLine("Device: ${Build.MODEL}; manufacturer=${Build.MANUFACTURER}; API=${Build.VERSION.SDK_INT}; release=${Build.VERSION.RELEASE}; build=${Build.FINGERPRINT}")
             appendLine("Display px: ${metrics.widthPixels}x${metrics.heightPixels}; densityDpi=${metrics.densityDpi}; density=${metrics.density}")
-            appendLine("Host dp: 360x640; measured root dp=${360}x${640}; font scale=1.0; direction=LTR; contrast=Standard; effects=$effectKey")
-            appendLine("SDK platform 37.0; emulator 37.1.11.0; build tools 36.0.0; JDK 27; Gradle 9.7.0")
+            appendLine("Measured root px=${root.width.roundToInt()}x${root.height.roundToInt()}; dp=${root.width / density}x${root.height / density}; density=$density; font scale=$fontScale; direction=LTR; contrast=Standard; effects=$effectsLabel")
             appendLine("Application: ${context.packageName}; version=${context.packageManager.getPackageInfo(context.packageName, 0).versionName}")
+            appendLine("Installed target APK SHA-256: $apkSha256")
             captures.forEach { capture ->
                 appendLine("${capture.filename}: page=${capture.page}; theme=${capture.theme}; ${capture.widthPx}x${capture.heightPx}px; sha256=${capture.sha256}")
             }
@@ -392,7 +414,11 @@ class ProductionSharedShowcaseTest {
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, if (effectKey == "effects-off") "Download/oxygen-weather-tp2e-076-partial1" else "Download/oxygen-weather-tp2e-075")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, when (effectKey) {
+                "effects-off" -> "Download/oxygen-weather-tp2e-076-partial1"
+                "effects-off-partial2" -> "Download/oxygen-weather-tp2e-077-partial2"
+                else -> "Download/oxygen-weather-tp2e-075"
+            })
         }
         val uri = requireNotNull(context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values))
         context.contentResolver.openOutputStream(uri, "w")!!.bufferedWriter().use { it.write(contents) }

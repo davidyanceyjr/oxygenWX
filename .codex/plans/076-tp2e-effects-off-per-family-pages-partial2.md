@@ -1,64 +1,70 @@
 # Plan 076-partial2 — TP.2E Effects Off per-family showcase pages, partial 2
 
-Status: Planned
+Status: Blocked
 Cycle ID: 076-tp2e-effects-off-per-family-pages-partial2
 Roadmap item: TP.2E-effects-off-per-family-pages-partial2
 Created: 2026-09-28
+Revised: 2026-09-29
 Depends on: PASS for `076-tp2e-effects-off-per-family-pages`
 
-**Difficulty: 4/10.** This dependent part reuses the Effects Off test host and capture contract from partial 1 for three more component families. Its primary work is exercising source/inspection, weather-mark, and backdrop behavior across five themes and retaining 15 installed captures.
+**Difficulty: 3/10.** The existing installed showcase already implements the assigned source/inspection, weather-mark, and backdrop fixtures, fit checks, semantic snapshots, click probe, pixel capture, manifest, and Effects Off alpha assertion. The slice adds a focused test entry point, corrects cycle-specific export naming/metadata if needed, and verifies/reviews 15 installed captures. No production UI or data change is expected.
 
-**Recommended Codex CLI model:** `gpt-6-luna` at medium reasoning; use `gpt-6-sol` at low or medium reasoning if Luna is unavailable.
+**Recommended Codex CLI model:** `gpt-6-luna` at medium reasoning. Escalate only if test infrastructure exposes a concrete issue beyond the existing harness.
 
-**Context budget:** target no more than 35% of a fresh context window and stop before 45%. Do not start before partial 1 has a PASS history record.
+**Context budget:** target no more than 35% of a fresh context window and stop before 45%. This is the second half of the already split Effects Off matrix and remains independently bounded to three families and five themes.
 
 ## Objective
 
-Complete the Effects Off per-family installed matrix for **Source and inspection**, **Weather mark**, and **Backdrop** across Atmospheric, Glass, Minimal OLED, Instrument, and Terminal. Verify 15 cases against the existing fixture, semantics, decorative, foreground interaction, opacity/static, and fit contracts, and retain exactly 15 installed PNGs. This completes the Effects Off capture set only; it does not close TP.2E.
+Complete the Effects Off installed matrix for **Source and inspection**, **Weather mark**, and **Backdrop** across Atmospheric, Glass, Minimal OLED, Instrument, and Terminal. Verify the 15 assigned captures against existing fixture meaning, semantic, fit, interaction, and Effects Off contracts. This completes only the second capture half; it does not close TP.2E.
 
 ## Production boundary
 
-Instrumentation and evidence only. Expected test boundary: `app/src/androidTest/java/com/oxygen/weather/ui/themeengine/components/ProductionSharedShowcaseTest.kt`, with minimal focused changes only if the partial 1 harness cannot select these three cases. Update this plan/current-cycle record, the TP.2E Effects Off roadmap entry, and evidence under `.codex/test-artifacts/076-tp2e-effects-off-per-family-pages-partial2/`.
+Instrumentation and evidence only. Expected implementation boundary: `app/src/androidTest/java/com/oxygen/weather/ui/themeengine/components/ProductionSharedShowcaseTest.kt`. Update this plan, `.codex/current.md`, the TP.2E section at the head of `docs/theme-pack-roadmap.md`, and evidence under `.codex/test-artifacts/076-tp2e-effects-off-per-family-pages-partial2/` as lifecycle requires.
 
-Do not change production Kotlin, resources, resolver/catalog/tokens, models/data, normal Home composition/navigation, or provider state. Reuse partial 1's Effects Off host, fixture content, manifest schema, and capture/export approach. Keep the Subtle baseline unchanged.
+Do not change production Kotlin, resources, resolver/catalog/tokens, models/data, normal Home composition/navigation, or provider state. Preserve partial 1's test path and captures. Reuse the existing typed fixtures and checks; add no assertion already provided by `assertPageContent`, `requiredTexts`, `assertRequiredContentBounds`, `semanticSnapshot`, `assertPageFits`, or the backdrop interaction branch unless a focused run demonstrates a specific uncovered contract.
 
 ## Functional invariants
 
-- Matrix: exactly three assigned families × five themes = 15 final installed captures.
-- Conditions: 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Effects Off, verified against installed display/density and measured root bounds.
-- All themes receive identical source/update facts, inspection groups, mark identity/caller-visible text, backdrop caller content, and callbacks for a family. Theme identity affects appearance only.
-- Source and update values remain separately visible; inspection facts and unavailable values remain supplied and honest.
-- Weather marks and backdrops remain decorative, with no added spoken weather meaning. Backdrop remains opaque/static/complete and cannot block foreground input.
-- All required content remains inside the root without scrolling, clipping, truncation, or font shrinking. A failure blocks this partial with exact evidence; no production fix is included.
+- Exactly three assigned families × five themes = 15 final installed captures.
+- Conditions: 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Effects Off; record installed display/density and measured root bounds.
+- All themes use the same supplied source/update facts, inspection groups, mark identity and caller-visible text, backdrop caller content, and callbacks. Theme identity affects appearance only.
+- Source and update time remain distinct; supplied unavailable values stay verbatim; inspection facts retain their fixture order.
+- Weather mark and backdrop remain decorative and add no spoken weather meaning. Backdrop remains opaque, static, complete, and allows foreground input.
+- All required text remains inside the measured root, without scrolling, clipping, truncation, or font shrinking. A demonstrated failure blocks this slice; no production fix is in scope.
 
 ## Implementation steps
 
-1. **Dependency and entry audit:** verify partial 1's PASS history, 15 captures and manifest, and current-cycle IDLE state. Since this pre-created plan's filename retains the original ID plus `-partial2`, start it by setting `.codex/current.md` to PLANNED with cycle ID `076-tp2e-effects-off-per-family-pages-partial2`, roadmap item and this plan/evidence path, then run `python scripts/codex_cycle.py activate`. Do not start while partial 1 is ACTIVE or BLOCKED. Inspect the focused source/inspection, mark, and backdrop tests and confirm the device/capture environment. Record dependency and environment evidence.
-2. **Extend/select remaining cases:** reuse partial 1's Effects Off showcase mechanism to run only `SOURCE_INSPECTION`, `WEATHER_MARK`, and `BACKDROP` for all five themes. Avoid duplicating content or changing page-family behavior.
-3. **Assert contracts:** per theme/family, assert required visible fixture values and all text bounds; compare semantic snapshots across themes; preserve distinct source/update facts and inspection order/unavailable text; assert the weather mark adds no content description; assert backdrop decorative semantics and a successful foreground click. Check image alpha/static/complete contract at the backdrop. For source/mark cases, verify the captured composition is opaque and complete where their surfaces require it, without treating a background as semantic content.
-4. **Capture installed matrix:** capture and export 15 cycle-specific PNGs (for example `Download/oxygen-weather-tp2e-076-partial2/`). Decode dimensions against measured root pixels and create a manifest with family/theme/state, viewport/font/direction/contrast/effects, device/API/build, density, app/APK identity, filename and SHA-256. Keep failed attempt outputs marked non-final.
-5. **Verify and review:** run focused showcase instrumentation with `:app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.oxygen.weather.ui.themeengine.components.ProductionSharedShowcaseTest#effectsOffRemainingFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes`; run `ProductionDetailsComponentsTest`, `ProductionWeatherMarkTest`, and applicable `ProductionBackdrop*Test` through the components package filter. Run JVM `:app:testDebugUnitTest --tests com.oxygen.weather.ui.themeengine.ThemeResolverTest --tests com.oxygen.weather.ui.themeengine.ProductionWeatherVisualsTest`. Preserve exact commands, counts, logs/XML, and exits. Visually review all 15 captures for visible facts, clipping, opacity, legibility, decoration behavior, and foreground action. Run `python scripts/dev.py workflow`, `git diff --check`, and `python scripts/dev.py check` when SDK/dependencies are available; state any unavailable check and why.
-6. **Close partial 2:** inspect final diff/evidence and write the history record. Update the TP.2E sequence to record actual PASS/BLOCKED result for this half and the cumulative 30 Effects Off captures if passed. If both partials pass, make a separately bounded cross-effects comparison/review or other remaining TP.2E work eligible; do not claim TP.2E complete or perform comparison/correction here.
+1. **Audit entry state:** verify `python scripts/dev.py workflow`, the partial 1 PASS history and evidence, current plan/cycle identity, focused showcase implementation, and emulator/export availability. Record device, display/font settings, JDK/SDK, APK identity, test-to-contract inventory, and exact entry result. Stop with evidence if partial 1 is not PASS or installed verification cannot run.
+2. **Add only the focused entry point:** add `effectsOffRemainingFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes()` calling `runShowcase(ThemeEffectsLevel.OFF, setOf(SOURCE_INSPECTION, WEATHER_MARK, BACKDROP), "effects-off-partial2", 15)`. Preserve the existing Subtle and partial 1 entry points. Do not duplicate or rewrite existing shared assertions.
+3. **Fix cycle-specific export metadata:** the current Effects Off exporter routes every Effects Off run to `Download/oxygen-weather-tp2e-076-partial1`, and the manifest labels the effect key as `effects-off` although the UI contract calls this state Effects Off. Extend the test-only export routing with an explicit partial2 destination (for example `Download/oxygen-weather-tp2e-076-partial2/`) and have the focused run's manifest identify partial2 and Effects Off. Preserve the existing partial 1 and Subtle destinations and content. Record the APK SHA-256 and actual measured root/display values in retained evidence; do not claim metadata fields that were not measured.
+4. **Run assigned contracts:** execute the focused instrumentation for the new entry. Its existing checks must demonstrate required fixture text and text bounds, per-family cross-theme semantic stability, source/update distinction, unavailable inspection content, mark/backdrop decorative semantics, backdrop foreground click, 48dp foreground target, root fit, and full pixel alpha for every Effects Off capture. Inspect any uncovered assertion gap before making a narrowly scoped test-only change.
+5. **Retain and review captures:** collect exactly 15 cycle-specific PNGs and a manifest with family/theme/effects, viewport, font scale, direction, contrast, display/root pixels and dp, density, device/API/build, app/APK identity/hash, filenames, and SHA-256. Verify decoded dimensions and hashes against manifest. Visually inspect all 15 for visible facts, clipping, legibility, opaque/static backdrop, decorative treatment, and foreground action. Keep failed attempts separate and explicitly non-final.
+6. **Focused regression and closeout:** run applicable `ProductionDetailsComponentsTest`, `ProductionWeatherMarkTest`, and backdrop instrumentation tests; run JVM `ThemeResolverTest` and `ProductionWeatherVisualsTest`. Record exact commands, counts, XML/logs, and exits. Run `python scripts/dev.py workflow`, `git diff --check`, and `python scripts/dev.py check` when environment permits, recording unavailable checks and reasons. Inspect final diff/evidence and write the cycle history. Update the TP.2E execution head with the actual result and cumulative 30-case Effects Off count only if both halves pass. Keep cross-effects review/correction and TP.2E closure as separate work.
 
 ## Acceptance criteria
 
-PASS requires all 15 assigned installed cases run at the recorded conditions; content, provenance/update distinction, unavailable value, decoration, semantic stability, fit, opacity/static/foreground action contracts pass; all 15 PNGs decode and match manifest dimensions/hashes and receive visual review; focused test and repository workflow/diff outcomes are recorded. Combined with partial 1 PASS this yields the 30-case Effects Off matrix, but this plan closes only partial 2.
+PASS requires all 15 assigned installed cases at the recorded conditions; existing content, provenance/update distinction, unavailable value, semantic stability, fit, decorative, foreground-input, and Effects Off opacity/static/completeness contracts pass; all PNGs decode and match manifest dimensions/hashes and receive visual review; focused tests and workflow/diff/check outcomes and limitations are recorded. With partial 1 PASS, this yields 30 Effects Off captures, but closes only this partial.
 
-If the installed environment is unavailable or any required contract fails, retain precise output and captures/bounds and close BLOCKED. No production or resolver changes are permitted under this plan.
+If the installed environment is unavailable or a required contract fails, preserve exact output, relevant captures/bounds, and close BLOCKED. Do not make production or resolver changes under this plan.
 
 ## Verification and evidence
 
-Evidence path: `.codex/test-artifacts/076-tp2e-effects-off-per-family-pages-partial2/`. Preserve dependency audit, environment, test inventory, exact commands and result XML/logs, 15 canonical captures, manifest, visual review, hashes, diff/workflow/check outputs, and limitations. Link to partial 1's evidence; do not duplicate its files.
+`.codex/test-artifacts/076-tp2e-effects-off-per-family-pages-partial2/` must retain environment and test inventory, exact commands/results, canonical 15 PNGs, manifest, visual review, hashes, diff/workflow/check outputs, and unverified boundaries. Link to partial 1 evidence rather than duplicating it.
 
 ## Risks and assumptions
 
-- Partial 1 passes and leaves the test-only Effects Off selection mechanism usable for the remaining three families.
-- Existing typed fixture components and test runner cover source, weather-mark, and backdrop behavior without production changes.
-- Device/emulator and external-files/MediaStore export path remain available and are reverified at entry.
-- Defects requiring runtime/API/resolver/layout change must be reported and routed to a new plan.
+- Partial 1 has PASS evidence and its test path remains intact.
+- Existing typed fixture checks cover the assigned family contracts; any additional assertion must be motivated by a demonstrated gap.
+- Emulator and export path remain available and are reverified at entry.
+- Any defect needing production, resolver, or layout change is recorded and routed to another bounded plan.
 
 ## Out of scope
 
-- Re-running or changing page identity, current, or forecast captures from partial 1.
-- Subtle recapture or any cross-effects visual comparison; production corrections; TP.2E closure; TP.3.
-- Full effects, large-font, RTL, High contrast, alternate viewport, design-reference pixel parity, TalkBack service traversal, provider/data behavior, and release acceptance.
+- Re-running or changing partial 1 families/captures, Subtle recapture, or cross-effects comparison.
+- Production correction, TP.2E closure, TP.3, or standard Home changes.
+- Full effects, large-font, RTL, High contrast, alternate viewport, reference pixel parity, TalkBack service traversal, provider/data behavior, and release acceptance.
+
+
+## Closeout — BLOCKED (2026-09-29)
+
+The installed API 37 environment could not be made available. The prior `oxygen_tp2b_api37` AVD is absent; available `oxygen_starter` exited before adb registration. No implementation or capture was produced. Exact evidence and unverified boundaries are in `.codex/test-artifacts/076-tp2e-effects-off-per-family-pages-partial2/` and `.codex/history/2026-09-29-076-tp2e-effects-off-per-family-pages-partial2.md`.
