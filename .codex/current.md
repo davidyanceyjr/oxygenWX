@@ -9,4 +9,4 @@ Last updated: 2026-09-29
 
 ## Current objective
 
-No active cycle. The next eligible planned slice is 078-tp2e-cross-effects-comparison-review-partial2, after PASS and closeout of partial 1.
+No active cycle. Select the next item from `docs/ROADMAP.md`.

@@ -1,8 +1,8 @@
 # Oxygen Weather Theme Pack Roadmap
 
-## TP.2E cross-effects comparison — partial 1 PASS; partial 2 eligible
+## TP.2E cross-effects comparison — both review parts PASS; TP.2E remains open
 
-Cycle 078-tp2e-cross-effects-comparison-review passed its 15-pair review of Page identity, Current conditions, and Forecast windows across five themes. Twelve pairs passed; three record the already known Rain glyph mapping gap while preserving visible Rain text. Source inventory, hashes, pair dispositions, and limitations are in .codex/history/2026-09-29-078-tp2e-cross-effects-comparison-review.md and .codex/test-artifacts/078-tp2e-cross-effects-comparison-review/. The dependent [078-tp2e-cross-effects-comparison-review-partial2.md](../.codex/plans/078-tp2e-cross-effects-comparison-review-partial2.md) is now eligible and covers Source and inspection, Weather mark, and Backdrop (15 pairs). Both review slices are evidence-only; any production correction requires a separate plan. TP.2E remains open until the full comparison, any accepted correction, and a separate closure slice are complete.
+Cycle 078 partial 1 reviewed Page identity, Current conditions, and Forecast windows; partial 2 reviewed Source and inspection, Weather mark, and Backdrop. Together they cover 30 unique pairs / 60 source captures across six families and five themes. The result is 24 PASS, six KNOWN-LIMITATION for the existing Rain glyph mapping gap, and zero FINDING; Rain text remains visible. Inventories, hashes, pair dispositions, and limitations are recorded in the two cycle histories and evidence directories: `.codex/history/2026-09-29-078-tp2e-cross-effects-comparison-review.md`, `.codex/history/2026-09-29-078-tp2e-cross-effects-comparison-review-partial2.md`, `.codex/test-artifacts/078-tp2e-cross-effects-comparison-review/`, and `.codex/test-artifacts/078-tp2e-cross-effects-comparison-review-partial2/`. The comparison is evidence-only and makes no pixel-parity claim. TP.2E remains open; any correction and TP.2E closure require separate work.
 
 ## Owner-directed revision — TP.2E per-family showcase pages
 
@@ -848,14 +848,16 @@ the showcase compositions. Cross-effects comparison, production correction,
 and TP.2E closure remain separate bounded work; these two capture parts alone
 do not close TP.2E.
 
-**Cross-effects comparison — partial 1 PASS:** Cycle
+**Cross-effects comparison — PASS:** Cycle
 078-tp2e-cross-effects-comparison-review reviewed the first 15 Subtle/Effects
 Off pairs. Twelve passed; the three Forecast Windows theme pairs with the
 existing Rain glyph mapping gap are recorded as KNOWN-LIMITATION, with Rain
-text preserved. Full matrix and limitations are in
-.codex/test-artifacts/078-tp2e-cross-effects-comparison-review/. Partial 2 is
-eligible for the remaining 15 pairs. The cross-effects review does not close
-TP.2E; closure work remains separately bounded.
+text preserved. Partial 2 reviewed the remaining 15 pairs; 12 passed and three
+Weather mark theme pairs retain that same KNOWN-LIMITATION with Rain text
+preserved. No new contract finding was observed. Matrices, inventories, and
+limitations are in both cycle 078 evidence directories and history records.
+Together the partials cover all 30 family/theme pairs with no overlap or
+omission. This comparison does not close TP.2E; closure work remains separate.
 
 ### Shared invariants and out of scope
 
