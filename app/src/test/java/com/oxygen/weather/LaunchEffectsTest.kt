@@ -19,4 +19,11 @@ class LaunchEffectsTest {
     fun releaseBuildIgnoresEffectsOffLaunchExtra() {
         assertEquals(EffectsLevel.SUBTLE, selectLaunchEffects(isDebugBuild = false, effectsOffRequested = true))
     }
+
+    @Test
+    fun captureOptionIsDebugOnly() {
+        assertEquals(true, selectDeterministicCapture(isDebugBuild = true, captureRequested = true))
+        assertEquals(false, selectDeterministicCapture(isDebugBuild = true, captureRequested = false))
+        assertEquals(false, selectDeterministicCapture(isDebugBuild = false, captureRequested = true))
+    }
 }

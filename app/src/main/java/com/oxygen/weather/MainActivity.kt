@@ -6,12 +6,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
+import com.oxygen.weather.data.CacheWriteOutcome
 import com.oxygen.weather.data.DemoWeatherRepository
+import com.oxygen.weather.data.WeatherDataOrigin
+import com.oxygen.weather.data.WeatherFreshness
+import com.oxygen.weather.data.WeatherRepositoryResult
 import com.oxygen.weather.derived.HistoricalSynthesis
-import com.oxygen.weather.presentation.HomePresentationState
+import com.oxygen.weather.presentation.HomeLoadState
+import com.oxygen.weather.presentation.HomePresentationInput
 import com.oxygen.weather.presentation.HomePresentationMapper
+import com.oxygen.weather.presentation.HomePresentationState
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.ui.OxygenWeatherApp
+import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,15 +31,31 @@ class MainActivity : ComponentActivity() {
             isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             effectsOffRequested = intent?.getBooleanExtra(EFFECTS_OFF_LAUNCH_EXTRA, false) == true,
         )
-        val bundle = DemoWeatherRepository.load()
+        val captureMode = selectDeterministicCapture(
+            isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
+            captureRequested = intent?.getBooleanExtra(DETERMINISTIC_CAPTURE_LAUNCH_EXTRA, false) == true,
+        )
+        val fixtureAnchor = if (captureMode) LocalDateTime.of(2026, 9, 23, 9, 0) else LocalDateTime.now()
+        val bundle = DemoWeatherRepository.load(fixtureAnchor)
         val derived = HistoricalSynthesis.derive(bundle)
         val presentation = HomePresentationMapper.map(bundle, derived)
         val mappedState = HomePresentationMapper.mapState(bundle, derived)
         val partialHorizons = (mappedState as? HomePresentationState.Partial)?.horizon
+        val status = if (captureMode) {
+            val result = WeatherRepositoryResult(
+                bundle = bundle,
+                origin = WeatherDataOrigin.LIVE,
+                freshness = WeatherFreshness.UNKNOWN,
+                cacheWriteOutcome = CacheWriteOutcome.NOT_ATTEMPTED,
+            )
+            (HomePresentationMapper.mapLoadState(HomePresentationInput.Data(result, derived)) as HomeLoadState.LiveData).status
+        } else {
+            StatusPresentation.of("Development fixture data. Freshness: unknown.")
+        }
         setContent {
             OxygenWeatherApp(
                 presentation = presentation,
-                status = StatusPresentation.of("Development fixture data. Freshness: unknown."),
+                status = status,
                 partialHorizons = partialHorizons,
                 effects = effects,
             )
