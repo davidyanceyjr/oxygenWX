@@ -45,7 +45,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.oxygen.weather.presentation.DailyWindowPresentation
 import com.oxygen.weather.presentation.ForecastHorizonStatus
 import com.oxygen.weather.presentation.ForecastHorizonPresentation
 import com.oxygen.weather.presentation.HomePresentation
@@ -109,8 +108,8 @@ fun OxygenWeatherApp(
                     when (HomePage.entries[page]) {
                         HomePage.NOW -> NowPage(presentation, status, partialHorizons, theme)
                         HomePage.HOURLY -> HourlyPage(presentation, status, partialHorizons, theme)
-                        HomePage.DAILY -> DailyPage(presentation, theme)
-                        HomePage.DETAILS -> DetailsPage(presentation, theme)
+                        HomePage.DAILY -> DailyPage(presentation, status, partialHorizons, theme)
+                        HomePage.DETAILS -> DetailsPage(presentation, status, theme)
                     }
                 }
             }
@@ -371,32 +370,45 @@ private fun HourlyPage(
 }
 
 @Composable
-private fun DailyPage(home: HomePresentation, theme: ResolvedTheme) {
+private fun DailyPage(
+    home: HomePresentation,
+    status: StatusPresentation,
+    partialHorizons: ForecastHorizonPresentation?,
+    theme: ResolvedTheme,
+) {
     var windowIndex by rememberSaveable { mutableIntStateOf(0) }
     val windows = home.dailyWindows
-    if (windows.isEmpty()) return UnavailablePage("Daily forecast unavailable", theme)
-    val selected = windowIndex.coerceIn(0, windows.lastIndex)
-    val window: DailyWindowPresentation = windows[selected]
+    val selected = if (windows.isEmpty()) 0 else windowIndex.coerceIn(0, windows.lastIndex)
+    val window = windows.getOrNull(selected)
     Column(
-        Modifier.fillMaxSize().padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
         verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
     ) {
-        ProductionPageHeader(theme, "Daily", window.rangeLabel)
-        Column(
-            Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
-        ) {
-            window.entries.forEach { entry -> ProductionDailyRow(theme, entry) }
+        ProductionPageHeader(theme, "Daily", window?.rangeLabel ?: "Daily forecast unavailable")
+        if (window != null && window.entries.isEmpty()) {
+            Text("Daily forecast unavailable", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        } else if (window != null) {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                window.entries.take(5).forEach { entry -> ProductionDailyRow(theme, entry) }
+            }
         }
-        ProductionWindowControls(
-            theme, selected > 0, selected < windows.lastIndex,
-            onEarlier = { windowIndex = selected - 1 }, onLater = { windowIndex = selected + 1 },
-        )
+        if (windows.isNotEmpty()) {
+            ProductionWindowControls(
+                theme, selected > 0, selected < windows.lastIndex,
+                onEarlier = { windowIndex = selected - 1 }, onLater = { windowIndex = selected + 1 },
+            )
+        }
+        ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine)
+        partialHorizons?.daily?.takeIf { it == ForecastHorizonStatus.PARTIAL }?.let {
+            Text("Daily forecast horizon is partial.", style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+        }
+        StatusPanel(theme, status)
     }
 }
 
 @Composable
-private fun DetailsPage(home: HomePresentation, theme: ResolvedTheme) {
+private fun DetailsPage(home: HomePresentation, status: StatusPresentation, theme: ResolvedTheme) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
             .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
@@ -404,15 +416,8 @@ private fun DetailsPage(home: HomePresentation, theme: ResolvedTheme) {
     ) {
         ProductionPageHeader(theme, "Details", "Measurements · forecast pattern · context")
         ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine)
-        home.detailGroups.forEach { ProductionInspectionMetricGroup(theme, it) }
-    }
-}
-
-@Composable
-private fun UnavailablePage(message: String, theme: ResolvedTheme) {
-    Box(Modifier.fillMaxSize().padding(theme.geometry.pageGutter), contentAlignment = Alignment.Center) {
-        ProductionSectionSurface(theme, Modifier.fillMaxWidth()) {
-            Text(message, style = theme.typography.titleMedium, color = theme.palette.content)
-        }
+        StatusPanel(theme, status)
+        home.detailGroups.filter { it.metrics.isNotEmpty() }
+            .forEach { ProductionInspectionMetricGroup(theme, it) }
     }
 }
