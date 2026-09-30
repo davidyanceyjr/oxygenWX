@@ -257,6 +257,55 @@ were tracked in plan 024, which was pivoted before completion. Their acceptance
 criteria now follow `docs/theme-pack-roadmap.md`; no separate completion claim
 is made.
 
+### DX.1 — Codex CLI workflow prompt shortcuts — DONE
+
+Add three project-local Codex skills for analyzing the next roadmap slice and
+creating its draft plan, reviewing a draft into a complete implementation plan,
+and executing an active plan with delegated agent work. The shortcuts must
+preserve the repository's cycle lifecycle and must not bypass plan activation,
+scope boundaries, verification, or closeout.
+
+**Exit:** Project-local skills for all three workflow stages and `/skills`
+usage documentation are present. YAML and workflow checks pass. The interactive
+picker was not exercised during implementation; this boundary is recorded in
+`.codex/history/2026-09-30-080-codex-cli-workflow-prompt-shortcuts.md`.
+
+### DX.2 — Preserve owner workflow prompts verbatim — DONE
+
+Revise the three workflow skills so the owner's original prompt text is the
+primary instruction in each, with repository lifecycle requirements expressed
+as supporting constraints. Do not paraphrase the prompt into a different
+workflow or weaken its intent.
+
+**Exit:** Each skill contains its corresponding owner prompt verbatim and makes
+that request its primary task. Existing stage boundaries and cycle safety
+remain clear; skill manifests parse and workflow/diff checks pass.
+Evidence: `.codex/history/2026-09-30-081-preserve-owner-workflow-prompts-verbatim.md`.
+
+### DX.3 — Add reusable plan-selection and execution skills — DONE
+
+Add standalone project skills for the owner's first-draft plan-selection prompt
+and coordinating-agent execution prompt. Preserve both prompt bodies verbatim,
+including ambiguity handling, task boundaries, delegation criteria, agent
+response format, and local Android environment note. Use valid kebab-case skill
+naming (`slice-select`, `execute-plan`).
+
+**Exit:** Both skills contain their supplied prompt verbatim after frontmatter,
+validate as project skills, and the repository workflow and diff checks pass.
+No app behavior changes.
+Evidence: `.codex/history/2026-09-30-082-add-coordinated-execute-plan-skill.md`.
+
+### DX.4 — Add planned-draft review skill — NEXT
+
+Add the owner's prompt for reviewing a planned implementation slice as a
+standalone project skill. Preserve the prompt wording, ambiguity stop rule,
+45% context-window limit, split convention, validation expectations, and
+difficulty-rating requirement.
+
+**Exit:** The skill contains the supplied prompt verbatim after frontmatter,
+validates with a kebab-case name, and repository workflow/diff checks pass. No
+app behavior changes.
+
 ## R1 — Domain and presentation stabilization
 
 ### R1.1 — Canonical domain contract — DONE

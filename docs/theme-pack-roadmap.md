@@ -1,5 +1,21 @@
 # Oxygen Weather Theme Pack Roadmap
 
+## TP.3C baseline recovery split (2026-09-30)
+
+Cycle 087 found the existing TP.3A/TP.3B installed captures incomparable and
+closed the comparison as blocked. Recovery is split into bounded prerequisites.
+Cycle 088 established the debug-only deterministic fixture and load-state
+launch mode and passed. Cycle 089, the dependent installed capture slice, was
+closed BLOCKED after the emulator lost a stable rendered surface. Cycle 090
+retried that bounded capture on the local `oxygen_starter` AVD with its saved
+lavapipe renderer and completed the twenty-case installed evidence matrix. Five
+Now rows record a source/update/load-state visibility deviation; text clipping
+and reference parity remain unverified. This resolves the emulator prerequisite
+only. Cycle 090 does not compare references or complete TP.3C; a separate
+comparison and any permitted single correction pass remain required before
+TP.3D. See
+`.codex/history/2026-09-30-090-tp-3c-partial-b-installed-baseline-recapture-on-local-avd.md`.
+
 ## TP.2E shared-component showcase and cross-effects comparison — CLOSED (PASS)
 
 Cycle 084 reconciled the passing 075–077 installed showcase sets and both 078 reviews. Together they cover 30 unique pairs / 60 source captures across six families and five themes at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle and Effects Off. The result is 24 PASS, six KNOWN-LIMITATION for the existing Rain glyph mapping gap, and zero FINDING; Rain text and supplied semantics remain. The inventory, hashes, dispositions, exact conditions, and limits are recorded in `.codex/test-artifacts/084-tp2e-evidence-reconciliation-closure/` and the cycle 084 history. This closes TP.2E for test-only shared-component showcases and cross-effects review. Normal Home integration/page composition, pixel parity, TP.3 responsive/state acceptance, and TalkBack service traversal remain unverified. Any Rain glyph correction requires separate planned work. TP.3 is the next theme-pack dependency.

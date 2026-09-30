@@ -30,6 +30,23 @@ If `.codex/current.md` is `PLANNED`, activate the plan before modifying producti
 python scripts/codex_cycle.py activate
 ```
 
+## Reusable workflow prompts
+
+Start Codex CLI from the repository root, type `/skills`, and select one of
+these project skills:
+
+- **oxygen-plan-next-slice** — inspect the roadmap and current cycle, then
+  prepare a bounded draft plan and make it the current planned cycle.
+- **oxygen-review-plan** — review the current draft and turn it into a complete,
+  reviewable implementation plan. It does not activate the plan unless asked.
+- **oxygen-execute-plan** — execute the active plan, delegating bounded tasks to
+  agents when the plan benefits from parallel work, then verify and close the
+  cycle.
+
+The skills are stored in `.agents/skills/`. `/skills` applies the chosen skill
+to the next request; it does not itself start or execute a cycle. Provide any
+slice-specific preferences in the same request after selecting the skill.
+
 If it is `IDLE`, create one bounded cycle from a roadmap item:
 
 ```sh
