@@ -1,0 +1,43 @@
+{
+  "status": "derived proposal; unapproved",
+  "revision": "079-rain-marks-r1",
+  "condition": "RAIN",
+  "purpose": "Owner review of theme-specific Rain marks for the three D29 source-gap cells. This proposal does not amend D29 or authorize runtime changes.",
+  "shared_contract": {
+    "meaning": "Supplied visible Rain text and semantics remain authoritative; artwork is decorative and noninteractive.",
+    "size": "Show the specimen in the existing 36 dp forecast slot and permit proportional use up to 40 dp in the hero slot.",
+    "effects_off": "Static, opaque, complete artwork with no glow, blur, translucency, or motion.",
+    "fallback": "Omit the mark and retain visible Rain text if fit or contrast is inadequate.",
+    "inference_limits": "Do not add severity, amount, time-of-day, or other meteorological detail. No mark is inferred from a backdrop."
+  },
+  "proposals": [
+    {
+      "theme": "atmospheric",
+      "source_basis": "D29 WEATHER_ART.md CLOUDY proposal for Atmospheric: pale foreground cloud contour with restrained dark keyline over the atmospheric field; solid high-contrast contour on surfaces. Same-theme language basis only; no direct Rain art is claimed.",
+      "source_locator": "docs/theme-system/design-pack/WEATHER_ART.md, Atmospheric/CLOUDY cell; theme basis: docs/assets/design-references/production-themes/one-app-many-personalities/extracted/atmospheric_phone.png",
+      "treatment": "One soft-edged, outlined cloud with three separated short falling strokes. Use the established pale contour with a restrained dark keyline and a cool condition accent for the drops. No sky, horizon, rain field, or extra wisps.",
+      "contrast_and_effects_off": "The preview uses solid opaque strokes with a static dark keyline around both contour and drops. On flat surfaces use the theme foreground contour; over image-like atmosphere retain the keylines. Effects Off removes any optional effect; none is needed by this proposal.",
+      "fallback": "Remove a drop if it crowds the 36 dp slot; omit the mark if cloud/drop separation or contrast fails, retaining visible Rain text.",
+      "preview": "rain-atmospheric-079.svg"
+    },
+    {
+      "theme": "minimal_oled",
+      "source_basis": "D29 WEATHER_ART.md CLOUDY proposal for Minimal OLED: one simple white cloud outline with open interior, no shaded fill, gradients, or glow. Same-theme language basis only; no direct Rain art is claimed.",
+      "source_locator": "docs/theme-system/design-pack/WEATHER_ART.md, Minimal OLED/CLOUDY cell; theme basis: docs/assets/design-references/production-themes/one-app-many-personalities/extracted/minimal_oled_phone.png",
+      "treatment": "One spare white cloud contour and three short separated white falling strokes. Use one line weight, no fill, accent color, glow, gradient, or secondary contour.",
+      "contrast_and_effects_off": "Use the opaque foreground white on black or near-black. Effects Off is identical to the static specimen.",
+      "fallback": "Simplify by removing a falling stroke if needed; omit the mark if contours merge or lose legibility at 36 dp, retaining visible Rain text.",
+      "preview": "rain-minimal-oled-079.svg"
+    },
+    {
+      "theme": "terminal",
+      "source_basis": "D29 WEATHER_ART.md Terminal CLEAR, PARTLY_CLOUDY, and CLOUDY proposals use literal monospace console tokens and reject ASCII weather art or blinking characters. Same-theme language basis only; no direct Rain token is claimed.",
+      "source_locator": "docs/theme-system/design-pack/WEATHER_ART.md, Terminal/CLEAR, Terminal/PARTLY_CLOUDY, and Terminal/CLOUDY cells; theme basis: docs/assets/design-references/production-themes/one-app-many-personalities/extracted/terminal_phone.png",
+      "treatment": "A static monospace `RAIN` token, without brackets, box, cursor, or pictographic mark. The token is decorative and does not replace the caller-supplied condition text.",
+      "contrast_and_effects_off": "Use the existing terminal foreground role on its opaque dark canvas. Effects Off keeps the same static token.",
+      "fallback": "Omit if the token crowds or displaces visible condition text; retain visible Rain text.",
+      "preview": "rain-terminal-079.svg"
+    }
+  ],
+  "open_owner_decision": "Review each treatment and exact retained revision; approve, reject, or request revision. No runtime change is authorized by this artifact."
+}

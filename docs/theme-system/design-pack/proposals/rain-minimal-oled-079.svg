@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" role="img" aria-labelledby="title desc">
+  <title id="title">Minimal OLED Rain mark proposal, revision 079-rain-marks-r1</title>
+  <desc id="desc">A white open cloud contour with three short separated white falling strokes. Static proposal preview at 36 dp on black.</desc>
+  <rect width="36" height="36" fill="#000000"/>
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
+    <path d="M8.1 21h18.1a4.8 4.8 0 0 0 0-9.6 7.4 7.4 0 0 0-13.9-1.2A5.5 5.5 0 0 0 8.1 21Z"/>
+    <path d="m11.2 25.1-1.4 3m8.2-3-1.4 3m8.2-3-1.4 3"/>
+  </g>
+</svg>

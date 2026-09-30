@@ -14,6 +14,7 @@ Authority order: [product specification](../../SPECIFICATION.md), [adopted UI sp
 - [REFERENCE_MEASUREMENT_METHOD.md](REFERENCE_MEASUREMENT_METHOD.md): proportional measurement and state-treatment derivation from reference art.
 - [CONTENT_AND_STATE_RULES.md](CONTENT_AND_STATE_RULES.md): presentation-model slots, state grammar, accessibility, RTL, and effects.
 - [WEATHER_ART.md](WEATHER_ART.md): complete D29 shared mark contract and owner-approved 30-cell theme/condition matrix, including direct sources, same-theme proposals, explicit omissions, and integrated review; the broader TP.1D pack remains unapproved.
+- [Rain mark proposals (cycle 079)](proposals/RAIN_MARKS_079_REVIEW.md): owner-approved visual proposals for the three D29 Rain source-gap cells; the D29 matrix and runtime behavior remain unchanged pending separate implementation work.
 - [SOURCE_DECISIONS.md](SOURCE_DECISIONS.md): source ledger, conflicts, asset disposition, and owner decisions.
 - [D31_SOURCE_AUDIT.md](D31_SOURCE_AUDIT.md): source-traceable five-theme atmosphere inventory, measured backdrop samples, qualitative profiles, explicit source gaps, and audit limits; it does not approve page treatments.
 - [D31_PAGE_ATMOSPHERES.md](D31_PAGE_ATMOSPHERES.md): cycle 053 mapping of twenty source-traceable Now, Hourly, Daily, and Details atmosphere proposals, one per page and built-in theme. The owner approved the cells and overall set on 2026-09-25; the five Details cells remain explicitly identified as same-theme derivations because no dedicated Details reference is indexed.

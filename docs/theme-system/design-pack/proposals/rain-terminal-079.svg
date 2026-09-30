@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" role="img" aria-labelledby="title desc">
+  <title id="title">Terminal Rain mark proposal, revision 079-rain-marks-r1</title>
+  <desc id="desc">A static monospace RAIN token in terminal foreground green on an opaque dark canvas, centered within the 36 dp specimen.</desc>
+  <rect width="36" height="36" fill="#07151D"/>
+  <text x="18" y="21.2" text-anchor="middle" fill="#76E39A" font-family="monospace" font-size="9.2" font-weight="600" letter-spacing="0.1">RAIN</text>
+</svg>
