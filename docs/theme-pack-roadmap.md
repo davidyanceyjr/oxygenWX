@@ -16,6 +16,16 @@ comparison and any permitted single correction pass remain required before
 TP.3D. See
 `.codex/history/2026-09-30-090-tp-3c-partial-b-installed-baseline-recapture-on-local-avd.md`.
 
+Cycle 092 then validated the approved packet and all twenty cycle 090 capture
+identities, but closed BLOCKED: cycle 091 changed default Metric display strings
+after those captures. The approved SVG fixture and saved APK show bare-degree
+values while the current normal-app mapper shows explicit units. Its twenty
+case records are provisional and cannot authorize visual corrections. The
+owner-requested TP.3C-R reconciliation passed in cycle 094 with explicit
+approval of the r4 packet below. Cycle 093 remains ineligible until a new
+comparison cycle reaches REVIEW COMPLETE. See
+`.codex/history/2026-09-30-092-tp3c-baseline-installed-visual-comparison.md`.
+
 ## TP.2E shared-component showcase and cross-effects comparison — CLOSED (PASS)
 
 Cycle 084 reconciled the passing 075–077 installed showcase sets and both 078 reviews. Together they cover 30 unique pairs / 60 source captures across six families and five themes at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle and Effects Off. The result is 24 PASS, six KNOWN-LIMITATION for the existing Rain glyph mapping gap, and zero FINDING; Rain text and supplied semantics remain. The inventory, hashes, dispositions, exact conditions, and limits are recorded in `.codex/test-artifacts/084-tp2e-evidence-reconciliation-closure/` and the cycle 084 history. This closes TP.2E for test-only shared-component showcases and cross-effects review. Normal Home integration/page composition, pixel parity, TP.3 responsive/state acceptance, and TalkBack service traversal remain unverified. Any Rain glyph correction requires separate planned work. TP.3 is the next theme-pack dependency.
@@ -888,7 +898,7 @@ limitations, and a finite pass/block result in history. TP.2 closes only when
 all five exits pass. A blocker stops dependent work until the roadmap is
 explicitly revised.
 
-## TP.3 — Approved page compositions and installed theme acceptance — PLANNED (four bounded slices)
+## TP.3 — Approved page compositions and installed theme acceptance — PLANNED (six bounded slices)
 
 ### Dependency
 
@@ -922,19 +932,64 @@ themes, preserved chronology/provenance/window contracts, focused value and
 semantics checks, and ten installed baseline screenshots (two pages × five
 themes) at 393 × 852 dp. Do not claim visual acceptance yet.
 
+### TP.3C-R — Reconcile Metric references and recapture baseline — PASS (cycle 094)
+
+Cycle 092 was BLOCKED because its approved r3 fixture and cycle 090 installed
+captures predated cycle 091's default Metric formatting. Cycle 094 exported the
+current normal-app Metric presentation, reconciled the fixture and indexed
+references, and recaptured all twenty installed theme/page cases with the
+fixed LIVE/UNKNOWN fixture. The owner approved exact revision
+`tp3cr-proposed-r4-metric-094` at 2026-10-01 18:23:29 UTC.
+
+The immutable comparison target is
+`.codex/test-artifacts/094-tp3c-r-metric-reference-reconciliation/packet/tp3cr-proposed-r4-metric-094/`;
+aggregate SHA-256:
+`a2569e1c8482cc719c1d2de94950a9f929e6f548e32017ae497e4c284b9d1711`;
+full manifest SHA-256:
+`a4d201959d14a19ed4cb458803ee04efe85043111cea22764f70fb6892ab5474`.
+The approved decision, capture identities, and verification details are in
+cycle 094 evidence and history. No production code changed. This pass makes a
+new TP.3C comparison cycle eligible; it does not establish visual parity or
+complete TP.3C. Cycle 093 remains ineligible until that new comparison cycle
+closes REVIEW COMPLETE with a correction handoff.
+
+**Exit:** One explicitly approved, hash-pinned current-Metric reference packet
+and twenty complete, condition-matched installed capture identities pass
+fixture/fact, manifest, and interaction validation. Any unsupported reference
+reflow, missing owner approval, missing capture, or fact mismatch closes
+BLOCKED. This evidence makes a new TP.3C comparison cycle eligible; it does
+not claim TP.3C visual acceptance.
+
 ### TP.3C — Baseline installed visual comparison
 
-After TP.3A and TP.3B pass, compare all 20 baseline app screenshots side by
-side with their approved references. Record screenshot, hierarchy, build and device metadata
-for each comparison. Run one visual correction pass for measurable deviations
-and recapture affected baseline cases. Exit PASS only if all 20 meet the
-approved composition criteria; otherwise record the remaining deviations as
-blockers and stop TP.3.
+After TP.3C-R passes, start a new bounded comparison cycle using its approved
+packet and current-build captures. Compare all twenty baseline cases side by
+side; record measured geometry, text fit/reachability, hierarchy, facts,
+qualitative treatment, build/device metadata, and a disposition for each.
+Exit REVIEW COMPLETE only when all twenty are validly classified and a
+reference-supported correction handoff exists. This portion makes no
+production edit and does not claim visual acceptance. The first attempt,
+`.codex/plans/092-tp3c-baseline-installed-visual-comparison.md`, closed
+BLOCKED and remains historical evidence, not a plan to reactivate.
+
+### TP.3C-partial-A — Baseline correction and installed acceptance
+
+After a new TP.3C comparison cycle closes REVIEW COMPLETE, use its handoff for
+at most one coordinated visual correction pass, then recapture and recompare
+every affected baseline case. If no correction is needed, perform final
+evidence closure without a production edit. Exit TP.3C PASS only if all 20
+meet the approved composition and functional criteria with installed evidence
+and required checks; otherwise record remaining deviations as blockers and
+stop TP.3. The existing
+`.codex/plans/093-tp3c-baseline-visual-correction.md` draft refers to the
+blocked cycle 092; revise its dependency and approved packet identity after
+the new comparison before considering activation.
 
 ### TP.3D — Responsive/state regression closure
 
-After TP.3C passes, capture exactly 15 theme-level Now cases (five themes each
-at compact 360 × 640 dp, font scale 1.3, and Effects Off), ten RTL Hourly/Daily
+After TP.3C-partial-A passes, capture exactly 15 theme-level Now cases (five
+themes each at compact 360 × 640 dp, font scale 1.3, and Effects Off), ten RTL
+Hourly/Daily
 cases (five themes × two pages), and five sparse/missing-data representative
 cases (one per theme). Record hierarchy, build, and device metadata for every
 capture. Run one focused correction pass for functional/readability failures;

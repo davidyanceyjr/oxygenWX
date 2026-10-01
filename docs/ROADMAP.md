@@ -33,6 +33,14 @@ supersedes the theme-specific implementation sequence below. Product semantics
 remain governed by `docs/SPECIFICATION.md` and
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The general roadmap remains active
 for non-theme work and resumes as the implementation sequence after TP.3.
+Cycle 094 passed **TP.3C-R**, Metric reference and installed-baseline
+reconciliation. The approved immutable comparison target is
+`.codex/test-artifacts/094-tp3c-r-metric-reference-reconciliation/packet/tp3cr-proposed-r4-metric-094/`
+(aggregate SHA-256
+`a2569e1c8482cc719c1d2de94950a9f929e6f548e32017ae497e4c284b9d1711`). The
+next eligible slice is a new **TP.3C** installed visual comparison cycle; this
+approval does not establish visual parity or complete TP.3C. R2.1 remains the
+next production forecast-path candidate after the TP.3 gate.
 
 ## Context-budget slicing rule
 
@@ -295,7 +303,7 @@ validate as project skills, and the repository workflow and diff checks pass.
 No app behavior changes.
 Evidence: `.codex/history/2026-09-30-082-add-coordinated-execute-plan-skill.md`.
 
-### DX.4 — Add planned-draft review skill — NEXT
+### DX.4 — Add planned-draft review skill — DONE
 
 Add the owner's prompt for reviewing a planned implementation slice as a
 standalone project skill. Preserve the prompt wording, ambiguity stop rule,
@@ -305,6 +313,7 @@ difficulty-rating requirement.
 **Exit:** The skill contains the supplied prompt verbatim after frontmatter,
 validates with a kebab-case name, and repository workflow/diff checks pass. No
 app behavior changes.
+Evidence: `.codex/history/2026-09-30-083-add-planned-draft-review-skill.md`.
 
 ## R1 — Domain and presentation stabilization
 
@@ -360,7 +369,7 @@ Evidence and limitations: `.codex/history/2026-09-30-091-unit-aware-presentation
 ## R2 — Production forecast path
 
 
-### R2.1 — Forecast provider interface — NEXT
+### R2.1 — Forecast provider interface — PLANNED
 
 Introduce provider-neutral forecast request/result contracts and configurable provider endpoints.
 
