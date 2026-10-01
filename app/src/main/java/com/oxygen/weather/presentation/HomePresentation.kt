@@ -230,8 +230,12 @@ object HomePresentationMapper {
      * Typed state boundary for application-state work. The existing [map] API remains a display
      * adapter until a later slice deliberately changes the caller boundary.
      */
-    fun mapState(bundle: WeatherBundle, derived: DerivedWeather): HomePresentationState {
-        val presentation = map(bundle, derived)
+    fun mapState(
+        bundle: WeatherBundle,
+        derived: DerivedWeather,
+        unitPreset: UnitPreset = UnitPreset.METRIC,
+    ): HomePresentationState {
+        val presentation = map(bundle, derived, unitPreset)
         if (!bundle.hasUsableWeatherFact()) {
             return HomePresentationState.Unavailable(
                 UnavailableHomePresentation(
@@ -255,11 +259,15 @@ object HomePresentationMapper {
         }
     }
 
-    fun map(bundle: WeatherBundle, derived: DerivedWeather): HomePresentation {
+    fun map(
+        bundle: WeatherBundle,
+        derived: DerivedWeather,
+        unitPreset: UnitPreset = UnitPreset.METRIC,
+    ): HomePresentation {
         val hourly = bundle.hourly.take(72)
         val daily = bundle.daily.take(10)
-        val hourlyWindows = hourly.chunked(6).map(::hourlyWindow)
-        val dailyWindows = daily.chunked(5).map { dailyWindow(it, bundle.current.observedAt.toLocalDate()) }
+        val hourlyWindows = hourly.chunked(6).map { hourlyWindow(it, unitPreset) }
+        val dailyWindows = daily.chunked(5).map { dailyWindow(it, bundle.current.observedAt.toLocalDate(), unitPreset) }
 
         val dateJumps = hourlyWindows.mapIndexedNotNull { index, _ ->
             val first = hourly.getOrNull(index * 6) ?: return@mapIndexedNotNull null
@@ -278,56 +286,56 @@ object HomePresentationMapper {
         return HomePresentation(
             current = CurrentPresentation(
                 location = location,
-                temperature = temp(current.temperatureC),
+                temperature = temp(current.temperatureC, unitPreset),
                 condition = condition,
-                apparent = temp(current.apparentC),
+                apparent = temp(current.apparentC, unitPreset),
                 humidity = percent(current.relativeHumidityPct),
-                dewPoint = temp(current.dewPointC),
+                dewPoint = temp(current.dewPointC, unitPreset),
                 precipitationHeadline = when {
                     maxPop == null -> "Precipitation unavailable"
                     maxPop <= 0.0 -> "No precipitation indicated"
                     else -> "${percent(maxPop)} chance"
                 },
-                precipitationSupporting = "Next 6h · ${amount?.oneDecimal() ?: "Amount unavailable"}${if (amount == null) "" else " mm"}",
-                windHeadline = current.windSpeedKph?.let { "${it.roundToInt()} km/h" } ?: "Unavailable",
-                windSupporting = windSupporting(current.windGustKph, current.windDirectionDeg),
+                precipitationSupporting = "Next 6h · ${precipitation(amount, unitPreset)}",
+                windHeadline = speed(current.windSpeedKph, unitPreset),
+                windSupporting = windSupporting(current.windGustKph, current.windDirectionDeg, unitPreset),
                 spokenSummary = buildString {
                     append(location)
                     append(", ")
                     append(condition)
                     append(", ")
-                    append(temp(current.temperatureC))
+                    append(temp(current.temperatureC, unitPreset))
                     append(", feels like ")
-                    append(temp(current.apparentC))
+                    append(temp(current.apparentC, unitPreset))
                     append(". Humidity ")
                     append(percent(current.relativeHumidityPct))
                     append(". Wind ")
-                    append(current.windSpeedKph?.roundToInt()?.let { "$it kilometers per hour." } ?: "unavailable.")
+                    append(current.windSpeedKph?.let { "${speed(it, unitPreset)}." } ?: "unavailable.")
                 },
                 conditionIdentity = current.condition.toWeatherMarkCondition(),
                 fieldAvailability = CurrentFieldAvailability(
                     condition = field(current.condition) { it.displayName() },
-                    temperature = field(current.temperatureC, ::temp),
-                    apparentTemperature = field(current.apparentC, ::temp),
+                    temperature = field(current.temperatureC) { temp(it, unitPreset) },
+                    apparentTemperature = field(current.apparentC) { temp(it, unitPreset) },
                     relativeHumidity = field(current.relativeHumidityPct, ::percent),
-                    dewPoint = field(current.dewPointC, ::temp),
+                    dewPoint = field(current.dewPointC) { temp(it, unitPreset) },
                     precipitationChance = field(maxPop, ::percent),
-                    precipitationAmount = field(amount) { "${it.oneDecimal()} mm" },
-                    windSpeed = field(current.windSpeedKph) { "${it.roundToInt()} km/h" },
-                    windGust = field(current.windGustKph) { "${it.roundToInt()} km/h" },
+                    precipitationAmount = field(amount) { precipitation(it, unitPreset) },
+                    windSpeed = field(current.windSpeedKph) { speed(it, unitPreset) },
+                    windGust = field(current.windGustKph) { speed(it, unitPreset) },
                     windDirection = field(current.windDirectionDeg, ::compass),
                 ),
             ),
             hourlyWindows = hourlyWindows,
             hourlyDateJumps = dateJumps,
             dailyWindows = dailyWindows,
-            detailGroups = details(bundle, derived),
+            detailGroups = details(bundle, derived, unitPreset),
             sourceLine = bundle.currentProvenance.sourceLine(),
             updatedLine = bundle.currentProvenance.updatedLine(bundle.location.timeZone),
         )
     }
 
-    private fun hourlyWindow(hours: List<HourWeather>): HourlyWindowPresentation {
+    private fun hourlyWindow(hours: List<HourWeather>, unitPreset: UnitPreset): HourlyWindowPresentation {
         val first = hours.first()
         val last = hours.last()
         val firstDay = first.time.format(dayFormatter)
@@ -345,7 +353,7 @@ object HomePresentationMapper {
                 HourlyEntryPresentation(
                     time = hour.time.format(hourFormatter),
                     condition = condition,
-                    temperature = temp(hour.temperatureC),
+                    temperature = temp(hour.temperatureC, unitPreset),
                     precipitation = pop,
                     conditionIdentity = hour.condition.toWeatherMarkCondition(),
                     spokenSummary = buildString {
@@ -353,21 +361,21 @@ object HomePresentationMapper {
                         append(", ")
                         append(condition)
                         append(", ")
-                        append(temp(hour.temperatureC))
+                        append(temp(hour.temperatureC, unitPreset))
                         if (pop != null) append(", precipitation $pop")
                     },
                     fieldAvailability = HourlyFieldAvailability(
                         condition = field(hour.condition) { it.displayName() },
-                        temperature = field(hour.temperatureC, ::temp),
+                        temperature = field(hour.temperatureC) { temp(it, unitPreset) },
                         precipitationChance = field(hour.precipitationProbabilityPct, ::percent),
-                        precipitationAmount = field(hour.precipitationMm) { "${it.oneDecimal()} mm" },
+                        precipitationAmount = field(hour.precipitationMm) { precipitation(it, unitPreset) },
                     ),
                 )
             },
         )
     }
 
-    private fun dailyWindow(days: List<DayWeather>, today: java.time.LocalDate): DailyWindowPresentation {
+    private fun dailyWindow(days: List<DayWeather>, today: java.time.LocalDate, unitPreset: UnitPreset): DailyWindowPresentation {
         fun label(day: DayWeather): String = if (day.date == today) "TODAY" else day.date.format(dayFormatter).uppercase()
         return DailyWindowPresentation(
             rangeLabel = "${label(days.first())}–${label(days.last())}",
@@ -377,50 +385,50 @@ object HomePresentationMapper {
                 val precip = when (val probability = day.precipitationProbabilityPct) {
                     null -> "Precipitation unavailable"
                     else -> if (probability <= 0.0) "Dry" else {
-                        "${percent(probability)} · ${day.precipitationMm?.oneDecimal() ?: "Amount unavailable"}${if (day.precipitationMm == null) "" else " mm"}"
+                        "${percent(probability)} · ${day.precipitationMm?.let { precipitation(it, unitPreset) } ?: "Amount unavailable"}"
                     }
                 }
                 DailyEntryPresentation(
                     day = dayLabel,
                     condition = condition,
-                    low = temp(day.lowC),
-                    high = temp(day.highC),
+                    low = temp(day.lowC, unitPreset),
+                    high = temp(day.highC, unitPreset),
                     precipitation = precip,
                     conditionIdentity = day.condition.toWeatherMarkCondition(),
-                    spokenSummary = "$dayLabel, $condition, low ${temp(day.lowC)}, high ${temp(day.highC)}, precipitation $precip",
+                    spokenSummary = "$dayLabel, $condition, low ${temp(day.lowC, unitPreset)}, high ${temp(day.highC, unitPreset)}, precipitation $precip",
                     fieldAvailability = DailyFieldAvailability(
                         condition = field(day.condition) { it.displayName() },
-                        lowTemperature = field(day.lowC, ::temp),
-                        highTemperature = field(day.highC, ::temp),
+                        lowTemperature = field(day.lowC) { temp(it, unitPreset) },
+                        highTemperature = field(day.highC) { temp(it, unitPreset) },
                         precipitationChance = field(day.precipitationProbabilityPct, ::percent),
-                        precipitationAmount = field(day.precipitationMm) { "${it.oneDecimal()} mm" },
+                        precipitationAmount = field(day.precipitationMm) { precipitation(it, unitPreset) },
                     ),
                 )
             },
         )
     }
 
-    private fun details(bundle: WeatherBundle, derived: DerivedWeather): List<MetricGroupPresentation> {
+    private fun details(bundle: WeatherBundle, derived: DerivedWeather, unitPreset: UnitPreset): List<MetricGroupPresentation> {
         val current = bundle.current
         val conditions = listOfNotNull(
-            current.apparentC?.let { MetricPresentation("Feels like", temp(it)) },
+            current.apparentC?.let { MetricPresentation("Feels like", temp(it, unitPreset)) },
             current.relativeHumidityPct?.let { MetricPresentation("Humidity", percent(it)) },
-            current.dewPointC?.let { MetricPresentation("Dew point", temp(it)) },
-            current.pressureHpa?.let { MetricPresentation("Pressure", "${it.oneDecimal()} hPa") },
+            current.dewPointC?.let { MetricPresentation("Dew point", temp(it, unitPreset)) },
+            current.pressureHpa?.let { MetricPresentation("Pressure", pressure(it, unitPreset)) },
             current.cloudCoverPct?.let { MetricPresentation("Cloud cover", percent(it)) },
-            current.visibilityKm?.let { MetricPresentation("Visibility", "${it.oneDecimal()} km") },
+            current.visibilityKm?.let { MetricPresentation("Visibility", visibility(it, unitPreset)) },
         )
         val forecastPattern = listOfNotNull(
-            derived.thermalMomentumC3h?.let { MetricPresentation("3h temperature", signedTemp(it)) },
-            derived.pressureTendencyHpa3h?.let { MetricPresentation("3h pressure", signed(it, "hPa")) },
+            derived.thermalMomentumC3h?.let { MetricPresentation("3h temperature", signedTemp(it, unitPreset)) },
+            derived.pressureTendencyHpa3h?.let { MetricPresentation("3h pressure", pressureDifference(it, unitPreset)) },
             derived.persistenceIndex?.let { MetricPresentation("Persistence", "$it / 100") },
             derived.forecastVolatility?.let { MetricPresentation("Volatility", "$it / 100") },
             derived.atmosphereTexture?.let { MetricPresentation("Pattern", it.displayName()) },
         )
         val history = listOfNotNull(
             derived.seasonalTemperaturePercentile?.let { MetricPresentation("Seasonal temperature", "${it.ordinal()} percentile") },
-            derived.thermalDepartureC?.let { MetricPresentation("Temperature departure", "${signedTemp(it)} from normal") },
-            derived.pressureDepartureHpa?.let { MetricPresentation("Pressure departure", signed(it, "hPa")) },
+            derived.thermalDepartureC?.let { MetricPresentation("Temperature departure", "${signedTemp(it, unitPreset)} from normal") },
+            derived.pressureDepartureHpa?.let { MetricPresentation("Pressure departure", pressureDifference(it, unitPreset)) },
             derived.analogYears.takeIf { it.isNotEmpty() }?.let { MetricPresentation("Analog years", it.joinToString()) },
         )
         return buildList {
@@ -549,14 +557,31 @@ private fun DataProvenance.updatedLine(timeZone: java.time.ZoneId): String =
         ?: "Update time unavailable"
 
 private fun AtmosphereTexture.displayName(): String = name.lowercase().replaceFirstChar(Char::uppercaseChar)
-private fun temp(value: Double?): String = value?.let { "${it.roundToInt()}°" } ?: "Unavailable"
-private fun percent(value: Double?): String = value?.let { "${it.roundToInt().coerceIn(0, 100)}%" } ?: "Unavailable"
-private fun Double.oneDecimal(): String = "%.1f".format(this)
-private fun signedTemp(value: Double): String = "%+.1f°".format(value)
-private fun signed(value: Double, unit: String): String = "%+.1f %s".format(value, unit)
+private fun temp(value: Double?, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.absoluteTemperature(value, preset)) ?: "Unavailable"
 
-private fun windSupporting(gustKph: Double?, directionDeg: Double?): String {
-    val gust = gustKph?.let { "Gusts ${it.roundToInt()}" }
+private fun percent(value: Double?): String = value?.let { "${it.roundToInt().coerceIn(0, 100)}%" } ?: "Unavailable"
+
+private fun precipitation(value: Double?, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.precipitationDepth(value, preset)) ?: "Amount unavailable"
+
+private fun speed(value: Double?, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.windSpeed(value, preset)) ?: "Unavailable"
+
+private fun pressure(value: Double, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.pressure(value, preset))!!
+
+private fun pressureDifference(value: Double, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.pressureDifference(value, preset))!!
+
+private fun visibility(value: Double, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.visibility(value, preset))!!
+
+private fun signedTemp(value: Double, preset: UnitPreset): String =
+    WeatherUnits.format(WeatherUnits.temperatureDifference(value, preset))!!
+
+private fun windSupporting(gustKph: Double?, directionDeg: Double?, preset: UnitPreset): String {
+    val gust = gustKph?.let { "Gusts ${speed(it, preset)}" }
     val direction = directionDeg?.let(::compass)
     return listOfNotNull(gust, direction).takeIf { it.isNotEmpty() }?.joinToString(" · ") ?: "Wind details unavailable"
 }

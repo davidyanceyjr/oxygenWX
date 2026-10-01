@@ -67,7 +67,7 @@ class HomePresentationTest {
         assertTrue(state is HomePresentationState.Partial)
         assertEquals(ForecastHorizonStatus.PARTIAL, (state as HomePresentationState.Partial).horizon.hourly)
         assertEquals(ForecastHorizonStatus.PARTIAL, state.horizon.daily)
-        assertEquals("28°", state.presentation.current.temperature)
+        assertEquals("28 °C", state.presentation.current.temperature)
     }
 
     @Test
@@ -143,20 +143,109 @@ class HomePresentationTest {
     fun sourceAndCurrentSemanticsAreExplicit() {
         assertEquals("Model estimate · Offline development fixture", presentation.sourceLine)
         assertEquals("Updated 12:00 PM", presentation.updatedLine)
-        assertEquals("28°", presentation.current.temperature)
+        assertEquals("28 °C", presentation.current.temperature)
         assertEquals("Partly cloudy", presentation.current.condition)
-        assertEquals("29°", presentation.current.apparent)
+        assertEquals("29 °C", presentation.current.apparent)
         assertEquals("56%", presentation.current.humidity)
-        assertEquals("18°", presentation.current.dewPoint)
+        assertEquals("18 °C", presentation.current.dewPoint)
         assertEquals("No precipitation indicated", presentation.current.precipitationHeadline)
         assertEquals("Next 6h · 0.0 mm", presentation.current.precipitationSupporting)
         assertEquals("13 km/h", presentation.current.windHeadline)
-        assertEquals("Gusts 23 · SW", presentation.current.windSupporting)
+        assertEquals("Gusts 23 km/h · SW", presentation.current.windSupporting)
         assertEquals(WeatherMarkCondition.PARTLY_CLOUDY, presentation.current.conditionIdentity)
         assertEquals(
-            "Demo Station, Partly cloudy, 28°, feels like 29°. Humidity 56%. Wind 13 kilometers per hour.",
+            "Demo Station, Partly cloudy, 28 °C, feels like 29 °C. Humidity 56%. Wind 13 km/h.",
             presentation.current.spokenSummary,
         )
+    }
+
+    @Test
+    fun unitPresetsMapCurrentForecastAndEveryUnitBearingDetail() {
+        val derived = HistoricalSynthesis.derive(bundle).copy(
+            thermalMomentumC3h = -2.5,
+            pressureTendencyHpa3h = 12.0,
+            thermalDepartureC = 3.5,
+            pressureDepartureHpa = -2.4,
+        )
+        val metric = HomePresentationMapper.map(bundle, derived, UnitPreset.METRIC)
+        val us = HomePresentationMapper.map(bundle, derived, UnitPreset.US)
+        val uk = HomePresentationMapper.map(bundle, derived, UnitPreset.UK)
+        assertEquals(metric.current.temperature, uk.current.temperature)
+        assertEquals(metric.current.apparent, uk.current.apparent)
+        assertEquals(metric.current.dewPoint, uk.current.dewPoint)
+        assertEquals("8 mph", uk.current.windHeadline)
+        assertEquals("Gusts 14 mph · SW", uk.current.windSupporting)
+        assertEquals(metric.hourlyWindows, uk.hourlyWindows)
+        assertEquals(metric.dailyWindows, uk.dailyWindows)
+        assertEquals(metric.detailGroups, uk.detailGroups)
+
+        assertEquals("28 °C", metric.current.temperature)
+        assertEquals("82 °F", us.current.temperature)
+        assertEquals("28 °C", uk.current.temperature)
+        assertEquals("85 °F", us.current.apparent)
+        assertEquals("65 °F", us.current.dewPoint)
+        assertEquals("8 mph", us.current.windHeadline)
+        assertEquals("Gusts 14 mph · SW", us.current.windSupporting)
+        assertEquals("Next 6h · 0.0 in", us.current.precipitationSupporting)
+        assertEquals("82 °F", us.current.fieldAvailability.temperature.text)
+        assertEquals("0.0 in", us.current.fieldAvailability.precipitationAmount.text)
+        assertEquals("8 mph", us.current.fieldAvailability.windSpeed.text)
+        assertEquals("SW", us.current.windSupporting.substringAfter(" · "))
+        assertEquals("No precipitation indicated", us.current.precipitationHeadline)
+        assertEquals("0%", us.current.fieldAvailability.precipitationChance.text)
+        assertEquals(us.current.temperature, us.current.spokenSummary.substringAfter(", ").substringAfter(", ").substringBefore(", feels"))
+
+        val metricHours = metric.hourlyWindows.first().entries
+        val usHours = us.hourlyWindows.first().entries
+        val ukHours = uk.hourlyWindows.first().entries
+        assertEquals(6, usHours.size)
+        assertEquals("66 °F", usHours.first().temperature)
+        assertEquals(usHours.first().temperature, usHours.first().fieldAvailability.temperature.text)
+        assertTrue(usHours.first().spokenSummary.contains("66 °F"))
+        assertEquals("0.0 in", usHours.first().fieldAvailability.precipitationAmount.text)
+        assertEquals("0%", usHours.first().fieldAvailability.precipitationChance.text)
+        assertEquals("19 °C", metricHours.first().temperature)
+        assertEquals("19 °C", ukHours.first().temperature)
+        assertEquals(metricHours.map { it.time }, usHours.map { it.time })
+        assertEquals(metricHours.map { it.condition }, usHours.map { it.condition })
+
+        val usDays = us.dailyWindows.first().entries
+        assertEquals(5, usDays.size)
+        assertEquals("66 °F", usDays.first().low)
+        assertEquals("88 °F", usDays.first().high)
+        assertEquals(usDays.first().low, usDays.first().fieldAvailability.lowTemperature.text)
+        assertEquals("8%", usDays.first().fieldAvailability.precipitationChance.text)
+        assertEquals("0.0 in", usDays.first().fieldAvailability.precipitationAmount.text)
+        assertTrue(usDays.first().spokenSummary.contains("low 66 °F, high 88 °F"))
+        assertEquals(metric.dailyWindows.first().entries.map { it.day }, usDays.map { it.day })
+
+        val details = us.detailGroups.associate { group -> group.title to group.metrics.associate { it.label to it.value } }
+        assertEquals("85 °F", details.getValue("Conditions").getValue("Feels like"))
+        assertEquals("56%", details.getValue("Conditions").getValue("Humidity"))
+        assertEquals("65 °F", details.getValue("Conditions").getValue("Dew point"))
+        assertEquals("29.9 inHg", details.getValue("Conditions").getValue("Pressure"))
+        assertEquals("36%", details.getValue("Conditions").getValue("Cloud cover"))
+        assertEquals("9.9 mi", details.getValue("Conditions").getValue("Visibility"))
+        assertEquals("-4.5 °F", details.getValue("Forecast pattern").getValue("3h temperature"))
+        assertEquals("+0.4 inHg", details.getValue("Forecast pattern").getValue("3h pressure"))
+        assertEquals("+6.3 °F from normal", details.getValue("Historical context").getValue("Temperature departure"))
+        assertEquals("-0.1 inHg", details.getValue("Historical context").getValue("Pressure departure"))
+        assertEquals(
+            metric.detailGroups[1].metrics.first { it.label == "Persistence" }.value,
+            details.getValue("Forecast pattern").getValue("Persistence"),
+        )
+        assertEquals(
+            metric.detailGroups[2].metrics.first { it.label == "Analog years" }.value,
+            details.getValue("Historical context").getValue("Analog years"),
+        )
+        assertEquals(
+            metric.detailGroups[2].metrics.first().value,
+            details.getValue("Historical context").getValue("Seasonal temperature"),
+        )
+        assertEquals(details.getValue("Forecast pattern").getValue("Persistence"), metric.detailGroups[1].metrics[2].value)
+        assertEquals("-2.5 °C", metric.detailGroups[1].metrics.first().value)
+        assertEquals("-2.5 °C", uk.detailGroups[1].metrics.first().value)
+        assertEquals("+12.0 hPa", metric.detailGroups[1].metrics[1].value)
     }
 
     @Test

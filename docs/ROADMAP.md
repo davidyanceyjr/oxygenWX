@@ -347,7 +347,7 @@ fixture output changes. Applying the preset to Home mapping remains R1.3A. Plan:
 `.codex/plans/018-unit-conversion-boundary.md`. Evidence and limitations:
 `.codex/history/2026-09-21-018-unit-conversion-boundary.md`.
 
-### R1.3A — Unit-aware presentation mapping — PLANNED
+### R1.3A — Unit-aware presentation mapping — DONE
 
 After R1.3, apply the tested unit functions to current, hourly, daily, and
 Details presentation mapping with unavailable-value coverage. Preference
@@ -355,10 +355,12 @@ selection and persistence remain R5.1 work.
 
 **Exit:** One mapper test matrix covers current, six hourly, five daily, and Details values under Metric/US/UK, including nulls and temperature differences; all existing fixture facts remain unchanged except their formatted units.
 
+Evidence and limitations: `.codex/history/2026-09-30-091-unit-aware-presentation-mapping.md`.
+
 ## R2 — Production forecast path
 
 
-### R2.1 — Forecast provider interface — PLANNED
+### R2.1 — Forecast provider interface — NEXT
 
 Introduce provider-neutral forecast request/result contracts and configurable provider endpoints.
 
