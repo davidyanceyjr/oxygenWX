@@ -34,13 +34,32 @@ remain governed by `docs/SPECIFICATION.md` and
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The general roadmap remains active
 for non-theme work and resumes as the implementation sequence after TP.3.
 Cycle 094 passed **TP.3C-R**, Metric reference and installed-baseline
-reconciliation. The approved immutable comparison target is
+reconciliation. Cycle 095 completed the resulting **TP.3C** baseline comparison
+with REVIEW COMPLETE and a correction handoff; all twenty cases have
+reference-supported deviations, so visual acceptance remains open. Cycle 096
+completed the **TP.3C-partial-A** single correction and installed-acceptance
+slice, but closed BLOCKED with 10 remaining visual deviations; TP.3D is
+ineligible. See `.codex/history/2026-10-01-096-baseline-correction-and-installed-acceptance.md`
+and its evidence directory. The approved immutable comparison target is
 `.codex/test-artifacts/094-tp3c-r-metric-reference-reconciliation/packet/tp3cr-proposed-r4-metric-094/`
 (aggregate SHA-256
 `a2569e1c8482cc719c1d2de94950a9f929e6f548e32017ae497e4c284b9d1711`). The
-next eligible slice is a new **TP.3C** installed visual comparison cycle; this
-approval does not establish visual parity or complete TP.3C. R2.1 remains the
-next production forecast-path candidate after the TP.3 gate.
+approval and comparison do not establish visual parity or complete TP.3C.
+Following the owner direction that blockers become roadmap slices for planned
+implementation of their resolution, cycle 098 completed the Hourly
+reference-identity resolution and acceptance slice with all five primary cases
+passing on the installed app. Evidence and the recovery account are recorded in
+`.codex/history/2026-10-02-098-tp3c-hourly-reference-identity-and-acceptance.md`
+and `.codex/test-artifacts/098-tp3c-hourly-reference-identity-and-acceptance/`.
+Cycle 097 is BLOCKED and remains closed. Its three mismatched citations were
+regression variants attached to primary `P-*` case reports; cycle 098 maps each
+`P-*` case to the corresponding primary SVG and keeps the common indexed
+baseline capture setup. TP.3C remains open: Details and the all-twenty acceptance
+gate are outstanding. The recovery remains bounded in three dependent
+page-family slices under
+`docs/theme-pack-roadmap.md`; the final partial-C cycle owns the all-twenty
+acceptance gate. R2.1 is not executable until the full TP.3 gate passes; it is
+not the current next candidate while TP.3 is blocked.
 
 ## Context-budget slicing rule
 

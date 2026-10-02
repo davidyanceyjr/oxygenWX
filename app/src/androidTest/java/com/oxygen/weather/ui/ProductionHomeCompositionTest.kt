@@ -1,7 +1,8 @@
 package com.oxygen.weather.ui
 
-import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -37,7 +38,7 @@ class ProductionHomeCompositionTest {
         assertTextPresent(home.current.location)
         assertTextPresent(home.current.temperature)
         assertTextPresent(home.current.condition)
-        assertTextPresent(home.current.apparent)
+        assertTextPresent("Feels ${home.current.apparent}")
         assertTextPresent(home.current.humidity)
         assertTextPresent(home.current.dewPoint)
         assertTextPresent(home.current.precipitationHeadline)
@@ -45,6 +46,10 @@ class ProductionHomeCompositionTest {
         assertTextPresent(home.sourceLine)
         assertTextPresent(home.updatedLine)
         assertTextPresent(STATUS)
+        assertTextDisplayedOnSelectedPage(home.sourceLine)
+        assertTextDisplayedOnSelectedPage(home.updatedLine)
+        assertTextDisplayedOnSelectedPage(STATUS)
+        compose.onNodeWithText("Forecast pattern", substring = false).assertDoesNotExist()
         compose.onNodeWithText("Next hours", substring = false).assertDoesNotExist()
 
         val firstWindow = home.hourlyWindows.first()
@@ -58,18 +63,17 @@ class ProductionHomeCompositionTest {
                 assertTextPresent("Precipitation $it")
             }
         }
-        compose.onAllNodesWithContentDescription("Earlier unavailable").assertCountEquals(2)
-        compose.onAllNodesWithContentDescription("Earlier unavailable")[0].assertIsNotEnabled()
-        compose.onAllNodesWithContentDescription("Later").assertCountEquals(2)
+        currentPageControl("Earlier unavailable").assertIsNotEnabled()
+        currentPageControl("Later").assertExists()
         compose.onNodeWithContentDescription("Choose forecast date").assertExists().performClick()
 
         val laterJump = home.hourlyDateJumps.first { it.windowIndex > 0 }
         compose.onNodeWithText(laterJump.label, substring = false).assertExists().performClick()
         val selectedWindow = home.hourlyWindows[laterJump.windowIndex]
         compose.onNodeWithText(selectedWindow.rangeLabel, substring = false, useUnmergedTree = true).assertExists()
-        compose.onNodeWithContentDescription("Earlier").performClick()
+        currentPageControl("Earlier").performClick()
         compose.onNodeWithText(home.hourlyWindows[laterJump.windowIndex - 1].rangeLabel, substring = false, useUnmergedTree = true).assertExists()
-        compose.onAllNodesWithContentDescription("Later")[0].performClick()
+        currentPageControl("Later").performClick()
         compose.onNodeWithText(selectedWindow.rangeLabel, substring = false, useUnmergedTree = true).assertExists()
         compose.onNodeWithContentDescription("Choose forecast date").performClick()
         compose.onNodeWithText(home.hourlyDateJumps.first().label, substring = false).performClick()
@@ -92,6 +96,8 @@ class ProductionHomeCompositionTest {
             }
         }
         assertEquals(WeatherThemeId.entries.toList(), visitedThemes)
+        compose.onNodeWithContentDescription("Details page, 4 of 4, not selected").performClick()
+        assertTextPresent("Forecast pattern")
     }
 
     private fun selectTheme(displayName: String) {
@@ -103,6 +109,26 @@ class ProductionHomeCompositionTest {
     private fun assertTextPresent(text: String) {
         assertTrue("expected supplied text '$text'", compose.onAllNodesWithText(text, substring = false, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
     }
+
+    private fun assertTextDisplayedOnSelectedPage(text: String) {
+        val viewport = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+        val nodes = compose.onAllNodesWithText(text, substring = false, useUnmergedTree = true)
+        val index = nodes.fetchSemanticsNodes().indexOfFirst {
+            it.boundsInRoot.center.x >= viewport.left && it.boundsInRoot.center.x < viewport.right
+        }
+        require(index >= 0) { "No '$text' on the selected page" }
+        nodes[index].assertIsDisplayed()
+    }
+
+    private fun currentPageControl(label: String) =
+        compose.onAllNodesWithContentDescription(label).let { nodes ->
+            val viewport = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+            val index = nodes.fetchSemanticsNodes().indexOfFirst {
+                it.boundsInRoot.center.x >= viewport.left && it.boundsInRoot.center.x < viewport.right
+            }
+            require(index >= 0) { "No control '$label' on the selected page" }
+            nodes[index]
+        }
 
     private fun assertThemeContentPreserved(home: com.oxygen.weather.presentation.HomePresentation, page: String) {
         when (page) {

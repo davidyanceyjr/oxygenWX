@@ -20,9 +20,7 @@ Follow `docs/CODEX.md` and the plan requirements in `.codex/README.md`.
    draft; if ACTIVE, do not replace the active boundary. Report any mismatch.
 3. Review the draft against the roadmap's dependencies and exit criteria,
    product/architecture/UI invariants, context budget, and explicit out-of-scope
-   work. Enforce a hard maximum of 65% of the available context window for each
-   implementation slice; split any slice expected to exceed that ceiling.
-   Resolve routine planning gaps using repository authority. Clearly mark
+   work. Resolve routine planning gaps using repository authority. Clearly mark
    assumptions and dependencies that need owner input; do not invent approval.
 4. Rewrite the referenced plan into a complete implementation plan with a
    bounded objective, production boundary, invariants, ordered implementation

@@ -3,6 +3,7 @@ package com.oxygen.weather.ui.themeengine
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -41,7 +42,9 @@ class ThemeCatalogTest {
             assertNotNull(definition.typography.bodyMedium.fontFamily)
             assertNotNull(definition.typography.labelMedium.fontFamily)
         }
-        assertEquals(FontFamily.Monospace, ThemeCatalog.terminal.typography.bodyMedium.fontFamily)
+        assertTrue(ThemeCatalog.terminal.typography.bodyMedium.fontFamily != FontFamily.Monospace)
+        assertEquals(56.sp, ThemeCatalog.atmospheric.typography.displayLarge.fontSize)
+        assertEquals(48.sp, ThemeCatalog.terminal.typography.displayLarge.fontSize)
     }
 
     @Test

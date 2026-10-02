@@ -60,12 +60,12 @@ class ProductionDailyDetailsCompositionTest {
                 dailyControl("Earlier").performScrollTo().performClick()
             }
             assertDailyWindow(0)
-            val earlier = dailyControl("Earlier unavailable")
+            val earlier = dailyControl("Earlier unavailable").performScrollTo()
             earlier.assertIsNotEnabled()
             assertControlHeight(earlier.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
             dailyControl("Later").performScrollTo().performClick()
             assertDailyWindow(1)
-            val later = dailyControl("Later unavailable")
+            val later = dailyControl("Later unavailable").performScrollTo()
             later.assertIsNotEnabled()
             assertControlHeight(later.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
 
@@ -123,8 +123,7 @@ class ProductionDailyDetailsCompositionTest {
         window.entries.forEach { entry ->
             assertText(entry.day)
             assertText(entry.condition)
-            assertText(entry.low)
-            assertText(entry.high)
+            assertText("Low ${entry.low} · High ${entry.high}")
             assertText(entry.precipitation)
             compose.onAllNodesWithContentDescription(entry.spokenSummary).assertCountEquals(1)
         }
@@ -134,7 +133,7 @@ class ProductionDailyDetailsCompositionTest {
         assertText(home.sourceLine)
         assertText(home.updatedLine)
         assertText(STATUS)
-        assertPageTextOrder("Daily", listOf(window.rangeLabel, "Earlier${if (index == 0) " unavailable" else ""}", "Later${if (index == 1) " unavailable" else ""}", "Source", home.sourceLine, "Update time", home.updatedLine, STATUS))
+        assertPageTextOrder("Daily", listOf(window.rangeLabel, "Earlier${if (index == 0) " · disabled" else ""}", "Later${if (index == 1) " · disabled" else ""}", "Source", home.sourceLine, "Update time", home.updatedLine, STATUS))
         val descriptions = collectDescriptions(compose.onNode(isRoot(), useUnmergedTree = true).fetchSemanticsNode())
         val positions = window.entries.map { descriptions.indexOf(it.spokenSummary) }
         assertTrue("Daily summaries missing or reordered: $positions", positions.all { it >= 0 } && positions.zipWithNext().all { (a, b) -> a < b })
@@ -147,7 +146,9 @@ class ProductionDailyDetailsCompositionTest {
 
     private fun dailyControl(label: String): SemanticsNodeInteraction =
         compose.onAllNodesWithContentDescription(label).let { nodes ->
-            val index = nodes.fetchSemanticsNodes().indexOfLast { it.boundsInRoot.left >= 0f }
+            val index = nodes.fetchSemanticsNodes().indexOfLast {
+                it.boundsInRoot.left >= 0f
+            }
             require(index >= 0) { "No visible Daily control '$label'" }
             nodes[index]
         }
@@ -205,7 +206,7 @@ class ProductionDailyDetailsSparseCompositionTest {
         }
 
         compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
-        listOf(first.day, first.condition, first.low, first.high, first.precipitation, mapped.sourceLine, mapped.updatedLine,
+        listOf(first.day, first.condition, "Low ${first.low} · High ${first.high}", first.precipitation, mapped.sourceLine, mapped.updatedLine,
             "Daily forecast horizon is partial.", "Retained cached data; refresh failed.").forEach(::assertText)
         compose.onAllNodesWithContentDescription(first.spokenSummary).assertCountEquals(1)
         dailyControl("Earlier unavailable").assertIsNotEnabled()
@@ -229,7 +230,11 @@ class ProductionDailyDetailsSparseCompositionTest {
 
     private fun dailyControl(label: String): SemanticsNodeInteraction =
         compose.onAllNodesWithContentDescription(label).let { nodes ->
-            val index = nodes.fetchSemanticsNodes().indexOfLast { it.boundsInRoot.left >= 0f }
+            val index = nodes.fetchSemanticsNodes().indexOfLast {
+                val bounds = it.boundsInRoot
+                bounds.left >= 0f && bounds.width >= 48f * compose.density.density &&
+                    bounds.height >= 48f * compose.density.density
+            }
             require(index >= 0) { "No visible Daily control '$label'" }
             nodes[index]
         }

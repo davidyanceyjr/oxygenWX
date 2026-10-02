@@ -69,10 +69,8 @@ class ProductionForecastComponentsTest {
             compose.onAllNodesWithText("Sunny", useUnmergedTree = true).assertCountEquals(themes)
             compose.onAllNodesWithText("Rain chance 40%", useUnmergedTree = true).assertCountEquals(themes)
             compose.onAllNodesWithText("No precipitation", useUnmergedTree = true).assertCountEquals(themes)
-            compose.onAllNodesWithText("8°C", useUnmergedTree = true).assertCountEquals(themes)
-            compose.onAllNodesWithText("13°C", useUnmergedTree = true).assertCountEquals(themes)
-            compose.onAllNodesWithText("9°C", useUnmergedTree = true).assertCountEquals(themes)
-            compose.onAllNodesWithText("18°C", useUnmergedTree = true).assertCountEquals(themes)
+            compose.onAllNodesWithText("Low 8°C · High 13°C", useUnmergedTree = true).assertCountEquals(themes)
+            compose.onAllNodesWithText("Low 9°C · High 18°C", useUnmergedTree = true).assertCountEquals(themes)
             compose.onAllNodesWithContentDescription("06:00, Rain expected, Temperature unavailable verbatim, precipitation 35 percent")
                 .assertCountEquals(themes)
             compose.onAllNodesWithContentDescription("07:00, Sunny, 21°C, precipitation unavailable")
@@ -125,7 +123,8 @@ class ProductionForecastComponentsTest {
             val height = node.fetchSemanticsNode().boundsInRoot.height / compose.density.density
             assertTrue("Disabled Earlier target in theme index $index was ${height}dp", height >= 48f)
         }
-        compose.onAllNodesWithText("Earlier unavailable").assertCountEquals(WeatherThemeId.entries.size)
+        compose.onAllNodesWithText("Earlier · disabled").assertCountEquals(WeatherThemeId.entries.size)
+        compose.onNodeWithText("Later · disabled").assertExists()
         val enabledEarlier = compose.onNodeWithContentDescription("Earlier")
         val disabledLater = compose.onNodeWithContentDescription("Later unavailable")
         disabledLater.assertIsNotEnabled()

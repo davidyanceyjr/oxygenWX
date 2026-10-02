@@ -1,6 +1,7 @@
 package com.oxygen.weather.ui
 
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -62,7 +63,7 @@ class ProductionHomeSparseCompositionTest {
 
         assertTextPresent(presentation.current.temperature)
         assertTextPresent(presentation.current.condition)
-        assertTextPresent(presentation.current.apparent)
+        assertTextPresent("Feels ${presentation.current.apparent}")
         assertTextPresent(presentation.current.humidity)
         assertTextPresent(presentation.current.dewPoint)
         assertTextPresent(presentation.current.precipitationHeadline)
@@ -77,7 +78,12 @@ class ProductionHomeSparseCompositionTest {
         assertTextPresent(entry.time)
         assertTextPresent(entry.condition)
         assertTextPresent(entry.temperature)
-        compose.onNodeWithText("Precipitation", substring = false).assertDoesNotExist()
+        val viewport = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+        assertTrue(
+            "Hourly must omit missing precipitation",
+            compose.onAllNodesWithText("Precipitation", substring = false).fetchSemanticsNodes()
+                .none { it.boundsInRoot.right > viewport.left && it.boundsInRoot.left < viewport.right },
+        )
         compose.onAllNodesWithContentDescription(entry.spokenSummary).assertCountEquals(1)
         compose.onAllNodesWithContentDescription("Earlier unavailable").assertCountEquals(1)
         compose.onAllNodesWithContentDescription("Later unavailable").assertCountEquals(1)

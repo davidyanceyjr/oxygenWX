@@ -980,14 +980,102 @@ every affected baseline case. If no correction is needed, perform final
 evidence closure without a production edit. Exit TP.3C PASS only if all 20
 meet the approved composition and functional criteria with installed evidence
 and required checks; otherwise record remaining deviations as blockers and
-stop TP.3. The existing
+stop TP.3. Cycle 096 (`.codex/history/2026-10-01-096-baseline-correction-and-installed-acceptance.md`)
+closed BLOCKED: 10 of 20 cases retain visual deviations. Its complete matrix
+and per-case evidence are under
+`.codex/test-artifacts/096-baseline-correction-and-installed-acceptance/`.
+TP.3D is ineligible until a separately planned cycle resolves the deviations
+and TP.3C passes. The existing
 `.codex/plans/093-tp3c-baseline-visual-correction.md` draft refers to the
 blocked cycle 092; revise its dependency and approved packet identity after
 the new comparison before considering activation.
 
+### TP.3C-recovery — Remaining baseline visual deviations
+
+Cycle 096 exhausted the original single correction pass but closed BLOCKED with
+ten of twenty cases still deviating. The owner directed that these blockers
+become planned implementation work. This separately authorized recovery is
+limited to the ten listed findings; it does not rewrite cycle 096 or permit
+open-ended polish. The findings span three separable page families, so apply
+the roadmap's context-budget rule as three ordered recovery slices, each below
+45% target and the hard 65% ceiling. No slice may be activated before its
+dependency passes.
+
+All slices use the unchanged owner-approved r4 Metric packet from cycle 094
+(aggregate SHA-256
+`a2569e1c8482cc719c1d2de94950a9f929e6f548e32017ae497e4c284b9d1711`), cycle
+095's source-linked correction handoff, and cycle 096's case matrix/evidence.
+The packet and prior evidence remain immutable. Preserve facts, provenance,
+chronology, navigation, controls, request behavior, and accessibility meaning;
+Effects Off remains opaque, static, and complete.
+
+#### TP.3C-recovery-partial-A — Hourly reference identity and acceptance — DONE (PASS)
+
+Cycle 098 completed this slice. All five primary Hourly cases passed with
+installed evidence from one final APK, focused UI checks, and broader
+repository checks. The cycle history records verification and boundaries:
+`.codex/history/2026-10-02-098-tp3c-hourly-reference-identity-and-acceptance.md`;
+the case matrix, screenshots, comparisons, and recovery record are in
+`.codex/test-artifacts/098-tp3c-hourly-reference-identity-and-acceptance/`.
+The repeated setup after interruption is documented in
+`logs/capture-recovery-note.md` under that evidence directory. Details recovery
+partial-B is the next dependent slice. TP.3C and TP.3 remain open, and TP.3D is
+still ineligible until the all-twenty gate passes.
+
+**Completed plan:** `.codex/plans/098-tp3c-hourly-reference-identity-and-acceptance.md`.
+
+Resolve the five Hourly deviations across Atmospheric, Glass, Minimal OLED,
+Instrument, and Terminal. Scope is Hourly composition, date/window controls,
+Hourly provenance anatomy, and directly relevant tests. Cycle 097 closed
+BLOCKED before capture because three primary `P-*` case reports cited separate
+regression references (Glass font 1.3, Instrument High contrast, Terminal
+RTL). The authoritative identity is the case ID's primary SVG in the approved
+r4 render index. Cycle 098 must use `glass-hourly.svg`,
+`instrument-hourly.svg`, and `terminal-hourly.svg` for those cases, just as the
+Atmospheric and Minimal OLED cases use their primary SVGs. All five indexed
+primary cases use the common baseline setup: 393 × 852 dp, font scale 1.0,
+en-US/LTR, Standard contrast, and the theme's indexed effects. The variant
+references remain distinct regression cases and are not substitutes for the
+primary acceptance targets. The cycle 096 reports and artifacts remain
+immutable; their three incorrect citations are explicitly superseded for
+reference selection by the completed plan above.
+
+**Exit:** All five Hourly cases pass with exact installed evidence and focused
+checks; otherwise close BLOCKED with exact remaining deviations and stop the
+recovery dependency chain. Target context 30–40%, stop before 45%.
+
+#### TP.3C-recovery-partial-B — Details cases (cycle 099)
+
+After partial-A passes, resolve the five Details deviations across the same
+five themes. Scope is Details composition and source/update/status/inspection
+groups plus directly relevant tests. Recompare the five Details cases through
+the installed normal-app path.
+
+**Exit:** All five Details cases pass with exact installed evidence and focused
+checks; otherwise close BLOCKED with exact remaining deviations and stop the
+recovery dependency chain. Target context 25–35%, stop before 45%.
+
+#### TP.3C-recovery-partial-C — Now cases and full baseline gate (cycle 100)
+
+After partial-B passes, resolve the remaining Glass, Instrument, and Minimal
+OLED Now deviations. Then freeze the candidate and recapture/recompare all
+twenty theme/page cases, including the ten cases that passed cycle 096 and the
+Hourly/Details cases verified by partial-A/B. Scope includes only the three
+listed Now cases, integration needed to preserve their semantics, and the
+final twenty-case installed acceptance/review; no additional visual polish is
+authorized.
+
+**Exit:** All twenty baseline cases pass composition, geometry, text
+fit/reachability, fact/provenance, semantics, and interaction criteria with
+exact installed evidence and required focused/regression checks. If any case
+remains deviating or unverified, close BLOCKED with exact evidence and stop
+TP.3; no automatic follow-up slice is created. Target context 35–45%, stop
+before 50%. TP.3D remains ineligible until this exit passes and the complete
+TP.3C gate is closed.
+
 ### TP.3D — Responsive/state regression closure
 
-After TP.3C-partial-A passes, capture exactly 15 theme-level Now cases (five
+After TP.3C-partial-A and all three TP.3C-recovery slices pass, capture exactly 15 theme-level Now cases (five
 themes each at compact 360 × 640 dp, font scale 1.3, and Effects Off), ten RTL
 Hourly/Daily
 cases (five themes × two pages), and five sparse/missing-data representative
@@ -998,7 +1086,8 @@ verification remains a separately reported boundary.
 
 ### TP.3 exit
 
-TP.3 closes only when all baseline comparisons and regression captures pass the
+TP.3 closes only when TP.3C-partial-A and all three TP.3C-recovery slices pass,
+all baseline comparisons and regression captures pass the
 approved visual and semantic criteria, the single correction pass leaves no
 blocking deviation, and focused/regression checks pass. Any remaining blocker
 ends the cycle blocked; no automatic polish follow-up is created.

@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +42,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -119,22 +123,24 @@ class ProductionSharedShowcaseTest {
             }
             val page = ShowcasePage.entries[activePage]
             ProductionBackdrop(theme, Modifier.requiredSize(360.dp, 640.dp).testTag(ROOT_TAG)) {
-                ShowcasePageContent(
-                    theme = theme,
-                    page = page,
-                    pageSelected = { index ->
-                        pageCallbacks++
-                        selectedPageIndex = index
-                    },
-                    earlier = { earlierCallbacks++ },
-                    later = { laterCallbacks++ },
-                    dateSelected = { index ->
-                        dateCallbacks++
-                        selectedWindowIndex = index
-                    },
-                    foregroundClicked = { foregroundClicks++ },
-                    onMeasured = { measuredPageBounds[page] = it },
-                )
+                key(theme.definition.id, page) {
+                    ShowcasePageContent(
+                        theme = theme,
+                        page = page,
+                        pageSelected = { index ->
+                            pageCallbacks++
+                            selectedPageIndex = index
+                        },
+                        earlier = { earlierCallbacks++ },
+                        later = { laterCallbacks++ },
+                        dateSelected = { index ->
+                            dateCallbacks++
+                            selectedWindowIndex = index
+                        },
+                        foregroundClicked = { foregroundClicks++ },
+                        onMeasured = { measuredPageBounds[page] = it },
+                    )
+                }
             }
         }
 
@@ -153,7 +159,6 @@ class ProductionSharedShowcaseTest {
                 compose.waitForIdle()
                 assertPageContent(page, id.name)
                 assertPageFits(page, id.name, measuredPageBounds)
-                assertRequiredContentBounds(page, id.name)
                 val semanticFacts = semanticSnapshot()
                 val baseline = semanticBaselines.putIfAbsent(page, semanticFacts)
                 if (baseline != null) assertEquals("${id.name}/${page.name} changed supplied semantic meaning", baseline, semanticFacts)
@@ -169,6 +174,10 @@ class ProductionSharedShowcaseTest {
                     selectedWindowIndex = { selectedWindowIndex },
                     foregroundCalls = { foregroundClicks },
                 )
+                assertRequiredContentBounds(page, id.name)
+
+                compose.onNodeWithText(page.label, useUnmergedTree = true).performScrollTo()
+                compose.waitForIdle()
 
                 val filename = "${id.name.lowercase()}-${page.fileKey}-$effectKey-360x640-font1.0-ltr-standard.png"
                 val bitmap = compose.onNode(isRoot()).captureToImage().asAndroidBitmap()
@@ -201,7 +210,11 @@ class ProductionSharedShowcaseTest {
         compose.onNodeWithText(page.label, substring = false).assertExists()
         when (page) {
             ShowcasePage.PAGE_IDENTITY -> {
-                compose.onAllNodesWithText("Now", substring = false).assertCountEquals(2)
+                compose.onAllNodesWithText("Now", substring = false)
+                    .assertCountEquals(if (theme == WeatherThemeId.TERMINAL.name) 1 else 2)
+                if (theme == WeatherThemeId.TERMINAL.name) {
+                    compose.onNodeWithText("[Now]", substring = false).assertExists()
+                }
                 compose.onNodeWithText("Example location · Unknown source", substring = false).assertExists()
                 listOf("Hourly", "Daily", "Details").forEach { compose.onNodeWithText(it, substring = false).assertExists() }
                 compose.onNodeWithContentDescription("Now page, 1 of 4, selected").assertIsSelected()
@@ -214,7 +227,7 @@ class ProductionSharedShowcaseTest {
                 compose.onNodeWithText(ProductionSharedComponentsTest.sampleMetricSupport).assertExists()
             }
             ShowcasePage.FORECAST_WINDOWS -> {
-                listOf("06:00", "07:00", "Rain expected", "Sunny", "Temperature unavailable verbatim", "21°C", "Monday", "Tuesday", "8°C", "18°C").forEach {
+                listOf("06:00", "07:00", "Rain expected", "Sunny", "Temperature unavailable verbatim", "21°C", "Monday", "Tuesday", "Low 8°C · High 13°C", "Low 9°C · High 18°C").forEach {
                     compose.onNodeWithText(it, useUnmergedTree = true).assertExists()
                 }
                 compose.onNodeWithContentDescription("Tuesday, Sep 29, forecast window 7, selected").assertIsSelected()
@@ -257,8 +270,10 @@ class ProductionSharedShowcaseTest {
         (requiredTexts(page) + page.label).forEach { text ->
             val nodes = compose.onAllNodesWithText(text, useUnmergedTree = true).fetchSemanticsNodes()
             assertTrue("$theme/${page.name} is missing required visible text '$text'", nodes.isNotEmpty())
-            nodes.forEach { node ->
-                val bounds = node.boundsInRoot
+            nodes.indices.forEach { index ->
+                val visible = compose.onAllNodesWithText(text, useUnmergedTree = true)[index]
+                    .performScrollTo()
+                val bounds = visible.fetchSemanticsNode().boundsInRoot
                 assertTrue("$theme/${page.name} '$text' has empty/clipped bounds $bounds", bounds.width > 0f && bounds.height > 0f)
                 assertTrue("$theme/${page.name} '$text' clips left: $bounds", bounds.left >= root.left)
                 assertTrue("$theme/${page.name} '$text' clips top: $bounds", bounds.top >= root.top)
@@ -276,8 +291,9 @@ class ProductionSharedShowcaseTest {
             ProductionSharedComponentsTest.sampleMetricHeadline, ProductionSharedComponentsTest.sampleMetricSupport,
         )
         ShowcasePage.FORECAST_WINDOWS -> listOf(
-            "Earlier unavailable", "Later", "Monday, Sep 28", "Tuesday, Sep 29", "06:00", "07:00",
-            "Rain expected", "Sunny", "Temperature unavailable verbatim", "21°C", "Monday", "Tuesday", "8°C", "18°C",
+            "Earlier · disabled", "Later", "Monday, Sep 28", "Tuesday, Sep 29", "06:00", "07:00",
+            "Rain expected", "Sunny", "Temperature unavailable verbatim", "21°C", "Monday", "Tuesday",
+            "Low 8°C · High 13°C", "Low 9°C · High 18°C",
         )
         ShowcasePage.SOURCE_INSPECTION -> listOf(
             "Source", ProductionDetailsComponentsTest.source, "Update time", ProductionDetailsComponentsTest.updated,
@@ -327,9 +343,11 @@ class ProductionSharedShowcaseTest {
                 assertEquals("$id date callback must run once", beforeDate + 1, dateCalls())
                 assertEquals("$id date callback must select Monday's first window", 0, selectedWindowIndex())
                 assertEquals("$id disabled Earlier callback must not run", beforeEarlier, earlierCalls())
+                compose.onNodeWithText("07:00", useUnmergedTree = true).performScrollTo()
                 val firstHour = compose.onNodeWithText("06:00", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
                 val secondHour = compose.onNodeWithText("07:00", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
                 assertTrue("$id hourly chronology changed", firstHour.top < secondHour.top)
+                compose.onNodeWithText("Tuesday", useUnmergedTree = true).performScrollTo()
                 val mondayBounds = compose.onNodeWithText("Monday", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
                 val tuesdayBounds = compose.onNodeWithText("Tuesday", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
                 assertTrue("$id daily chronology changed", mondayBounds.top < tuesdayBounds.top)
@@ -351,7 +369,10 @@ class ProductionSharedShowcaseTest {
 
     private fun collectSemanticFacts(node: androidx.compose.ui.semantics.SemanticsNode): List<String> {
         val own = buildList {
-            if (node.config.contains(SemanticsProperties.Text)) addAll(node.config[SemanticsProperties.Text].map { "text:${it.text}" })
+            if (node.config.contains(SemanticsProperties.Text)) addAll(node.config[SemanticsProperties.Text].map {
+                val visible = it.text
+                "text:${if (visible in pageNames.map { name -> "[$name]" }) visible.removeSurrounding("[", "]") else visible}"
+            })
             if (node.config.contains(SemanticsProperties.ContentDescription)) addAll(node.config[SemanticsProperties.ContentDescription].map { "description:$it" })
             if (node.config.contains(SemanticsProperties.Selected)) add("selected:${node.config[SemanticsProperties.Selected]}")
         }
@@ -528,12 +549,12 @@ private fun ShowcasePageContent(
     onMeasured: (Rect) -> Unit,
 ) {
     Column(
-        Modifier.fillMaxWidth().padding(8.dp).testTag(page.tag).onGloballyPositioned { coordinates ->
+        Modifier.fillMaxSize().testTag(page.tag).onGloballyPositioned { coordinates ->
             val topLeft = coordinates.positionInRoot()
             val size = coordinates.size
             onMeasured(Rect(topLeft.x, topLeft.y, topLeft.x + size.width, topLeft.y + size.height))
-        },
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        }.verticalScroll(rememberScrollState()).padding(8.dp),
+        verticalArrangement = Arrangement.Top,
     ) {
         page.Content(theme, pageSelected, earlier, later, dateSelected, foregroundClicked)
     }

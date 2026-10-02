@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.WeatherMarkCondition
@@ -190,43 +189,18 @@ fun ProductionBackdrop(
             Canvas(Modifier.fillMaxSize().clearAndSetSemantics { }) {
                 when (style) {
                     BackdropStyle.SOLID -> Unit
-                    BackdropStyle.ATMOSPHERE -> {
-                        drawRect(Brush.verticalGradient(listOf(
-                            lerp(theme.palette.atmosphereTop, theme.palette.precipitationAccent, 0.20f),
-                            lerp(theme.palette.atmosphereBottom, theme.palette.precipitationAccent, 0.48f),
-                        )))
-                        drawRect(Brush.radialGradient(
-                            listOf(Color(0xFFFFDDA5).copy(alpha = 0.12f), Color.Transparent),
-                            center = Offset(size.width * 0.82f, size.height * 0.16f),
-                            radius = size.minDimension * 0.82f,
-                        ))
-                    }
-                    BackdropStyle.GLASS_GRADIENT -> {
-                        drawRect(Brush.verticalGradient(listOf(
-                            theme.palette.atmosphereTop,
-                            lerp(theme.palette.atmosphereTop, theme.palette.atmosphereBottom, 0.40f),
-                            lerp(theme.palette.atmosphereBottom, theme.palette.elevatedSurface, 0.55f),
-                        )))
-                        drawRect(Brush.radialGradient(
-                            listOf(Color(0xFFFFC8A0).copy(alpha = 0.16f), Color.Transparent),
-                            center = Offset(size.width * 0.92f, size.height * 0.16f),
-                            radius = size.minDimension * 0.94f,
-                        ))
-                        drawRect(Brush.radialGradient(
-                            listOf(theme.palette.conditionAccent.copy(alpha = 0.16f), Color.Transparent),
-                            center = Offset(size.width * 0.06f, size.height * 0.78f),
-                            radius = size.minDimension * 0.96f,
-                        ))
+                    BackdropStyle.ATMOSPHERE, BackdropStyle.GLASS_GRADIENT -> {
+                        drawReferenceSky(theme)
                     }
                     BackdropStyle.PURE_BLACK -> drawRect(Color.Black)
                     BackdropStyle.INSTRUMENT_GRID, BackdropStyle.TERMINAL_GRID -> {
                         val isTerminal = style == BackdropStyle.TERMINAL_GRID
-                        drawRect(theme.palette.canvas)
+                        if (isTerminal) drawRect(theme.palette.canvas) else drawReferenceSky(theme)
                         val gap = if (isTerminal) 16.dp.toPx() else 32.dp.toPx()
                         val grid = theme.palette.outline.copy(alpha = when {
                             isTerminal -> 0.3f
                             theme.contrast == ContrastLevel.HIGH -> 0.10f
-                            else -> 0.22f
+                            else -> 0.18f
                         })
                         var x = 0f
                         while (x <= size.width) { drawLine(grid, Offset(x, 0f), Offset(x, size.height), 1.dp.toPx()); x += gap }
@@ -238,6 +212,15 @@ fun ProductionBackdrop(
         }
         content()
     }
+}
+
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawReferenceSky(theme: ResolvedTheme) {
+    drawRect(Brush.verticalGradient(listOf(theme.palette.atmosphereTop, theme.palette.atmosphereBottom)))
+    drawRect(Brush.radialGradient(
+        listOf(theme.palette.atmosphereGlow.copy(alpha = 0.18f), Color.Transparent),
+        center = Offset(size.width * 0.85f, size.height * 0.31f),
+        radius = size.minDimension * 0.85f,
+    ))
 }
 
 internal fun markStyleSignature(style: WeatherMarkStyle, condition: WeatherMarkCondition?): String? {
