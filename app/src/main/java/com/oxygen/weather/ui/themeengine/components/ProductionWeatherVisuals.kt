@@ -35,6 +35,7 @@ fun ProductionWeatherMark(
     theme: ResolvedTheme,
     condition: WeatherMarkCondition?,
     modifier: Modifier = Modifier,
+    accentAllStrokes: Boolean = false,
 ) {
     val treatment = markStyleSignature(theme.weatherMarkStyle, condition) ?: return
     val style = theme.weatherMarkStyle
@@ -59,7 +60,7 @@ fun ProductionWeatherMark(
                 WeatherMarkStyle.INSTRUMENT_LINE -> if (highContrast) 0.065f else 0.045f
                 WeatherMarkStyle.TERMINAL_GLYPH -> 0f
             }
-            val main = palette.content
+            val main = if (accentAllStrokes) palette.conditionAccent else palette.content
             val weather = requireNotNull(condition)
             val cloudTop = size.height * if (weather == WeatherMarkCondition.PARTLY_CLOUDY) 0.43f else 0.39f
             val cloudLeft = size.width * 0.16f
@@ -104,7 +105,9 @@ fun ProductionWeatherMark(
                 drawPath(path, main, style = Stroke(width = stroke, cap = StrokeCap.Round))
             }
             fun sun(center: Offset, radius: Float, rayCount: Int) {
-                val sunColor = if (style == WeatherMarkStyle.ILLUSTRATIVE_LINE || style == WeatherMarkStyle.INSTRUMENT_LINE) palette.conditionAccent else main
+                val sunColor = if (
+                    accentAllStrokes || style == WeatherMarkStyle.ILLUSTRATIVE_LINE || style == WeatherMarkStyle.INSTRUMENT_LINE
+                ) palette.conditionAccent else main
                 drawCircle(sunColor, radius, center, style = Stroke(stroke, cap = StrokeCap.Round))
                 repeat(rayCount) { i ->
                     val angle = Math.toRadians(i * (360.0 / rayCount))

@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -252,7 +254,18 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
                         color = theme.palette.content,
                     )
                 }
-                current.conditionIdentity?.let { ProductionWeatherMark(theme, it, Modifier.size(64.dp)) }
+                current.conditionIdentity?.let {
+                    ProductionWeatherMark(
+                        theme,
+                        it,
+                        Modifier.size(64.dp),
+                        accentAllStrokes = theme.definition.id in setOf(
+                            WeatherThemeId.GLASS,
+                            WeatherThemeId.INSTRUMENT,
+                            WeatherThemeId.MINIMAL_OLED,
+                        ),
+                    )
+                }
             }
             Text(
                 "Feels ${current.apparent}",
@@ -309,9 +322,19 @@ private fun NowSupportingMeasurements(
         val rows = if (twoColumns) measurements.chunked(2) else measurements.map(::listOf)
         Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
             rows.forEach { row ->
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                val equalHeightTiles = theme.definition.id in setOf(WeatherThemeId.GLASS, WeatherThemeId.INSTRUMENT)
+                Row(
+                    Modifier.fillMaxWidth().then(if (equalHeightTiles) Modifier.height(IntrinsicSize.Min) else Modifier),
+                    horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
+                ) {
                     row.forEach { item ->
-                        ProductionMetricTile(theme, item.label, item.value, item.supporting, Modifier.weight(1f))
+                        ProductionMetricTile(
+                            theme,
+                            item.label,
+                            item.value,
+                            item.supporting,
+                            Modifier.weight(1f).then(if (equalHeightTiles) Modifier.fillMaxHeight() else Modifier),
+                        )
                     }
                     if (twoColumns && row.size == 1) Spacer(Modifier.weight(1f))
                 }
@@ -417,11 +440,7 @@ private fun NowProvenanceStatus(
     status: StatusPresentation,
 ) {
     val provenanceStyle = theme.typography.labelMedium.copy(fontSize = 12.sp, lineHeight = 16.sp)
-    ProductionQuietSectionSurface(
-        theme,
-        Modifier.fillMaxWidth().heightIn(min = 96.dp),
-        contentPadding = PaddingValues(horizontal = theme.geometry.panelInset, vertical = 10.dp),
-    ) {
+    val provenanceContent: @Composable ColumnScope.() -> Unit = {
         Text(sourceLine, style = provenanceStyle, color = theme.palette.secondaryData)
         Spacer(Modifier.height(4.dp))
         Text(updatedLine, style = provenanceStyle, color = theme.palette.secondaryData)
@@ -433,6 +452,21 @@ private fun NowProvenanceStatus(
             color = theme.palette.secondaryData,
         )
     }
+    if (theme.definition.id == WeatherThemeId.MINIMAL_OLED) {
+        Column(
+            Modifier.fillMaxWidth().drawBehind {
+                drawLine(theme.palette.outline, Offset(0f, size.height), Offset(size.width, size.height), 1.dp.toPx())
+            }.padding(horizontal = 8.dp, vertical = 8.dp),
+            content = provenanceContent,
+        )
+        return
+    }
+    ProductionQuietSectionSurface(
+        theme,
+        Modifier.fillMaxWidth().heightIn(min = 96.dp),
+        contentPadding = PaddingValues(horizontal = theme.geometry.panelInset, vertical = 10.dp),
+        content = provenanceContent,
+    )
 }
 
 @Composable
