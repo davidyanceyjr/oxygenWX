@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -29,10 +31,10 @@ fun ProductionSourceFreshnessPanel(
     MaterialTheme(typography = theme.typography) {
         if (separateFacts) {
             Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap)) {
-                ProductionSectionSurface(theme, Modifier.fillMaxWidth()) {
+                ProductionSectionSurface(theme, provenanceFactModifier(theme)) {
                     DetailFact(theme, "Source", source, separate = true)
                 }
-                ProductionSectionSurface(theme, Modifier.fillMaxWidth()) {
+                ProductionSectionSurface(theme, provenanceFactModifier(theme)) {
                     DetailFact(theme, "Update time", updated, separate = true)
                 }
             }
@@ -45,6 +47,21 @@ fun ProductionSourceFreshnessPanel(
             }
         }
     }
+}
+
+/** Minimal OLED's Details references use a flat divider even though its shared panel border is off. */
+private fun provenanceFactModifier(theme: ResolvedTheme): Modifier {
+    val modifier = Modifier.fillMaxWidth()
+    return if (theme.surfaceStyle == SurfaceStyle.MINIMAL) {
+        modifier.drawBehind {
+            drawLine(
+                color = theme.palette.outline,
+                start = Offset(0f, size.height),
+                end = Offset(size.width, size.height),
+                strokeWidth = 1.dp.toPx(),
+            )
+        }
+    } else modifier
 }
 
 /** Renders one supplied Details group without deriving meaning from its title or metric labels. */

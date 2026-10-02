@@ -59,6 +59,7 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
+import com.oxygen.weather.ui.themeengine.SurfaceStyle
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.components.ProductionBackdrop
 import com.oxygen.weather.ui.themeengine.components.ProductionDailyRow
@@ -322,12 +323,32 @@ private fun NowSupportingMeasurements(
 private data class SupportMeasurement(val label: String, val value: String, val supporting: String?)
 
 @Composable
-private fun StatusPanel(theme: ResolvedTheme, status: StatusPresentation) {
-    ProductionSectionSurface(theme, Modifier.fillMaxWidth()) {
+private fun StatusPanel(theme: ResolvedTheme, status: StatusPresentation, details: Boolean = false) {
+    val modifier = Modifier.fillMaxWidth().then(
+        if (details && theme.surfaceStyle == SurfaceStyle.MINIMAL) {
+            Modifier.drawBehind {
+                drawLine(
+                    color = theme.palette.outline,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 1.dp.toPx(),
+                )
+            }
+        } else Modifier,
+    )
+    ProductionSectionSurface(theme, modifier) {
+        if (details) {
+            Text(
+                "Status",
+                style = theme.typography.labelMedium.copy(fontSize = 14.sp, lineHeight = 20.sp),
+                color = theme.palette.secondaryData,
+            )
+        }
         Text(
             status.visibleText,
             modifier = Modifier.semantics { contentDescription = status.accessibilitySummary },
-            style = theme.typography.bodyMedium,
+            style = if (details) theme.typography.bodyMedium.copy(fontSize = 14.sp, lineHeight = 20.sp)
+            else theme.typography.bodyMedium,
             color = theme.palette.content,
         )
     }
@@ -594,7 +615,7 @@ private fun DetailsPage(home: HomePresentation, status: StatusPresentation, them
     ) {
         ProductionPageHeader(theme, "Details", "")
         ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine, separateFacts = true)
-        StatusPanel(theme, status)
+        StatusPanel(theme, status, details = true)
         home.detailGroups.filter { it.metrics.isNotEmpty() }
             .forEach { ProductionInspectionMetricGroup(theme, it) }
     }

@@ -98,6 +98,13 @@ class ProductionHomeCompositionTest {
         assertEquals(WeatherThemeId.entries.toList(), visitedThemes)
         compose.onNodeWithContentDescription("Details page, 4 of 4, not selected").performClick()
         assertTextPresent("Forecast pattern")
+        WeatherThemeId.entries.forEach { themeId ->
+            selectTheme(themeId.displayName)
+            assertTextPresent("Source")
+            assertTextPresent("Update time")
+            assertTextPresent("Status")
+            assertTextPresent(STATUS)
+        }
     }
 
     private fun selectTheme(displayName: String) {
