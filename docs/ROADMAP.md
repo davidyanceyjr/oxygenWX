@@ -45,7 +45,9 @@ next production forecast-path candidate after the TP.3 gate.
 ## Context-budget slicing rule
 
 An implementation slice whose stated boundary is expected to consume more than
-approximately 45% of an agent context window must be split before activation.
+65% of an agent context window must be split before activation. This is a hard
+maximum, not a target; prefer materially smaller slices when clean boundaries
+exist, and reserve headroom for execution uncertainty.
 The first bounded portion retains its existing identifier; each later dependent
 portion uses `-partial-A`, `-partial-B`, and so on (for example,
 `TP.1D-partial-A`). Earlier suffixes such as `R0.6A` remain historical IDs.

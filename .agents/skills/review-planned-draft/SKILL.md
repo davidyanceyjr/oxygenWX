@@ -33,7 +33,7 @@ Wait for the user's answer before continuing.
 
 ## Context-window constraint
 
-A single implementation slice must be designed to use no more than 45% of the available context window during execution.
+A single implementation slice must be designed to use no more than 65% of the available context window during execution. This is a hard maximum, not a target; leave headroom for execution uncertainty and prefer materially smaller slices when clean boundaries exist.
 
 Estimate context pressure conservatively from:
 
@@ -44,9 +44,9 @@ Estimate context pressure conservatively from:
 - documentation and migration work
 - likely debugging and integration effort
 
-Do not treat 45% as a target. Prefer materially smaller slices when clean boundaries exist.
+Do not treat 65% as a target. Prefer materially smaller slices when clean boundaries exist.
 
-If the slice is likely to exceed 45% of the context window and its `<id>` does not contain `partial`:
+If the slice is likely to exceed 65% of the context window and its `<id>` does not contain `partial`:
 
 1. Split it at the cleanest implementation boundary into two approximately equal execution workloads.
 2. Preserve dependencies and ensure each part is independently coherent.
@@ -58,7 +58,7 @@ If the slice is likely to exceed 45% of the context window and its `<id>` does n
 5. Move all work belonging to the second part out of the active slice. Do not duplicate requirements between parts except for minimal dependency/context notes.
 6. Ensure partial 1 leaves the repository in a valid, tested state and does not require unfinished partial 2 changes to function correctly.
 
-If a plan whose `<id>` already contains `partial` still exceeds the 45% limit, reduce its scope further at the cleanest boundary while preserving the project's existing partial-plan naming convention. Do not allow the context limit to be bypassed merely because the plan is already partial.
+If a plan whose `<id>` already contains `partial` still exceeds the 65% limit, reduce its scope further at the cleanest boundary while preserving the project's existing partial-plan naming convention. Do not allow the context limit to be bypassed merely because the plan is already partial.
 
 ## Review requirements
 
@@ -100,4 +100,4 @@ Once the revised draft is complete:
    - 10 = highly complex, cross-cutting, migration-heavy, or integration-sensitive work
 5. Include a brief justification for the difficulty rating based on implementation complexity, coupling, validation burden, and risk.
 
-The active plan must be complete enough to execute directly without rediscovering its intended design, while remaining narrow enough to stay comfortably within the context-window constraint.
+The active plan must be complete enough to execute directly without rediscovering its intended design, while remaining narrow enough to stay comfortably within the 65% context-window maximum.
