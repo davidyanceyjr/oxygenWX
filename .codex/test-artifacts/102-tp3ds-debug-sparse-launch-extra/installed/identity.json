@@ -1,0 +1,27 @@
+{
+  "apk_sha256": "afd90b48e8064bd12625aad921f1205f0626bf1ed4dd8632d8d93367d21deccd",
+  "installed_apk_sha256": "afd90b48e8064bd12625aad921f1205f0626bf1ed4dd8632d8d93367d21deccd",
+  "package": "com.oxygen.weather",
+  "version_name": "1.0.0-alpha01",
+  "version_code": 1000001,
+  "device": "oxygen_starter / sdk_gphone64_x86_64 (emulator-5554)",
+  "api_level": 37,
+  "viewport_dp": "393 x 852",
+  "screenshot_px": "393 x 852",
+  "font_scale": 1.0,
+  "locale": "en-US",
+  "layout_direction": "LTR",
+  "theme": "Atmospheric",
+  "contrast": "Standard",
+  "effects": "Subtle",
+  "fixture_name": "demo_sparse_partial_horizon_v1",
+  "launch_extras": {
+    "oxygen_deterministic_capture": true,
+    "oxygen_sparse_fixture": true
+  },
+  "launch_command": "adb -s emulator-5554 shell am start -n com.oxygen.weather/.MainActivity --ez oxygen_deterministic_capture true --ez oxygen_sparse_fixture true",
+  "screenshot": "sparse-now.png",
+  "hierarchy": "sparse-now-hierarchy.xml",
+  "installed_base_apk_path": "/data/app/~~6zZf2d6fwW_aOl3BTJ1DyA==/com.oxygen.weather-d_17tuzqCsnjHUZUvOgJzw==/base.apk",
+  "visible_status": "Model estimate · Offline development fixture; Updated 9:00 AM; demo_sparse_partial_horizon_v1 development fixture. Freshness: unknown."
+}

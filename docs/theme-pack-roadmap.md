@@ -1071,15 +1071,36 @@ exact installed evidence and required focused/regression checks. If any case
 remains deviating or unverified, close BLOCKED with exact evidence and stop
 TP.3; no automatic follow-up slice is created. Target context 35–45%, stop
 before 50%. TP.3D remains ineligible until this exit passes and the complete
-TP.3C gate is closed.
+TP.3C gate is closed; it also depends on TP.3D-S below.
+
+### TP.3D-S — Deterministic sparse installed-capture fixture
+
+Cycle 101 (`.codex/history/2026-10-02-101-tp3d-responsive-state-regression.md`)
+closed BLOCKED because the normal-app path could not select its deterministic
+sparse fixture for the required installed cases. Add a debug-only launch extra
+that selects a deterministic sparse `WeatherBundle` fixture through the same
+normal Home presentation/rendering path. Guard selection with the app's
+debuggable-build check, following the existing deterministic-capture and
+Effects Off launch-extra pattern. With the extra absent or supplied to a
+non-debuggable build, retain the regular fixture behavior. Do not add a user-
+facing selector, change canonical weather semantics, or introduce release
+fixture-selection behavior.
+
+**Exit:** Focused tests prove the launch extra selects the exact sparse fixture
+only in a debuggable build and default/release behavior stays on the regular
+fixture. The installed debug app launches through normal Home with the sparse
+fixture and preserves honest missing-value text/semantics. Record APK/device,
+fixture identity, hierarchy, screenshot, and exact launch command. Focused,
+repository, contract, and workflow checks pass. This makes a new TP.3D cycle
+eligible; it does not capture or close TP.3D.
 
 ### TP.3D — Responsive/state regression closure
 
-After TP.3C-partial-A and all three TP.3C-recovery slices pass, capture exactly 15 theme-level Now cases (five
-themes each at compact 360 × 640 dp, font scale 1.3, and Effects Off), ten RTL
-Hourly/Daily
-cases (five themes × two pages), and five sparse/missing-data representative
-cases (one per theme). Record hierarchy, build, and device metadata for every
+After TP.3C-partial-A and all three TP.3C-recovery slices pass, and TP.3D-S
+passes, capture exactly 15 theme-level Now cases (five themes each at compact
+360 × 640 dp, font scale 1.3, and Effects Off), ten RTL Hourly/Daily cases
+(five themes × two pages), and five sparse/missing-data representative cases
+(one per theme). Record hierarchy, build, and device metadata for every
 capture. Run one focused correction pass for functional/readability failures;
 remaining failures block TP.3 and stop work. TalkBack/service-level
 verification remains a separately reported boundary.
@@ -1087,7 +1108,7 @@ verification remains a separately reported boundary.
 ### TP.3 exit
 
 TP.3 closes only when TP.3C-partial-A and all three TP.3C-recovery slices pass,
-all baseline comparisons and regression captures pass the
+TP.3D-S passes, all baseline comparisons and regression captures pass the
 approved visual and semantic criteria, the single correction pass leaves no
 blocking deviation, and focused/regression checks pass. Any remaining blocker
 ends the cycle blocked; no automatic polish follow-up is created.

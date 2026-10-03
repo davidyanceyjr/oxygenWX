@@ -35,13 +35,45 @@ class MainActivity : ComponentActivity() {
             isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             captureRequested = intent?.getBooleanExtra(DETERMINISTIC_CAPTURE_LAUNCH_EXTRA, false) == true,
         )
+        val sparseFixture = selectSparseFixture(
+            isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
+            sparseFixtureRequested = intent?.getBooleanExtra(SPARSE_FIXTURE_LAUNCH_EXTRA, false) == true,
+        )
         val fixtureAnchor = if (captureMode) LocalDateTime.of(2026, 9, 23, 9, 0) else LocalDateTime.now()
-        val bundle = DemoWeatherRepository.load(fixtureAnchor)
+        val regularBundle = DemoWeatherRepository.load(fixtureAnchor)
+        val bundle = if (sparseFixture) {
+            regularBundle.copy(
+                current = regularBundle.current.copy(
+                    condition = null,
+                    temperatureC = null,
+                    apparentC = null,
+                    dewPointC = null,
+                    relativeHumidityPct = null,
+                    precipitationMmPerHr = null,
+                    windSpeedKph = null,
+                    windGustKph = null,
+                    windDirectionDeg = null,
+                ),
+                hourly = regularBundle.hourly.take(1).map { hour ->
+                    hour.copy(
+                        condition = null,
+                        temperatureC = null,
+                        precipitationProbabilityPct = null,
+                        precipitationMm = null,
+                    )
+                },
+                daily = emptyList(),
+            )
+        } else {
+            regularBundle
+        }
         val derived = HistoricalSynthesis.derive(bundle)
         val presentation = HomePresentationMapper.map(bundle, derived)
         val mappedState = HomePresentationMapper.mapState(bundle, derived)
         val partialHorizons = (mappedState as? HomePresentationState.Partial)?.horizon
-        val status = if (captureMode) {
+        val status = if (sparseFixture) {
+            StatusPresentation.of("$SPARSE_FIXTURE_NAME development fixture. Freshness: unknown.")
+        } else if (captureMode) {
             val result = WeatherRepositoryResult(
                 bundle = bundle,
                 origin = WeatherDataOrigin.LIVE,

@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="23" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-03T00:33:20" hostname="localhost">
+  <testsuite name="com.oxygen.weather.ui.ProductionDailyDetailsCompositionTest" tests="2" failures="0" errors="0" skipped="0" time="53.833" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="dailyWindowsKeepExactSuppliedRowsBoundsAndThemeIndependentState" classname="com.oxygen.weather.ui.ProductionDailyDetailsCompositionTest" time="34.715" />
+    <testcase name="detailsKeepSuppliedGroupAndMetricOrderUnderEveryTheme" classname="com.oxygen.weather.ui.ProductionDailyDetailsCompositionTest" time="19.118" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.ProductionDailyDetailsSparseCompositionTest" tests="1" failures="0" errors="0" skipped="0" time="7.245" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="sparseDailyAndDetailsPreserveUnavailableSupportOmissionAndPartialStatus" classname="com.oxygen.weather.ui.ProductionDailyDetailsSparseCompositionTest" time="7.245" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.ProductionHomeCompositionTest" tests="1" failures="0" errors="0" skipped="0" time="35.342" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="nowAndHourlyPreserveSuppliedFactsAndWindowControlsInNormalApp" classname="com.oxygen.weather.ui.ProductionHomeCompositionTest" time="35.342" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.ProductionHomeSparseCompositionTest" tests="1" failures="0" errors="0" skipped="0" time="5.490" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="sparseTypedFactsStayUnavailableAndHourlyDoesNotFillMissingEntries" classname="com.oxygen.weather.ui.ProductionHomeSparseCompositionTest" time="5.490" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionBackdropAtmosphericGlassTest" tests="1" failures="0" errors="0" skipped="0" time="5.730" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="installedBackdropsPreserveTextSemanticsActionAndHighContrastPairs" classname="com.oxygen.weather.ui.themeengine.components.ProductionBackdropAtmosphericGlassTest" time="5.730" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionBackdropEffectsOffTest" tests="1" failures="0" errors="0" skipped="0" time="5.695" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="allThemesEffectsOffAreOpaqueStaticAndPreserveCallerContent" classname="com.oxygen.weather.ui.themeengine.components.ProductionBackdropEffectsOffTest" time="5.695" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionBackdropMinimalInstrumentTest" tests="1" failures="0" errors="0" skipped="0" time="6.225" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="installedBackdropsPreserveTextSemanticsActionAndHighContrastPairs" classname="com.oxygen.weather.ui.themeengine.components.ProductionBackdropMinimalInstrumentTest" time="6.225" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionBackdropTerminalTest" tests="1" failures="0" errors="0" skipped="0" time="4.103" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="installedTerminalBackdropsPreserveCallerContentSemanticsAndInteraction" classname="com.oxygen.weather.ui.themeengine.components.ProductionBackdropTerminalTest" time="4.103" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionDetailsComponentsTest" tests="3" failures="0" errors="0" skipped="0" time="21.255" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="fiveResponsiveCasesKeepLongFactsReachableAndCaptureInstalledRenders" classname="com.oxygen.weather.ui.themeengine.components.ProductionDetailsComponentsTest" time="5.937" />
+    <testcase name="standardSubtleBaselineCapturesOneInstalledPngPerTheme" classname="com.oxygen.weather.ui.themeengine.components.ProductionDetailsComponentsTest" time="6.077" />
+    <testcase name="allThemesPreserveSourceAndOrderedMetricFactsAtStandardHighContrastAndEffectsOff" classname="com.oxygen.weather.ui.themeengine.components.ProductionDetailsComponentsTest" time="9.241" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionForecastComponentsTest" tests="3" failures="0" errors="0" skipped="0" time="15.328" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="allThemesPreserveForecastFactsOptionalFieldsAndCallerOrder" classname="com.oxygen.weather.ui.themeengine.components.ProductionForecastComponentsTest" time="4.116" />
+    <testcase name="windowAndDateControlsKeepCallerStateCallbacksAnd48DpTargets" classname="com.oxygen.weather.ui.themeengine.components.ProductionForecastComponentsTest" time="5.814" />
+    <testcase name="compactLargeFontRtlHighContrastAndEffectsOffKeepFactsAndControls" classname="com.oxygen.weather.ui.themeengine.components.ProductionForecastComponentsTest" time="5.398" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionSharedComponentsTest" tests="3" failures="0" errors="0" skipped="0" time="16.122" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="compactLargeFontRtlAndResolvedVariantsKeepMeaning" classname="com.oxygen.weather.ui.themeengine.components.ProductionSharedComponentsTest" time="6.124" />
+    <testcase name="absentOptionalMetricSupportIsNotRendered" classname="com.oxygen.weather.ui.themeengine.components.ProductionSharedComponentsTest" time="4.100" />
+    <testcase name="allThemesPreserveSuppliedValuesAndSelectorContract" classname="com.oxygen.weather.ui.themeengine.components.ProductionSharedComponentsTest" time="5.898" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionSharedShowcaseTest" tests="3" failures="0" errors="0" skipped="0" time="94.980" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="allFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes" classname="com.oxygen.weather.ui.themeengine.components.ProductionSharedShowcaseTest" time="38.633" />
+    <testcase name="effectsOffFirstThreeFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes" classname="com.oxygen.weather.ui.themeengine.components.ProductionSharedShowcaseTest" time="33.218" />
+    <testcase name="effectsOffRemainingFamilyPagesFitCaptureAndPreserveMeaningAcrossAllThemes" classname="com.oxygen.weather.ui.themeengine.components.ProductionSharedShowcaseTest" time="23.129" />
+  </testsuite>
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionWeatherMarkTest" tests="2" failures="0" errors="0" skipped="0" time="7.906" timestamp="2026-10-03T00:33:20" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="d29GridKeepsVisibleConditionTextAndCapturesThemesGapsAndModes" classname="com.oxygen.weather.ui.themeengine.components.ProductionWeatherMarkTest" time="4.652" />
+    <testcase name="compactLargeFontRtlRetainsConditionTextAndCallerSlots" classname="com.oxygen.weather.ui.themeengine.components.ProductionWeatherMarkTest" time="3.254" />
+  </testsuite>
+</testsuites>

@@ -26,4 +26,11 @@ class LaunchEffectsTest {
         assertEquals(false, selectDeterministicCapture(isDebugBuild = true, captureRequested = false))
         assertEquals(false, selectDeterministicCapture(isDebugBuild = false, captureRequested = true))
     }
+
+    @Test
+    fun sparseFixtureOptionIsDebugOnly() {
+        assertEquals(true, selectSparseFixture(isDebugBuild = true, sparseFixtureRequested = true))
+        assertEquals(false, selectSparseFixture(isDebugBuild = true, sparseFixtureRequested = false))
+        assertEquals(false, selectSparseFixture(isDebugBuild = false, sparseFixtureRequested = true))
+    }
 }
