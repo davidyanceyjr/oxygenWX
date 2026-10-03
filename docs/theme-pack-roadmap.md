@@ -990,6 +990,16 @@ and TP.3C passes. The existing
 blocked cycle 092; revise its dependency and approved packet identity after
 the new comparison before considering activation.
 
+**Owner clarification (2026-10-03):** The owner confirms that the separately
+planned TP.3C recovery work resolves the ten deviations that blocked cycle
+096. Cycles 098–100, including cycle 100's passing all-twenty installed gate,
+satisfy the TP.3C baseline-correction and acceptance prerequisite for TP.3D
+and TP.3 exit. Cycle 096 remains historically BLOCKED; this clarification does
+not rewrite its outcome. The recovery evidence is evaluated on its own scope
+and together supplies the resolved baseline gate. The recovery outcomes are
+recorded in commits `55b4a04` (Hourly), `1d87910` (Details), and `4989df8`
+(Now and all-twenty baseline gate).
+
 ### TP.3C-recovery — Remaining baseline visual deviations
 
 Cycle 096 exhausted the original single correction pass but closed BLOCKED with
@@ -1096,8 +1106,9 @@ eligible; it does not capture or close TP.3D.
 
 ### TP.3D — Responsive/state regression closure
 
-After TP.3C-partial-A and all three TP.3C-recovery slices pass, and TP.3D-S
-passes, capture exactly 15 theme-level Now cases (five themes each at compact
+After the TP.3C baseline-correction/acceptance prerequisite is satisfied by
+the accepted baseline gate and its recovery evidence, and TP.3D-S passes,
+capture exactly 15 theme-level Now cases (five themes each at compact
 360 × 640 dp, font scale 1.3, and Effects Off), ten RTL Hourly/Daily cases
 (five themes × two pages), and five sparse/missing-data representative cases
 (one per theme). Record hierarchy, build, and device metadata for every
@@ -1107,11 +1118,13 @@ verification remains a separately reported boundary.
 
 ### TP.3 exit
 
-TP.3 closes only when TP.3C-partial-A and all three TP.3C-recovery slices pass,
-TP.3D-S passes, all baseline comparisons and regression captures pass the
-approved visual and semantic criteria, the single correction pass leaves no
-blocking deviation, and focused/regression checks pass. Any remaining blocker
-ends the cycle blocked; no automatic polish follow-up is created.
+TP.3 closes only when the TP.3C baseline-correction/acceptance prerequisite is
+satisfied by the accepted all-twenty baseline gate and its authorized recovery
+evidence (cycles 098–100; cycle 096 remains historically BLOCKED), TP.3D-S
+passes, all baseline comparisons and regression captures pass the approved
+visual and semantic criteria, the single correction pass leaves no blocking
+deviation, and focused/regression checks pass. Any remaining blocker ends the
+cycle blocked; no automatic polish follow-up is created.
 
 ## Workflow use
 
