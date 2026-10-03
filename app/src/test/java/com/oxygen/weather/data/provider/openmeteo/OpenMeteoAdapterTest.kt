@@ -39,17 +39,24 @@ class OpenMeteoAdapterTest {
     @Test fun fixturePreservesLabelsUnitsSparseAndNullableValues() {
         val result = OpenMeteoAdapter(endpoint) { OpenMeteoHttpResponse(200, fixture("complete.json")) }.fetch(request)
         val response = (result as OpenMeteoResult.Success).response
+        val currentSection = requireNotNull(response.current)
+        val hourlySection = requireNotNull(response.hourly)
+        val dailySection = requireNotNull(response.daily)
         assertEquals("America/Chicago", response.timezone)
         assertEquals("-18000", (response.utcOffsetSeconds as OpenMeteoValue.Scalar).value)
-        assertEquals(listOf("2026-10-03T10:00", "2026-10-03T11:00", "2026-10-03T11:00"), ((response.hourly?.time as OpenMeteoValue.ArrayValue).values).map { (it as OpenMeteoValue.Scalar).value })
-        assertEquals("°C", response.hourly?.units?.get("temperature_2m"))
-        val temp = response.hourly?.variables?.get(OpenMeteoVariable.TEMPERATURE_2M) as OpenMeteoValue.ArrayValue
+        assertEquals(setOf(OpenMeteoVariable.WEATHER_CODE, OpenMeteoVariable.TEMPERATURE_2M, OpenMeteoVariable.DEW_POINT_2M, OpenMeteoVariable.PRESSURE_MSL, OpenMeteoVariable.WIND_SPEED_10M, OpenMeteoVariable.PRECIPITATION, OpenMeteoVariable.CLOUD_COVER), currentSection.variables.keys)
+        assertEquals(setOf(OpenMeteoVariable.WEATHER_CODE, OpenMeteoVariable.TEMPERATURE_2M, OpenMeteoVariable.DEW_POINT_2M, OpenMeteoVariable.PRESSURE_MSL, OpenMeteoVariable.WIND_SPEED_10M, OpenMeteoVariable.PRECIPITATION_PROBABILITY, OpenMeteoVariable.PRECIPITATION, OpenMeteoVariable.CLOUD_COVER), hourlySection.variables.keys)
+        assertEquals(setOf(OpenMeteoVariable.WEATHER_CODE, OpenMeteoVariable.PRECIPITATION_PROBABILITY_MAX, OpenMeteoVariable.PRECIPITATION_SUM, OpenMeteoVariable.TEMPERATURE_2M_MIN, OpenMeteoVariable.TEMPERATURE_2M_MAX, OpenMeteoVariable.WIND_GUSTS_10M_MAX, OpenMeteoVariable.SUNSHINE_DURATION), dailySection.variables.keys)
+        assertEquals(listOf("2026-10-03T10:00", "2026-10-03T11:00", "2026-10-03T11:00"), ((hourlySection.time as OpenMeteoValue.ArrayValue).values).map { (it as OpenMeteoValue.Scalar).value })
+        assertEquals("°C", hourlySection.units["temperature_2m"])
+        assertEquals("km/h", currentSection.units["wind_speed_10m"])
+        val temp = hourlySection.variables[OpenMeteoVariable.TEMPERATURE_2M] as OpenMeteoValue.ArrayValue
         assertEquals(OpenMeteoValue.Scalar("12.5", OpenMeteoValue.Scalar.Kind.NUMBER), temp.values[0])
         assertSame(OpenMeteoValue.Null, temp.values[1])
-        assertEquals(2, (response.hourly?.variables?.get(OpenMeteoVariable.PRECIPITATION_PROBABILITY) as OpenMeteoValue.ArrayValue).values.size)
-        assertFalse(response.hourly!!.variables.containsKey(OpenMeteoVariable.TEMPERATURE_2M_MIN))
-        assertEquals("s", response.daily?.units?.get("sunshine_duration"))
-        assertEquals(listOf("2026-10-03", "2026-10-04"), ((response.daily?.time as OpenMeteoValue.ArrayValue).values).map { (it as OpenMeteoValue.Scalar).value })
+        assertEquals(2, (hourlySection.variables[OpenMeteoVariable.PRECIPITATION_PROBABILITY] as OpenMeteoValue.ArrayValue).values.size)
+        assertFalse(hourlySection.variables.containsKey(OpenMeteoVariable.TEMPERATURE_2M_MIN))
+        assertEquals("s", dailySection.units["sunshine_duration"])
+        assertEquals(listOf("2026-10-03", "2026-10-04"), ((dailySection.time as OpenMeteoValue.ArrayValue).values).map { (it as OpenMeteoValue.Scalar).value })
     }
 
     @Test fun distinguishesNoDataMalformedProviderErrorHttpAndTransportFailure() {
@@ -57,26 +64,40 @@ class OpenMeteoAdapterTest {
         assertEquals(OpenMeteoResult.NoData, result(fixture("no_data.json")))
         assertTrue(result("{not json") is OpenMeteoResult.Malformed)
         assertTrue(result("{\"temperature_2m\":-}") is OpenMeteoResult.Malformed)
+        assertTrue(result("{\"value\":\"line\nfeed\"}") is OpenMeteoResult.Malformed)
+        assertTrue(result("\u00a0{}") is OpenMeteoResult.Malformed)
         val apiError = result(fixture("api_error.json")) as OpenMeteoResult.HttpError
         assertTrue(apiError.providerError)
         assertFalse(apiError.toString().contains("private-provider-detail"))
+        val httpApiError = result("{\"error\" : true, \"reason\":\"private-provider-detail\"}", 400) as OpenMeteoResult.HttpError
+        assertTrue(httpApiError.providerError)
         assertEquals(503, (result("sensitive body", 503) as OpenMeteoResult.HttpError).statusCode)
         assertTrue(OpenMeteoAdapter(endpoint) { throw java.net.SocketTimeoutException() }.fetch(request) is OpenMeteoResult.TransportFailure)
+        assertTrue(OpenMeteoAdapter(endpoint) { throw java.io.IOException("private-network-detail") }.fetch(request) is OpenMeteoResult.TransportFailure)
     }
 
     @Test fun queryRenderingDoesNotLeakQuerySecrets() {
         val q = OpenMeteoRequestBuilder.build(endpoint, request)
         assertFalse(q.toString().contains("latitude"))
         assertFalse(q.toString().contains("America"))
+        assertFalse(q.toString().contains("weather.invalid"))
+        val secretPathQuery = OpenMeteoRequestBuilder.build(ForecastEndpoint(URI("https://weather.invalid/private-token/forecast")), request)
+        assertFalse(secretPathQuery.toString().contains("private-token"))
+        val sensitiveBody = "{\"current\":{\"time\":\"2026-10-03T10:00\",\"temperature_2m\":12.5},\"private\":\"response-detail\"}"
+        val response = OpenMeteoHttpResponse(200, sensitiveBody)
+        assertFalse(response.toString().contains("response-detail"))
+        val result = OpenMeteoAdapter(endpoint) { response }.fetch(request)
+        assertFalse(result.toString().contains("response-detail"))
     }
 
     @Test fun preservesExplicitNullSeparatelyFromAbsentProperty() {
         val json = """{"hourly":{"time":["2026-10-03T10:00"],"temperature_2m":[null],"cloud_cover":null}}"""
         val response = (OpenMeteoAdapter(endpoint) { OpenMeteoHttpResponse(200, json) }.fetch(request) as OpenMeteoResult.Success).response
-        assertTrue(response.hourly!!.variables.containsKey(OpenMeteoVariable.TEMPERATURE_2M))
-        assertEquals(OpenMeteoValue.ArrayValue(listOf(OpenMeteoValue.Null)), response.hourly!!.variables[OpenMeteoVariable.TEMPERATURE_2M])
-        assertEquals(OpenMeteoValue.Null, response.hourly!!.variables[OpenMeteoVariable.CLOUD_COVER])
-        assertFalse(response.hourly!!.variables.containsKey(OpenMeteoVariable.TEMPERATURE_2M_MIN))
+        val hourly = requireNotNull(response.hourly)
+        assertTrue(hourly.variables.containsKey(OpenMeteoVariable.TEMPERATURE_2M))
+        assertEquals(OpenMeteoValue.ArrayValue(listOf(OpenMeteoValue.Null)), hourly.variables[OpenMeteoVariable.TEMPERATURE_2M])
+        assertEquals(OpenMeteoValue.Null, hourly.variables[OpenMeteoVariable.CLOUD_COVER])
+        assertFalse(hourly.variables.containsKey(OpenMeteoVariable.TEMPERATURE_2M_MIN))
     }
 
     private fun fixture(name: String) = javaClass.classLoader!!.getResourceAsStream("openmeteo/$name")!!.bufferedReader().use { it.readText() }

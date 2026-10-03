@@ -23,7 +23,7 @@ enum class OpenMeteoVariable(val wireName: String) {
 }
 
 data class OpenMeteoQuery(val uri: URI, val unsupportedFields: Set<ForecastField>) {
-    override fun toString(): String = "OpenMeteoQuery(uri=${uri.scheme}://${uri.host}${uri.path}?<redacted>)"
+    override fun toString(): String = "OpenMeteoQuery(uri=<redacted>, unsupportedFields=$unsupportedFields)"
 }
 
 object OpenMeteoRequestBuilder {
@@ -105,7 +105,9 @@ data class OpenMeteoSection(
 data class OpenMeteoResponse(val timezone: String?, val utcOffsetSeconds: OpenMeteoValue?, val current: OpenMeteoSection?, val hourly: OpenMeteoSection?, val daily: OpenMeteoSection?)
 
 sealed interface OpenMeteoResult {
-    data class Success(val response: OpenMeteoResponse, val unsupportedFields: Set<ForecastField> = emptySet()) : OpenMeteoResult
+    data class Success(val response: OpenMeteoResponse, val unsupportedFields: Set<ForecastField> = emptySet()) : OpenMeteoResult {
+        override fun toString(): String = "OpenMeteoResult.Success(response=<redacted>, unsupportedFields=$unsupportedFields)"
+    }
     data class HttpError(val statusCode: Int, val providerError: Boolean) : OpenMeteoResult
     data object NoData : OpenMeteoResult
     data class Malformed(val reason: Reason) : OpenMeteoResult { enum class Reason { INVALID_JSON, INVALID_SHAPE } }
@@ -113,7 +115,9 @@ sealed interface OpenMeteoResult {
 }
 
 fun interface OpenMeteoTransport { fun get(uri: URI): OpenMeteoHttpResponse }
-data class OpenMeteoHttpResponse(val statusCode: Int, val body: String)
+data class OpenMeteoHttpResponse(val statusCode: Int, val body: String) {
+    override fun toString(): String = "OpenMeteoHttpResponse(statusCode=$statusCode, body=<redacted>)"
+}
 
 class UrlConnectionOpenMeteoTransport(private val connectTimeoutMillis: Int = 15_000, private val readTimeoutMillis: Int = 20_000) : OpenMeteoTransport {
     override fun get(uri: URI): OpenMeteoHttpResponse {
@@ -140,7 +144,7 @@ class OpenMeteoAdapter(private val endpoint: ForecastEndpoint, private val trans
         } catch (_: Exception) {
             return OpenMeteoResult.TransportFailure(ForecastTransportFailure(ForecastTransportFailure.Kind.UNKNOWN))
         }
-        if (http.statusCode !in 200..299) return OpenMeteoResult.HttpError(http.statusCode, http.body.contains("\"error\":true"))
+        if (http.statusCode !in 200..299) return OpenMeteoResult.HttpError(http.statusCode, hasProviderError(http.body))
         val root = try { JsonReader(http.body).read() as? OpenMeteoValue.ObjectValue }
         catch (_: IllegalArgumentException) { return OpenMeteoResult.Malformed(OpenMeteoResult.Malformed.Reason.INVALID_JSON) }
             ?: return OpenMeteoResult.Malformed(OpenMeteoResult.Malformed.Reason.INVALID_SHAPE)
@@ -154,11 +158,21 @@ class OpenMeteoAdapter(private val endpoint: ForecastEndpoint, private val trans
                 hourly = decodeSection(obj["hourly"], obj["hourly_units"]),
                 daily = decodeSection(obj["daily"], obj["daily_units"]),
             )
-            if (response.current == null && response.hourly == null && response.daily == null && obj["error"] == null) OpenMeteoResult.NoData
-            else if (obj["error"] != null) OpenMeteoResult.HttpError(http.statusCode, providerError = true)
+            if (hasProviderError(root)) OpenMeteoResult.HttpError(http.statusCode, providerError = true)
+            else if (response.current == null && response.hourly == null && response.daily == null) OpenMeteoResult.NoData
             else OpenMeteoResult.Success(response, query.unsupportedFields)
         } catch (_: IllegalArgumentException) { OpenMeteoResult.Malformed(OpenMeteoResult.Malformed.Reason.INVALID_SHAPE) }
     }
+
+    private fun hasProviderError(body: String): Boolean = try {
+        val root = JsonReader(body).read() as? OpenMeteoValue.ObjectValue
+        hasProviderError(root)
+    } catch (_: IllegalArgumentException) { false }
+
+    private fun hasProviderError(root: OpenMeteoValue.ObjectValue?): Boolean =
+        (root?.values?.get("error") as? OpenMeteoValue.Scalar)?.let {
+            it.kind == OpenMeteoValue.Scalar.Kind.BOOLEAN && it.value == "true"
+        } == true
 
     private fun decodeSection(value: OpenMeteoValue?, unitsValue: OpenMeteoValue?): OpenMeteoSection? {
         if (value == null || value === OpenMeteoValue.Null) return null
@@ -226,8 +240,8 @@ private class JsonReader(private val source: String) {
         require(i > start)
         return OpenMeteoValue.Scalar(source.substring(start, i), OpenMeteoValue.Scalar.Kind.NUMBER)
     }
-    private fun string(): String { require(take('"')); val out = StringBuilder(); while (i < source.length) { val c = source[i++]; if (c == '"') return out.toString(); if (c != '\\') out.append(c) else { require(i < source.length); when (val e = source[i++]) { '"', '\\', '/' -> out.append(e); 'b' -> out.append('\b'); 'f' -> out.append('\u000c'); 'n' -> out.append('\n'); 'r' -> out.append('\r'); 't' -> out.append('\t'); 'u' -> { require(i + 4 <= source.length); out.append(source.substring(i, i + 4).toInt(16).toChar()); i += 4 }; else -> throw IllegalArgumentException("escape") } } }; throw IllegalArgumentException("string") }
+    private fun string(): String { require(take('"')); val out = StringBuilder(); while (i < source.length) { val c = source[i++]; if (c == '"') return out.toString(); if (c != '\\') { require(c.code >= 0x20); out.append(c) } else { require(i < source.length); when (val e = source[i++]) { '"', '\\', '/' -> out.append(e); 'b' -> out.append('\b'); 'f' -> out.append('\u000c'); 'n' -> out.append('\n'); 'r' -> out.append('\r'); 't' -> out.append('\t'); 'u' -> { require(i + 4 <= source.length); out.append(source.substring(i, i + 4).toInt(16).toChar()); i += 4 }; else -> throw IllegalArgumentException("escape") } } }; throw IllegalArgumentException("string") }
     private fun literal(s: String) { require(source.startsWith(s, i)); i += s.length }
     private fun take(c: Char): Boolean { ws(); if (i < source.length && source[i] == c) { i++; return true }; return false }
-    private fun ws() { while (i < source.length && source[i].isWhitespace()) i++ }
+    private fun ws() { while (i < source.length && source[i] in " \t\n\r") i++ }
 }
