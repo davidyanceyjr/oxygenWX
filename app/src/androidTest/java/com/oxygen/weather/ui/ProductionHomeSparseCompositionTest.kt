@@ -24,6 +24,41 @@ class ProductionHomeSparseCompositionTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun unavailableHeroValueFitsGlassAndMinimalOledWithoutChangingSemantics() {
+        val fixture = DemoWeatherRepository.load()
+        val sparse = fixture.copy(
+            current = fixture.current.copy(temperatureC = null),
+        )
+        val derived = HistoricalSynthesis.derive(sparse)
+        val presentation = HomePresentationMapper.map(sparse, derived)
+        compose.setContent {
+            OxygenWeatherApp(
+                presentation = presentation,
+                status = StatusPresentation.of("Sparse development fixture status."),
+                partialHorizons = null,
+            )
+        }
+
+        selectTheme("Glass", "Atmospheric")
+        assertUnavailableHeroHeight(presentation.current.spokenSummary)
+        selectTheme("Minimal OLED", "Glass")
+        assertUnavailableHeroHeight(presentation.current.spokenSummary)
+    }
+
+    private fun assertUnavailableHeroHeight(spokenSummary: String) {
+        val hero = compose.onAllNodesWithText("Unavailable", substring = false, useUnmergedTree = true)
+            .fetchSemanticsNodes().first()
+        val heightDp = hero.boundsInRoot.height / compose.density.density
+        assertTrue("Unavailable hero wrapped beyond one readable line: ${heightDp}dp", heightDp <= 42f)
+        compose.onNodeWithContentDescription(spokenSummary).assertExists()
+    }
+
+    private fun selectTheme(theme: String, currentTheme: String) {
+        compose.onNodeWithContentDescription("Theme, $currentTheme").performClick()
+        compose.onNodeWithText(theme, useUnmergedTree = true).performClick()
+    }
+
+    @Test
     fun sparseTypedFactsStayUnavailableAndHourlyDoesNotFillMissingEntries() {
         val fixture = DemoWeatherRepository.load()
         val sparse = fixture.copy(

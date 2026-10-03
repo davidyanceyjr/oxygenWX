@@ -234,6 +234,14 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
         WeatherThemeId.INSTRUMENT -> 338.dp
         else -> 480.dp
     }
+    val temperatureStyle = if (
+        current.temperature == "Unavailable" &&
+        theme.definition.id in setOf(WeatherThemeId.GLASS, WeatherThemeId.MINIMAL_OLED)
+    ) {
+        theme.typography.displayLarge.copy(fontSize = 30.sp, lineHeight = 38.sp)
+    } else {
+        theme.typography.displayLarge
+    }
     Box(Modifier.fillMaxWidth().heightIn(min = 220.dp), contentAlignment = Alignment.TopCenter) {
         val heroContent: @Composable ColumnScope.() -> Unit = {
             Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
@@ -241,7 +249,7 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
                     Text(
                         current.temperature,
                         modifier = Modifier.semantics { contentDescription = current.spokenSummary },
-                        style = theme.typography.displayLarge,
+                        style = temperatureStyle,
                         color = theme.palette.primaryData,
                     )
                     Text(
