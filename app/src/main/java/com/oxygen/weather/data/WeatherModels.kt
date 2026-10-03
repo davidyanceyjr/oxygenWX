@@ -165,6 +165,40 @@ data class WeatherBundle(
     }
 }
 
+/** Canonical provider forecast data, independent of current conditions and historical context. */
+data class ForecastData(
+    val location: WeatherLocation,
+    val hourly: List<HourWeather>,
+    val daily: List<DayWeather>,
+    val provenance: DataProvenance,
+) {
+    init {
+        require(provenance.dataType == DataType.FORECAST) {
+            "Forecast data must use FORECAST provenance."
+        }
+        require(hourly.zipWithNext().all { (earlier, later) -> !later.time.isBefore(earlier.time) }) {
+            "Hourly weather must be in non-decreasing chronological order."
+        }
+        require(daily.zipWithNext().all { (earlier, later) -> !later.date.isBefore(earlier.date) }) {
+            "Daily weather must be in non-decreasing chronological order."
+        }
+        require(hourly.any(::hasWeatherFact) || daily.any(::hasWeatherFact)) {
+            "Forecast data must contain at least one available weather fact."
+        }
+    }
+}
+
+private fun hasWeatherFact(weather: HourWeather): Boolean =
+    weather.condition != null || weather.temperatureC != null || weather.dewPointC != null ||
+        weather.pressureHpa != null || weather.windSpeedKph != null ||
+        weather.precipitationProbabilityPct != null || weather.precipitationMm != null ||
+        weather.cloudCoverPct != null
+
+private fun hasWeatherFact(weather: DayWeather): Boolean =
+    weather.condition != null || weather.lowC != null || weather.highC != null ||
+        weather.precipitationProbabilityPct != null || weather.precipitationMm != null ||
+        weather.windGustKph != null || weather.sunshineHours != null
+
 /** A source-supplied official alert, intentionally separate from forecast and observation records. */
 data class OfficialAlert(
     val issuer: String,

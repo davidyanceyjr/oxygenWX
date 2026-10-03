@@ -33,33 +33,15 @@ supersedes the theme-specific implementation sequence below. Product semantics
 remain governed by `docs/SPECIFICATION.md` and
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The general roadmap remains active
 for non-theme work and resumes as the implementation sequence after TP.3.
-Cycle 094 passed **TP.3C-R**, Metric reference and installed-baseline
-reconciliation. Cycle 095 completed the resulting **TP.3C** baseline comparison
-with REVIEW COMPLETE and a correction handoff; all twenty cases have
-reference-supported deviations, so visual acceptance remains open. Cycle 096
-completed the **TP.3C-partial-A** single correction and installed-acceptance
-slice, but closed BLOCKED with 10 remaining visual deviations; TP.3D is
-ineligible. See `.codex/history/2026-10-01-096-baseline-correction-and-installed-acceptance.md`
-and its evidence directory. The approved immutable comparison target is
-`.codex/test-artifacts/094-tp3c-r-metric-reference-reconciliation/packet/tp3cr-proposed-r4-metric-094/`
-(aggregate SHA-256
-`a2569e1c8482cc719c1d2de94950a9f929e6f548e32017ae497e4c284b9d1711`). The
-approval and comparison do not establish visual parity or complete TP.3C.
-Following the owner direction that blockers become roadmap slices for planned
-implementation of their resolution, cycle 098 completed the Hourly
-reference-identity resolution and acceptance slice with all five primary cases
-passing on the installed app. Evidence and the recovery account are recorded in
-`.codex/history/2026-10-02-098-tp3c-hourly-reference-identity-and-acceptance.md`
-and `.codex/test-artifacts/098-tp3c-hourly-reference-identity-and-acceptance/`.
-Cycle 097 is BLOCKED and remains closed. Its three mismatched citations were
-regression variants attached to primary `P-*` case reports; cycle 098 maps each
-`P-*` case to the corresponding primary SVG and keeps the common indexed
-baseline capture setup. TP.3C remains open: Details and the all-twenty acceptance
-gate are outstanding. The recovery remains bounded in three dependent
-page-family slices under
-`docs/theme-pack-roadmap.md`; the final partial-C cycle owns the all-twenty
-acceptance gate. R2.1 is not executable until the full TP.3 gate passes; it is
-not the current next candidate while TP.3 is blocked.
+The focused theme-pack sequence is complete through TP.3. Cycle 104 audited the
+retained baseline, authorized recovery, TP.3D-S, and TP.3D evidence and recorded
+TP.3 PASS; its criterion matrix and limitations are in
+`.codex/test-artifacts/104-tp3-theme-pack-exit-gate/`, with the closeout in
+`.codex/history/2026-10-03-104-tp3-theme-pack-exit-gate.md`. Cycle 096 remains
+historically BLOCKED; the accepted recovery cycles 098–100 satisfy the baseline
+prerequisite under the 2026-10-03 owner clarification recorded in
+`docs/theme-pack-roadmap.md`. The prior cycle 097 blocker also remains historical
+and closed. R2.1 is now the next eligible general-roadmap slice.
 
 ## Context-budget slicing rule
 
@@ -390,11 +372,15 @@ Evidence and limitations: `.codex/history/2026-09-30-091-unit-aware-presentation
 ## R2 — Production forecast path
 
 
-### R2.1 — Forecast provider interface — PLANNED
+### R2.1 — Forecast provider interface — DONE
 
 Introduce provider-neutral forecast request/result contracts and configurable provider endpoints.
 
 **Exit:** Provider-neutral request/result contracts compile and deterministic tests cover success, unsupported fields, no result, and transport failure; no provider-specific DTO enters canonical or presentation packages.
+
+Plan: `.codex/plans/105-forecast-provider-interface.md`. Evidence and
+limitations: `.codex/history/2026-10-03-105-forecast-provider-interface.md` and
+`.codex/test-artifacts/105-forecast-provider-interface/verification.md`.
 
 ### R2.2 — Open-Meteo primary provider — PLANNED
 
