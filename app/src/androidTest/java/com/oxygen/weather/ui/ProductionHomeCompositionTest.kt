@@ -2,6 +2,8 @@ package com.oxygen.weather.ui
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -9,6 +11,10 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeRight
+import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
@@ -34,7 +40,7 @@ class ProductionHomeCompositionTest {
     @Test
     fun nowAndHourlyPreserveSuppliedFactsAndWindowControlsInNormalApp() {
         val home = presentation
-        compose.onNodeWithContentDescription("Now page, 1 of 4, selected").assertExists()
+        assertPageIdentity("Now")
         assertTextPresent(home.current.location)
         assertTextPresent(home.current.temperature)
         assertTextPresent(home.current.condition)
@@ -53,7 +59,7 @@ class ProductionHomeCompositionTest {
         compose.onNodeWithText("Next hours", substring = false).assertDoesNotExist()
 
         val firstWindow = home.hourlyWindows.first()
-        compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+        selectPage("Hourly")
         assertTextPresent(firstWindow.rangeLabel)
         firstWindow.entries.take(6).forEach { entry ->
             assertTextPresent(entry.time)
@@ -81,22 +87,16 @@ class ProductionHomeCompositionTest {
         // Exercise all page/theme pairs through the actual MainActivity process.
         val pageLabels = listOf("Now", "Hourly")
         val visitedThemes = mutableListOf<WeatherThemeId>()
-        var selectedPageName = "Hourly"
         WeatherThemeId.entries.forEach { themeId ->
             visitedThemes += themeId
             selectTheme(themeId.displayName)
-            pageLabels.forEachIndexed { pageIndex, pageLabel ->
-                compose.onNodeWithContentDescription(
-                    "$pageLabel page, ${pageIndex + 1} of 4, ${if (selectedPageName == pageLabel) "selected" else "not selected"}",
-                )
-                    .performClick()
-                selectedPageName = pageLabel
-                compose.waitForIdle()
+            pageLabels.forEach { pageLabel ->
+                selectPage(pageLabel)
                 assertThemeContentPreserved(home, pageLabel)
             }
         }
         assertEquals(WeatherThemeId.entries.toList(), visitedThemes)
-        compose.onNodeWithContentDescription("Details page, 4 of 4, not selected").performClick()
+        selectPage("Details")
         assertTextPresent("Forecast pattern")
         WeatherThemeId.entries.forEach { themeId ->
             selectTheme(themeId.displayName)
@@ -105,6 +105,103 @@ class ProductionHomeCompositionTest {
             assertTextPresent("Status")
             assertTextPresent(STATUS)
         }
+    }
+
+    @Test
+    fun titleMenuNavigatesEverySourceToEveryDestinationAndPreservesPagerBehavior() {
+        assertPageIdentity("Now")
+        assertOldSelectorAbsent()
+
+        PAGE_LABELS.forEach { source ->
+            selectPage(source)
+            PAGE_LABELS.forEach { destination ->
+                selectPage(source)
+                val title = titleControl(source)
+                title.assertIsDisplayed()
+                assertMinimumTarget(title.fetchSemanticsNode().boundsInRoot.width, title.fetchSemanticsNode().boundsInRoot.height)
+                title.performClick()
+                assertPageIdentity(source)
+                PAGE_LABELS.forEachIndexed { index, label ->
+                    val item = compose.onNodeWithContentDescription(menuItemDescription(label, index, label == source))
+                    item.assertIsDisplayed()
+                    if (label == source) item.assertIsSelected() else item.assertIsNotSelected()
+                    val bounds = item.fetchSemanticsNode().boundsInRoot
+                    assertMinimumTarget(bounds.width, bounds.height)
+                }
+                compose.onNodeWithContentDescription(
+                    menuItemDescription(destination, PAGE_LABELS.indexOf(destination), destination == source),
+                ).performClick()
+                compose.waitForIdle()
+                assertPageIdentity(destination)
+                assertOldSelectorAbsent()
+            }
+        }
+
+        selectPage("Daily")
+        titleControl("Daily").performClick()
+        Espresso.pressBack()
+        assertPageIdentity("Daily")
+        assertOldSelectorAbsent()
+        selectPage("Daily") // Selecting the current destination closes the menu without moving.
+        assertPageIdentity("Daily")
+
+        Espresso.pressBack()
+        compose.waitForIdle()
+        assertPageIdentity("Hourly")
+        Espresso.pressBack()
+        compose.waitForIdle()
+        assertPageIdentity("Now")
+
+        swipePage(left = true)
+        assertPageIdentity("Hourly")
+        swipePage(left = true)
+        assertPageIdentity("Daily")
+        swipePage(left = true)
+        assertPageIdentity("Details")
+        swipePage(left = false)
+        assertPageIdentity("Daily")
+    }
+
+    private fun selectPage(label: String) {
+        val current = PAGE_LABELS.first {
+            compose.onAllNodesWithContentDescription("Choose Home page, current: $it").fetchSemanticsNodes().isNotEmpty()
+        }
+        titleControl(current).performClick()
+        compose.onNodeWithContentDescription(menuItemDescription(label, PAGE_LABELS.indexOf(label), label == current))
+            .performClick()
+        compose.waitForIdle()
+        assertPageIdentity(label)
+    }
+
+    private fun titleControl(label: String) =
+        compose.onNodeWithContentDescription("Choose Home page, current: $label")
+
+    private fun menuItemDescription(label: String, index: Int, selected: Boolean) =
+        "$label page, ${index + 1} of 4, ${if (selected) "selected" else "not selected"}"
+
+    private fun assertPageIdentity(label: String) {
+        titleControl(label).assertIsDisplayed()
+        compose.onNodeWithText("$label ⌄", substring = false, useUnmergedTree = true).assertIsDisplayed()
+    }
+
+    private fun assertOldSelectorAbsent() {
+        PAGE_LABELS.forEachIndexed { index, label ->
+            compose.onNodeWithContentDescription(menuItemDescription(label, index, selected = true)).assertDoesNotExist()
+            compose.onNodeWithContentDescription(menuItemDescription(label, index, selected = false)).assertDoesNotExist()
+        }
+    }
+
+    private fun assertMinimumTarget(widthPx: Float, heightPx: Float) {
+        val minimumPx = 48f * compose.density.density
+        assertTrue("target width $widthPx is below 48dp", widthPx >= minimumPx)
+        assertTrue("target height $heightPx is below 48dp", heightPx >= minimumPx)
+    }
+
+    private fun swipePage(left: Boolean) {
+        compose.onNode(isRoot()).performTouchInput {
+            if (left) swipeLeft() else swipeRight()
+        }
+        compose.waitForIdle()
     }
 
     private fun selectTheme(displayName: String) {
@@ -165,5 +262,6 @@ class ProductionHomeCompositionTest {
 
     companion object {
         private const val STATUS = "Development fixture data. Freshness: unknown."
+        private val PAGE_LABELS = listOf("Now", "Hourly", "Daily", "Details")
     }
 }

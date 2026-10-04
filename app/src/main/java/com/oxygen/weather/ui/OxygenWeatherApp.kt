@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.PaddingValues
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import com.oxygen.weather.presentation.ForecastHorizonStatus
 import com.oxygen.weather.presentation.ForecastHorizonPresentation
 import com.oxygen.weather.presentation.HomePresentation
@@ -68,7 +70,6 @@ import com.oxygen.weather.ui.themeengine.components.ProductionDailyRow
 import com.oxygen.weather.ui.themeengine.components.ProductionInspectionMetricGroup
 import com.oxygen.weather.ui.themeengine.components.ProductionMetricTile
 import com.oxygen.weather.ui.themeengine.components.ProductionPageHeader
-import com.oxygen.weather.ui.themeengine.components.ProductionPageSelector
 import com.oxygen.weather.ui.themeengine.components.ProductionQuietSectionSurface
 import com.oxygen.weather.ui.themeengine.components.ProductionSectionSurface
 import com.oxygen.weather.ui.themeengine.components.ProductionSourceFreshnessPanel
@@ -101,6 +102,7 @@ fun OxygenWeatherApp(
     val theme = remember(themeId, themeEffects) { resolveTheme(themeId, effects = themeEffects) }
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
+    var pageMenuExpanded by remember { mutableStateOf(false) }
     BackHandler(enabled = pagerState.currentPage > 0) {
         scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
     }
@@ -109,21 +111,55 @@ fun OxygenWeatherApp(
         ProductionBackdrop(theme, Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize().safeDrawingPadding()) {
                 val selectedPage = HomePage.entries[pagerState.currentPage]
-                Box(Modifier.fillMaxWidth().height(theme.headerToTabHeight())) {
-                    ProductionPageHeader(
-                        theme,
-                        presentation.current.location,
-                        selectedPage.label,
-                        Modifier.padding(horizontal = theme.geometry.pageGutter),
-                    )
+                Box(Modifier.fillMaxWidth().heightIn(min = theme.headerToTabHeight())) {
+                    Column(Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)) {
+                        Text(
+                            presentation.current.location,
+                            style = theme.typography.headlineMedium,
+                            color = theme.palette.primaryData,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(end = 56.dp),
+                        )
+                        Box {
+                            TextButton(
+                                onClick = { pageMenuExpanded = true },
+                                modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                                    .semantics { contentDescription = "Choose Home page, current: ${selectedPage.label}" },
+                                contentPadding = PaddingValues(0.dp),
+                                colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.secondaryData),
+                            ) {
+                                Text("${selectedPage.label} ⌄", style = theme.typography.labelMedium)
+                            }
+                            DropdownMenu(
+                                expanded = pageMenuExpanded,
+                                onDismissRequest = { pageMenuExpanded = false },
+                                shape = RoundedCornerShape(theme.geometry.panelCornerRadius),
+                                containerColor = theme.palette.surface,
+                                tonalElevation = 0.dp,
+                                border = BorderStroke(theme.geometry.panelBorderWidth, theme.palette.outline),
+                            ) {
+                                HomePage.entries.forEachIndexed { index, page ->
+                                    val active = pagerState.currentPage == index
+                                    DropdownMenuItem(
+                                        text = { Text(page.label, style = theme.typography.bodyMedium) },
+                                        onClick = {
+                                            pageMenuExpanded = false
+                                            scope.launch { pagerState.moveToPage(index, effects) }
+                                        },
+                                        modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                                            .semantics {
+                                                selected = active
+                                                contentDescription = "${page.label} page, ${index + 1} of 4, ${if (active) "selected" else "not selected"}"
+                                            },
+                                        colors = MenuDefaults.itemColors(textColor = theme.palette.content),
+                                    )
+                                }
+                            }
+                        }
+                    }
                     ThemePicker(theme, themeId, onSelect = { selectedThemeIndex = it.ordinal })
                 }
-                ProductionPageSelector(
-                    theme = theme,
-                    labels = HomePage.entries.map { it.label },
-                    selectedIndex = pagerState.currentPage,
-                    onSelected = { page -> scope.launch { pagerState.moveToPage(page, effects) } },
-                )
                 Spacer(Modifier.height(theme.headerToBodyGap()))
                 HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
                     when (HomePage.entries[page]) {

@@ -43,6 +43,12 @@ prerequisite under the 2026-10-03 owner clarification recorded in
 `docs/theme-pack-roadmap.md`. The prior cycle 097 blocker also remains historical
 and closed. R2.1 is now the next eligible general-roadmap slice.
 
+Owner-directed visual refinements to the application after TP.3 are tracked in
+`docs/UI_CONTEXT_ROADMAP.md`. That document defines how each concrete request
+becomes a bounded implementation slice; product and detailed presentation
+authority remain with `docs/SPECIFICATION.md` and
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`.
+
 ## Context-budget slicing rule
 
 An implementation slice whose stated boundary is expected to consume more than

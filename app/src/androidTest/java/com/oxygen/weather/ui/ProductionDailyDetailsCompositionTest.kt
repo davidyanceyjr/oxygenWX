@@ -140,8 +140,13 @@ class ProductionDailyDetailsCompositionTest {
     }
 
     private fun openPage(name: String, number: Int) {
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
         compose.onNodeWithContentDescription("$name page, $number of 4, not selected").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: $name").assertExists()
+        compose.onNodeWithContentDescription("Choose Home page, current: $name").performClick()
         compose.onNodeWithContentDescription("$name page, $number of 4, selected").assertExists()
+        compose.onNodeWithContentDescription("$name page, $number of 4, selected").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: $name").assertExists()
     }
 
     private fun dailyControl(label: String): SemanticsNodeInteraction =
@@ -205,7 +210,9 @@ class ProductionDailyDetailsSparseCompositionTest {
             )
         }
 
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
         compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertExists()
         listOf(first.day, first.condition, "Low ${first.low} · High ${first.high}", first.precipitation, mapped.sourceLine, mapped.updatedLine,
             "Daily forecast horizon is partial.", "Retained cached data; refresh failed.").forEach(::assertText)
         compose.onAllNodesWithContentDescription(first.spokenSummary).assertCountEquals(1)
@@ -217,7 +224,9 @@ class ProductionDailyDetailsSparseCompositionTest {
         assertText(mapped.sourceLine)
         assertText("Retained cached data; refresh failed.")
 
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").performClick()
         compose.onNodeWithContentDescription("Details page, 4 of 4, not selected").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: Details").assertExists()
         listOf(mapped.sourceLine, mapped.updatedLine, "Retained cached data; refresh failed.", "Conditions", "Exact metric",
             "Unavailable exactly as supplied", "Exact supporting context", "Historical context", "Reference", "1991–2020").forEach(::assertText)
         compose.onNodeWithText("Empty supplied group", substring = false, useUnmergedTree = true).assertDoesNotExist()

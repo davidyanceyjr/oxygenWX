@@ -108,7 +108,9 @@ class ProductionHomeSparseCompositionTest {
         compose.onNodeWithText("Forecast pattern", substring = false).assertDoesNotExist()
         compose.onNodeWithText("Next hours", substring = false).assertDoesNotExist()
 
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
         compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertExists()
         val entry = presentation.hourlyWindows.single().entries.single()
         assertTextPresent(entry.time)
         assertTextPresent(entry.condition)
