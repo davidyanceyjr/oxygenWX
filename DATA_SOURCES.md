@@ -24,6 +24,24 @@ The adopted Oxygen product direction uses replaceable provider interfaces. Initi
 
 Provider terms, attribution, rate limits, fields, provenance, and caching rules must be reviewed again when those integrations are implemented.
 
+### Open-Meteo geocoding candidate
+
+The location-search candidate is Open-Meteo's Geocoding API at
+`https://geocoding-api.open-meteo.com/v1/search`. It accepts a required `name`
+(location or postal code), with optional `count` (default 10, maximum 100),
+`language`, and `countryCode`. Empty and one-character names return no results;
+search matching and qualifier rules are documented by the provider.
+
+Location records are based on GeoNames, which must be credited in the product
+when using these results. The free endpoint requires no API key for
+non-commercial use. Open-Meteo's current free-service terms limit usage to
+fewer than 10,000 calls per day, 5,000 per hour, and 600 per minute, and restrict
+the free service to non-commercial purposes. Open-Meteo states the API data is
+under CC BY 4.0; preserve appropriate attribution and indicate modifications as
+required by that license. Recheck these terms before production integration.
+
+Authoritative references (verified 2026-10-04): [Geocoding API documentation](https://open-meteo.com/en/docs/geocoding-api), [Terms of Use](https://open-meteo.com/en/terms), and [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/). The verification details are recorded in `.codex/test-artifacts/115-manual-location-search-contracts-and-lookup-adapter/provider-documentation.md`.
+
 ## MET Norway Locationforecast fallback
 
 The configured fallback uses the MET Norway Locationforecast 2.0 compact JSON

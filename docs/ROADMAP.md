@@ -443,16 +443,18 @@ Plan: `.codex/plans/113-met-norway-fallback.md`. Evidence and limitations:
 `.codex/history/2026-10-04-113-met-norway-fallback.md` and
 `.codex/test-artifacts/113-met-norway-fallback/verification.md`.
 
-### R2.5 — Forecast provenance/freshness UI — NEXT
+### R2.5 — Forecast provenance/freshness UI — DONE
 
 Expose source, valid/fetch/update time, partial horizon, and refresh state through the established UI vocabulary.
 
 **Exit:** Installed captures of Now and Details show source, valid/fetch/update times, partial horizon, and refresh state for live, cached/stale, and failure cases; values and provenance match supplied state.
 
+Evidence and limitations: `.codex/history/2026-10-04-114-forecast-provenance-and-freshness-ui.md`.
+
 ## R3 — Location and offline behavior
 
 
-### R3.1 — Manual location search — PLANNED
+### R3.1 — Manual location search — NEXT
 
 Implement provider-neutral geocoding/search request-result contracts and the
 initial lookup adapter, including locale/timezone and no-result/error fixtures.
