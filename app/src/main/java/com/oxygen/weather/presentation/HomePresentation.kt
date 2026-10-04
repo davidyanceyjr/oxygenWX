@@ -5,13 +5,18 @@ import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DataType
 import com.oxygen.weather.data.CurrentWeather
 import com.oxygen.weather.data.HourWeather
+import com.oxygen.weather.data.LiveWeatherResult
 import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
 import com.oxygen.weather.data.WeatherFreshness
+import com.oxygen.weather.data.WeatherOrigin
 import com.oxygen.weather.data.WeatherBundle
 import com.oxygen.weather.data.WeatherCondition
+import com.oxygen.weather.data.WeatherSection
+import com.oxygen.weather.data.provider.ForecastField
 import com.oxygen.weather.derived.AtmosphereTexture
 import com.oxygen.weather.derived.DerivedWeather
+import java.time.Instant
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -98,6 +103,24 @@ data class HomePresentation(
     val updatedLine: String,
 )
 
+/** Display-ready live sections without requiring a synthetic current, forecast, or baseline. */
+data class LiveWeatherPresentation(
+    val locationId: String,
+    val locationName: String?,
+    val timeZoneId: String,
+    val current: CurrentPresentation?,
+    val currentProvenance: DataProvenance?,
+    val hourlyWindows: List<HourlyWindowPresentation>,
+    val dailyWindows: List<DailyWindowPresentation>,
+    val forecastProvenance: DataProvenance?,
+    val sourceId: String,
+    val sourceName: String?,
+    val origin: WeatherOrigin,
+    val retrievedAt: Instant,
+    val unsupportedFields: Set<ForecastField>,
+    val invalidSections: Set<WeatherSection>,
+)
+
 data class CurrentPresentation(
     val location: String,
     val temperature: String,
@@ -172,6 +195,62 @@ data class MetricPresentation(
 )
 
 object HomePresentationMapper {
+    /** Maps a live success while preserving the independently available current/forecast sections. */
+    fun mapLiveSuccess(
+        success: LiveWeatherResult.Success,
+        unitPreset: UnitPreset = UnitPreset.METRIC,
+    ): LiveWeatherPresentation {
+        val location = success.request.location
+        val forecast = success.forecast
+        val current = success.current?.let { value ->
+            val condition = value.condition.displayName()
+            CurrentPresentation(
+                location = location.displayName ?: "Location unavailable",
+                temperature = temp(value.temperatureC, unitPreset),
+                condition = condition,
+                apparent = temp(value.apparentC, unitPreset),
+                humidity = percent(value.relativeHumidityPct),
+                dewPoint = temp(value.dewPointC, unitPreset),
+                precipitationHeadline = "Precipitation chance unavailable",
+                precipitationSupporting = "Amount ${precipitation(value.precipitationMmPerHr, unitPreset)}",
+                windHeadline = speed(value.windSpeedKph, unitPreset),
+                windSupporting = windSupporting(value.windGustKph, value.windDirectionDeg, unitPreset),
+                spokenSummary = "${location.displayName ?: "Location unavailable"}, $condition, " +
+                    "${temp(value.temperatureC, unitPreset)}",
+                conditionIdentity = value.condition.toWeatherMarkCondition(),
+                fieldAvailability = CurrentFieldAvailability(
+                    condition = field(value.condition) { it.displayName() },
+                    temperature = field(value.temperatureC) { temp(it, unitPreset) },
+                    apparentTemperature = field(value.apparentC) { temp(it, unitPreset) },
+                    relativeHumidity = field(value.relativeHumidityPct, ::percent),
+                    dewPoint = field(value.dewPointC) { temp(it, unitPreset) },
+                    precipitationAmount = field(value.precipitationMmPerHr) { precipitation(it, unitPreset) },
+                    windSpeed = field(value.windSpeedKph) { speed(it, unitPreset) },
+                    windGust = field(value.windGustKph) { speed(it, unitPreset) },
+                    windDirection = field(value.windDirectionDeg, ::compass),
+                ),
+            )
+        }
+        return LiveWeatherPresentation(
+            locationId = location.id.value,
+            locationName = location.displayName,
+            timeZoneId = location.timeZone.id,
+            current = current,
+            currentProvenance = success.currentProvenance,
+            hourlyWindows = forecast?.hourly?.take(72)?.chunked(6)?.map { hourlyWindow(it, unitPreset) }.orEmpty(),
+            dailyWindows = forecast?.daily?.take(10)?.chunked(5)?.map {
+                dailyWindow(it, null, unitPreset)
+            }.orEmpty(),
+            forecastProvenance = forecast?.provenance,
+            sourceId = success.source.id.value,
+            sourceName = success.source.displayName,
+            origin = success.origin,
+            retrievedAt = success.retrievedAt,
+            unsupportedFields = success.unsupportedFields.toSet(),
+            invalidSections = success.invalidSections.toSet(),
+        )
+    }
+
     /** Maps repository load outcomes while keeping weather-content availability independently nested. */
     fun mapLoadState(input: HomePresentationInput): HomeLoadState = when (input) {
         HomePresentationInput.Loading -> HomeLoadState.Loading(
@@ -375,8 +454,8 @@ object HomePresentationMapper {
         )
     }
 
-    private fun dailyWindow(days: List<DayWeather>, today: java.time.LocalDate, unitPreset: UnitPreset): DailyWindowPresentation {
-        fun label(day: DayWeather): String = if (day.date == today) "TODAY" else day.date.format(dayFormatter).uppercase()
+    private fun dailyWindow(days: List<DayWeather>, today: java.time.LocalDate?, unitPreset: UnitPreset): DailyWindowPresentation {
+        fun label(day: DayWeather): String = if (today != null && day.date == today) "TODAY" else day.date.format(dayFormatter).uppercase()
         return DailyWindowPresentation(
             rangeLabel = "${label(days.first())}–${label(days.last())}",
             entries = days.map { day ->

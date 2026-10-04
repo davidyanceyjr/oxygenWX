@@ -41,7 +41,8 @@ TP.3 PASS; its criterion matrix and limitations are in
 historically BLOCKED; the accepted recovery cycles 098–100 satisfy the baseline
 prerequisite under the 2026-10-03 owner clarification recorded in
 `docs/theme-pack-roadmap.md`. The prior cycle 097 blocker also remains historical
-and closed. R2.1 is now the next eligible general-roadmap slice.
+and closed. The production forecast path is complete through R2.3; R2.3A is
+the next eligible general-roadmap slice.
 
 Owner-directed visual refinements to the application after TP.3 are tracked in
 `docs/UI_CONTEXT_ROADMAP.md`. That document defines how each concrete request
@@ -388,7 +389,7 @@ Plan: `.codex/plans/105-forecast-provider-interface.md`. Evidence and
 limitations: `.codex/history/2026-10-03-105-forecast-provider-interface.md` and
 `.codex/test-artifacts/105-forecast-provider-interface/verification.md`.
 
-### R2.2 — Open-Meteo primary provider — PLANNED
+### R2.2 — Open-Meteo primary provider — DONE
 
 Implement the Open-Meteo request configuration, transport boundary, and
 response decoding fixtures for the required current/hourly/daily fields and
@@ -396,7 +397,10 @@ response decoding fixtures for the required current/hourly/daily fields and
 
 **Exit:** Recorded request fixtures and decoder tests cover required current/hourly/daily fields, timezone, nullable values, and the 72-hour/10-day horizon; no canonical mapping is added.
 
-### R2.2A — Open-Meteo canonical forecast mapping — PLANNED
+Plan: `.codex/plans/107-open-meteo-primary-forecast-provider.md`. Evidence
+and limitations: `.codex/history/2026-10-03-107-open-meteo-primary-forecast-provider.md`.
+
+### R2.2A — Open-Meteo canonical forecast mapping — DONE
 
 After R2.2, map decoded responses into canonical current/hourly/daily records,
 preserving source provenance, location timezone, sparse/nullable/duplicate
@@ -404,7 +408,10 @@ values, and partial horizons truthfully. Provider orchestration remains R2.3.
 
 **Exit:** Fixtures for complete, sparse, duplicate-time, and partial responses map to canonical records with source/timezone provenance intact; deterministic mapping tests pass.
 
-### R2.3 — WeatherRepository live path — PLANNED
+Plan: `.codex/plans/110-open-meteo-canonical-forecast-mapping.md`. Evidence
+and limitations: `.codex/history/2026-10-03-110-open-meteo-canonical-forecast-mapping.md`.
+
+### R2.3 — WeatherRepository live path — DONE
 
 Connect the Open-Meteo mapper to a provider-neutral repository live-result
 path, including result origin/provenance but no cache restoration or Compose
@@ -412,13 +419,19 @@ state integration.
 
 **Exit:** Repository tests prove one Open-Meteo live result path, preserved origin/provenance, and distinct success/failure outcomes; cache restoration and UI state remain absent.
 
-### R2.3A — Live forecast application-state bridge — PLANNED
+Plan: `.codex/plans/111-weather-repository-live-path.md`. Evidence and
+limitations: `.codex/history/2026-10-03-111-weather-repository-live-path.md`.
+
+### R2.3A — Live forecast application-state bridge — DONE
 
 After R2.3, bind the live repository result to application state and the
 existing presentation path without moving provider logic into Compose. Preserve
 selected-location request identity and honest loading/failure state mapping.
 
-**Exit:** State tests cover loading, live, and failure without data, reject a stale selected-location response, and feed the existing presentation boundary without provider logic in Compose.
+**Exit:** State tests cover loading, live, and failure without data, reject stale selected-location and same-location refresh responses, and feed a typed presentation boundary for current-only, forecast-only, and combined results without provider logic in Compose.
+
+Plan: `.codex/plans/112-live-forecast-application-state-bridge.md`. Evidence
+and limitations: `.codex/history/2026-10-04-112-live-forecast-application-state-bridge.md` and `.codex/test-artifacts/112-live-forecast-application-state-bridge/verification.md`.
 
 ### R2.4 — MET Norway fallback — PLANNED
 
