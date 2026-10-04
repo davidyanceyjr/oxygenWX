@@ -41,8 +41,8 @@ TP.3 PASS; its criterion matrix and limitations are in
 historically BLOCKED; the accepted recovery cycles 098–100 satisfy the baseline
 prerequisite under the 2026-10-03 owner clarification recorded in
 `docs/theme-pack-roadmap.md`. The prior cycle 097 blocker also remains historical
-and closed. The production forecast path is complete through R2.3; R2.3A is
-the next eligible general-roadmap slice.
+and closed. The production forecast path is complete through R2.4; R2.5 is the
+next eligible general-roadmap slice.
 
 Owner-directed visual refinements to the application after TP.3 are tracked in
 `docs/UI_CONTEXT_ROADMAP.md`. That document defines how each concrete request
@@ -443,7 +443,7 @@ Plan: `.codex/plans/113-met-norway-fallback.md`. Evidence and limitations:
 `.codex/history/2026-10-04-113-met-norway-fallback.md` and
 `.codex/test-artifacts/113-met-norway-fallback/verification.md`.
 
-### R2.5 — Forecast provenance/freshness UI — PLANNED
+### R2.5 — Forecast provenance/freshness UI — NEXT
 
 Expose source, valid/fetch/update time, partial horizon, and refresh state through the established UI vocabulary.
 

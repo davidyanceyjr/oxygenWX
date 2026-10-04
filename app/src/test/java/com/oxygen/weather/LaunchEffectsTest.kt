@@ -33,4 +33,11 @@ class LaunchEffectsTest {
         assertEquals(false, selectSparseFixture(isDebugBuild = true, sparseFixtureRequested = false))
         assertEquals(false, selectSparseFixture(isDebugBuild = false, sparseFixtureRequested = true))
     }
+
+    @Test
+    fun reviewScenariosAreNamedAndDebugOnly() {
+        assertEquals(ReviewScenario.CACHED_STALE, selectReviewScenario(true, "cached_stale"))
+        assertEquals(null, selectReviewScenario(true, "unknown"))
+        assertEquals(null, selectReviewScenario(false, "cached_stale"))
+    }
 }

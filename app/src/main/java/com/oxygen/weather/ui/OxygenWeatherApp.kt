@@ -60,6 +60,7 @@ import com.oxygen.weather.presentation.ForecastHorizonStatus
 import com.oxygen.weather.presentation.ForecastHorizonPresentation
 import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.StatusPresentation
+import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
@@ -76,6 +77,7 @@ import com.oxygen.weather.ui.themeengine.components.ProductionSourceFreshnessPan
 import com.oxygen.weather.ui.themeengine.components.ProductionHourlyEntry
 import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
 import com.oxygen.weather.ui.themeengine.components.ProductionWindowControls
+import com.oxygen.weather.ui.themeengine.components.ProductionForecastContext
 import com.oxygen.weather.ui.themeengine.resolveTheme
 import kotlinx.coroutines.launch
 
@@ -91,6 +93,7 @@ fun OxygenWeatherApp(
     status: StatusPresentation,
     partialHorizons: ForecastHorizonPresentation? = null,
     effects: EffectsLevel = EffectsLevel.SUBTLE,
+    forecastContext: ForecastContextPresentation? = null,
 ) {
     var selectedThemeIndex by rememberSaveable { mutableIntStateOf(0) }
     val themeId = WeatherThemeId.entries[selectedThemeIndex.coerceIn(0, WeatherThemeId.entries.lastIndex)]
@@ -163,10 +166,10 @@ fun OxygenWeatherApp(
                 Spacer(Modifier.height(theme.headerToBodyGap()))
                 HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
                     when (HomePage.entries[page]) {
-                        HomePage.NOW -> NowPage(presentation, status, partialHorizons, theme)
+                        HomePage.NOW -> NowPage(presentation, status, partialHorizons, theme, forecastContext)
                         HomePage.HOURLY -> HourlyPage(presentation, status, partialHorizons, theme)
                         HomePage.DAILY -> DailyPage(presentation, status, partialHorizons, theme)
-                        HomePage.DETAILS -> DetailsPage(presentation, status, theme)
+                        HomePage.DETAILS -> DetailsPage(presentation, status, theme, forecastContext)
                     }
                 }
             }
@@ -241,6 +244,7 @@ private fun NowPage(
     status: StatusPresentation,
     partialHorizons: ForecastHorizonPresentation?,
     theme: ResolvedTheme,
+    forecastContext: ForecastContextPresentation?,
 ) {
     val layout = theme.geometry
     val current = home.current
@@ -259,7 +263,8 @@ private fun NowPage(
         ).forEach { note ->
             Text(note, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
         }
-        NowProvenanceStatus(theme, home.sourceLine, home.updatedLine, status)
+        if (forecastContext != null) ProductionForecastContext(theme, forecastContext)
+        else NowProvenanceStatus(theme, home.sourceLine, home.updatedLine, status)
     }
 }
 
@@ -685,15 +690,23 @@ private fun DailyPage(
 }
 
 @Composable
-private fun DetailsPage(home: HomePresentation, status: StatusPresentation, theme: ResolvedTheme) {
+private fun DetailsPage(
+    home: HomePresentation,
+    status: StatusPresentation,
+    theme: ResolvedTheme,
+    forecastContext: ForecastContextPresentation?,
+) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
             .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
         verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
     ) {
         ProductionPageHeader(theme, "Details", "")
-        ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine, separateFacts = true)
-        StatusPanel(theme, status, details = true)
+        if (forecastContext != null) ProductionForecastContext(theme, forecastContext)
+        else {
+            ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine, separateFacts = true)
+            StatusPanel(theme, status, details = true)
+        }
         home.detailGroups.filter { it.metrics.isNotEmpty() }
             .forEach { ProductionInspectionMetricGroup(theme, it) }
     }

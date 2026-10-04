@@ -61,13 +61,23 @@ assumptions.
 
 ## Response
 
-Keep the recommendation concise and include:
+Keep the recommendation concise. Separate reasoning-heavy decisions from
+mechanical implementation work, and use this order:
 
-- **Recommended model:** cheapest suitable option, why it fits, and confidence
-  (high/medium/low) with the key evidence or uncertainty.
-- **Fallback:** next model to try and a specific escalation trigger, such as a
-  failed schema decision, repeated test/debug loop, or inability to preserve a
-  contract boundary.
+- **Raw implementation difficulty:** score 1–10 for the whole plan as written,
+  including design ambiguity, implementation, integration, and verification.
+- **Reasoning concentration:** identify where the difficult judgment is
+  concentrated (for example, a contract boundary, semantic decision, or
+  unfamiliar integration). If no single hotspot dominates, say so.
+- **Mechanical implementation difficulty after resolving those decisions:**
+  score 1–10 for the remaining execution once the named decisions are settled.
+- **Recommendation:** state whether to resolve ambiguity before execution or
+  during it, name the cheapest suitable model for the work, and give confidence
+  with its key evidence or uncertainty. When useful, say whether one model can
+  handle the full implementation after the decisions are resolved.
+- **Fallback:** name the next model to try and a specific escalation trigger,
+  such as a failed contract decision, repeated test/debug loop, or an
+  instrumentation result that exposes an architectural mismatch.
 - **Cost basis:** expected input/output workload range and expected cost range
   when prices and billing are available; otherwise state what is missing and
   compare relative cost/usage tiers.
@@ -75,3 +85,12 @@ Keep the recommendation concise and include:
   model's capability.
 - **Context fit:** report context-window capacity only when it could constrain
   execution. Keep it separate from workload and cost estimates.
+
+Treat both difficulty scores as comparative judgment, not as a substitute for
+the work-based capability and cost assessment. Keep them calibrated to the
+plan: do not inflate raw difficulty just because one decision is subtle, and
+do not call the mechanical work easy if integration or installed verification
+remains substantial. Name the specific ambiguity hotspots so the owner can
+resolve them before execution when that is likely to reduce retries. Do not
+recommend escalation solely because a plan contains an ambiguity that can be
+settled before coding.
