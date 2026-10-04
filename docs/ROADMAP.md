@@ -601,6 +601,30 @@ or changing weather meaning.
 
 **Exit:** System reduced-motion enabled/disabled cases resolve effective motion policy while persisted choice remains unchanged; installed motion is absent when the system policy disables it.
 
+### R5.4B — Compose ambient background foundation — PLANNED
+
+Add a theme-resolved, Compose-native background layer supporting gradients, radial fields, abstract shapes, and low-cost overlays without changing page composition or weather semantics. Effects Off remains opaque, static, and complete.
+
+**Exit:** All five themes resolve a deterministic base background through the existing appearance boundary; focused tests cover Off/Subtle/Full resolution and existing Home content remains unchanged.
+
+### R5.4C — Atmospheric and Glass ambient treatments — PLANNED
+
+Apply layered gradients, soft color fields, haze/glow forms, and restrained motion to Atmospheric and Glass. Atmospheric should suggest sky and weather mood; Glass should gain depth behind translucent surfaces without photographic assets.
+
+**Exit:** Installed Now captures show distinct Atmospheric and Glass treatments under Off/Subtle/Full, with readable content, no layout change, and no weather refetch or semantic change.
+
+### R5.4D — Instrument, Terminal, and Minimal OLED treatments — PLANNED
+
+Apply theme-native backgrounds to the remaining themes: grid/contour fields for Instrument, restrained phosphor/scanline texture for Terminal, and a predominantly true-black treatment for Minimal OLED. Do not force common decorative effects where they weaken theme identity.
+
+**Exit:** Installed Now captures verify all three themes under Off/Subtle/Full; Minimal OLED preserves its black-field identity, Terminal remains text-dominant, and Instrument overlays remain decorative rather than weather data.
+
+### R5.4E — Ambient background performance and fallback — PLANNED
+
+Bound animation, drawing, blur, and layer cost; provide static fallback behavior for reduced motion or unavailable effects. Background rendering must never gate weather content or make animation necessary for a complete appearance.
+
+**Exit:** Installed compact and large-font checks show complete static fallback states for all five themes, reduced-motion disables ambient motion, and focused profiling finds no blocking rendering or interaction regression.
+
 ### R5.5 — Simple layout — PLANNED
 
 Implement Simple layout's Home page model and navigation shell, preserving
