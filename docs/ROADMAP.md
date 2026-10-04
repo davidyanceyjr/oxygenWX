@@ -433,11 +433,15 @@ selected-location request identity and honest loading/failure state mapping.
 Plan: `.codex/plans/112-live-forecast-application-state-bridge.md`. Evidence
 and limitations: `.codex/history/2026-10-04-112-live-forecast-application-state-bridge.md` and `.codex/test-artifacts/112-live-forecast-application-state-bridge/verification.md`.
 
-### R2.4 — MET Norway fallback — PLANNED
+### R2.4 — MET Norway fallback — DONE
 
 Add eligible terminal-failure fallback with provider identification, attribution, and no silent blending of provider values.
 
 **Exit:** Fallback tests cover each eligible terminal failure and prove noneligible failures do not call MET Norway; source identity/attribution stays singular and provider values are never blended.
+
+Plan: `.codex/plans/113-met-norway-fallback.md`. Evidence and limitations:
+`.codex/history/2026-10-04-113-met-norway-fallback.md` and
+`.codex/test-artifacts/113-met-norway-fallback/verification.md`.
 
 ### R2.5 — Forecast provenance/freshness UI — PLANNED
 

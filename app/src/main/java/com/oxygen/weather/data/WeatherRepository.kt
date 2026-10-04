@@ -46,6 +46,32 @@ interface WeatherRepository {
     fun fetchLive(request: ForecastRequest): LiveWeatherResult
 }
 
+/** Composes one primary source with a fallback invoked at most once. */
+class FallbackLiveForecastSource(
+    private val primary: LiveForecastSource,
+    private val fallback: LiveForecastSource,
+) : LiveForecastSource {
+    override fun fetch(request: ForecastRequest): LiveWeatherResult {
+        val primaryResult = primary.fetch(request)
+        return if (primaryResult is LiveWeatherResult.TransportFailure &&
+            primaryResult.failure.kind.isFallbackEligible()
+        ) {
+            fallback.fetch(request)
+        } else {
+            primaryResult
+        }
+    }
+}
+
+/** Exhaustive policy forces every transport kind to be deliberately classified. */
+private fun ForecastTransportFailure.Kind.isFallbackEligible(): Boolean =
+    when (this) {
+        ForecastTransportFailure.Kind.NETWORK,
+        ForecastTransportFailure.Kind.TIMEOUT,
+        ForecastTransportFailure.Kind.SERVICE_UNAVAILABLE -> true
+        ForecastTransportFailure.Kind.UNKNOWN -> false
+    }
+
 /** No retries, fallback, state, or cache are part of this live composition seam. */
 class LiveWeatherRepository(private val source: LiveForecastSource) : WeatherRepository {
     override fun fetchLive(request: ForecastRequest): LiveWeatherResult = source.fetch(request)
