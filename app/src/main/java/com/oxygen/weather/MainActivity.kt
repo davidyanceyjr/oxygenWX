@@ -2,10 +2,13 @@ package com.oxygen.weather
 
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
+import androidx.compose.ui.unit.LayoutDirection
 import com.oxygen.weather.data.CacheWriteOutcome
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DemoWeatherRepository
@@ -14,6 +17,11 @@ import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
 import com.oxygen.weather.data.WeatherFreshness
 import com.oxygen.weather.data.WeatherRepositoryResult
+import com.oxygen.weather.data.locationsearch.LocationSearch
+import com.oxygen.weather.data.locationsearch.openmeteo.OpenMeteoLocationSearch
+import com.oxygen.weather.data.locationsearch.openmeteo.UrlConnectionLocationSearchTransport
+import com.oxygen.weather.data.provider.ForecastRequest
+import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomeLoadState
 import com.oxygen.weather.presentation.HomePresentationInput
@@ -22,16 +30,24 @@ import com.oxygen.weather.presentation.HomePresentationState
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.ui.OxygenWeatherApp
+import com.oxygen.weather.ui.EffectsLevel
 import java.time.LocalDateTime
+import java.util.Locale
+import java.util.UUID
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : ComponentActivity() {
+    private var locationSearchExecutor: ExecutorService? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
         )
-        val effects = selectLaunchEffects(
+        val effects = LocationSearchTestHooks.effectsOverrideForTests ?: selectLaunchEffects(
             isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             effectsOffRequested = intent?.getBooleanExtra(EFFECTS_OFF_LAUNCH_EXTRA, false) == true,
         )
@@ -163,6 +179,21 @@ class MainActivity : ComponentActivity() {
             )
             ForecastContextMapper.map(result, mappedState, inputState).copy(status = status)
         }
+        val worker = Executors.newSingleThreadExecutor { runnable ->
+            Thread(runnable, "oxygen-location-search").apply { isDaemon = true }
+        }
+        locationSearchExecutor = worker
+        val search = LocationSearchTestHooks.searchFactory?.invoke()
+            ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
+        val mainHandler = Handler(Looper.getMainLooper())
+        val coordinator = LocationSearchCoordinator(
+            locationSearch = search,
+            worker = worker,
+            publisher = Executor { command -> mainHandler.post(command) },
+            localeTag = { resources.configuration.locales[0]?.toLanguageTag() ?: Locale.getDefault().toLanguageTag() },
+            localIdGenerator = { "local-${UUID.randomUUID()}" },
+            onSelected = { request -> LocationSearchTestHooks.onSelectedRequest?.invoke(request) },
+        )
         setContent {
             OxygenWeatherApp(
                 presentation = presentation,
@@ -170,9 +201,25 @@ class MainActivity : ComponentActivity() {
                 partialHorizons = partialHorizons,
                 effects = effects,
                 forecastContext = context.takeIf { reviewScenario != null },
+                locationSearchCoordinator = coordinator,
+                layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
         }
     }
+
+    override fun onDestroy() {
+        locationSearchExecutor?.shutdownNow()
+        locationSearchExecutor = null
+        super.onDestroy()
+    }
+}
+
+/** Injection point used by instrumentation to exercise the real Activity composition path. */
+internal object LocationSearchTestHooks {
+    @Volatile var searchFactory: (() -> LocationSearch)? = null
+    @Volatile var onSelectedRequest: ((ForecastRequest) -> Unit)? = null
+    @Volatile var effectsOverrideForTests: EffectsLevel? = null
+    @Volatile var layoutDirectionOverrideForTests: LayoutDirection? = null
 }
 
 private fun com.oxygen.weather.data.WeatherBundle.withUnavailableCurrent() = copy(

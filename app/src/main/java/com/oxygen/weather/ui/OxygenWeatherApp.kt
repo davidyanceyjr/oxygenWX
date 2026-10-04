@@ -37,6 +37,7 @@ import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,16 +52,19 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import com.oxygen.weather.presentation.ForecastHorizonStatus
 import com.oxygen.weather.presentation.ForecastHorizonPresentation
 import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
+import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
@@ -94,6 +98,8 @@ fun OxygenWeatherApp(
     partialHorizons: ForecastHorizonPresentation? = null,
     effects: EffectsLevel = EffectsLevel.SUBTLE,
     forecastContext: ForecastContextPresentation? = null,
+    locationSearchCoordinator: LocationSearchCoordinator? = null,
+    layoutDirectionOverride: LayoutDirection? = null,
 ) {
     var selectedThemeIndex by rememberSaveable { mutableIntStateOf(0) }
     val themeId = WeatherThemeId.entries[selectedThemeIndex.coerceIn(0, WeatherThemeId.entries.lastIndex)]
@@ -106,70 +112,102 @@ fun OxygenWeatherApp(
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
     var pageMenuExpanded by remember { mutableStateOf(false) }
-    BackHandler(enabled = pagerState.currentPage > 0) {
+    var searchOpen by rememberSaveable { mutableStateOf(false) }
+    var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
+    BackHandler(enabled = !searchOpen && pagerState.currentPage > 0) {
         scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
     }
 
-    MaterialTheme(typography = theme.typography) {
-        ProductionBackdrop(theme, Modifier.fillMaxSize()) {
-            Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-                val selectedPage = HomePage.entries[pagerState.currentPage]
-                Box(Modifier.fillMaxWidth().heightIn(min = theme.headerToTabHeight())) {
-                    Column(Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)) {
-                        Text(
-                            presentation.current.location,
-                            style = theme.typography.headlineMedium,
-                            color = theme.palette.primaryData,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(end = 56.dp),
-                        )
-                        Box {
-                            TextButton(
-                                onClick = { pageMenuExpanded = true },
-                                modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
-                                    .semantics { contentDescription = "Choose Home page, current: ${selectedPage.label}" },
-                                contentPadding = PaddingValues(0.dp),
-                                colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.secondaryData),
-                            ) {
-                                Text("${selectedPage.label} ⌄", style = theme.typography.labelMedium)
-                            }
-                            DropdownMenu(
-                                expanded = pageMenuExpanded,
-                                onDismissRequest = { pageMenuExpanded = false },
-                                shape = RoundedCornerShape(theme.geometry.panelCornerRadius),
-                                containerColor = theme.palette.surface,
-                                tonalElevation = 0.dp,
-                                border = BorderStroke(theme.geometry.panelBorderWidth, theme.palette.outline),
-                            ) {
-                                HomePage.entries.forEachIndexed { index, page ->
-                                    val active = pagerState.currentPage == index
-                                    DropdownMenuItem(
-                                        text = { Text(page.label, style = theme.typography.bodyMedium) },
-                                        onClick = {
-                                            pageMenuExpanded = false
-                                            scope.launch { pagerState.moveToPage(index, effects) }
-                                        },
-                                        modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
-                                            .semantics {
-                                                selected = active
-                                                contentDescription = "${page.label} page, ${index + 1} of 4, ${if (active) "selected" else "not selected"}"
+    CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
+        MaterialTheme(typography = theme.typography) {
+            ProductionBackdrop(theme, Modifier.fillMaxSize()) {
+                if (searchOpen && locationSearchCoordinator != null) {
+                    LocationSearchRoute(
+                        coordinator = locationSearchCoordinator,
+                        theme = theme,
+                        openingPageLabel = HomePage.entries[searchOpeningPage.coerceIn(HomePage.entries.indices)].label,
+                        onDismiss = {
+                            locationSearchCoordinator.dismiss()
+                            searchOpen = false
+                        },
+                        onSelected = {
+                            locationSearchCoordinator.dismiss()
+                            searchOpen = false
+                            scope.launch { pagerState.moveToPage(searchOpeningPage, effects) }
+                        },
+                    )
+                    return@ProductionBackdrop
+                }
+                Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+                    val selectedPage = HomePage.entries[pagerState.currentPage]
+                    Box(Modifier.fillMaxWidth().heightIn(min = theme.headerToTabHeight())) {
+                        Column(Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)) {
+                            Text(
+                                presentation.current.location,
+                                style = theme.typography.headlineMedium,
+                                color = theme.palette.primaryData,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(end = 56.dp),
+                            )
+                            Box {
+                                TextButton(
+                                    onClick = { pageMenuExpanded = true },
+                                    modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                                        .semantics { contentDescription = "Choose Home page, current: ${selectedPage.label}" },
+                                    contentPadding = PaddingValues(0.dp),
+                                    colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.secondaryData),
+                                ) {
+                                    Text("${selectedPage.label} ⌄", style = theme.typography.labelMedium)
+                                }
+                                DropdownMenu(
+                                    expanded = pageMenuExpanded,
+                                    onDismissRequest = { pageMenuExpanded = false },
+                                    shape = RoundedCornerShape(theme.geometry.panelCornerRadius),
+                                    containerColor = theme.palette.surface,
+                                    tonalElevation = 0.dp,
+                                    border = BorderStroke(theme.geometry.panelBorderWidth, theme.palette.outline),
+                                ) {
+                                    HomePage.entries.forEachIndexed { index, page ->
+                                        val active = pagerState.currentPage == index
+                                        DropdownMenuItem(
+                                            text = { Text(page.label, style = theme.typography.bodyMedium) },
+                                            onClick = {
+                                                pageMenuExpanded = false
+                                                scope.launch { pagerState.moveToPage(index, effects) }
                                             },
-                                        colors = MenuDefaults.itemColors(textColor = theme.palette.content),
-                                    )
+                                            modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                                                .semantics {
+                                                    selected = active
+                                                    contentDescription = "${page.label} page, ${index + 1} of 4, ${if (active) "selected" else "not selected"}"
+                                                },
+                                            colors = MenuDefaults.itemColors(textColor = theme.palette.content),
+                                        )
+                                    }
                                 }
                             }
                         }
+                        ThemePicker(
+                            theme,
+                            themeId,
+                            onSelect = { selectedThemeIndex = it.ordinal },
+                            onSearch = locationSearchCoordinator?.let {
+                                {
+                                    searchOpeningPage = pagerState.currentPage
+                                    it.openSession()
+                                    searchOpen = true
+                                }
+                            },
+                        )
                     }
-                    ThemePicker(theme, themeId, onSelect = { selectedThemeIndex = it.ordinal })
-                }
-                Spacer(Modifier.height(theme.headerToBodyGap()))
-                HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
-                    when (HomePage.entries[page]) {
-                        HomePage.NOW -> NowPage(presentation, status, partialHorizons, theme, forecastContext)
-                        HomePage.HOURLY -> HourlyPage(presentation, status, partialHorizons, theme)
-                        HomePage.DAILY -> DailyPage(presentation, status, partialHorizons, theme)
-                        HomePage.DETAILS -> DetailsPage(presentation, status, theme, forecastContext)
+                    Spacer(Modifier.height(theme.headerToBodyGap()))
+                    HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
+                        when (HomePage.entries[page]) {
+                            HomePage.NOW -> NowPage(presentation, status, partialHorizons, theme, forecastContext)
+                            HomePage.HOURLY -> HourlyPage(presentation, status, partialHorizons, theme)
+                            HomePage.DAILY -> DailyPage(presentation, status, partialHorizons, theme)
+                            HomePage.DETAILS -> DetailsPage(presentation, status, theme, forecastContext)
+                        }
                     }
                 }
             }
@@ -202,13 +240,19 @@ private suspend fun PagerState.moveToPage(page: Int, effects: EffectsLevel) {
 }
 
 @Composable
-private fun ThemePicker(theme: ResolvedTheme, selected: WeatherThemeId, onSelect: (WeatherThemeId) -> Unit) {
+private fun ThemePicker(
+    theme: ResolvedTheme,
+    selected: WeatherThemeId,
+    onSelect: (WeatherThemeId) -> Unit,
+    onSearch: (() -> Unit)? = null,
+) {
     var expanded by remember { mutableStateOf(false) }
     Row(
         Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
     ) {
+        if (onSearch != null) SearchEntry(theme, onSearch)
         TextButton(
             onClick = { expanded = true },
             modifier = Modifier.heightIn(min = theme.geometry.controlTargetMinimum)
