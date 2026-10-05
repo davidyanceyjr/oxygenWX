@@ -142,6 +142,7 @@ data class CachedForecastPresentation(
     val dailyWindows: List<DailyWindowPresentation>,
     val forecastProvenance: DataProvenance,
     val cachedAt: Instant,
+    val freshness: WeatherFreshness,
 )
 
 data class CurrentPresentation(
@@ -219,7 +220,12 @@ data class MetricPresentation(
 
 object HomePresentationMapper {
     /** Maps cached forecast content without creating a current observation or model estimate. */
-    fun mapCachedForecast(forecast: ForecastData, cachedAt: Instant, unitPreset: UnitPreset = UnitPreset.METRIC): CachedForecastPresentation {
+    fun mapCachedForecast(
+        forecast: ForecastData,
+        cachedAt: Instant,
+        freshness: WeatherFreshness = WeatherFreshness.UNKNOWN,
+        unitPreset: UnitPreset = UnitPreset.METRIC,
+    ): CachedForecastPresentation {
         val hours = forecast.hourly.take(72)
         val hourlyWindows = hours.chunked(6).map { hourlyWindow(it, unitPreset) }
         val hourlyDateJumps = hourlyWindows.mapIndexedNotNull { index, _ ->
@@ -234,6 +240,7 @@ object HomePresentationMapper {
             dailyWindows = forecast.daily.take(10).chunked(5).map { dailyWindow(it, null, unitPreset) },
             forecastProvenance = forecast.provenance,
             cachedAt = cachedAt,
+            freshness = freshness,
         )
     }
 

@@ -232,6 +232,7 @@ class MainActivity : ComponentActivity() {
         }
         locationSearchExecutor = worker
         val mainHandler = Handler(Looper.getMainLooper())
+        val forecastClock = ProductionForecastTestHooks.clockOverride ?: Clock.systemUTC()
         val forecastWorker = Executors.newSingleThreadExecutor { runnable ->
             Thread(runnable, "oxygen-live-forecast").apply { isDaemon = true }
         }
@@ -243,10 +244,12 @@ class MainActivity : ComponentActivity() {
         forecastController = ProductionForecastComposition.create(
             endpoint = ForecastEndpoint(URI("https://api.open-meteo.com/v1/forecast")),
             transport = ProductionForecastTestHooks.transportOverride ?: UrlConnectionOpenMeteoTransport(),
-            clock = Clock.systemUTC(),
+            clock = forecastClock,
             executor = forecastWorker,
-            cacheStore = AndroidForecastCacheStore(applicationContext),
-            onStateChanged = { state -> mainHandler.post { selectedForecastState.value = state.toSelectedPresentationState() } },
+            cacheStore = AndroidForecastCacheStore(applicationContext, forecastClock),
+            onStateChanged = { state -> mainHandler.post {
+                selectedForecastState.value = state.toSelectedPresentationState(forecastClock)
+            } },
         )
         val search = LocationSearchTestHooks.searchFactory?.invoke()
             ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
@@ -378,6 +381,7 @@ internal object LocationSearchTestHooks {
 /** Injection seam for installed Activity tests; production uses the Open-Meteo URL transport. */
 internal object ProductionForecastTestHooks {
     @Volatile var transportOverride: OpenMeteoTransport? = null
+    @Volatile var clockOverride: Clock? = null
 }
 
 private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentationState(
@@ -386,7 +390,7 @@ private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentation
     status = StatusPresentation.of("Loading weather data for ${location.displayName ?: "selected location"}."),
 )
 
-private fun LiveForecastState.toSelectedPresentationState(): SelectedForecastPresentationState = when (this) {
+private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.systemUTC()): SelectedForecastPresentationState = when (this) {
     is LiveForecastState.Loading -> request.loadingPresentation()
     is LiveForecastState.Failed -> SelectedForecastPresentationState(
         locationName = request.location.displayName ?: "Selected location",
@@ -410,14 +414,20 @@ private fun LiveForecastState.toSelectedPresentationState(): SelectedForecastPre
         )
     }
     is LiveForecastState.Cached -> {
-        val presentation = HomePresentationMapper.mapCachedForecast(forecast, cachedAt)
+        val freshness = com.oxygen.weather.application.CachedForecastFreshness.classify(cachedAt, clock)
+        val presentation = HomePresentationMapper.mapCachedForecast(forecast, cachedAt, freshness)
         val name = presentation.locationName ?: "Selected location"
         val zone = java.time.ZoneId.of(presentation.timeZoneId)
         val sourceName = presentation.forecastProvenance.source?.displayName ?: "Weather source unavailable"
         val providerRetrievedAt = presentation.forecastProvenance.retrievedAt
             ?.let { "Retrieved ${it.atZone(zone).format(java.time.format.DateTimeFormatter.ofPattern("h:mm a"))}" }
             ?: "Provider retrieval time unavailable"
-        val stateStatus = StatusPresentation.of("Cached forecast data from $sourceName is shown while refresh continues.")
+        val freshnessStatus = when (freshness) {
+            WeatherFreshness.CURRENT -> "Recent cache (under 2 hours)."
+            WeatherFreshness.STALE -> "Stale cache (2 hours or older)."
+            WeatherFreshness.UNKNOWN -> "Cache age unknown."
+        }
+        val stateStatus = StatusPresentation.of("$freshnessStatus Cached forecast data from $sourceName is shown while refresh continues.")
         val home = HomePresentation(
             current = unavailableCurrent(name),
             hourlyWindows = presentation.hourlyWindows,

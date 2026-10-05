@@ -7,13 +7,15 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
+import java.time.Clock
 
 /** Single-snapshot forecast cache. Callers should perform reads and writes off the UI thread. */
-class AndroidForecastCacheStore(context: Context) : ForecastCacheStore {
+class AndroidForecastCacheStore(context: Context, clock: Clock = Clock.systemUTC()) : ForecastCacheStore {
     private val core = ForecastCacheStoreCore(
         AtomicForecastCacheSnapshotFile(
             File(context.applicationContext.filesDir, FILE_NAME),
         ),
+        clock,
     )
 
     override fun read(id: LocalLocationId): ForecastCacheReadResult = core.read(id)

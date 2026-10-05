@@ -99,7 +99,7 @@ class ForecastContextMapperTest {
                 retrievedAt = providerRetrievedAt,
             ),
         )
-        val cached = HomePresentationMapper.mapCachedForecast(forecast, cachedAt)
+        val cached = HomePresentationMapper.mapCachedForecast(forecast, cachedAt, WeatherFreshness.STALE)
         val status = StatusPresentation.of("Cached forecast data is shown while refresh continues.")
         val context = ForecastContextMapper.mapCached(cached, status)
 
@@ -109,7 +109,7 @@ class ForecastContextMapperTest {
         assertEquals(providerRetrievedAt, cached.forecastProvenance.retrievedAt)
         assertEquals(cachedAt, cached.cachedAt)
         assertEquals(PresentedDataOrigin.CACHED, context.origin)
-        assertEquals(PresentedFreshness.UNKNOWN, context.freshness)
+        assertEquals(PresentedFreshness.STALE, context.freshness)
         assertEquals("Oct 5, 2026 3:30 AM America/Chicago", (context.cachedAt as MetadataValue.Available).value)
         assertEquals("Oct 4, 2026 9:05 AM America/Chicago", (context.retrievalTimes.single().instant as MetadataValue.Available).value)
         assertEquals(status, context.status)

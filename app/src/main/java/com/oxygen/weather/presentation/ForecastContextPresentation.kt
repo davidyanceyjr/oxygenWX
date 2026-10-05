@@ -2,6 +2,7 @@ package com.oxygen.weather.presentation
 
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.WeatherDataOrigin
+import com.oxygen.weather.data.WeatherFreshness
 import com.oxygen.weather.data.WeatherRepositoryResult
 import java.time.Instant
 import java.time.ZoneId
@@ -143,7 +144,7 @@ object ForecastContextMapper {
             validTimes = validTimes,
             retrievalTimes = retrievalTimes,
             origin = PresentedDataOrigin.CACHED,
-            freshness = PresentedFreshness.UNKNOWN,
+            freshness = cached.freshness.toPresentedFreshness(),
             refreshOutcome = PresentedRefreshOutcome.NONE,
             cachedAt = MetadataValue.Available(format(cached.cachedAt, zone)),
             status = status,
@@ -155,6 +156,12 @@ object ForecastContextMapper {
         dataType.displayName(),
         source?.displayName?.takeIf(String::isNotBlank)?.let(MetadataValue::Available) ?: MetadataValue.Unavailable,
     )
+
+    private fun WeatherFreshness.toPresentedFreshness() = when (this) {
+        WeatherFreshness.CURRENT -> PresentedFreshness.CURRENT
+        WeatherFreshness.STALE -> PresentedFreshness.STALE
+        WeatherFreshness.UNKNOWN -> PresentedFreshness.UNKNOWN
+    }
 
     private fun format(instant: Instant, zone: ZoneId): String =
         "${instant.atZone(zone).format(instantFormatter)} ${zone.id}"
