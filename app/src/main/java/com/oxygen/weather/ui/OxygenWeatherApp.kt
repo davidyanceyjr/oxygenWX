@@ -67,6 +67,7 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.application.LocationSearchCoordinator
+import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
@@ -102,6 +103,8 @@ fun OxygenWeatherApp(
     effects: EffectsLevel = EffectsLevel.SUBTLE,
     forecastContext: ForecastContextPresentation? = null,
     locationSearchCoordinator: LocationSearchCoordinator? = null,
+    deviceLocationCoordinator: DeviceLocationCoordinator? = null,
+    onRequestDeviceLocation: () -> Unit = {},
     savedLocationCoordinator: SavedLocationCoordinator? = null,
     selectedForecast: SelectedForecastPresentationState? = null,
     layoutDirectionOverride: LayoutDirection? = null,
@@ -135,14 +138,18 @@ fun OxygenWeatherApp(
                     LocationSearchRoute(
                         coordinator = locationSearchCoordinator,
                         savedCoordinator = savedLocationCoordinator,
+                        deviceLocationCoordinator = deviceLocationCoordinator,
                         theme = theme,
                         openingPageLabel = HomePage.entries[searchOpeningPage.coerceIn(HomePage.entries.indices)].label,
+                        onRequestDeviceLocation = onRequestDeviceLocation,
                         onDismiss = {
                             locationSearchCoordinator.dismiss()
+                            deviceLocationCoordinator?.dismiss()
                             searchOpen = false
                         },
                         onSelected = {
                             locationSearchCoordinator.dismiss()
+                            deviceLocationCoordinator?.dismiss()
                             searchOpen = false
                             scope.launch { pagerState.moveToPage(searchOpeningPage, effects) }
                         },
@@ -206,6 +213,7 @@ fun OxygenWeatherApp(
                                 {
                                     searchOpeningPage = pagerState.currentPage
                                     it.openSession()
+                                    deviceLocationCoordinator?.openSession()
                                     searchOpen = true
                                 }
                             },

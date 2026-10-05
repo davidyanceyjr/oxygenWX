@@ -1,0 +1,9 @@
+{
+  "latitude": 41.88,
+  "longitude": -87.63,
+  "timezone": "America/Chicago",
+  "timezone_abbreviation": "CDT",
+  "utc_offset_seconds": -18000,
+  "current": { "time": "2026-10-03T10:00", "temperature_2m": 12.5 },
+  "hourly": { "time": ["2026-10-03T10:00"], "temperature_2m": [12.5] }
+}

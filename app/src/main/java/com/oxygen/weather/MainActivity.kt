@@ -1,5 +1,7 @@
 package com.oxygen.weather
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.os.Handler
@@ -8,10 +10,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.LayoutDirection
 import com.oxygen.weather.application.LiveForecastController
 import com.oxygen.weather.application.LiveForecastState
+import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.data.CacheWriteOutcome
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DemoWeatherRepository
@@ -30,6 +34,7 @@ import com.oxygen.weather.application.ProductionForecastComposition
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.application.SelectedLocationStore
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
+import com.oxygen.weather.data.provider.openmeteo.OpenMeteoCoordinateTimeZoneLookup
 import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
 import com.oxygen.weather.presentation.CurrentPresentation
 import com.oxygen.weather.presentation.ForecastHorizonPresentation
@@ -45,6 +50,7 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.ui.OxygenWeatherApp
 import com.oxygen.weather.ui.EffectsLevel
+import com.oxygen.weather.platform.AndroidForegroundLocationAcquirer
 import java.time.LocalDateTime
 import java.time.Clock
 import java.net.URI
@@ -53,13 +59,34 @@ import java.util.UUID
 import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import androidx.lifecycle.Lifecycle
 
 class MainActivity : ComponentActivity() {
     private var locationSearchExecutor: ExecutorService? = null
     private var selectedLocationExecutor: ExecutorService? = null
     private var forecastExecutor: ExecutorService? = null
     private var forecastController: LiveForecastController? = null
+    private var locationSearchCoordinator: LocationSearchCoordinator? = null
+    private var deviceLocationCoordinator: DeviceLocationCoordinator? = null
+    private var permissionRequestPending = false
+    private var permissionRequestedThisActivity = false
+    private var permissionRationaleConfirmed = false
+    private var activityResumed = false
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
+    private val coarseLocationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        val wasPending = permissionRequestPending
+        permissionRequestPending = false
+        val chooserStillOpen = locationSearchCoordinator?.isSessionOpen == true
+        if (wasPending && chooserStillOpen) {
+            if (granted) {
+                if (activityResumed && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                    deviceLocationCoordinator?.start()
+                }
+            } else {
+                deviceLocationCoordinator?.permissionDenied()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -252,6 +279,22 @@ class MainActivity : ComponentActivity() {
             onSelected = savedLocationCoordinator::select,
             onSaved = savedLocationCoordinator::save,
         )
+        locationSearchCoordinator = coordinator
+        val timezoneEndpoint = ForecastEndpoint(URI("https://api.open-meteo.com/v1/forecast"))
+        val deviceCoordinator = DeviceLocationCoordinator(
+            acquirer = AndroidForegroundLocationAcquirer(applicationContext),
+            timeZoneLookup = OpenMeteoCoordinateTimeZoneLookup(
+                timezoneEndpoint,
+                UrlConnectionOpenMeteoTransport(),
+            ),
+            worker = worker,
+            publisher = Executor { command -> mainHandler.post(command) },
+            localIdGenerator = { "local-${UUID.randomUUID()}" },
+            onSelected = { request, shouldCommit, onComplete ->
+                savedLocationCoordinator.selectCancellable(request, shouldCommit, onComplete)
+            },
+        )
+        deviceLocationCoordinator = deviceCoordinator
         setContent {
             OxygenWeatherApp(
                 presentation = presentation,
@@ -260,6 +303,8 @@ class MainActivity : ComponentActivity() {
                 effects = effects,
                 forecastContext = context.takeIf { reviewScenario != null },
                 locationSearchCoordinator = coordinator,
+                deviceLocationCoordinator = deviceCoordinator,
+                onRequestDeviceLocation = ::requestDeviceLocation,
                 savedLocationCoordinator = savedLocationCoordinator,
                 selectedForecast = selectedForecastState.value,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
@@ -267,7 +312,46 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun requestDeviceLocation() {
+        val device = deviceLocationCoordinator ?: return
+        if (!activityResumed || !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) ||
+            locationSearchCoordinator?.isSessionOpen != true
+        ) return
+        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            device.start()
+            return
+        }
+        val rationaleRequired = shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (rationaleRequired && !permissionRationaleConfirmed) {
+            permissionRationaleConfirmed = true
+            device.showPermissionRationale()
+            return
+        }
+        if (permissionRequestedThisActivity && !permissionRationaleConfirmed) {
+            device.permissionDenied()
+            return
+        }
+        permissionRequestedThisActivity = true
+        permissionRationaleConfirmed = false
+        permissionRequestPending = true
+        coarseLocationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activityResumed = true
+    }
+
+    override fun onStop() {
+        activityResumed = false
+        deviceLocationCoordinator?.hostStopped()
+        super.onStop()
+    }
+
     override fun onDestroy() {
+        deviceLocationCoordinator?.dismiss()
+        deviceLocationCoordinator = null
+        locationSearchCoordinator = null
         locationSearchExecutor?.shutdownNow()
         locationSearchExecutor = null
         selectedLocationExecutor?.shutdownNow()

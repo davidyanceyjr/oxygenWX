@@ -4,12 +4,16 @@ import com.oxygen.weather.data.provider.ForecastEndpoint
 import com.oxygen.weather.data.provider.ForecastField
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.data.provider.ForecastTransportFailure
+import com.oxygen.weather.data.locationsearch.CoordinateTimeZoneLookup
+import com.oxygen.weather.data.locationsearch.CoordinateTimeZoneRequest
+import com.oxygen.weather.data.locationsearch.CoordinateTimeZoneResult
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.time.ZoneId
 
 /** Open-Meteo wire variable identity. Values remain provider-shaped until R2.2A. */
 enum class OpenMeteoVariable(val wireName: String) {
@@ -188,6 +192,66 @@ class OpenMeteoAdapter(private val endpoint: ForecastEndpoint, private val trans
             if (obj.containsKey(variable.wireName)) variable to obj[variable.wireName] else null
         }.toMap()
         return OpenMeteoSection(time, units, vars)
+    }
+}
+
+/** Resolves only the timezone field from Open-Meteo's coordinate-based forecast response. */
+class OpenMeteoCoordinateTimeZoneLookup(
+    private val endpoint: ForecastEndpoint,
+    private val transport: OpenMeteoTransport,
+) : CoordinateTimeZoneLookup {
+    override fun lookup(request: CoordinateTimeZoneRequest): CoordinateTimeZoneResult {
+        val uri = buildUri(request)
+        val http = try {
+            transport.get(uri)
+        } catch (_: Exception) {
+            return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.TRANSPORT)
+        }
+        if (http.statusCode !in 200..299) {
+            return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.HTTP)
+        }
+
+        val root = try {
+            JsonReader(http.body).read() as? OpenMeteoValue.ObjectValue
+        } catch (_: IllegalArgumentException) {
+            null
+        } ?: return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.MALFORMED_RESPONSE)
+
+        // A provider error in a 2xx body is still an HTTP/provider failure.
+        val providerError = (root.values["error"] as? OpenMeteoValue.Scalar)
+            ?.let { it.kind == OpenMeteoValue.Scalar.Kind.BOOLEAN && it.value == "true" } == true
+        if (providerError) return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.HTTP)
+
+        val value = root.values["timezone"]
+            ?: return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.MISSING_TIME_ZONE)
+        if (value === OpenMeteoValue.Null) {
+            return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.MISSING_TIME_ZONE)
+        }
+        val zoneText = (value as? OpenMeteoValue.Scalar)
+            ?.takeIf { it.kind == OpenMeteoValue.Scalar.Kind.STRING }
+            ?.value
+            ?: return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.MALFORMED_RESPONSE)
+        if (zoneText.isBlank()) {
+            return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.INVALID_TIME_ZONE)
+        }
+        if (zoneText !in ZoneId.getAvailableZoneIds()) {
+            return CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.INVALID_TIME_ZONE)
+        }
+        return try {
+            CoordinateTimeZoneResult.Success(ZoneId.of(zoneText))
+        } catch (_: java.time.DateTimeException) {
+            CoordinateTimeZoneResult.Failure(CoordinateTimeZoneResult.Reason.INVALID_TIME_ZONE)
+        }
+    }
+
+    private fun buildUri(request: CoordinateTimeZoneRequest): URI {
+        fun stable(value: Double) = java.math.BigDecimal.valueOf(value).stripTrailingZeros().toPlainString()
+        val query = listOf(
+            "latitude=${stable(request.latitude)}",
+            "longitude=${stable(request.longitude)}",
+            "timezone=auto",
+        ).joinToString("&")
+        return URI.create("${endpoint.uri.toASCIIString()}?$query")
     }
 }
 

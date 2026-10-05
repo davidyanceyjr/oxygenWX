@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,8 +37,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oxygen.weather.application.LocationSearchCoordinator
+import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.presentation.LocationSearchPresentation
+import com.oxygen.weather.presentation.DeviceLocationPresentation
 import com.oxygen.weather.presentation.SavedLocationsPresentation
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 
@@ -58,14 +61,20 @@ internal fun SearchEntry(theme: ResolvedTheme, onClick: () -> Unit) {
 internal fun LocationSearchRoute(
     coordinator: LocationSearchCoordinator,
     savedCoordinator: SavedLocationCoordinator?,
+    deviceLocationCoordinator: DeviceLocationCoordinator?,
     theme: ResolvedTheme,
     openingPageLabel: String,
+    onRequestDeviceLocation: () -> Unit,
     onDismiss: () -> Unit,
     onSelected: () -> Unit,
 ) {
     val state by coordinator.presentationState
+    val deviceLocation by (deviceLocationCoordinator?.presentationState ?: remember { mutableStateOf(DeviceLocationPresentation.Idle) })
     var query by remember { mutableStateOf("") }
     BackHandler(onBack = onDismiss)
+    LaunchedEffect(deviceLocation) {
+        if (deviceLocation == DeviceLocationPresentation.Selected) onSelected()
+    }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
@@ -119,6 +128,20 @@ internal fun LocationSearchRoute(
             enabled = query.isNotBlank(),
             colors = ButtonDefaults.buttonColors(containerColor = theme.palette.action, contentColor = theme.palette.actionContent),
         ) { Text("Search", style = theme.typography.labelLarge) }
+
+        if (deviceLocationCoordinator != null) {
+            Button(
+                onClick = onRequestDeviceLocation,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    .semantics { contentDescription = "Use approximate device location" }
+                    .testTag("device-location-request"),
+                enabled = deviceLocation !is DeviceLocationPresentation.Loading &&
+                    deviceLocation !is DeviceLocationPresentation.Saving &&
+                    deviceLocation !is DeviceLocationPresentation.Selected,
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = theme.palette.action),
+            ) { Text("Use approximate device location", style = theme.typography.labelLarge) }
+            DeviceLocationStatus(theme, deviceLocation)
+        }
 
         when (val visible = state) {
             is LocationSearchPresentation.Idle -> Unit
@@ -177,6 +200,29 @@ internal fun LocationSearchRoute(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun DeviceLocationStatus(theme: ResolvedTheme, state: DeviceLocationPresentation) {
+    val message = when (state) {
+        DeviceLocationPresentation.Idle -> "Device location is optional and is used only when you choose this action."
+        DeviceLocationPresentation.PermissionRationale -> "Android needs approximate location permission for this one-time foreground selection. Weather and manual place search remain available without it. Tap the action again to continue."
+        DeviceLocationPresentation.PermissionDenied -> "Location permission was denied. Search and saved places are still available."
+        DeviceLocationPresentation.Loading -> "Getting an approximate location and time zone…"
+        DeviceLocationPresentation.Unavailable -> "An approximate location or its time zone is unavailable. Your current selection is unchanged."
+        DeviceLocationPresentation.Failed -> "Could not select this device location. Your current selection is unchanged."
+        DeviceLocationPresentation.Saving -> "Saving the approximate location before loading its forecast…"
+        DeviceLocationPresentation.Selected -> "Approximate device location selected. Its forecast is loading."
+    }
+    val busy = state is DeviceLocationPresentation.Loading || state is DeviceLocationPresentation.Saving
+    Row(
+        Modifier.fillMaxWidth().semantics { contentDescription = message }.testTag("device-location-status"),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        if (busy) CircularProgressIndicator(color = theme.palette.action, modifier = Modifier.sizeIn(maxWidth = 24.dp, maxHeight = 24.dp))
+        Text(message, style = theme.typography.bodyMedium, color = if (state is DeviceLocationPresentation.Failed || state is DeviceLocationPresentation.Unavailable || state is DeviceLocationPresentation.PermissionDenied) theme.palette.warning else theme.palette.secondaryData)
     }
 }
 

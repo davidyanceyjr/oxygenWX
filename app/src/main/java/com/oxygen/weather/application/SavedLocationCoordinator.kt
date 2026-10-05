@@ -13,6 +13,9 @@ import com.oxygen.weather.presentation.SavedLocationsPresentation
 import java.util.ArrayDeque
 import java.util.concurrent.Executor
 
+fun interface SelectionCancellation { fun cancel() }
+data class SelectionSubmission(val accepted: Boolean, val cancellation: SelectionCancellation)
+
 /**
  * Serializes bookmark mutations and selected-location persistence in one FIFO. A failed latest
  * switch is compensated before any subsequently accepted operation can run.
@@ -39,6 +42,7 @@ class SavedLocationCoordinator(
     private var workerActive = false
     private var restoreStarted = false
     private var latestSwitch = 0L
+    private val cancelledSwitches = mutableSetOf<Long>()
     private var visibleSelection: SelectedLocation? = null
     private var selectionRestoreKnown = false
     private val mutableCollection = mutableStateOf<CollectionState>(CollectionState.Loading)
@@ -141,7 +145,49 @@ class SavedLocationCoordinator(
         request,
     )
 
-    private fun select(location: SavedLocation, request: ForecastRequest): Boolean {
+    /** Selects a request and reports whether it became the latest persisted selection. */
+    fun select(request: ForecastRequest, onComplete: (Boolean) -> Unit): Boolean = select(
+        SavedLocation(request.location.id, request.location.displayName, request.coordinates, request.location.timeZone),
+        request,
+        shouldCommit = { true },
+        onComplete,
+    )
+
+    /** Device-location flows supply a generation guard so a dismissed chooser cannot commit late. */
+    fun select(
+        request: ForecastRequest,
+        shouldCommit: () -> Boolean,
+        onComplete: (Boolean) -> Unit,
+    ): Boolean = select(
+        SavedLocation(request.location.id, request.location.displayName, request.coordinates, request.location.timeZone),
+        request,
+        shouldCommit,
+        onComplete,
+    )
+
+    /** Cancellable selected-location handoff for transient device-location work. */
+    fun selectCancellable(
+        request: ForecastRequest,
+        shouldCommit: () -> Boolean,
+        onComplete: (Boolean) -> Unit,
+    ): SelectionSubmission {
+        var cancellation: SelectionCancellation? = null
+        val accepted = select(
+            SavedLocation(request.location.id, request.location.displayName, request.coordinates, request.location.timeZone),
+            request,
+            shouldCommit,
+            onComplete,
+        ) { cancellation = it }
+        return SelectionSubmission(accepted, requireNotNull(cancellation))
+    }
+
+    private fun select(
+        location: SavedLocation,
+        request: ForecastRequest,
+        shouldCommit: () -> Boolean = { true },
+        onComplete: (Boolean) -> Unit = {},
+        onRegistered: (SelectionCancellation) -> Unit = {},
+    ): Boolean {
         val intent: Long
         val rollback: SelectedLocation?
         val rollbackWasEmpty: Boolean
@@ -150,6 +196,7 @@ class SavedLocationCoordinator(
             intent = latestSwitch
             rollback = visibleSelection
             rollbackWasEmpty = selectionRestoreKnown && rollback == null
+            onRegistered(SelectionCancellation { synchronized(lock) { cancelledSwitches += intent } })
         }
         publish {
             if (synchronized(lock) { latestSwitch == intent }) {
@@ -159,13 +206,29 @@ class SavedLocationCoordinator(
             }
         }
         val accepted = enqueue({
+            if (!shouldCommit() || !isCurrent(intent)) {
+                publish { onComplete(false) }
+                return@enqueue
+            }
             val write = try { selectedStore.save(location.toSelectedLocation()) } catch (_: Exception) {
                 SelectedLocationWriteResult.FAILURE
             }
             if (write == SelectedLocationWriteResult.SUCCESS) {
+                val currentAfterWrite = isCurrent(intent) && shouldCommit()
+                if (!currentAfterWrite) {
+                    val restored = restoreSelection(rollback, rollbackWasEmpty)
+                    if (restored == SelectedLocationWriteResult.SUCCESS) {
+                        synchronized(lock) {
+                            visibleSelection = rollback
+                            selectionRestoreKnown = true
+                        }
+                    }
+                    publish { onComplete(false) }
+                    return@enqueue
+                }
                 publish {
                     val current = synchronized(lock) {
-                        if (latestSwitch == intent) {
+                        if (isCurrent(intent) && shouldCommit()) {
                             visibleSelection = location.toSelectedLocation()
                             selectionRestoreKnown = true
                             true
@@ -174,16 +237,24 @@ class SavedLocationCoordinator(
                     if (current) {
                         mutableAction.value = LocationActionPresentation("Switched to ${location.label()}.", false, showOnHome = true)
                         onRequestReady(request)
+                        onComplete(true)
+                    } else {
+                        enqueueAtFront({
+                            val restored = restoreSelection(rollback, rollbackWasEmpty)
+                            if (restored == SelectedLocationWriteResult.SUCCESS) synchronized(lock) {
+                                visibleSelection = rollback
+                                selectionRestoreKnown = true
+                            }
+                            publish { onComplete(false) }
+                        }, onRejected = { publish { onComplete(false) } })
                     }
                 }
             } else {
-                val current = synchronized(lock) { latestSwitch == intent }
+                val current = isCurrent(intent) && shouldCommit()
                 if (current) {
                     enqueueAtFront({
                         val restored = try {
-                            if (rollback == null && rollbackWasEmpty) selectedStore.clear()
-                            else if (rollback == null) SelectedLocationWriteResult.FAILURE
-                            else selectedStore.save(rollback)
+                            restoreSelection(rollback, rollbackWasEmpty)
                         } catch (_: Exception) { SelectedLocationWriteResult.FAILURE }
                         publish {
                             val stillCurrent = synchronized(lock) { latestSwitch == intent }
@@ -194,28 +265,42 @@ class SavedLocationCoordinator(
                                     LocationActionPresentation("Could not switch places or restore the saved selection. Your previous forecast is still shown.", true, showOnHome = true)
                                 }
                             }
+                            onComplete(false)
                         }
                     }, onRejected = {
                         publish {
                             if (synchronized(lock) { latestSwitch == intent }) {
                                 mutableAction.value = LocationActionPresentation("Could not restore the previously selected place. Your previous forecast is still shown.", true, showOnHome = true)
                             }
+                            onComplete(false)
                         }
                     })
-                }
+                } else publish { onComplete(false) }
             }
         }, onRejected = {
             publish {
                 if (synchronized(lock) { latestSwitch == intent }) {
                     mutableAction.value = LocationActionPresentation("Could not switch places because storage work could not be started.", true, showOnHome = true)
                 }
+                onComplete(false)
             }
         })
         if (!accepted) {
             synchronized(lock) { latestSwitch++ }
             publish { mutableAction.value = LocationActionPresentation("Could not switch places because storage work could not be started.", true, showOnHome = true) }
+            onComplete(false)
         }
         return accepted
+    }
+
+    private fun restoreSelection(rollback: SelectedLocation?, rollbackWasEmpty: Boolean): SelectedLocationWriteResult = try {
+        if (rollback == null && rollbackWasEmpty) selectedStore.clear()
+        else if (rollback == null) SelectedLocationWriteResult.FAILURE
+        else selectedStore.save(rollback)
+    } catch (_: Exception) { SelectedLocationWriteResult.FAILURE }
+
+    private fun isCurrent(intent: Long): Boolean = synchronized(lock) {
+        latestSwitch == intent && intent !in cancelledSwitches
     }
 
     private fun publishMutation(

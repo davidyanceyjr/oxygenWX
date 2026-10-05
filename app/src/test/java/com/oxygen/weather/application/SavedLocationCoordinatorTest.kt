@@ -56,12 +56,12 @@ class SavedLocationCoordinatorTest {
         assertTrue(coordinator.select(requestB))
         assertEquals(0, selected.writes.size)
         worker.runNext()
-        assertEquals(listOf("a"), selected.writes.map { it.id.value })
-        publisher.runNext() // A's completion is stale after B was accepted.
+        assertTrue(selected.writes.isEmpty()) // Obsolete A is skipped before persistence.
+        publisher.runNext()
         assertTrue(handed.isEmpty())
         publisher.runAll()
         worker.runNext()
-        assertEquals(listOf("a", "b"), selected.writes.map { it.id.value })
+        assertEquals(listOf("b"), selected.writes.map { it.id.value })
         publisher.runAll()
         assertEquals(listOf(requestB), handed)
         assertEquals(requestB.toSelected(), selected.current)
@@ -185,11 +185,11 @@ class SavedLocationCoordinatorTest {
         val coordinator = coordinator(FakeSavedStore(), selected, worker, publisher, handed::add)
         assertTrue(coordinator.select(requestB))
         assertTrue(coordinator.select(requestC))
-        worker.runNext() // B's failure is now stale; it must not enqueue compensation.
+        worker.runNext() // B is stale before storage and is skipped.
         worker.runNext() // C decides the durable and visible outcome.
         publisher.runAll()
 
-        assertEquals(listOf("b", "c"), selected.writes.map { it.id.value })
+        assertEquals(listOf("c"), selected.writes.map { it.id.value })
         assertEquals(requestC.toSelected(), selected.current)
         assertEquals(listOf(requestC), handed)
         assertEquals("Switched to Place c.", coordinator.actionPresentation.value?.message)
@@ -244,6 +244,35 @@ class SavedLocationCoordinatorTest {
         assertEquals(requestB.toSelected(), selected.current)
         assertEquals(listOf(requestA, requestB), handed)
         assertEquals(listOf("b", "c", "b"), selected.writes.map { it.id.value })
+    }
+
+    @Test fun cancellingDeviceSelectionDuringWriteRestoresPreviousRecordAndSkipsForecastHandoff() {
+        val worker = QueueExecutor()
+        val publisher = QueueExecutor()
+        val selected = FakeSelectedStore(initial = requestA.toSelected())
+        val handed = mutableListOf<ForecastRequest>()
+        val completed = mutableListOf<Boolean>()
+        val coordinator = coordinator(FakeSavedStore(), selected, worker, publisher, handed::add)
+        coordinator.restoreOnce()
+        worker.runNext(); worker.runNext(); publisher.runAll()
+        handed.clear()
+
+        lateinit var cancellation: SelectionCancellation
+        selected.onSave = { value ->
+            selected.writes += value
+            selected.current = value
+            cancellation.cancel()
+            SelectedLocationWriteResult.SUCCESS
+        }
+        val submission = coordinator.selectCancellable(requestB, { true }, completed::add)
+        cancellation = submission.cancellation
+        worker.runNext()
+        publisher.runAll()
+
+        assertTrue(submission.accepted)
+        assertEquals(requestA.toSelected(), selected.current)
+        assertTrue(handed.isEmpty())
+        assertEquals(listOf(false), completed)
     }
 
     private fun coordinator(
