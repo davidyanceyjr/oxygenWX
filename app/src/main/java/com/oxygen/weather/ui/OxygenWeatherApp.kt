@@ -53,6 +53,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -66,6 +67,7 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.application.LocationSearchCoordinator
+import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
@@ -100,6 +102,7 @@ fun OxygenWeatherApp(
     effects: EffectsLevel = EffectsLevel.SUBTLE,
     forecastContext: ForecastContextPresentation? = null,
     locationSearchCoordinator: LocationSearchCoordinator? = null,
+    savedLocationCoordinator: SavedLocationCoordinator? = null,
     selectedForecast: SelectedForecastPresentationState? = null,
     layoutDirectionOverride: LayoutDirection? = null,
 ) {
@@ -115,6 +118,7 @@ fun OxygenWeatherApp(
     val displayStatus = selectedForecast?.status ?: status
     val displayHorizons = if (selectedForecast != null) selectedForecast.partialHorizons else partialHorizons
     val displayContext = if (selectedForecast != null) selectedForecast.forecastContext else forecastContext
+    val locationAction = savedLocationCoordinator?.actionPresentation?.value
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
     var pageMenuExpanded by remember { mutableStateOf(false) }
@@ -130,6 +134,7 @@ fun OxygenWeatherApp(
                 if (searchOpen && locationSearchCoordinator != null) {
                     LocationSearchRoute(
                         coordinator = locationSearchCoordinator,
+                        savedCoordinator = savedLocationCoordinator,
                         theme = theme,
                         openingPageLabel = HomePage.entries[searchOpeningPage.coerceIn(HomePage.entries.indices)].label,
                         onDismiss = {
@@ -204,6 +209,16 @@ fun OxygenWeatherApp(
                                     searchOpen = true
                                 }
                             },
+                        )
+                    }
+                    if (!searchOpen && locationAction?.showOnHome == true) {
+                        Text(
+                            locationAction.message,
+                            Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)
+                                .semantics { contentDescription = locationAction.message }
+                                .testTag("saved-location-action-status"),
+                            style = theme.typography.bodyMedium,
+                            color = if (locationAction.isError) theme.palette.warning else theme.palette.secondaryData,
                         )
                     }
                     Spacer(Modifier.height(theme.headerToBodyGap()))

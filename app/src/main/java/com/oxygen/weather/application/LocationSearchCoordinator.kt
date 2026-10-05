@@ -22,13 +22,15 @@ internal sealed interface LocationSearchState {
 
     data class Idle(override val query: String = "") : LocationSearchState
     data class Loading(override val query: String) : LocationSearchState
-    data class Results(override val query: String, val candidates: List<LocationCandidate>) : LocationSearchState
+    data class Results(override val query: String, val candidates: List<DisplayedCandidate>) : LocationSearchState
     data class NoResults(override val query: String) : LocationSearchState
     data class Failure(
         override val query: String,
         val category: LocationSearchResult.Category,
     ) : LocationSearchState
 }
+
+internal data class DisplayedCandidate(val candidate: LocationCandidate, val localId: LocalLocationId)
 
 /**
  * Owns search state and stale-result protection for a single search session.
@@ -41,6 +43,7 @@ class LocationSearchCoordinator(
     private val localeTag: () -> String,
     private val localIdGenerator: () -> String,
     private val onSelected: (ForecastRequest) -> Unit,
+    private val onSaved: (SavedLocation) -> Unit = {},
 ) {
     private val mutableState = mutableStateOf<LocationSearchState>(LocationSearchState.Idle())
     internal val state: State<LocationSearchState> = mutableState
@@ -114,12 +117,31 @@ class LocationSearchCoordinator(
             val candidate = results.candidates.getOrNull(index) ?: return false
             if (!open) return false
 
-            request = candidate.toForecastRequest(LocalLocationId(localIdGenerator()))
+            request = candidate.candidate.toForecastRequest(candidate.localId)
             generation++
             open = false
             mutableState.value = LocationSearchState.Idle()
         }
         onSelected(request)
+        return true
+    }
+
+    /** Saves one currently displayed candidate without closing or changing the search session. */
+    fun saveCandidate(index: Int): Boolean {
+        val location: SavedLocation
+        synchronized(this) {
+            val results = mutableState.value as? LocationSearchState.Results ?: return false
+            val displayed = results.candidates.getOrNull(index) ?: return false
+            if (!open) return false
+            val candidate = displayed.candidate
+            location = SavedLocation(
+                id = displayed.localId,
+                displayName = candidate.displayName,
+                coordinates = GeoCoordinates(candidate.latitude, candidate.longitude),
+                timeZone = candidate.timeZone,
+            )
+        }
+        onSaved(location)
         return true
     }
 
@@ -131,7 +153,10 @@ class LocationSearchCoordinator(
     ) {
         if (!open || requestGeneration != generation) return
         mutableState.value = when (result) {
-            is LocationSearchResult.Success -> LocationSearchState.Results(query, result.candidates.toList())
+            is LocationSearchResult.Success -> LocationSearchState.Results(
+                query,
+                result.candidates.map { DisplayedCandidate(it, LocalLocationId(localIdGenerator())) },
+            )
             LocationSearchResult.NoResults -> LocationSearchState.NoResults(query)
             is LocationSearchResult.Failure -> LocationSearchState.Failure(query, result.category)
         }
@@ -149,8 +174,10 @@ class LocationSearchCoordinator(
         is LocationSearchState.Loading -> LocationSearchPresentation.Loading(query)
         is LocationSearchState.Results -> LocationSearchPresentation.Results(
             query,
-            candidates.map { candidate ->
+            candidates.map { displayed ->
+                val candidate = displayed.candidate
                 LocationSearchPresentation.Candidate(
+                    localId = displayed.localId.value,
                     displayName = candidate.displayName,
                     admin1 = candidate.admin1,
                     admin2 = candidate.admin2,

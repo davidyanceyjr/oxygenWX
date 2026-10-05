@@ -36,7 +36,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oxygen.weather.application.LocationSearchCoordinator
+import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.presentation.LocationSearchPresentation
+import com.oxygen.weather.presentation.SavedLocationsPresentation
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 
 @Composable
@@ -55,6 +57,7 @@ internal fun SearchEntry(theme: ResolvedTheme, onClick: () -> Unit) {
 @Composable
 internal fun LocationSearchRoute(
     coordinator: LocationSearchCoordinator,
+    savedCoordinator: SavedLocationCoordinator?,
     theme: ResolvedTheme,
     openingPageLabel: String,
     onDismiss: () -> Unit,
@@ -123,13 +126,56 @@ internal fun LocationSearchRoute(
             is LocationSearchPresentation.Results -> {
                 Text("Results for ${visible.query}", style = theme.typography.titleMedium, color = theme.palette.content)
                 visible.candidates.forEachIndexed { index, candidate ->
-                    CandidateResult(theme, candidate, index, visible.candidates.size) {
+                    CandidateResult(theme, candidate, index, visible.candidates.size, onSave = {
+                        coordinator.saveCandidate(index)
+                    }) {
                         if (coordinator.select(index)) onSelected()
                     }
                 }
             }
             is LocationSearchPresentation.NoResults -> SearchNoResults(theme, visible.query)
             is LocationSearchPresentation.Failure -> SearchFailure(theme, visible.query, visible.category)
+        }
+
+        if (savedCoordinator != null) {
+            Spacer(Modifier.height(4.dp))
+            Text("Saved places", style = theme.typography.titleMedium, color = theme.palette.content)
+            val saved by savedCoordinator.presentationState
+            when (val collection = saved) {
+                SavedLocationsPresentation.Loading -> Text(
+                    "Loading saved places…", Modifier.testTag("saved-locations-loading"),
+                    style = theme.typography.bodyMedium, color = theme.palette.secondaryData,
+                )
+                SavedLocationsPresentation.Empty -> Text(
+                    "No saved places yet.", Modifier.testTag("saved-locations-empty"),
+                    style = theme.typography.bodyMedium, color = theme.palette.secondaryData,
+                )
+                is SavedLocationsPresentation.Unavailable -> Text(
+                    collection.message, Modifier.fillMaxWidth().semantics { contentDescription = collection.message }
+                        .testTag("saved-locations-unavailable"),
+                    style = theme.typography.bodyMedium, color = theme.palette.content,
+                )
+                is SavedLocationsPresentation.Ready -> collection.locations.forEachIndexed { index, place ->
+                    SavedPlaceRow(
+                        theme = theme,
+                        place = place,
+                        index = index,
+                        onSelect = {
+                            if (savedCoordinator.selectSaved(place.localId)) onSelected()
+                        },
+                        onRemove = { savedCoordinator.remove(place.localId) },
+                    )
+                }
+            }
+            val action by savedCoordinator.actionPresentation
+            action?.let {
+                Text(
+                    it.message,
+                    Modifier.fillMaxWidth().semantics { contentDescription = it.message }.testTag("saved-location-action-status"),
+                    style = theme.typography.bodyMedium,
+                    color = if (it.isError) theme.palette.warning else theme.palette.secondaryData,
+                )
+            }
         }
     }
 }
@@ -148,7 +194,7 @@ private fun SearchLoading(theme: ResolvedTheme, query: String) {
 }
 
 @Composable
-private fun CandidateResult(theme: ResolvedTheme, candidate: LocationSearchPresentation.Candidate, index: Int, count: Int, onSelect: () -> Unit) {
+private fun CandidateResult(theme: ResolvedTheme, candidate: LocationSearchPresentation.Candidate, index: Int, count: Int, onSave: () -> Unit, onSelect: () -> Unit) {
     val identity = listOfNotNull(candidate.displayName, candidate.admin1, candidate.admin2, candidate.admin3, candidate.admin4, candidate.country)
         .distinct().joinToString(", ")
     val position = "Place ${index + 1} of $count: $identity"
@@ -167,6 +213,13 @@ private fun CandidateResult(theme: ResolvedTheme, candidate: LocationSearchPrese
         }
         Text("Time zone: ${candidate.timeZone}", style = theme.typography.bodySmall, color = theme.palette.secondaryData)
         Button(
+            onClick = onSave,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                .semantics { contentDescription = "Save $identity" }
+                .testTag("location-search-save-$index"),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = theme.palette.action),
+        ) { Text("Save ${candidate.displayName}", style = theme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+        Button(
             onClick = onSelect,
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
                 .semantics { contentDescription = "Select $identity" }
@@ -174,6 +227,35 @@ private fun CandidateResult(theme: ResolvedTheme, candidate: LocationSearchPrese
             colors = ButtonDefaults.buttonColors(containerColor = theme.palette.action, contentColor = theme.palette.actionContent),
         ) { Text("Choose ${candidate.displayName}", style = theme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis) }
         Spacer(Modifier.height(4.dp))
+    }
+}
+
+@Composable
+private fun SavedPlaceRow(
+    theme: ResolvedTheme,
+    place: SavedLocationsPresentation.Location,
+    index: Int,
+    onSelect: () -> Unit,
+    onRemove: () -> Unit,
+) {
+    val name = place.displayName ?: "Unnamed place"
+    Column(Modifier.fillMaxWidth().padding(top = 4.dp).testTag("saved-location-row-$index")) {
+        Text(name, style = theme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = theme.palette.primaryData)
+        Text("${place.latitude}, ${place.longitude} · ${place.timeZone}", style = theme.typography.bodySmall, color = theme.palette.secondaryData)
+        Button(
+            onClick = onSelect,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                .semantics { contentDescription = "Select saved place $name" }
+                .testTag("saved-location-select-$index"),
+            colors = ButtonDefaults.buttonColors(containerColor = theme.palette.action, contentColor = theme.palette.actionContent),
+        ) { Text("Use $name", style = theme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+        TextButton(
+            onClick = onRemove,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                .semantics { contentDescription = "Remove saved place $name" }
+                .testTag("saved-location-remove-$index"),
+            colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
+        ) { Text("Remove", style = theme.typography.labelLarge) }
     }
 }
 

@@ -14,6 +14,7 @@ sealed interface LocationSearchPresentation {
     data class Failure(override val query: String, val category: FailureCategory) : LocationSearchPresentation
 
     data class Candidate(
+        val localId: String,
         val displayName: String,
         val admin1: String?,
         val admin2: String?,
@@ -26,3 +27,27 @@ sealed interface LocationSearchPresentation {
 
     enum class FailureCategory { TRANSPORT, HTTP_OR_PROVIDER, MALFORMED_RESPONSE }
 }
+
+/** Saved places are rendered from presentation values; Compose never receives storage records. */
+sealed interface SavedLocationsPresentation {
+    data object Loading : SavedLocationsPresentation
+    data object Empty : SavedLocationsPresentation
+    data class Ready(val locations: List<Location>) : SavedLocationsPresentation
+    data class Unavailable(val message: String) : SavedLocationsPresentation
+
+    data class Location(
+        val localId: String,
+        val displayName: String?,
+        val latitude: String,
+        val longitude: String,
+        val timeZone: String,
+    )
+}
+
+/** Visible outcome of the most recent save, remove, or switch action. */
+data class LocationActionPresentation(
+    val message: String,
+    val isError: Boolean,
+    val showOnHome: Boolean = false,
+    val isPending: Boolean = false,
+)

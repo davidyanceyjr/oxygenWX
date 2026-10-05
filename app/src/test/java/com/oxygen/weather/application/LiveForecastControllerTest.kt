@@ -107,6 +107,27 @@ class LiveForecastControllerTest {
         assertObsoleteResponseIgnored(listOf(request(chicago), request(chicago)))
     }
 
+    @Test fun olderLocationResponseCompletingLastCannotReplaceNewerLocation() {
+        val executor = QueueExecutor()
+        val states = mutableListOf<LiveForecastState>()
+        val controller = LiveForecastController(repository { success(it, current = current(), forecast = null) }, executor, states::add)
+        val requestA = request(chicago)
+        val requestB = request(boston)
+        val generationA = controller.fetch(requestA)
+        val generationB = controller.fetch(requestB)
+
+        executor.runLast() // B completes first.
+        assertEquals(LiveForecastState.Loaded::class, controller.state()!!::class)
+        assertEquals(requestB, controller.state()?.request)
+        executor.runNext() // Delayed A completes after B and must be ignored.
+
+        assertEquals(generationB, controller.state()?.generation)
+        assertEquals(requestB, controller.state()?.request)
+        assertTrue(generationA < generationB)
+        assertEquals(1, states.filterIsInstance<LiveForecastState.Loaded>().size)
+        assertEquals(requestB, states.filterIsInstance<LiveForecastState.Loaded>().single().request)
+    }
+
     @Test fun repositoryExceptionProducesSafeFailure() {
         val request = request(chicago)
         val executor = QueueExecutor()
@@ -190,5 +211,6 @@ class LiveForecastControllerTest {
         private val tasks = ArrayDeque<Runnable>()
         override fun execute(command: Runnable) { tasks.addLast(command) }
         fun runNext() = tasks.removeFirst().run()
+        fun runLast() = tasks.removeLast().run()
     }
 }

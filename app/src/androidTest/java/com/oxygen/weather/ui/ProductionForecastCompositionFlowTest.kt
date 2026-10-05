@@ -18,6 +18,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
 import com.oxygen.weather.ProductionForecastTestHooks
+import com.oxygen.weather.SharedPreferencesSelectedLocationStore
 import com.oxygen.weather.data.locationsearch.LocationCandidate
 import com.oxygen.weather.data.locationsearch.LocationSearch
 import com.oxygen.weather.data.locationsearch.LocationSearchResult
@@ -64,6 +65,7 @@ class ProductionForecastCompositionFlowTest {
 
     @Before
     fun installDeterministicDependencies() {
+        SharedPreferencesSelectedLocationStore(InstrumentationRegistry.getInstrumentation().targetContext).clear()
         forecastCalls.set(0)
         observedUri.set(null)
         selectedRequest.set(null)
@@ -91,6 +93,7 @@ class ProductionForecastCompositionFlowTest {
 
     @After
     fun clearDependencies() {
+        SharedPreferencesSelectedLocationStore(InstrumentationRegistry.getInstrumentation().targetContext).clear()
         LocationSearchTestHooks.searchFactory = null
         LocationSearchTestHooks.onSelectedRequest = null
         LocationSearchTestHooks.effectsOverrideForTests = null

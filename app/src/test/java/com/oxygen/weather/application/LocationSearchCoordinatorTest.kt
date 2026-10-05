@@ -54,7 +54,7 @@ class LocationSearchCoordinatorTest {
         assertEquals(LocationSearchRequest("München", "de-DE"), requests.single())
         assertEquals(LocationSearchState.Loading("München"), coordinator.state.value)
         publisher.runNext()
-        assertEquals(LocationSearchState.Results("München", listOf(candidate)), coordinator.state.value)
+        assertEquals(listOf(candidate), (coordinator.state.value as LocationSearchState.Results).candidates.map { it.candidate })
     }
 
     @Test
@@ -69,7 +69,7 @@ class LocationSearchCoordinatorTest {
         coordinator.openSession()
         coordinator.submit("Bavaria")
         coordinator.runSearch()
-        assertEquals(listOf(candidate, second), (coordinator.state.value as LocationSearchState.Results).candidates)
+        assertEquals(listOf(candidate, second), (coordinator.state.value as LocationSearchState.Results).candidates.map { it.candidate })
 
         coordinator.submit("Nowhere")
         coordinator.runSearch()
@@ -125,7 +125,7 @@ class LocationSearchCoordinatorTest {
         publisher.runNext()
         assertEquals(LocationSearchState.Loading("new"), coordinator.state.value)
         publisher.runNext()
-        assertEquals(LocationSearchState.Results("new", listOf(candidate)), coordinator.state.value)
+        assertEquals(listOf(candidate), (coordinator.state.value as LocationSearchState.Results).candidates.map { it.candidate })
         assertEquals(listOf("old", "new"), calls)
 
         coordinator.submit("dismissed")
@@ -193,6 +193,45 @@ class LocationSearchCoordinatorTest {
         coordinator.runSearch()
         assertFalse(coordinator.select(1))
         assertTrue(callbacks.isEmpty())
+    }
+
+    @Test
+    fun saveAndSelectReuseDisplayedIdentityAndSaveKeepsSearchOpen() {
+        val worker = QueueExecutor()
+        val publisher = QueueExecutor()
+        val selected = mutableListOf<ForecastRequest>()
+        val saved = mutableListOf<SavedLocation>()
+        val ids = ArrayDeque(listOf("session-one", "session-two"))
+        val coordinator = LocationSearchCoordinator(
+            locationSearch = LocationSearch { LocationSearchResult.Success(listOf(candidate)) },
+            worker = worker,
+            publisher = publisher,
+            localeTag = { "en-US" },
+            localIdGenerator = { ids.removeFirst() },
+            onSelected = selected::add,
+            onSaved = saved::add,
+        )
+        coordinator.openSession()
+        coordinator.submit("Munich")
+        worker.runNext(); publisher.runNext()
+
+        assertTrue(coordinator.saveCandidate(0))
+        assertTrue(coordinator.isSessionOpen)
+        assertTrue(coordinator.saveCandidate(0))
+        assertEquals(2, saved.size)
+        assertEquals(saved.first().id, saved.last().id)
+        assertTrue(coordinator.select(0))
+        assertEquals(saved.first().id, selected.single().location.id)
+        assertEquals(saved.first().coordinates, selected.single().coordinates)
+        assertEquals(saved.first().timeZone, selected.single().location.timeZone)
+        assertFalse(coordinator.isSessionOpen)
+        assertEquals("session-one", saved.first().id.value)
+
+        coordinator.openSession()
+        coordinator.submit("Munich")
+        worker.runNext(); publisher.runNext()
+        assertTrue(coordinator.saveCandidate(0))
+        assertEquals("session-two", saved.last().id.value)
     }
 
     private fun coordinator(

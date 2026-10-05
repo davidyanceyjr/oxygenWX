@@ -27,6 +27,8 @@ import com.oxygen.weather.data.locationsearch.openmeteo.UrlConnectionLocationSea
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.application.ProductionForecastComposition
+import com.oxygen.weather.application.SavedLocationCoordinator
+import com.oxygen.weather.application.SelectedLocationStore
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
 import com.oxygen.weather.presentation.CurrentPresentation
@@ -54,6 +56,7 @@ import java.util.concurrent.Executors
 
 class MainActivity : ComponentActivity() {
     private var locationSearchExecutor: ExecutorService? = null
+    private var selectedLocationExecutor: ExecutorService? = null
     private var forecastExecutor: ExecutorService? = null
     private var forecastController: LiveForecastController? = null
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
@@ -205,6 +208,10 @@ class MainActivity : ComponentActivity() {
             Thread(runnable, "oxygen-live-forecast").apply { isDaemon = true }
         }
         forecastExecutor = forecastWorker
+        val selectedLocationWorker = Executors.newSingleThreadExecutor { runnable ->
+            Thread(runnable, "oxygen-selected-location").apply { isDaemon = true }
+        }
+        selectedLocationExecutor = selectedLocationWorker
         forecastController = ProductionForecastComposition.create(
             endpoint = ForecastEndpoint(URI("https://api.open-meteo.com/v1/forecast")),
             transport = ProductionForecastTestHooks.transportOverride ?: UrlConnectionOpenMeteoTransport(),
@@ -214,17 +221,36 @@ class MainActivity : ComponentActivity() {
         )
         val search = LocationSearchTestHooks.searchFactory?.invoke()
             ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
+        val savedLocationCoordinator = SavedLocationCoordinator(
+            savedStore = SharedPreferencesSavedLocationStore(applicationContext),
+            selectedStore = LocationSearchTestHooks.selectedStoreFactory?.invoke(applicationContext)
+                ?: SharedPreferencesSelectedLocationStore(applicationContext),
+            worker = selectedLocationWorker,
+            publisher = Executor { command -> mainHandler.post(command) },
+            onRequestReady = { request ->
+                if (!isDestroyed) {
+                    LocationSearchTestHooks.onSelectedRequest?.invoke(request)
+                    selectedForecastState.value = request.loadingPresentation()
+                    forecastController?.fetch(request)
+                }
+            },
+            onRestoredRequest = { request ->
+                if (!isDestroyed) {
+                    LocationSearchTestHooks.onRestoredRequest?.invoke(request)
+                    selectedForecastState.value = request.loadingPresentation()
+                    forecastController?.fetch(request)
+                }
+            },
+        )
+        savedLocationCoordinator.restoreOnce()
         val coordinator = LocationSearchCoordinator(
             locationSearch = search,
             worker = worker,
             publisher = Executor { command -> mainHandler.post(command) },
             localeTag = { resources.configuration.locales[0]?.toLanguageTag() ?: Locale.getDefault().toLanguageTag() },
             localIdGenerator = { "local-${UUID.randomUUID()}" },
-            onSelected = { request ->
-                LocationSearchTestHooks.onSelectedRequest?.invoke(request)
-                selectedForecastState.value = request.loadingPresentation()
-                forecastController?.fetch(request)
-            },
+            onSelected = savedLocationCoordinator::select,
+            onSaved = savedLocationCoordinator::save,
         )
         setContent {
             OxygenWeatherApp(
@@ -234,6 +260,7 @@ class MainActivity : ComponentActivity() {
                 effects = effects,
                 forecastContext = context.takeIf { reviewScenario != null },
                 locationSearchCoordinator = coordinator,
+                savedLocationCoordinator = savedLocationCoordinator,
                 selectedForecast = selectedForecastState.value,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
@@ -243,6 +270,8 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         locationSearchExecutor?.shutdownNow()
         locationSearchExecutor = null
+        selectedLocationExecutor?.shutdownNow()
+        selectedLocationExecutor = null
         forecastExecutor?.shutdownNow()
         forecastExecutor = null
         forecastController = null
@@ -254,6 +283,8 @@ class MainActivity : ComponentActivity() {
 internal object LocationSearchTestHooks {
     @Volatile var searchFactory: (() -> LocationSearch)? = null
     @Volatile var onSelectedRequest: ((ForecastRequest) -> Unit)? = null
+    @Volatile var onRestoredRequest: ((ForecastRequest) -> Unit)? = null
+    @Volatile var selectedStoreFactory: ((android.content.Context) -> SelectedLocationStore)? = null
     @Volatile var effectsOverrideForTests: EffectsLevel? = null
     @Volatile var layoutDirectionOverrideForTests: LayoutDirection? = null
 }

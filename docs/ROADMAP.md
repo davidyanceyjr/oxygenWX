@@ -42,9 +42,9 @@ historically BLOCKED; the accepted recovery cycles 098–100 satisfy the baselin
 prerequisite under the 2026-10-03 owner clarification recorded in
 `docs/theme-pack-roadmap.md`. The prior cycle 097 blocker also remains historical
 and closed. The production forecast path is complete through R2.5. R3.1,
-R3.1A, and R3.1B are complete per cycles 115, 116, and 120; R3.2 is the next
-eligible slice after the app-composition blocker recorded by cycle 117 was
-resolved.
+R3.1A, and R3.1B are complete per cycles 115, 116, and 120. R3.2 completed in
+cycle 121 after the app-composition blocker recorded by cycle 117 was resolved;
+R3.2A completed in cycle 122.
 
 Owner-directed visual refinements to the application after TP.3 are tracked in
 `docs/UI_CONTEXT_ROADMAP.md`. That document defines how each concrete request
@@ -498,7 +498,7 @@ weather is attributed to a searched location.
 Plan: `.codex/plans/120-production-forecast-app-composition.md`.
 Evidence and limitations: `.codex/history/2026-10-04-120-production-forecast-app-composition.md` and `.codex/test-artifacts/120-production-forecast-app-composition/`.
 
-### R3.2 — Selected/saved locations — PLANNED
+### R3.2 — Selected/saved locations — DONE
 
 After R3.1B, persist and restore one selected location by stable local identity,
 including repository handoff across recreation/relaunch. Saved-location
@@ -506,12 +506,18 @@ collection and switching UI are excluded.
 
 **Exit:** Persistence tests restore one stable selected-location identity after recreation/relaunch and pass it to the repository; saved-location lists and switching UI remain absent.
 
-### R3.2A — Saved locations and safe switching — PLANNED
+Plan: `.codex/plans/121-selected-location-persistence-and-forecast-handoff.md`.
+Evidence and limitations: `.codex/history/2026-10-04-121-selected-location-persistence-and-forecast-handoff.md` and `.codex/test-artifacts/121-selected-location-persistence-and-forecast-handoff/`.
+
+### R3.2A — Saved locations and safe switching — DONE
 
 After R3.2, add locally saved location rows and switching behavior. Verify that
 an obsolete request cannot replace the newly selected location's forecast.
 
 **Exit:** Installed saved-location add/select/remove flow works, and a deterministic delayed-response test proves an older location result cannot overwrite the newly selected location.
+
+Plan: `.codex/plans/122-saved-locations-and-safe-switching.md`.
+Evidence and limitations: `.codex/history/2026-10-05-122-saved-locations-and-safe-switching.md` and `.codex/test-artifacts/122-saved-locations-and-safe-switching/`.
 
 ### R3.3 — Optional coarse device location — PLANNED
 

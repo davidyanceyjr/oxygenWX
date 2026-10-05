@@ -20,6 +20,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
 import com.oxygen.weather.ProductionForecastTestHooks
+import com.oxygen.weather.SharedPreferencesSelectedLocationStore
 import com.oxygen.weather.application.LocationSearchState
 import com.oxygen.weather.data.locationsearch.LocationCandidate
 import com.oxygen.weather.data.locationsearch.LocationSearch
@@ -76,6 +77,7 @@ class ManualLocationSearchFlowTest {
 
     @Before
     fun launchRealActivityWithFakeSearch() {
+        SharedPreferencesSelectedLocationStore(InstrumentationRegistry.getInstrumentation().targetContext).clear()
         calls.set(0)
         handoffCalls.set(0)
         handoff.set(null)
@@ -106,6 +108,7 @@ class ManualLocationSearchFlowTest {
 
     @After
     fun clearHooks() {
+        SharedPreferencesSelectedLocationStore(InstrumentationRegistry.getInstrumentation().targetContext).clear()
         releaseSearch.countDown()
         LocationSearchTestHooks.searchFactory = null
         LocationSearchTestHooks.onSelectedRequest = null
