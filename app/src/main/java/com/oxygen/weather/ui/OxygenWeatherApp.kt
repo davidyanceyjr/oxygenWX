@@ -64,6 +64,7 @@ import com.oxygen.weather.presentation.ForecastHorizonPresentation
 import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
+import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
@@ -99,6 +100,7 @@ fun OxygenWeatherApp(
     effects: EffectsLevel = EffectsLevel.SUBTLE,
     forecastContext: ForecastContextPresentation? = null,
     locationSearchCoordinator: LocationSearchCoordinator? = null,
+    selectedForecast: SelectedForecastPresentationState? = null,
     layoutDirectionOverride: LayoutDirection? = null,
 ) {
     var selectedThemeIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -109,6 +111,10 @@ fun OxygenWeatherApp(
         else -> ThemeEffectsLevel.SUBTLE
     }
     val theme = remember(themeId, themeEffects) { resolveTheme(themeId, effects = themeEffects) }
+    val displayPresentation = selectedForecast?.home ?: presentation
+    val displayStatus = selectedForecast?.status ?: status
+    val displayHorizons = if (selectedForecast != null) selectedForecast.partialHorizons else partialHorizons
+    val displayContext = if (selectedForecast != null) selectedForecast.forecastContext else forecastContext
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
     var pageMenuExpanded by remember { mutableStateOf(false) }
@@ -143,7 +149,7 @@ fun OxygenWeatherApp(
                     Box(Modifier.fillMaxWidth().heightIn(min = theme.headerToTabHeight())) {
                         Column(Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)) {
                             Text(
-                                presentation.current.location,
+                                selectedForecast?.locationName ?: displayPresentation.current.location,
                                 style = theme.typography.headlineMedium,
                                 color = theme.palette.primaryData,
                                 maxLines = 1,
@@ -203,10 +209,10 @@ fun OxygenWeatherApp(
                     Spacer(Modifier.height(theme.headerToBodyGap()))
                     HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
                         when (HomePage.entries[page]) {
-                            HomePage.NOW -> NowPage(presentation, status, partialHorizons, theme, forecastContext)
-                            HomePage.HOURLY -> HourlyPage(presentation, status, partialHorizons, theme)
-                            HomePage.DAILY -> DailyPage(presentation, status, partialHorizons, theme)
-                            HomePage.DETAILS -> DetailsPage(presentation, status, theme, forecastContext)
+                            HomePage.NOW -> NowPage(displayPresentation, displayStatus, displayHorizons, theme, displayContext)
+                            HomePage.HOURLY -> HourlyPage(displayPresentation, displayStatus, displayHorizons, theme)
+                            HomePage.DAILY -> DailyPage(displayPresentation, displayStatus, displayHorizons, theme)
+                            HomePage.DETAILS -> DetailsPage(displayPresentation, displayStatus, theme, displayContext)
                         }
                     }
                 }
@@ -319,10 +325,7 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
         WeatherThemeId.INSTRUMENT -> 338.dp
         else -> 480.dp
     }
-    val temperatureStyle = if (
-        current.temperature == "Unavailable" &&
-        theme.definition.id in setOf(WeatherThemeId.GLASS, WeatherThemeId.MINIMAL_OLED)
-    ) {
+    val temperatureStyle = if (current.temperature == "Unavailable") {
         theme.typography.displayLarge.copy(fontSize = 30.sp, lineHeight = 38.sp)
     } else {
         theme.typography.displayLarge

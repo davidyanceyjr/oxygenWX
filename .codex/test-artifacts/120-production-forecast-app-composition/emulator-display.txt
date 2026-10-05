@@ -1,0 +1,5 @@
+Physical size: 1080x2400
+Override size: 360x640
+Physical density: 420
+Override density: 160
+1.0

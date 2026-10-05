@@ -103,6 +103,15 @@ data class HomePresentation(
     val updatedLine: String,
 )
 
+/** Presentation-only state for a transient selected-location request. */
+data class SelectedForecastPresentationState(
+    val locationName: String,
+    val home: HomePresentation,
+    val status: StatusPresentation,
+    val partialHorizons: ForecastHorizonPresentation? = null,
+    val forecastContext: ForecastContextPresentation? = null,
+)
+
 /** Display-ready live sections without requiring a synthetic current, forecast, or baseline. */
 data class LiveWeatherPresentation(
     val locationId: String,
@@ -111,6 +120,7 @@ data class LiveWeatherPresentation(
     val current: CurrentPresentation?,
     val currentProvenance: DataProvenance?,
     val hourlyWindows: List<HourlyWindowPresentation>,
+    val hourlyDateJumps: List<DateJumpPresentation> = emptyList(),
     val dailyWindows: List<DailyWindowPresentation>,
     val forecastProvenance: DataProvenance?,
     val sourceId: String,
@@ -202,6 +212,11 @@ object HomePresentationMapper {
     ): LiveWeatherPresentation {
         val location = success.request.location
         val forecast = success.forecast
+        val hours = forecast?.hourly?.take(72).orEmpty()
+        val hourlyWindows = hours.chunked(6).map { hourlyWindow(it, unitPreset) }
+        val hourlyDateJumps = hourlyWindows.mapIndexedNotNull { index, _ ->
+            hours.getOrNull(index * 6)?.let { DateJumpPresentation(it.time.format(dayFormatter), index) }
+        }.distinctBy { it.label }
         val current = success.current?.let { value ->
             val condition = value.condition.displayName()
             CurrentPresentation(
@@ -237,7 +252,8 @@ object HomePresentationMapper {
             timeZoneId = location.timeZone.id,
             current = current,
             currentProvenance = success.currentProvenance,
-            hourlyWindows = forecast?.hourly?.take(72)?.chunked(6)?.map { hourlyWindow(it, unitPreset) }.orEmpty(),
+            hourlyWindows = hourlyWindows,
+            hourlyDateJumps = hourlyDateJumps,
             dailyWindows = forecast?.daily?.take(10)?.chunked(5)?.map {
                 dailyWindow(it, null, unitPreset)
             }.orEmpty(),
@@ -248,6 +264,37 @@ object HomePresentationMapper {
             retrievedAt = success.retrievedAt,
             unsupportedFields = success.unsupportedFields.toSet(),
             invalidSections = success.invalidSections.toSet(),
+        )
+    }
+
+    /** Adapts independent live sections to the existing page renderer without inventing weather. */
+    fun mapLiveToHome(live: LiveWeatherPresentation): HomePresentation {
+        val name = live.locationName ?: "Selected location"
+        val current = live.current ?: CurrentPresentation(
+            location = name,
+            temperature = "Unavailable",
+            condition = "Current conditions unavailable",
+            apparent = "Unavailable",
+            humidity = "Unavailable",
+            dewPoint = "Unavailable",
+            precipitationHeadline = "Unavailable",
+            precipitationSupporting = "Unavailable",
+            windHeadline = "Unavailable",
+            windSupporting = "Unavailable",
+            spokenSummary = "$name, current conditions unavailable",
+            conditionIdentity = null,
+        )
+        val source = live.sourceName?.takeIf(String::isNotBlank) ?: "Weather source unavailable"
+        val zone = java.time.ZoneId.of(live.timeZoneId)
+        val updated = "Retrieved ${live.retrievedAt.atZone(zone).format(updatedFormatter)}"
+        return HomePresentation(
+            current = current,
+            hourlyWindows = live.hourlyWindows,
+            hourlyDateJumps = live.hourlyDateJumps,
+            dailyWindows = live.dailyWindows,
+            detailGroups = emptyList(),
+            sourceLine = "Source: $source",
+            updatedLine = "$updated · ${zone.id}",
         )
     }
 

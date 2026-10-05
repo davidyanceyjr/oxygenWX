@@ -8,7 +8,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.LayoutDirection
+import com.oxygen.weather.application.LiveForecastController
+import com.oxygen.weather.application.LiveForecastState
 import com.oxygen.weather.data.CacheWriteOutcome
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DemoWeatherRepository
@@ -17,21 +20,32 @@ import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
 import com.oxygen.weather.data.WeatherFreshness
 import com.oxygen.weather.data.WeatherRepositoryResult
+import com.oxygen.weather.data.provider.ForecastEndpoint
 import com.oxygen.weather.data.locationsearch.LocationSearch
 import com.oxygen.weather.data.locationsearch.openmeteo.OpenMeteoLocationSearch
 import com.oxygen.weather.data.locationsearch.openmeteo.UrlConnectionLocationSearchTransport
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.application.LocationSearchCoordinator
+import com.oxygen.weather.application.ProductionForecastComposition
+import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
+import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
+import com.oxygen.weather.presentation.CurrentPresentation
+import com.oxygen.weather.presentation.ForecastHorizonPresentation
+import com.oxygen.weather.presentation.ForecastHorizonStatus
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomeLoadState
 import com.oxygen.weather.presentation.HomePresentationInput
 import com.oxygen.weather.presentation.HomePresentationMapper
+import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.HomePresentationState
+import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.ui.OxygenWeatherApp
 import com.oxygen.weather.ui.EffectsLevel
 import java.time.LocalDateTime
+import java.time.Clock
+import java.net.URI
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.Executor
@@ -40,6 +54,9 @@ import java.util.concurrent.Executors
 
 class MainActivity : ComponentActivity() {
     private var locationSearchExecutor: ExecutorService? = null
+    private var forecastExecutor: ExecutorService? = null
+    private var forecastController: LiveForecastController? = null
+    private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -183,16 +200,31 @@ class MainActivity : ComponentActivity() {
             Thread(runnable, "oxygen-location-search").apply { isDaemon = true }
         }
         locationSearchExecutor = worker
+        val mainHandler = Handler(Looper.getMainLooper())
+        val forecastWorker = Executors.newSingleThreadExecutor { runnable ->
+            Thread(runnable, "oxygen-live-forecast").apply { isDaemon = true }
+        }
+        forecastExecutor = forecastWorker
+        forecastController = ProductionForecastComposition.create(
+            endpoint = ForecastEndpoint(URI("https://api.open-meteo.com/v1/forecast")),
+            transport = ProductionForecastTestHooks.transportOverride ?: UrlConnectionOpenMeteoTransport(),
+            clock = Clock.systemUTC(),
+            executor = forecastWorker,
+            onStateChanged = { state -> mainHandler.post { selectedForecastState.value = state.toSelectedPresentationState() } },
+        )
         val search = LocationSearchTestHooks.searchFactory?.invoke()
             ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
-        val mainHandler = Handler(Looper.getMainLooper())
         val coordinator = LocationSearchCoordinator(
             locationSearch = search,
             worker = worker,
             publisher = Executor { command -> mainHandler.post(command) },
             localeTag = { resources.configuration.locales[0]?.toLanguageTag() ?: Locale.getDefault().toLanguageTag() },
             localIdGenerator = { "local-${UUID.randomUUID()}" },
-            onSelected = { request -> LocationSearchTestHooks.onSelectedRequest?.invoke(request) },
+            onSelected = { request ->
+                LocationSearchTestHooks.onSelectedRequest?.invoke(request)
+                selectedForecastState.value = request.loadingPresentation()
+                forecastController?.fetch(request)
+            },
         )
         setContent {
             OxygenWeatherApp(
@@ -202,6 +234,7 @@ class MainActivity : ComponentActivity() {
                 effects = effects,
                 forecastContext = context.takeIf { reviewScenario != null },
                 locationSearchCoordinator = coordinator,
+                selectedForecast = selectedForecastState.value,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
         }
@@ -210,6 +243,9 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         locationSearchExecutor?.shutdownNow()
         locationSearchExecutor = null
+        forecastExecutor?.shutdownNow()
+        forecastExecutor = null
+        forecastController = null
         super.onDestroy()
     }
 }
@@ -221,6 +257,65 @@ internal object LocationSearchTestHooks {
     @Volatile var effectsOverrideForTests: EffectsLevel? = null
     @Volatile var layoutDirectionOverrideForTests: LayoutDirection? = null
 }
+
+/** Injection seam for installed Activity tests; production uses the Open-Meteo URL transport. */
+internal object ProductionForecastTestHooks {
+    @Volatile var transportOverride: OpenMeteoTransport? = null
+}
+
+private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentationState(
+    locationName = location.displayName ?: "Selected location",
+    home = emptySelectedHome(location.displayName ?: "Selected location"),
+    status = StatusPresentation.of("Loading weather data for ${location.displayName ?: "selected location"}."),
+)
+
+private fun LiveForecastState.toSelectedPresentationState(): SelectedForecastPresentationState = when (this) {
+    is LiveForecastState.Loading -> request.loadingPresentation()
+    is LiveForecastState.Failed -> SelectedForecastPresentationState(
+        locationName = request.location.displayName ?: "Selected location",
+        home = emptySelectedHome(request.location.displayName ?: "Selected location"),
+        status = StatusPresentation.of(status),
+    )
+    is LiveForecastState.Loaded -> {
+        val hours = presentation.hourlyWindows.sumOf { it.entries.size }
+        val days = presentation.dailyWindows.sumOf { it.entries.size }
+        val horizons = if (hours > 0 && days > 0 && (hours < 72 || days < 10)) ForecastHorizonPresentation(
+            hourly = if (hours in 1..71) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
+            daily = if (days in 1..9) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
+        ) else null
+        val stateStatus = StatusPresentation.of("Live weather data from ${presentation.sourceName ?: "the selected source"}.")
+        SelectedForecastPresentationState(
+            locationName = presentation.locationName ?: "Selected location",
+            home = HomePresentationMapper.mapLiveToHome(presentation),
+            status = stateStatus,
+            partialHorizons = horizons,
+            forecastContext = ForecastContextMapper.mapLive(presentation, horizons, stateStatus),
+        )
+    }
+}
+
+private fun emptySelectedHome(location: String) = HomePresentation(
+    current = CurrentPresentation(
+        location = location,
+        temperature = "Unavailable",
+        condition = "Current conditions unavailable",
+        apparent = "Unavailable",
+        humidity = "Unavailable",
+        dewPoint = "Unavailable",
+        precipitationHeadline = "Unavailable",
+        precipitationSupporting = "Unavailable",
+        windHeadline = "Unavailable",
+        windSupporting = "Unavailable",
+        spokenSummary = "$location, weather unavailable",
+        conditionIdentity = null,
+    ),
+    hourlyWindows = emptyList(),
+    hourlyDateJumps = emptyList(),
+    dailyWindows = emptyList(),
+    detailGroups = emptyList(),
+    sourceLine = "Source: unavailable",
+    updatedLine = "Update time: unavailable",
+)
 
 private fun com.oxygen.weather.data.WeatherBundle.withUnavailableCurrent() = copy(
     current = current.copy(

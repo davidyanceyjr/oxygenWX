@@ -2,31 +2,47 @@
 
 ## Active in this UI candidate
 
-No live weather service is active.
+Normal startup displays the labeled `DemoWeatherRepository` development
+fixture until a location is selected through manual search. A selected request
+is sent to Open-Meteo and rendered with its returned location, weather facts,
+source, and retrieval/provenance times. Selection is transient and is not
+restored after relaunch; selected-location persistence is a later roadmap item.
 
-`DemoWeatherRepository` produces a deterministic development fixture with:
+Open-Meteo forecast requests use
+`https://api.open-meteo.com/v1/forecast`. The free service is limited to
+non-commercial use, requires CC BY 4.0 attribution, and publishes request
+limits. Recheck current terms before release use. Authoritative references
+(verified 2026-10-04): [Forecast API documentation](https://open-meteo.com/en/docs),
+[Terms of Use](https://open-meteo.com/en/terms), and
+[CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/).
+
+`DemoWeatherRepository` provides a deterministic development fixture with:
 
 - one model-estimated current condition;
 - 72 hourly forecast entries;
 - ten daily forecast entries;
 - a synthetic historical comparison sample used only to exercise derived UI behavior.
 
-The app labels this source as an offline development fixture. These values must not be presented as real local weather.
+The app labels this source as an offline development fixture. These values
+must not be presented as real local weather or attributed to a selected search
+candidate.
 
-## Planned production sources
+## Other planned production sources
 
-The adopted Oxygen product direction uses replaceable provider interfaces. Initial production candidates are:
+The adopted Oxygen product direction uses replaceable provider interfaces.
+Remaining candidates are:
 
-- Open-Meteo for general forecast data;
-- MET Norway as a separately attributed forecast fallback;
+- MET Norway as a separately attributed forecast fallback, deferred until the
+  production transport implements response caching/conditional requests and
+  the app has usable identifying contact metadata;
 - NOAA/NWS for United States official alerts;
 - an explicitly documented historical/archive provider for percentile and analog context.
 
 Provider terms, attribution, rate limits, fields, provenance, and caching rules must be reviewed again when those integrations are implemented.
 
-### Open-Meteo geocoding candidate
+### Open-Meteo geocoding lookup
 
-The location-search candidate is Open-Meteo's Geocoding API at
+The manual location-search adapter uses Open-Meteo's Geocoding API at
 `https://geocoding-api.open-meteo.com/v1/search`. It accepts a required `name`
 (location or postal code), with optional `count` (default 10, maximum 100),
 `language`, and `countryCode`. Empty and one-character names return no results;
@@ -44,8 +60,9 @@ Authoritative references (verified 2026-10-04): [Geocoding API documentation](ht
 
 ## MET Norway Locationforecast fallback
 
-The configured fallback uses the MET Norway Locationforecast 2.0 compact JSON
-endpoint:
+The deferred fallback candidate is the MET Norway Locationforecast 2.0 compact
+JSON endpoint. It is not configured in the normal app composition until the
+response cache policy and contact identity are ready:
 
 `https://api.met.no/weatherapi/locationforecast/2.0/compact`
 

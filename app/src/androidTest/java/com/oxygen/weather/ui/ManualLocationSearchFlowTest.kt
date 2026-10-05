@@ -19,12 +19,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
+import com.oxygen.weather.ProductionForecastTestHooks
 import com.oxygen.weather.application.LocationSearchState
 import com.oxygen.weather.data.locationsearch.LocationCandidate
 import com.oxygen.weather.data.locationsearch.LocationSearch
 import com.oxygen.weather.data.locationsearch.LocationSearchRequest
 import com.oxygen.weather.data.locationsearch.LocationSearchResult
 import com.oxygen.weather.data.provider.ForecastRequest
+import com.oxygen.weather.data.provider.openmeteo.OpenMeteoHttpResponse
+import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.ui.EffectsLevel
 import java.io.File
 import java.io.FileOutputStream
@@ -93,6 +96,9 @@ class ManualLocationSearchFlowTest {
             }
         }
         LocationSearchTestHooks.onSelectedRequest = { handoff.set(it); handoffCalls.incrementAndGet() }
+        ProductionForecastTestHooks.transportOverride = OpenMeteoTransport {
+            OpenMeteoHttpResponse(503, "deterministic test failure")
+        }
         LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
         LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
         compose.activityRule.scenario.recreate()
@@ -105,6 +111,7 @@ class ManualLocationSearchFlowTest {
         LocationSearchTestHooks.onSelectedRequest = null
         LocationSearchTestHooks.effectsOverrideForTests = null
         LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+        ProductionForecastTestHooks.transportOverride = null
     }
 
     @Test
@@ -164,7 +171,15 @@ class ManualLocationSearchFlowTest {
         assertEquals(1, handoffCalls.get())
         assertEquals(1, calls.get())
         compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertIsDisplayed()
-        compose.onNodeWithText("Demo Station", substring = false).assertIsDisplayed()
+        compose.onNodeWithText("Springfield", substring = false).assertIsDisplayed()
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").performClick()
+        compose.onNodeWithContentDescription("Now page, 1 of 4, not selected").performClick()
+        compose.waitUntil(10_000) {
+            compose.onAllNodesWithText("Weather source could not be reached.", substring = true)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Current conditions unavailable", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("Demo Station", substring = false).assertDoesNotExist()
         compose.onNodeWithText("Search places").assertDoesNotExist()
     }
 

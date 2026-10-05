@@ -41,8 +41,10 @@ TP.3 PASS; its criterion matrix and limitations are in
 historically BLOCKED; the accepted recovery cycles 098–100 satisfy the baseline
 prerequisite under the 2026-10-03 owner clarification recorded in
 `docs/theme-pack-roadmap.md`. The prior cycle 097 blocker also remains historical
-and closed. The production forecast path is complete through R2.4; R2.5 is the
-next eligible general-roadmap slice.
+and closed. The production forecast path is complete through R2.5. R3.1,
+R3.1A, and R3.1B are complete per cycles 115, 116, and 120; R3.2 is the next
+eligible slice after the app-composition blocker recorded by cycle 117 was
+resolved.
 
 Owner-directed visual refinements to the application after TP.3 are tracked in
 `docs/UI_CONTEXT_ROADMAP.md`. That document defines how each concrete request
@@ -454,7 +456,7 @@ Evidence and limitations: `.codex/history/2026-10-04-114-forecast-provenance-and
 ## R3 — Location and offline behavior
 
 
-### R3.1 — Manual location search — NEXT
+### R3.1 — Manual location search — DONE
 
 Implement provider-neutral geocoding/search request-result contracts and the
 initial lookup adapter, including locale/timezone and no-result/error fixtures.
@@ -462,18 +464,45 @@ No selection UI or persistence belongs here.
 
 **Exit:** Search contract/adapter fixtures pass for localized query, timezone-bearing results, empty result, and failure; no UI or persistence is introduced.
 
-### R3.1A — Manual location search interface — PLANNED
+Plan: `.codex/plans/115-manual-location-search-contracts-and-lookup-adapter.md`.
+Evidence: `.codex/history/2026-10-04-115-manual-location-search-contracts-and-lookup-adapter.md`.
+
+### R3.1A — Manual location search interface — DONE
 
 After R3.1, implement the accessible search, result, and selected-location
 handoff UI without requesting device location or persisting saved locations.
 
 **Exit:** Installed search flow supports query, progress, results, empty/error, and selected-location handoff with 48dp controls; manual search works without location permission.
 
+Plan: `.codex/plans/116-manual-location-search-interface.md`.
+Evidence and limitations: `.codex/history/2026-10-04-116-manual-location-search-interface.md` and `.codex/test-artifacts/116-manual-location-search-interface/`.
+
+### R3.1B — Production forecast app composition — DONE
+
+Compose the existing Open-Meteo source through `LiveWeatherRepository` and
+`LiveForecastController` in the normal app lifecycle. Route the transient
+manually selected `ForecastRequest` to that application boundary and show its
+real typed result/loading/failure state without presenting development fixture
+data as the selected location's forecast. MET Norway fallback remains deferred
+until its response-cache policy and identifying contact metadata are ready.
+This prerequisite adds no location persistence.
+
+**Exit:** Deterministic composition tests prove a selected request traverses
+the configured repository/controller and its successful or failed result
+reaches the app presentation boundary; installed Activity evidence exercises
+selection and confirms the displayed location/provenance match the supplied
+repository result. Normal startup and absent-selection behavior remain clearly
+labeled as the development fixture until R3.2 persists a selection; no fixture
+weather is attributed to a searched location.
+
+Plan: `.codex/plans/120-production-forecast-app-composition.md`.
+Evidence and limitations: `.codex/history/2026-10-04-120-production-forecast-app-composition.md` and `.codex/test-artifacts/120-production-forecast-app-composition/`.
+
 ### R3.2 — Selected/saved locations — PLANNED
 
-Persist and restore one selected location by stable local identity, including
-repository handoff across recreation/relaunch. Saved-location collection and
-switching UI are excluded.
+After R3.1B, persist and restore one selected location by stable local identity,
+including repository handoff across recreation/relaunch. Saved-location
+collection and switching UI are excluded.
 
 **Exit:** Persistence tests restore one stable selected-location identity after recreation/relaunch and pass it to the repository; saved-location lists and switching UI remain absent.
 

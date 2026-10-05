@@ -85,6 +85,36 @@ object ForecastContextMapper {
             horizon = null,
         )
 
+    fun mapLive(
+        live: LiveWeatherPresentation,
+        horizon: ForecastHorizonPresentation?,
+        status: StatusPresentation,
+    ): ForecastContextPresentation {
+        val zone = ZoneId.of(live.timeZoneId)
+        val provenance = listOfNotNull(live.currentProvenance, live.forecastProvenance).distinct()
+        val sources = provenance.map { it.toSourcePresentation() }.distinct().ifEmpty {
+            listOf(ProvenanceSourcePresentation("Forecast", MetadataValue.Available(live.sourceName ?: "Unavailable")))
+        }
+        val validTimes = provenance.mapNotNull { value ->
+            value.validAt?.let { ProvenanceTimePresentation(value.dataType.displayName(), MetadataValue.Available(format(it, zone))) }
+        }
+        val retrievalTimes = provenance.mapNotNull { value ->
+            value.retrievedAt?.let { ProvenanceTimePresentation(value.dataType.displayName(), MetadataValue.Available(format(it, zone))) }
+        }.distinctBy { it.instant }.ifEmpty {
+            listOf(ProvenanceTimePresentation("Forecast", MetadataValue.Available(format(live.retrievedAt, zone))))
+        }
+        return ForecastContextPresentation(
+            sources = sources,
+            validTimes = validTimes,
+            retrievalTimes = retrievalTimes,
+            origin = PresentedDataOrigin.LIVE,
+            freshness = PresentedFreshness.CURRENT,
+            refreshOutcome = PresentedRefreshOutcome.NONE,
+            status = status,
+            horizon = horizon,
+        )
+    }
+
     private fun DataProvenance.toSourcePresentation() = ProvenanceSourcePresentation(
         dataType.displayName(),
         source?.displayName?.takeIf(String::isNotBlank)?.let(MetadataValue::Available) ?: MetadataValue.Unavailable,
