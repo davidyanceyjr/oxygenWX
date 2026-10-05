@@ -19,6 +19,7 @@ import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.data.CacheWriteOutcome
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DemoWeatherRepository
+import com.oxygen.weather.data.AndroidForecastCacheStore
 import com.oxygen.weather.data.RefreshFailure
 import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
@@ -244,6 +245,7 @@ class MainActivity : ComponentActivity() {
             transport = ProductionForecastTestHooks.transportOverride ?: UrlConnectionOpenMeteoTransport(),
             clock = Clock.systemUTC(),
             executor = forecastWorker,
+            cacheStore = AndroidForecastCacheStore(applicationContext),
             onStateChanged = { state -> mainHandler.post { selectedForecastState.value = state.toSelectedPresentationState() } },
         )
         val search = LocationSearchTestHooks.searchFactory?.invoke()
@@ -407,10 +409,51 @@ private fun LiveForecastState.toSelectedPresentationState(): SelectedForecastPre
             forecastContext = ForecastContextMapper.mapLive(presentation, horizons, stateStatus),
         )
     }
+    is LiveForecastState.Cached -> {
+        val presentation = HomePresentationMapper.mapCachedForecast(forecast, cachedAt)
+        val name = presentation.locationName ?: "Selected location"
+        val zone = java.time.ZoneId.of(presentation.timeZoneId)
+        val sourceName = presentation.forecastProvenance.source?.displayName ?: "Weather source unavailable"
+        val providerRetrievedAt = presentation.forecastProvenance.retrievedAt
+            ?.let { "Retrieved ${it.atZone(zone).format(java.time.format.DateTimeFormatter.ofPattern("h:mm a"))}" }
+            ?: "Provider retrieval time unavailable"
+        val stateStatus = StatusPresentation.of("Cached forecast data from $sourceName is shown while refresh continues.")
+        val home = HomePresentation(
+            current = unavailableCurrent(name),
+            hourlyWindows = presentation.hourlyWindows,
+            hourlyDateJumps = presentation.hourlyDateJumps,
+            dailyWindows = presentation.dailyWindows,
+            detailGroups = emptyList(),
+            sourceLine = "Forecast source: $sourceName",
+            updatedLine = "$providerRetrievedAt · ${zone.id}",
+        )
+        val hours = presentation.hourlyWindows.sumOf { it.entries.size }
+        val days = presentation.dailyWindows.sumOf { it.entries.size }
+        val horizons = if (hours > 0 && days > 0 && (hours < 72 || days < 10)) ForecastHorizonPresentation(
+            hourly = if (hours < 72) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
+            daily = if (days < 10) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
+        ) else null
+        SelectedForecastPresentationState(
+            locationName = name,
+            home = home,
+            status = stateStatus,
+            partialHorizons = horizons,
+            forecastContext = ForecastContextMapper.mapCached(presentation, stateStatus),
+        )
+    }
 }
 
 private fun emptySelectedHome(location: String) = HomePresentation(
-    current = CurrentPresentation(
+    current = unavailableCurrent(location),
+    hourlyWindows = emptyList(),
+    hourlyDateJumps = emptyList(),
+    dailyWindows = emptyList(),
+    detailGroups = emptyList(),
+    sourceLine = "Source: unavailable",
+    updatedLine = "Update time: unavailable",
+)
+
+private fun unavailableCurrent(location: String) = CurrentPresentation(
         location = location,
         temperature = "Unavailable",
         condition = "Current conditions unavailable",
@@ -421,16 +464,9 @@ private fun emptySelectedHome(location: String) = HomePresentation(
         precipitationSupporting = "Unavailable",
         windHeadline = "Unavailable",
         windSupporting = "Unavailable",
-        spokenSummary = "$location, weather unavailable",
+        spokenSummary = "$location, current conditions unavailable",
         conditionIdentity = null,
-    ),
-    hourlyWindows = emptyList(),
-    hourlyDateJumps = emptyList(),
-    dailyWindows = emptyList(),
-    detailGroups = emptyList(),
-    sourceLine = "Source: unavailable",
-    updatedLine = "Update time: unavailable",
-)
+    )
 
 private fun com.oxygen.weather.data.WeatherBundle.withUnavailableCurrent() = copy(
     current = current.copy(

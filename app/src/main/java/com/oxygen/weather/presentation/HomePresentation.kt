@@ -4,6 +4,7 @@ import com.oxygen.weather.data.DayWeather
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DataType
 import com.oxygen.weather.data.CurrentWeather
+import com.oxygen.weather.data.ForecastData
 import com.oxygen.weather.data.HourWeather
 import com.oxygen.weather.data.LiveWeatherResult
 import com.oxygen.weather.data.RefreshFailureKind
@@ -131,6 +132,18 @@ data class LiveWeatherPresentation(
     val invalidSections: Set<WeatherSection>,
 )
 
+/** Display-ready cached forecast only; cache metadata stays separate from provider provenance. */
+data class CachedForecastPresentation(
+    val locationId: String,
+    val locationName: String?,
+    val timeZoneId: String,
+    val hourlyWindows: List<HourlyWindowPresentation>,
+    val hourlyDateJumps: List<DateJumpPresentation>,
+    val dailyWindows: List<DailyWindowPresentation>,
+    val forecastProvenance: DataProvenance,
+    val cachedAt: Instant,
+)
+
 data class CurrentPresentation(
     val location: String,
     val temperature: String,
@@ -205,6 +218,25 @@ data class MetricPresentation(
 )
 
 object HomePresentationMapper {
+    /** Maps cached forecast content without creating a current observation or model estimate. */
+    fun mapCachedForecast(forecast: ForecastData, cachedAt: Instant, unitPreset: UnitPreset = UnitPreset.METRIC): CachedForecastPresentation {
+        val hours = forecast.hourly.take(72)
+        val hourlyWindows = hours.chunked(6).map { hourlyWindow(it, unitPreset) }
+        val hourlyDateJumps = hourlyWindows.mapIndexedNotNull { index, _ ->
+            hours.getOrNull(index * 6)?.let { DateJumpPresentation(it.time.format(dayFormatter), index) }
+        }.distinctBy { it.label }
+        return CachedForecastPresentation(
+            locationId = forecast.location.id.value,
+            locationName = forecast.location.displayName,
+            timeZoneId = forecast.location.timeZone.id,
+            hourlyWindows = hourlyWindows,
+            hourlyDateJumps = hourlyDateJumps,
+            dailyWindows = forecast.daily.take(10).chunked(5).map { dailyWindow(it, null, unitPreset) },
+            forecastProvenance = forecast.provenance,
+            cachedAt = cachedAt,
+        )
+    }
+
     /** Maps a live success while preserving the independently available current/forecast sections. */
     fun mapLiveSuccess(
         success: LiveWeatherResult.Success,

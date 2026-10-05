@@ -2,6 +2,7 @@ package com.oxygen.weather.presentation
 
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DemoWeatherRepository
+import com.oxygen.weather.data.ForecastData
 import com.oxygen.weather.data.RefreshFailure
 import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
@@ -83,5 +84,34 @@ class ForecastContextMapperTest {
         assertEquals(PresentedDataOrigin.UNAVAILABLE, context.origin)
         assertEquals(PresentedRefreshOutcome.FAILED_WITHOUT_DATA, context.refreshOutcome)
         assertEquals(null, context.horizon)
+    }
+
+    @Test
+    fun cachedForecastKeepsCacheTimeSeparateFromProviderRetrievalAndHasNoCurrentField() {
+        val providerRetrievedAt = Instant.parse("2026-10-04T14:05:00Z")
+        val cachedAt = Instant.parse("2026-10-05T08:30:00Z")
+        val forecast = ForecastData(
+            location = bundle.location,
+            hourly = bundle.hourly.take(12),
+            daily = bundle.daily.take(5),
+            provenance = bundle.forecastProvenance.copy(
+                validAt = Instant.parse("2026-10-04T15:00:00Z"),
+                retrievedAt = providerRetrievedAt,
+            ),
+        )
+        val cached = HomePresentationMapper.mapCachedForecast(forecast, cachedAt)
+        val status = StatusPresentation.of("Cached forecast data is shown while refresh continues.")
+        val context = ForecastContextMapper.mapCached(cached, status)
+
+        assertEquals(bundle.location.id.value, cached.locationId)
+        assertEquals(12, cached.hourlyWindows.sumOf { it.entries.size })
+        assertEquals(5, cached.dailyWindows.sumOf { it.entries.size })
+        assertEquals(providerRetrievedAt, cached.forecastProvenance.retrievedAt)
+        assertEquals(cachedAt, cached.cachedAt)
+        assertEquals(PresentedDataOrigin.CACHED, context.origin)
+        assertEquals(PresentedFreshness.UNKNOWN, context.freshness)
+        assertEquals("Oct 5, 2026 3:30 AM America/Chicago", (context.cachedAt as MetadataValue.Available).value)
+        assertEquals("Oct 4, 2026 9:05 AM America/Chicago", (context.retrievalTimes.single().instant as MetadataValue.Available).value)
+        assertEquals(status, context.status)
     }
 }

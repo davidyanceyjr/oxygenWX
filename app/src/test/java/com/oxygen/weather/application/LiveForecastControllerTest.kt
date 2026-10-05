@@ -150,6 +150,116 @@ class LiveForecastControllerTest {
         assertEquals(LiveFetchFailureKind.UNEXPECTED, failure.kind)
     }
 
+    @Test fun matchingCachePublishesBeforeLiveAndLiveSuccessReplacesItAndWritesForecast() {
+        val req = request(chicago)
+        val cachedForecast = forecast(chicago)
+        val liveForecast = forecast(chicago).copy(hourly = emptyList())
+        val cache = FakeCache(ForecastCacheReadResult.Found(ForecastCacheRecord(
+            cachedForecast, req.coordinates, instant.minusSeconds(7200),
+        )))
+        val events = mutableListOf<LiveForecastState>()
+        val executor = QueueExecutor()
+        val controller = LiveForecastController(
+            repository { success(it, current = current(), forecast = liveForecast) },
+            executor,
+            events::add,
+            cache,
+        )
+
+        val generation = controller.fetch(req)
+        executor.runNext()
+
+        val cached = events.filterIsInstance<LiveForecastState.Cached>().single()
+        assertEquals(generation, cached.generation)
+        assertEquals(req, cached.request)
+        assertSame(cachedForecast, cached.forecast)
+        assertEquals(instant.minusSeconds(7200), cached.cachedAt)
+        assertTrue(events.indexOf(cached) < events.indexOf(controller.state()))
+        val loaded = controller.state() as LiveForecastState.Loaded
+        assertSame(liveForecast, loaded.result.forecast)
+        assertEquals(listOf(liveForecast to req.coordinates), cache.writes)
+    }
+
+    @Test fun cacheMissAndMismatchedIdentitySkipCacheButStillFetchLive() {
+        val req = request(chicago)
+        listOf(
+            ForecastCacheReadResult.Absent,
+            ForecastCacheReadResult.Invalid,
+            ForecastCacheReadResult.Failure,
+            ForecastCacheReadResult.Found(ForecastCacheRecord(forecast(boston), req.coordinates, instant)),
+        ).forEach { outcome ->
+            val executor = QueueExecutor()
+            val events = mutableListOf<LiveForecastState>()
+            val cache = FakeCache(outcome)
+            val controller = LiveForecastController(
+                repository { success(it, current = current(), forecast = null) }, executor, events::add, cache,
+            )
+            controller.fetch(req)
+            executor.runNext()
+            assertTrue(events.none { it is LiveForecastState.Cached })
+            assertTrue(controller.state() is LiveForecastState.Loaded)
+            assertEquals(req.location.id, cache.readIds.single())
+            assertTrue("current-only success must not be cached", cache.writes.isEmpty())
+        }
+    }
+
+    @Test fun cacheReadAndWriteExceptionsDoNotChangeLiveSuccess() {
+        val req = request(chicago)
+        val cache = FakeCache(ForecastCacheReadResult.Absent, throwOnRead = true, throwOnWrite = true)
+        val executor = QueueExecutor()
+        val controller = LiveForecastController(
+            repository { success(it, current = null, forecast = forecast(chicago)) }, executor, cacheStore = cache,
+        )
+        controller.fetch(req)
+        executor.runNext()
+        assertTrue(controller.state() is LiveForecastState.Loaded)
+    }
+
+    @Test fun liveFailureReplacesInterimCachedStateWithExistingFailureState() {
+        val req = request(chicago)
+        val cache = FakeCache(ForecastCacheReadResult.Found(ForecastCacheRecord(
+            forecast(chicago), req.coordinates, instant.minusSeconds(7200),
+        )))
+        val events = mutableListOf<LiveForecastState>()
+        val executor = QueueExecutor()
+        val controller = LiveForecastController(repository { LiveWeatherResult.NoResult }, executor, events::add, cache)
+        controller.fetch(req)
+        executor.runNext()
+
+        assertTrue(events[1] is LiveForecastState.Cached)
+        val failure = controller.state() as LiveForecastState.Failed
+        assertEquals(LiveFetchFailureKind.NO_RESULT, failure.kind)
+        assertTrue(events.last() is LiveForecastState.Failed)
+    }
+
+    @Test fun obsoleteGenerationCannotPublishItsCacheAfterSelectionChanges() {
+        val executor = QueueExecutor()
+        val events = mutableListOf<LiveForecastState>()
+        val cache = object : ForecastCacheStore {
+            override fun read(id: LocalLocationId): ForecastCacheReadResult =
+                ForecastCacheReadResult.Found(ForecastCacheRecord(
+                    if (id == boston.id) forecast(boston) else forecast(chicago),
+                    GeoCoordinates(41.0, -87.0), instant,
+                ))
+            override fun write(forecast: ForecastData, requestCoordinates: GeoCoordinates): ForecastCacheWriteResult =
+                ForecastCacheWriteResult.Success
+        }
+        val controller = LiveForecastController(
+            repository { success(it, current = current(), forecast = null) }, executor, events::add, cache,
+        )
+        val old = request(chicago)
+        val selected = request(boston)
+        controller.fetch(old)
+        val selectedGeneration = controller.fetch(selected)
+        executor.runLast()
+        executor.runNext()
+
+        val cachedEvents = events.filterIsInstance<LiveForecastState.Cached>()
+        assertEquals(1, cachedEvents.size)
+        assertEquals(selected, cachedEvents.single().request)
+        assertEquals(selectedGeneration, controller.state()?.generation)
+    }
+
     private fun assertObsoleteResponseIgnored(requests: List<ForecastRequest>) {
         val executor = QueueExecutor()
         val controller = LiveForecastController(repository { success(it, current = current(), forecast = null) }, executor)
@@ -212,5 +322,24 @@ class LiveForecastControllerTest {
         override fun execute(command: Runnable) { tasks.addLast(command) }
         fun runNext() = tasks.removeFirst().run()
         fun runLast() = tasks.removeLast().run()
+    }
+
+    private class FakeCache(
+        private val outcome: ForecastCacheReadResult,
+        private val throwOnRead: Boolean = false,
+        private val throwOnWrite: Boolean = false,
+    ) : ForecastCacheStore {
+        val readIds = mutableListOf<LocalLocationId>()
+        val writes = mutableListOf<Pair<ForecastData, GeoCoordinates>>()
+        override fun read(id: LocalLocationId): ForecastCacheReadResult {
+            readIds += id
+            if (throwOnRead) throw IllegalStateException("read failure")
+            return outcome
+        }
+        override fun write(forecast: ForecastData, requestCoordinates: GeoCoordinates): ForecastCacheWriteResult {
+            writes += forecast to requestCoordinates
+            if (throwOnWrite) throw IllegalStateException("write failure")
+            return ForecastCacheWriteResult.WriteFailure
+        }
     }
 }

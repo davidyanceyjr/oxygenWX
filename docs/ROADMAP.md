@@ -519,13 +519,15 @@ an obsolete request cannot replace the newly selected location's forecast.
 Plan: `.codex/plans/122-saved-locations-and-safe-switching.md`.
 Evidence and limitations: `.codex/history/2026-10-05-122-saved-locations-and-safe-switching.md` and `.codex/test-artifacts/122-saved-locations-and-safe-switching/`.
 
-### R3.3 — Optional coarse device location — PLANNED
+### R3.3 — Optional coarse device location — DONE
 
 One foreground coarse point routed through the same selected-location/repository path. No background location.
 
 **Exit:** Permission tests and one installed foreground coarse-location flow prove denial/manual use remains complete and one accepted point enters the same selected-location path; no background permission/service exists.
 
-### R3.4 — Normalized forecast cache — PLANNED
+Evidence and limitations: `.codex/history/2026-10-05-123-optional-coarse-device-location.md` and `.codex/test-artifacts/123-optional-coarse-device-location/`. API 26–29 successful one-shot completion remains unverified; see cycle history.
+
+### R3.4 — Normalized forecast cache — DONE
 
 Define and implement normalized forecast cache serialization, keys, retention,
 and atomic read/write behavior for selected-location forecast records. Do not
@@ -533,12 +535,16 @@ wire cache recovery into application launch in this slice.
 
 **Exit:** Serialization/key/retention tests round-trip normalized forecast records including missing fields and provenance, reject mismatched locations, and prove atomic write/read behavior; launch restoration is not wired.
 
-### R3.4A — Cached forecast restoration — PLANNED
+Evidence and limitations: `.codex/history/2026-10-05-124-normalized-forecast-cache.md` and `.codex/test-artifacts/124-normalized-forecast-cache/`. Cache-specific Android instrumentation passed; the complete Android instrumentation suite did not complete.
+
+### R3.4A — Cached forecast restoration — DONE
 
 After R3.4, restore the last useful selected-location forecast through the
 repository/application-state boundary with explicit cache origin and freshness.
 
 **Exit:** Repository tests restore exactly the last useful selected-location cache with explicit cached origin/freshness, and distinguish absent/corrupt cache without fabricating weather.
+
+Evidence and limitations: `.codex/history/2026-10-05-125-cached-forecast-restoration.md` and `.codex/test-artifacts/125-cached-forecast-restoration/`. Focused API 37 installed restoration passed; the full Android instrumentation suite and TalkBack checks were not run.
 
 ### R3.5 — Offline/stale refresh behavior — PLANNED
 

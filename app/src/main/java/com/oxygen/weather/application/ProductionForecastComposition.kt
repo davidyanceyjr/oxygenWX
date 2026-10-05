@@ -1,6 +1,7 @@
 package com.oxygen.weather.application
 
 import com.oxygen.weather.data.LiveWeatherRepository
+import com.oxygen.weather.data.ForecastCacheStore
 import com.oxygen.weather.data.provider.ForecastEndpoint
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoAdapter
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoLiveSource
@@ -15,11 +16,17 @@ object ProductionForecastComposition {
         transport: OpenMeteoTransport,
         clock: Clock,
         executor: Executor,
+        cacheStore: ForecastCacheStore,
         onStateChanged: (LiveForecastState) -> Unit = {},
     ): LiveForecastController {
         val adapter = OpenMeteoAdapter(endpoint, transport)
         val source = OpenMeteoLiveSource(adapter, clock)
         val repository = LiveWeatherRepository(source)
-        return LiveForecastController(repository, executor, onStateChanged)
+        return LiveForecastController(
+            repository = repository,
+            executor = executor,
+            onStateChanged = onStateChanged,
+            cacheStore = cacheStore,
+        )
     }
 }

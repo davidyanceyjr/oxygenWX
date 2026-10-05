@@ -2,6 +2,10 @@ package com.oxygen.weather.application
 
 import com.oxygen.weather.data.WeatherSource
 import com.oxygen.weather.data.WeatherSourceId
+import com.oxygen.weather.data.ForecastCacheStore
+import com.oxygen.weather.data.ForecastCacheReadResult
+import com.oxygen.weather.data.ForecastCacheWriteResult
+import com.oxygen.weather.data.ForecastData
 import com.oxygen.weather.data.provider.ForecastCoverage
 import com.oxygen.weather.data.provider.ForecastEndpoint
 import com.oxygen.weather.data.provider.ForecastField
@@ -48,6 +52,7 @@ class ProductionForecastCompositionTest {
             transport = transport,
             clock = Clock.fixed(instant, ZoneId.of("UTC")),
             executor = executor,
+            cacheStore = NoopCacheStore,
             onStateChanged = events::add,
         )
 
@@ -81,6 +86,7 @@ class ProductionForecastCompositionTest {
             transport = transport,
             clock = Clock.fixed(instant, ZoneId.of("UTC")),
             executor = executor,
+            cacheStore = NoopCacheStore,
             onStateChanged = events::add,
         )
 
@@ -99,7 +105,7 @@ class ProductionForecastCompositionTest {
         val compositionParameters = ProductionForecastComposition::class.java.declaredMethods
             .single { it.name == "create" }.parameterTypes.map { it.simpleName }
         assertEquals(
-            listOf("ForecastEndpoint", "OpenMeteoTransport", "Clock", "Executor", "Function1"),
+            listOf("ForecastEndpoint", "OpenMeteoTransport", "Clock", "Executor", "ForecastCacheStore", "Function1"),
             compositionParameters,
         )
         assertTrue(compositionParameters.none { it.contains("MetNorway", ignoreCase = true) })
@@ -109,5 +115,11 @@ class ProductionForecastCompositionTest {
         private val tasks = ArrayDeque<Runnable>()
         override fun execute(command: Runnable) { tasks.addLast(command) }
         fun runNext() = tasks.removeFirst().run()
+    }
+
+    private object NoopCacheStore : ForecastCacheStore {
+        override fun read(id: LocalLocationId): ForecastCacheReadResult = ForecastCacheReadResult.Absent
+        override fun write(forecast: ForecastData, requestCoordinates: GeoCoordinates): ForecastCacheWriteResult =
+            ForecastCacheWriteResult.Success
     }
 }

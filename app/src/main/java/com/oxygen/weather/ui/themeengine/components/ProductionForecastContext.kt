@@ -46,6 +46,9 @@ fun ProductionForecastContext(
                     PresentedDataOrigin.CACHED -> "Cached"
                     PresentedDataOrigin.UNAVAILABLE -> "Unavailable"
                 })
+                if (context.origin == PresentedDataOrigin.CACHED) {
+                    Fact(theme, "Cached at", context.cachedAt.visibleOrUnavailable())
+                }
                 Fact(theme, "Freshness", when (context.freshness) {
                     PresentedFreshness.CURRENT -> "Current"
                     PresentedFreshness.STALE -> "Stale"

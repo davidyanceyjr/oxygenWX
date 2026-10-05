@@ -29,6 +29,7 @@ data class ForecastContextPresentation(
     val origin: PresentedDataOrigin,
     val freshness: PresentedFreshness,
     val refreshOutcome: PresentedRefreshOutcome,
+    val cachedAt: MetadataValue,
     val status: StatusPresentation,
     val horizon: ForecastHorizonPresentation?,
 )
@@ -68,6 +69,7 @@ object ForecastContextMapper {
                 is HomeLoadState.FailedWithoutData -> PresentedRefreshOutcome.FAILED_WITHOUT_DATA
                 else -> PresentedRefreshOutcome.NONE
             },
+            cachedAt = MetadataValue.Unavailable,
             status = state.status(),
             horizon = content.horizonOrNull(),
         )
@@ -81,6 +83,7 @@ object ForecastContextMapper {
             origin = PresentedDataOrigin.UNAVAILABLE,
             freshness = PresentedFreshness.UNKNOWN,
             refreshOutcome = PresentedRefreshOutcome.FAILED_WITHOUT_DATA,
+            cachedAt = MetadataValue.Unavailable,
             status = state.status,
             horizon = null,
         )
@@ -110,6 +113,39 @@ object ForecastContextMapper {
             origin = PresentedDataOrigin.LIVE,
             freshness = PresentedFreshness.CURRENT,
             refreshOutcome = PresentedRefreshOutcome.NONE,
+            cachedAt = MetadataValue.Unavailable,
+            status = status,
+            horizon = horizon,
+        )
+    }
+
+    fun mapCached(
+        cached: CachedForecastPresentation,
+        status: StatusPresentation,
+    ): ForecastContextPresentation {
+        val zone = ZoneId.of(cached.timeZoneId)
+        val provenance = cached.forecastProvenance
+        val sources = listOf(provenance.toSourcePresentation())
+        val validTimes = provenance.validAt?.let {
+            listOf(ProvenanceTimePresentation(provenance.dataType.displayName(), MetadataValue.Available(format(it, zone))))
+        }.orEmpty()
+        val retrievalTimes = provenance.retrievedAt?.let {
+            listOf(ProvenanceTimePresentation(provenance.dataType.displayName(), MetadataValue.Available(format(it, zone))))
+        }.orEmpty()
+        val hours = cached.hourlyWindows.sumOf { it.entries.size }
+        val days = cached.dailyWindows.sumOf { it.entries.size }
+        val horizon = if (hours > 0 && days > 0 && (hours < 72 || days < 10)) ForecastHorizonPresentation(
+            hourly = if (hours < 72) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
+            daily = if (days < 10) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
+        ) else null
+        return ForecastContextPresentation(
+            sources = sources,
+            validTimes = validTimes,
+            retrievalTimes = retrievalTimes,
+            origin = PresentedDataOrigin.CACHED,
+            freshness = PresentedFreshness.UNKNOWN,
+            refreshOutcome = PresentedRefreshOutcome.NONE,
+            cachedAt = MetadataValue.Available(format(cached.cachedAt, zone)),
             status = status,
             horizon = horizon,
         )
