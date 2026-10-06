@@ -40,6 +40,14 @@ Remaining candidates are:
 
 Provider terms, attribution, rate limits, fields, provenance, and caching rules must be reviewed again when those integrations are implemented.
 
+### NOAA/National Weather Service active alerts
+
+The R4.2 provider queries `https://api.weather.gov/alerts/active?point={latitude},{longitude}` over HTTPS and requests GeoJSON (`Accept: application/geo+json`). Every request sends a descriptive `User-Agent` identifying Oxygen Weather; NWS says a User-Agent is required and recommends contact information when available. The API is cache-friendly; the Alerts service recommends requests no more frequently than every 30 seconds and may rate-limit abusive traffic. The NWS explicitly permits third-party redistribution of its watches, warnings, advisories, and similar products. Preserve NWS issuer/source attribution in the UI. NWS CAP must not be used to activate the Emergency Alert System.
+
+Point queries resolve both county and zone alerts. A successful GeoJSON FeatureCollection with an empty `features` list means supported with no active alerts. The API has no separate documented unsupported-region result schema; observed out-of-bounds point requests return HTTP 400 with problem type `https://api.weather.gov/problems/InvalidParameter` and detail `Parameter "point" is invalid: out of bounds`. Only this precise response is treated as unsupported; other failures remain failures. This rule is verified against a covered empty point and an out-of-bounds point, and must be revisited if NWS changes its response contract.
+
+Official references (reviewed 2026-10-05): [NWS Alerts Web Service](https://www.weather.gov/documentation/services-web-alerts), [NWS API Web Service](https://www.weather.gov/documentation/services-web-api), and [NWS Alerts Geolocation Guide](https://www.weather.gov/media/documentation/docs/NWS_Geolocation.pdf). Detailed request, response, mapping, limitations, and observed behavior are recorded in `.codex/test-artifacts/129-noaa-nws-us-alert-provider/provider-documentation.md`.
+
 ### Open-Meteo geocoding lookup
 
 The manual location-search adapter uses Open-Meteo's Geocoding API at

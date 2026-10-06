@@ -16,6 +16,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
 import com.oxygen.weather.ProductionForecastTestHooks
+import com.oxygen.weather.ProductionOfficialAlertTestHooks
 import com.oxygen.weather.SharedPreferencesSelectedLocationStore
 import com.oxygen.weather.data.locationsearch.LocationCandidate
 import com.oxygen.weather.data.locationsearch.LocationSearch
@@ -28,6 +29,9 @@ import com.oxygen.weather.application.SelectedLocationReadResult
 import com.oxygen.weather.application.SelectedLocationWriteResult
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoHttpResponse
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
+import com.oxygen.weather.data.alerts.OfficialAlertRequest
+import com.oxygen.weather.data.alerts.nws.NwsHttpResponse
+import com.oxygen.weather.data.alerts.nws.NwsTransport
 import com.oxygen.weather.ui.EffectsLevel
 import java.io.File
 import java.io.FileOutputStream
@@ -51,6 +55,7 @@ class SelectedLocationLifecycleTest {
     private val searchCalls = AtomicInteger()
     private val forecastCalls = AtomicInteger()
     private val requests = CopyOnWriteArrayList<ForecastRequest>()
+    private val alertRequests = CopyOnWriteArrayList<OfficialAlertRequest>()
     private val forecastEnteredTwice = CountDownLatch(2)
     private var preserveSelectionForExternalRelaunch = false
     private val candidate = LocationCandidate(
@@ -70,6 +75,7 @@ class SelectedLocationLifecycleTest {
         searchCalls.set(0)
         forecastCalls.set(0)
         requests.clear()
+        alertRequests.clear()
         LocationSearchTestHooks.searchFactory = {
             LocationSearch {
                 searchCalls.incrementAndGet()
@@ -87,6 +93,10 @@ class SelectedLocationLifecycleTest {
                 """{"timezone":"America/Chicago","current":{"time":"2026-10-04T10:00","temperature_2m":12,"weather_code":3},"current_units":{"temperature_2m":"°C","weather_code":"wmo code"}}""",
             )
         }
+        ProductionOfficialAlertTestHooks.onRequestFetched = alertRequests::add
+        ProductionOfficialAlertTestHooks.transportOverride = NwsTransport {
+            NwsHttpResponse(200, """{"type":"FeatureCollection","features":[]}""")
+        }
         compose.activityRule.scenario.recreate()
         compose.onNodeWithText("Demo Station", substring = false).assertIsDisplayed()
     }
@@ -98,6 +108,8 @@ class SelectedLocationLifecycleTest {
         LocationSearchTestHooks.onRestoredRequest = null
         LocationSearchTestHooks.effectsOverrideForTests = null
         ProductionForecastTestHooks.transportOverride = null
+        ProductionOfficialAlertTestHooks.transportOverride = null
+        ProductionOfficialAlertTestHooks.onRequestFetched = null
         if (!preserveSelectionForExternalRelaunch) {
             SharedPreferencesSelectedLocationStore(targetContext()).clear()
         }
@@ -118,6 +130,7 @@ class SelectedLocationLifecycleTest {
         }
         assertEquals(1, searchCalls.get())
         assertEquals(1, requests.size)
+        assertEquals(listOf(OfficialAlertRequest(requests.single().location, requests.single().coordinates)), alertRequests.toList())
         val original = requests.single()
         assertRequestFacts(original)
         compose.onNodeWithText("Springfield", substring = false).assertIsDisplayed()
@@ -132,6 +145,11 @@ class SelectedLocationLifecycleTest {
         }
         assertEquals("restore must not geocode", 1, searchCalls.get())
         assertEquals("one explicit request and one restored request", 2, requests.size)
+        assertEquals(
+            "selection and restoration each issue one alert lookup for their exact request",
+            listOf(original, original).map { OfficialAlertRequest(it.location, it.coordinates) },
+            alertRequests.toList(),
+        )
         assertEquals(original, requests[1])
         assertEquals(original.location.id, requests[1].location.id)
         assertRequestFacts(requests[1])
@@ -181,6 +199,7 @@ class SelectedLocationLifecycleTest {
         selectCandidate()
         assertTrue("production forecast request was not issued", awaitForecastCount(1))
         assertEquals(1, requests.size)
+        assertEquals(1, alertRequests.size)
         assertRequestFacts(requests.single())
         preserveSelectionForExternalRelaunch = true
     }

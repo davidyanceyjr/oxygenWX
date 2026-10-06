@@ -1,6 +1,9 @@
 package com.oxygen.weather.application
 
 import com.oxygen.weather.data.*
+import com.oxygen.weather.data.alerts.OfficialAlertProviderResult
+import com.oxygen.weather.data.alerts.OfficialAlertRepository
+import com.oxygen.weather.data.alerts.OfficialAlertRequest
 import com.oxygen.weather.data.provider.*
 import java.time.Instant
 import java.time.LocalDate
@@ -16,6 +19,33 @@ class LiveForecastControllerTest {
     private val boston = location("bos", "America/New_York")
     private val source = WeatherSource(WeatherSourceId("provider"), "Weather source")
     private val instant = Instant.parse("2026-10-04T15:00:00Z")
+
+    @Test fun alertAndForecastControllersCompleteOnIndependentExecutorsAndKeepStateSeparate() {
+        val forecastRequest = request(chicago)
+        val alertRequest = OfficialAlertRequest(forecastRequest.location, forecastRequest.coordinates)
+        val forecastExecutor = QueueExecutor()
+        val alertExecutor = QueueExecutor()
+        val forecastController = LiveForecastController(
+            repository { success(it, current = current(), forecast = null) }, forecastExecutor,
+        )
+        val alertController = OfficialAlertController(
+            OfficialAlertRepository { OfficialAlertProviderResult.Supported(emptyList()) }, alertExecutor,
+        )
+
+        forecastController.fetch(forecastRequest)
+        val alertGeneration = alertController.fetch(alertRequest)
+        val alertLoading = OfficialAlertState.Loading(alertGeneration, alertRequest)
+        assertEquals(alertLoading, alertController.state())
+
+        forecastExecutor.runNext()
+        val forecastTerminal = forecastController.state()
+        assertTrue(forecastTerminal is LiveForecastState.Loaded)
+        assertEquals(alertLoading, alertController.state())
+
+        alertExecutor.runNext()
+        assertEquals(OfficialAlertState.Supported(alertGeneration, alertRequest, emptyList()), alertController.state())
+        assertEquals(forecastTerminal, forecastController.state())
+    }
 
     @Test fun startsLoadingThenPreservesCompleteCanonicalSuccessAndPresentation() {
         val request = request(chicago)

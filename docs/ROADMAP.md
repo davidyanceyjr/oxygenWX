@@ -568,19 +568,23 @@ Evidence and limitations: `.codex/history/2026-10-05-127-refresh-failure-and-cac
 ## R4 — Official safety information
 
 
-### R4.1 — Alert provider/result contract — PLANNED
+### R4.1 — Alert provider/result contract — DONE
 
 Keep official alerts separate from forecast semantics and represent unsupported/no-alert/failure distinctly.
 
 **Exit:** Contract tests distinguish supported/no-alert, unsupported region, and failure, while preserving issuer/event/effective/expiry/provenance fields and keeping alerts separate from forecasts.
 
-### R4.2 — NOAA/NWS US alert provider — PLANNED
+Evidence: `.codex/history/2026-10-05-128-alert-provider-result-contract.md`.
+
+### R4.2 — NOAA/NWS US alert provider — DONE
 
 Implement NWS selected-point/active-alert transport, response decoding, and
 parser fixtures into the existing official-alert contract. No application-state
 or Home rendering integration occurs here.
 
 **Exit:** NWS request/decoder fixtures cover active alerts, empty result, malformed response, and failure; normalized alert fields and attribution match source payloads.
+
+Evidence: `.codex/history/2026-10-05-129-noaa-nws-us-alert-provider.md`.
 
 ### R4.2A — NWS alert repository integration — PLANNED
 

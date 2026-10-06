@@ -14,6 +14,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.LayoutDirection
 import com.oxygen.weather.application.LiveForecastController
+import com.oxygen.weather.application.OfficialAlertController
+import com.oxygen.weather.application.OfficialAlertState
 import com.oxygen.weather.application.LiveFetchFailureKind
 import com.oxygen.weather.application.CachedForecastFreshness
 import com.oxygen.weather.application.LiveForecastState
@@ -29,6 +31,9 @@ import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
 import com.oxygen.weather.data.WeatherFreshness
 import com.oxygen.weather.data.WeatherRepositoryResult
+import com.oxygen.weather.data.alerts.OfficialAlertRequest
+import com.oxygen.weather.data.alerts.nws.NwsTransport
+import com.oxygen.weather.data.alerts.nws.UrlConnectionNwsTransport
 import com.oxygen.weather.data.provider.ForecastEndpoint
 import com.oxygen.weather.data.locationsearch.LocationSearch
 import com.oxygen.weather.data.locationsearch.openmeteo.OpenMeteoLocationSearch
@@ -36,6 +41,7 @@ import com.oxygen.weather.data.locationsearch.openmeteo.UrlConnectionLocationSea
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.application.ProductionForecastComposition
+import com.oxygen.weather.application.ProductionOfficialAlertComposition
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.application.SelectedLocationStore
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
@@ -70,7 +76,9 @@ class MainActivity : ComponentActivity() {
     private var locationSearchExecutor: ExecutorService? = null
     private var selectedLocationExecutor: ExecutorService? = null
     private var forecastExecutor: ExecutorService? = null
+    private var alertExecutor: ExecutorService? = null
     private var forecastController: LiveForecastController? = null
+    private var alertController: OfficialAlertController? = null
     private var locationSearchCoordinator: LocationSearchCoordinator? = null
     private var deviceLocationCoordinator: DeviceLocationCoordinator? = null
     private var permissionRequestPending = false
@@ -256,6 +264,18 @@ class MainActivity : ComponentActivity() {
                 selectedForecastState.value = state.toSelectedPresentationState(forecastClock)
             } },
         )
+        val alertWorker = Executors.newSingleThreadExecutor { runnable ->
+            Thread(runnable, "oxygen-official-alerts").apply { isDaemon = true }
+        }
+        alertExecutor = alertWorker
+        val alertRepository = ProductionOfficialAlertComposition.create(
+            endpoint = ProductionOfficialAlertTestHooks.endpointOverride ?: URI("https://api.weather.gov/alerts"),
+            transport = ProductionOfficialAlertTestHooks.transportOverride ?: UrlConnectionNwsTransport(),
+            clock = ProductionOfficialAlertTestHooks.clockOverride ?: Clock.systemUTC(),
+        )
+        alertController = OfficialAlertController(alertRepository, alertWorker) { state ->
+            mainHandler.post { ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state) }
+        }
         val search = LocationSearchTestHooks.searchFactory?.invoke()
             ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
         val savedLocationCoordinator = SavedLocationCoordinator(
@@ -269,6 +289,7 @@ class MainActivity : ComponentActivity() {
                     LocationSearchTestHooks.onSelectedRequest?.invoke(request)
                     selectedForecastState.value = request.loadingPresentation()
                     forecastController?.fetch(request)
+                    dispatchOfficialAlerts(request)
                 }
             },
             onRestoredRequest = { request ->
@@ -276,6 +297,7 @@ class MainActivity : ComponentActivity() {
                     LocationSearchTestHooks.onRestoredRequest?.invoke(request)
                     selectedForecastState.value = request.loadingPresentation()
                     forecastController?.fetch(request)
+                    dispatchOfficialAlerts(request)
                 }
             },
         )
@@ -347,6 +369,12 @@ class MainActivity : ComponentActivity() {
         coarseLocationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
+    private fun dispatchOfficialAlerts(request: ForecastRequest) {
+        val alertRequest = OfficialAlertRequest(request.location, request.coordinates)
+        ProductionOfficialAlertTestHooks.onRequestFetched?.invoke(alertRequest)
+        alertController?.fetch(alertRequest)
+    }
+
     override fun onResume() {
         super.onResume()
         activityResumed = true
@@ -369,6 +397,9 @@ class MainActivity : ComponentActivity() {
         forecastExecutor?.shutdownNow()
         forecastExecutor = null
         forecastController = null
+        alertExecutor?.shutdownNow()
+        alertExecutor = null
+        alertController = null
         super.onDestroy()
     }
 }
@@ -388,6 +419,15 @@ internal object ProductionForecastTestHooks {
     @Volatile var transportOverride: OpenMeteoTransport? = null
     @Volatile var clockOverride: Clock? = null
     @Volatile var cacheStoreFactory: ((android.content.Context, Clock) -> ForecastCacheStore)? = null
+}
+
+/** Injection seam for exercising the Activity's independent official-alert composition. */
+internal object ProductionOfficialAlertTestHooks {
+    @Volatile var endpointOverride: URI? = null
+    @Volatile var transportOverride: NwsTransport? = null
+    @Volatile var clockOverride: Clock? = null
+    @Volatile var onRequestFetched: ((OfficialAlertRequest) -> Unit)? = null
+    @Volatile var onStateChanged: ((OfficialAlertState) -> Unit)? = null
 }
 
 private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentationState(
