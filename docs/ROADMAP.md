@@ -586,13 +586,15 @@ or Home rendering integration occurs here.
 
 Evidence: `.codex/history/2026-10-05-129-noaa-nws-us-alert-provider.md`.
 
-### R4.2A — NWS alert repository integration — PLANNED
+### R4.2A — NWS alert repository integration — DONE
 
 After R4.2, integrate normalized official alerts with selected-location
 repository/application state, preserving supported/no-alert/unsupported/failure
 distinctions, issuer provenance, and attribution.
 
 **Exit:** Repository/state tests preserve supported/no-alert/unsupported/failure distinctions and issuer provenance for selected location; no alert copy is derived from forecast heuristics.
+
+Evidence: `.codex/history/2026-10-05-130-nws-alert-repository-integration.md`.
 
 ### R4.3 — Home alert summary — DONE
 
@@ -624,12 +626,14 @@ Evidence: `.codex/history/2026-10-06-134-multiple-alert-selection-and-return.md`
 ## R5 — Settings and appearance
 
 
-### R5.1 — Persisted unit presets — PLANNED
+### R5.1 — Persisted unit presets — DONE
 
 Implement Metric/US/UK choice state and persistence, restoring the selected
 preset across recreation/relaunch without changing canonical cached data.
 
 **Exit:** Persistence tests restore Metric/US/UK across recreation/relaunch and show canonical cached values are byte/structurally unchanged.
+
+Evidence: `.codex/history/2026-10-06-135-persisted-unit-presets.md`.
 
 ### R5.1A — Unit-preset application regression — PLANNED
 
