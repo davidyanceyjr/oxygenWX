@@ -82,8 +82,8 @@ import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
-import com.oxygen.weather.ui.themeengine.SurfaceStyle
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
+import com.oxygen.weather.ui.themeengine.SurfaceStyle
 import com.oxygen.weather.ui.themeengine.components.ProductionBackdrop
 import com.oxygen.weather.ui.themeengine.components.ProductionDailyRow
 import com.oxygen.weather.ui.themeengine.components.ProductionInspectionMetricGroup
@@ -124,9 +124,10 @@ fun OxygenWeatherApp(
     officialAlertChoices: List<OfficialAlertChoicePresentation> = emptyList(),
     onOpenOfficialAlertSource: (String) -> Unit = {},
     layoutDirectionOverride: LayoutDirection? = null,
+    selectedThemeId: WeatherThemeId = WeatherThemeId.ATMOSPHERIC,
+    onSelectTheme: (WeatherThemeId) -> Unit = {},
 ) {
-    var selectedThemeIndex by rememberSaveable { mutableIntStateOf(0) }
-    val themeId = WeatherThemeId.entries[selectedThemeIndex.coerceIn(0, WeatherThemeId.entries.lastIndex)]
+    val themeId = selectedThemeId
     val themeEffects = when {
         effects == EffectsLevel.OFF -> ThemeEffectsLevel.OFF
         themeId == WeatherThemeId.MINIMAL_OLED || themeId == WeatherThemeId.TERMINAL -> ThemeEffectsLevel.OFF
@@ -254,7 +255,7 @@ fun OxygenWeatherApp(
                         ThemePicker(
                             theme,
                             themeId,
-                            onSelect = { selectedThemeIndex = it.ordinal },
+                            onSelect = onSelectTheme,
                             onSearch = locationSearchCoordinator?.let {
                                 {
                                     searchOpeningPage = pagerState.currentPage

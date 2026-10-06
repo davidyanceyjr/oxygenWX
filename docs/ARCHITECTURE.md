@@ -66,9 +66,11 @@ The presentation layer owns text/unit formatting, page-window selection, concise
 Compose owns layout, interaction, weather marks, atmospheric rendering, and accessibility semantics. The outer Home pager is the sole horizontal-swipe owner. Hourly/Daily window changes are explicit UI actions.
 
 The installed app renderer now uses the production `ResolvedTheme` component
-family. `OxygenWeatherApp` owns the in-memory five-theme selection, outer pager,
-page-window state, and navigation callbacks. Atmospheric is the launch default.
-Theme changes affect presentation only and do not refetch weather.
+family. `MainActivity` owns and persists the five-theme selection, defaulting to
+Atmospheric when storage has no recognized choice. `OxygenWeatherApp` resolves
+the supplied theme ID and owns the outer pager, page-window state, and
+navigation callbacks. Theme changes affect presentation only and do not
+refetch weather.
 
 The additive production theme foundation lives under `ui/themeengine/`. Its typed
 catalog contains Atmospheric, Glass, Minimal OLED, Instrument, and Terminal

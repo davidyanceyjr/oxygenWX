@@ -49,6 +49,9 @@ import com.oxygen.weather.application.SelectedLocationStore
 import com.oxygen.weather.application.UnitPresetSelection
 import com.oxygen.weather.application.UnitPresetStore
 import com.oxygen.weather.application.UnitPresetWriteResult
+import com.oxygen.weather.application.ThemePreferenceSelection
+import com.oxygen.weather.application.ThemePreferenceStore
+import com.oxygen.weather.application.ThemePreferenceWriteResult
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoCoordinateTimeZoneLookup
 import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
@@ -64,6 +67,7 @@ import com.oxygen.weather.presentation.HomePresentationState
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.UnitPreset
+import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -98,6 +102,8 @@ class MainActivity : ComponentActivity() {
     private var activityResumed = false
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
     private var unitPresetSelection: UnitPresetSelection? = null
+    private var themePreferenceSelection: ThemePreferenceSelection? = null
+    private val selectedThemeIdState = mutableStateOf(WeatherThemeId.ATMOSPHERIC)
     private var fixtureBundle: com.oxygen.weather.data.WeatherBundle? = null
     private var fixtureDerived: com.oxygen.weather.derived.DerivedWeather? = null
     private var fixtureStatus: StatusPresentation? = null
@@ -128,6 +134,12 @@ class MainActivity : ComponentActivity() {
         unitPresetSelection = UnitPresetSelection(presetStore)
         UnitPresetTestHooks.onRead?.invoke(unitPresetSelection!!.readResult)
         UnitPresetTestHooks.applyPreset = ::applyUnitPresetForTests
+        val themeStore = ThemePreferenceTestHooks.storeFactory?.invoke(applicationContext)
+            ?: SharedPreferencesThemePreferenceStore(applicationContext)
+        themePreferenceSelection = ThemePreferenceSelection(themeStore)
+        selectedThemeIdState.value = themePreferenceSelection!!.effectiveThemeId
+        ThemePreferenceTestHooks.onRead?.invoke(themePreferenceSelection!!.readResult)
+        ThemePreferenceTestHooks.selectTheme = ::selectThemeForTests
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
@@ -148,7 +160,8 @@ class MainActivity : ComponentActivity() {
             isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             requestedKey = intent?.getStringExtra(REVIEW_SCENARIO_LAUNCH_EXTRA),
         )
-        val fixtureAnchor = UnitPresetTestHooks.fixtureAnchorOverride
+        val fixtureAnchor = ThemePreferenceTestHooks.fixtureAnchorOverride
+            ?: UnitPresetTestHooks.fixtureAnchorOverride
             ?: if (captureMode || reviewScenario != null) LocalDateTime.of(2026, 9, 23, 9, 0) else LocalDateTime.now()
         val regularBundle = DemoWeatherRepository.load(fixtureAnchor)
         val scenarioBundle = when (reviewScenario) {
@@ -400,6 +413,8 @@ class MainActivity : ComponentActivity() {
                 officialAlertSummary = officialAlertSummaryState.value,
                 officialAlertDetail = officialAlertDetailState.value,
                 officialAlertChoices = officialAlertChoicesState.value,
+                selectedThemeId = selectedThemeIdState.value,
+                onSelectTheme = ::selectThemeForTests,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
@@ -453,6 +468,16 @@ class MainActivity : ComponentActivity() {
         return outcome
     }
 
+    internal fun selectThemeForTests(themeId: WeatherThemeId): ThemePreferenceWriteResult {
+        val selection = checkNotNull(themePreferenceSelection) { "Theme preference store has not been initialized" }
+        val outcome = selection.select(themeId)
+        selectedThemeIdState.value = selection.effectiveThemeId
+        ThemePreferenceTestHooks.onThemeApplied?.invoke(themeId, outcome)
+        return outcome
+    }
+
+    internal fun canonicalWeatherFixtureForTests(): com.oxygen.weather.data.WeatherBundle? = fixtureBundle
+
     private fun dispatchOfficialAlerts(request: ForecastRequest) {
         val alertRequest = OfficialAlertRequest(request.location, request.coordinates)
         ProductionOfficialAlertTestHooks.onRequestFetched?.invoke(alertRequest)
@@ -501,6 +526,7 @@ class MainActivity : ComponentActivity() {
         forecastExecutor = null
         forecastController = null
         UnitPresetTestHooks.applyPreset = null
+        ThemePreferenceTestHooks.selectTheme = null
         alertExecutor?.shutdownNow()
         alertExecutor = null
         alertController = null
@@ -579,6 +605,15 @@ internal object UnitPresetTestHooks {
     @Volatile var onPresetApplied: ((UnitPreset, UnitPresetWriteResult, SelectedForecastPresentationState?) -> Unit)? = null
     @Volatile var onPresentationChanged: ((SelectedForecastPresentationState) -> Unit)? = null
     @Volatile var applyPreset: ((UnitPreset) -> UnitPresetWriteResult)? = null
+    @Volatile var fixtureAnchorOverride: LocalDateTime? = null
+}
+
+/** Narrow instrumentation seam for persisted theme selection through the Activity owner. */
+internal object ThemePreferenceTestHooks {
+    @Volatile var storeFactory: ((android.content.Context) -> ThemePreferenceStore)? = null
+    @Volatile var onRead: ((com.oxygen.weather.application.ThemePreferenceReadResult) -> Unit)? = null
+    @Volatile var onThemeApplied: ((WeatherThemeId, ThemePreferenceWriteResult) -> Unit)? = null
+    @Volatile var selectTheme: ((WeatherThemeId) -> ThemePreferenceWriteResult)? = null
     @Volatile var fixtureAnchorOverride: LocalDateTime? = null
 }
 

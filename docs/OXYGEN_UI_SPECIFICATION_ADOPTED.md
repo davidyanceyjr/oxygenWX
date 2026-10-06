@@ -6,8 +6,10 @@ Art Sheet v0.2. The upstream material recorded in
 `upstream/OXYGEN_SOURCE_REFERENCE.md` is historical research, not a visual
 reference or a screen-composition source. The normal four-page app now uses the
 production theme renderer. Atmospheric, Glass, Minimal OLED, Instrument, and
-Terminal are selectable in memory, with Atmospheric as the initial theme. The
-Theme B implementation sketch is historical; it is no longer the normal app
+Terminal are selectable through the existing picker, with the choice persisted
+in application-private storage and Atmospheric as the default when no
+recognized preference is available. The Theme B implementation sketch is
+historical; it is no longer the normal app
 visual target. The production component showcase remains a debug-only focused
 fixture, while installed review covers the real app path.
 
@@ -40,8 +42,9 @@ presentations:
 - **Instrument** — technical monitor treatment with bounded, source-supported data indicators.
 - **Terminal** — flat, console-like presentation with monospace typography.
 
-Atmospheric is the initial theme selection. The current selection is in memory and
-is not persisted. The personalities and
+Atmospheric is the initial theme selection. The selected theme is persisted in
+application-private storage, with Atmospheric used when no recognized choice is
+available. The personalities and
 shared component references are indexed in
 [`docs/assets/design-references/production-themes/`](assets/design-references/production-themes/).
 Use the [One App. Many Personalities board](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png), [Glass asset sheet](assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png), and [Instrument asset sheet](assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png) as the visual baseline for the design review; the full reference set is listed in the theme-system asset manifest. These references are not yet a complete exact specification for the production app.
@@ -222,7 +225,7 @@ Still separate future slices:
 - official alerts;
 - location and saved locations;
 - unit preferences;
-- persisted selection among Atmospheric, Glass, Minimal OLED, Instrument, and Terminal;
+- persisted selection among Atmospheric, Glass, Minimal OLED, Instrument, and Terminal (implemented in R5.2);
 - high contrast preference;
 - persisted Off/Subtle/Full effects preference;
 - Simple layout;
