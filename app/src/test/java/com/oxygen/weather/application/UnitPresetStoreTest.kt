@@ -10,6 +10,37 @@ import java.time.LocalDateTime
 
 class UnitPresetStoreTest {
     @Test
+    fun selectionUsesReadResultAsInitialChoiceAndKeepsFailedWriteSeparate() {
+        val stored = MemoryPreferences(UnitPreset.UK.name)
+        val selection = UnitPresetSelection(SharedPreferencesUnitPresetStore(stored))
+        assertEquals(UnitPresetReadResult.Found(UnitPreset.UK), selection.readResult)
+        assertEquals(UnitPreset.UK, selection.effectivePreset)
+        assertEquals(UnitPresetWriteResult.SUCCESS, selection.select(UnitPreset.US))
+        assertEquals(UnitPreset.US, selection.effectivePreset)
+
+        val failed = MemoryPreferences(UnitPreset.UK.name).apply { failWrites = true }
+        val running = UnitPresetSelection(SharedPreferencesUnitPresetStore(failed))
+        assertEquals(UnitPresetWriteResult.FAILURE, running.select(UnitPreset.US))
+        assertEquals(UnitPreset.US, running.effectivePreset)
+        assertEquals(UnitPresetReadResult.Found(UnitPreset.UK),
+            UnitPresetSelection(SharedPreferencesUnitPresetStore(failed)).readResult)
+        assertEquals(UnitPreset.UK,
+            UnitPresetSelection(SharedPreferencesUnitPresetStore(failed)).effectivePreset)
+    }
+
+    @Test
+    fun readFailureUsesMetricButRemainsDistinctFromDefaultedMetric() {
+        val failure = MemoryPreferences().apply { throwOnRead = true }
+        val unavailable = UnitPresetSelection(SharedPreferencesUnitPresetStore(failure))
+        val absent = UnitPresetSelection(SharedPreferencesUnitPresetStore(MemoryPreferences()))
+
+        assertEquals(UnitPresetReadResult.Failure, unavailable.readResult)
+        assertEquals(UnitPresetReadResult.Defaulted(UnitPreset.METRIC), absent.readResult)
+        assertEquals(UnitPreset.METRIC, unavailable.effectivePreset)
+        assertEquals(UnitPreset.METRIC, absent.effectivePreset)
+    }
+
+    @Test
     fun everyPresetRestoresFromFreshStoreInstance() {
         UnitPreset.entries.forEach { preset ->
             val preferences = MemoryPreferences()

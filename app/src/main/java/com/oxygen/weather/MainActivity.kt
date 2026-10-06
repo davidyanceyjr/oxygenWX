@@ -46,6 +46,9 @@ import com.oxygen.weather.application.ProductionForecastComposition
 import com.oxygen.weather.application.ProductionOfficialAlertComposition
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.application.SelectedLocationStore
+import com.oxygen.weather.application.UnitPresetSelection
+import com.oxygen.weather.application.UnitPresetStore
+import com.oxygen.weather.application.UnitPresetWriteResult
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoCoordinateTimeZoneLookup
 import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
@@ -60,6 +63,7 @@ import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.HomePresentationState
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.StatusPresentation
+import com.oxygen.weather.presentation.UnitPreset
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -93,6 +97,11 @@ class MainActivity : ComponentActivity() {
     private var permissionRationaleConfirmed = false
     private var activityResumed = false
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
+    private var unitPresetSelection: UnitPresetSelection? = null
+    private var fixtureBundle: com.oxygen.weather.data.WeatherBundle? = null
+    private var fixtureDerived: com.oxygen.weather.derived.DerivedWeather? = null
+    private var fixtureStatus: StatusPresentation? = null
+    private var fixtureForecastContext: com.oxygen.weather.presentation.ForecastContextPresentation? = null
     private val officialAlertSummaryState = mutableStateOf<OfficialAlertSummaryPresentation?>(null)
     private val officialAlertDetailState = mutableStateOf<OfficialAlertDetailPresentation?>(null)
     private val officialAlertChoicesState = mutableStateOf<List<OfficialAlertChoicePresentation>>(emptyList())
@@ -114,6 +123,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val presetStore = UnitPresetTestHooks.storeFactory?.invoke(applicationContext)
+            ?: SharedPreferencesUnitPresetStore(applicationContext)
+        unitPresetSelection = UnitPresetSelection(presetStore)
+        UnitPresetTestHooks.onRead?.invoke(unitPresetSelection!!.readResult)
+        UnitPresetTestHooks.applyPreset = ::applyUnitPresetForTests
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
@@ -134,7 +148,8 @@ class MainActivity : ComponentActivity() {
             isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             requestedKey = intent?.getStringExtra(REVIEW_SCENARIO_LAUNCH_EXTRA),
         )
-        val fixtureAnchor = if (captureMode || reviewScenario != null) LocalDateTime.of(2026, 9, 23, 9, 0) else LocalDateTime.now()
+        val fixtureAnchor = UnitPresetTestHooks.fixtureAnchorOverride
+            ?: if (captureMode || reviewScenario != null) LocalDateTime.of(2026, 9, 23, 9, 0) else LocalDateTime.now()
         val regularBundle = DemoWeatherRepository.load(fixtureAnchor)
         val scenarioBundle = when (reviewScenario) {
             ReviewScenario.LIVE_CURRENT_ONLY -> regularBundle.copy(
@@ -190,11 +205,14 @@ class MainActivity : ComponentActivity() {
             )
         } else scenarioBundle
         val derived = HistoricalSynthesis.derive(bundle)
-        val mappedPresentation = HomePresentationMapper.map(bundle, derived)
+        fixtureBundle = bundle
+        fixtureDerived = derived
+        val unitPreset = unitPresetSelection!!.effectivePreset
+        val mappedPresentation = HomePresentationMapper.map(bundle, derived, unitPreset)
         val presentation = if (reviewScenario == ReviewScenario.FAILURE_WITHOUT_DATA) {
             mappedPresentation.copy(hourlyWindows = emptyList(), hourlyDateJumps = emptyList(), dailyWindows = emptyList(), detailGroups = emptyList())
         } else mappedPresentation
-        val mappedState = HomePresentationMapper.mapState(bundle, derived)
+        val mappedState = HomePresentationMapper.mapState(bundle, derived, unitPreset)
         val partialHorizons = (mappedState as? HomePresentationState.Partial)?.horizon
         val inputState = if (reviewScenario == ReviewScenario.FAILURE_WITHOUT_DATA) {
             HomePresentationMapper.mapLoadState(
@@ -215,7 +233,7 @@ class MainActivity : ComponentActivity() {
                 } else null,
                 cacheWriteOutcome = CacheWriteOutcome.NOT_ATTEMPTED,
             )
-            HomePresentationMapper.mapLoadState(HomePresentationInput.Data(result, derived))
+            HomePresentationMapper.mapLoadState(HomePresentationInput.Data(result, derived, unitPreset))
         }
         val reviewStatus = when (inputState) {
             is HomeLoadState.LiveData -> inputState.status
@@ -250,6 +268,8 @@ class MainActivity : ComponentActivity() {
             )
             ForecastContextMapper.map(result, mappedState, inputState).copy(status = status)
         }
+        fixtureStatus = status
+        fixtureForecastContext = context.takeIf { reviewScenario != null }
         val worker = Executors.newSingleThreadExecutor { runnable ->
             Thread(runnable, "oxygen-location-search").apply { isDaemon = true }
         }
@@ -272,7 +292,11 @@ class MainActivity : ComponentActivity() {
             cacheStore = ProductionForecastTestHooks.cacheStoreFactory?.invoke(applicationContext, forecastClock)
                 ?: AndroidForecastCacheStore(applicationContext, forecastClock),
             onStateChanged = { state -> mainHandler.post {
-                selectedForecastState.value = state.toSelectedPresentationState(forecastClock)
+                state.toSelectedPresentationState(forecastClock, unitPresetSelection?.effectivePreset ?: UnitPreset.METRIC)
+                    .also { mapped ->
+                        selectedForecastState.value = mapped
+                        UnitPresetTestHooks.onPresentationChanged?.invoke(mapped)
+                    }
             } },
         )
         val alertWorker = Executors.newSingleThreadExecutor { runnable ->
@@ -407,6 +431,28 @@ class MainActivity : ComponentActivity() {
         coarseLocationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
+    /** Test seam for the not-yet-built selector; changing units only remaps retained canonical input. */
+    internal fun applyUnitPresetForTests(preset: UnitPreset): UnitPresetWriteResult {
+        val selection = checkNotNull(unitPresetSelection) { "Unit preset store has not been initialized" }
+        val outcome = selection.select(preset)
+        val forecastState = forecastController?.state()
+        selectedForecastState.value = if (forecastState != null) {
+            forecastState.toSelectedPresentationState(ProductionForecastTestHooks.clockOverride ?: Clock.systemUTC(), preset)
+        } else {
+            fixtureBundle?.let { bundle -> fixtureDerived?.let { derived ->
+                bundle.toSelectedPresentationState(
+                    derived,
+                    preset,
+                    status = fixtureStatus,
+                    forecastContext = fixtureForecastContext,
+                )
+            } }
+        }
+        selectedForecastState.value?.let { UnitPresetTestHooks.onPresentationChanged?.invoke(it) }
+        UnitPresetTestHooks.onPresetApplied?.invoke(preset, outcome, selectedForecastState.value)
+        return outcome
+    }
+
     private fun dispatchOfficialAlerts(request: ForecastRequest) {
         val alertRequest = OfficialAlertRequest(request.location, request.coordinates)
         ProductionOfficialAlertTestHooks.onRequestFetched?.invoke(alertRequest)
@@ -454,11 +500,59 @@ class MainActivity : ComponentActivity() {
         forecastExecutor?.shutdownNow()
         forecastExecutor = null
         forecastController = null
+        UnitPresetTestHooks.applyPreset = null
         alertExecutor?.shutdownNow()
         alertExecutor = null
         alertController = null
         super.onDestroy()
     }
+}
+
+private fun com.oxygen.weather.data.WeatherBundle.toSelectedPresentationState(
+    derived: com.oxygen.weather.derived.DerivedWeather,
+    unitPreset: UnitPreset,
+    status: StatusPresentation? = null,
+    forecastContext: com.oxygen.weather.presentation.ForecastContextPresentation? = null,
+): SelectedForecastPresentationState {
+    val result = WeatherRepositoryResult(
+        bundle = this,
+        origin = WeatherDataOrigin.LIVE,
+        freshness = WeatherFreshness.UNKNOWN,
+        cacheWriteOutcome = CacheWriteOutcome.NOT_ATTEMPTED,
+    )
+    val load = HomePresentationMapper.mapLoadState(HomePresentationInput.Data(result, derived, unitPreset))
+    val content = when (load) {
+        is HomeLoadState.LiveData -> load.content
+        is HomeLoadState.CachedData -> load.content
+        is HomeLoadState.RefreshFailedWithRetainedData -> load.content
+        else -> HomePresentationMapper.mapState(this, derived, unitPreset)
+    }
+    val home = when (content) {
+        is HomePresentationState.Complete -> content.presentation
+        is HomePresentationState.Partial -> content.presentation
+        is HomePresentationState.Unavailable -> HomePresentation(
+            current = unavailableCurrent(content.presentation.location),
+            hourlyWindows = emptyList(), hourlyDateJumps = emptyList(), dailyWindows = emptyList(),
+            detailGroups = emptyList(), sourceLine = content.presentation.sourceLine,
+            updatedLine = content.presentation.updatedLine,
+        )
+    }
+    val partial = (content as? HomePresentationState.Partial)?.horizon
+    return SelectedForecastPresentationState(
+        locationName = home.current.location,
+        home = home,
+        status = status ?: load.status(),
+        partialHorizons = partial,
+        forecastContext = forecastContext,
+    )
+}
+
+private fun HomeLoadState.status(): StatusPresentation = when (this) {
+    is HomeLoadState.LiveData -> status
+    is HomeLoadState.CachedData -> status
+    is HomeLoadState.RefreshFailedWithRetainedData -> status
+    is HomeLoadState.FailedWithoutData -> status
+    is HomeLoadState.Loading -> status
 }
 
 /** Injection point used by instrumentation to exercise the real Activity composition path. */
@@ -478,6 +572,16 @@ internal object ProductionForecastTestHooks {
     @Volatile var cacheStoreFactory: ((android.content.Context, Clock) -> ForecastCacheStore)? = null
 }
 
+/** Narrow instrumentation seam for unit-preset persistence and in-place presentation changes. */
+internal object UnitPresetTestHooks {
+    @Volatile var storeFactory: ((android.content.Context) -> UnitPresetStore)? = null
+    @Volatile var onRead: ((com.oxygen.weather.application.UnitPresetReadResult) -> Unit)? = null
+    @Volatile var onPresetApplied: ((UnitPreset, UnitPresetWriteResult, SelectedForecastPresentationState?) -> Unit)? = null
+    @Volatile var onPresentationChanged: ((SelectedForecastPresentationState) -> Unit)? = null
+    @Volatile var applyPreset: ((UnitPreset) -> UnitPresetWriteResult)? = null
+    @Volatile var fixtureAnchorOverride: LocalDateTime? = null
+}
+
 /** Injection seam for exercising the Activity's independent official-alert composition. */
 internal object ProductionOfficialAlertTestHooks {
     @Volatile var endpointOverride: URI? = null
@@ -495,7 +599,10 @@ private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentation
     status = StatusPresentation.of("Loading weather data for ${location.displayName ?: "selected location"}."),
 )
 
-private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.systemUTC()): SelectedForecastPresentationState = when (this) {
+private fun LiveForecastState.toSelectedPresentationState(
+    clock: Clock = Clock.systemUTC(),
+    unitPreset: UnitPreset = UnitPreset.METRIC,
+): SelectedForecastPresentationState = when (this) {
     is LiveForecastState.Loading -> request.loadingPresentation()
     is LiveForecastState.Failed -> SelectedForecastPresentationState(
         locationName = request.location.displayName ?: "Selected location",
@@ -504,6 +611,7 @@ private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.s
                 record.forecast,
                 record.cachedAt,
                 CachedForecastFreshness.classify(record.cachedAt, clock),
+                unitPreset,
             )
             HomePresentation(
                 current = unavailableCurrent(cached.locationName ?: "Selected location"),
@@ -529,7 +637,7 @@ private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.s
         } ?: kind.toFailureStatus(),
         forecastContext = retainedCache?.let { record ->
             val freshness = CachedForecastFreshness.classify(record.cachedAt, clock)
-            val cached = HomePresentationMapper.mapCachedForecast(record.forecast, record.cachedAt, freshness)
+            val cached = HomePresentationMapper.mapCachedForecast(record.forecast, record.cachedAt, freshness, unitPreset)
             val retainedStatus = StatusPresentation.of(
                 "Refresh failed: ${kind.toStatusLabel()}. Retained cached forecast data is shown. " + when (freshness) {
                     WeatherFreshness.CURRENT -> "Recent cache (under 2 hours)."
@@ -543,29 +651,30 @@ private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.s
         }
     )
     is LiveForecastState.Loaded -> {
-        val hours = presentation.hourlyWindows.sumOf { it.entries.size }
-        val days = presentation.dailyWindows.sumOf { it.entries.size }
+        val mapped = HomePresentationMapper.mapLiveSuccess(result, unitPreset)
+        val hours = mapped.hourlyWindows.sumOf { it.entries.size }
+        val days = mapped.dailyWindows.sumOf { it.entries.size }
         val horizons = if (hours > 0 && days > 0 && (hours < 72 || days < 10)) ForecastHorizonPresentation(
             hourly = if (hours in 1..71) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
             daily = if (days in 1..9) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
         ) else null
         val stateStatus = StatusPresentation.of(
-            "Live weather data from ${presentation.sourceName ?: "the selected source"}." +
+            "Live weather data from ${mapped.sourceName ?: "the selected source"}." +
                 if (cacheWriteOutcome != null && cacheWriteOutcome != ForecastCacheWriteResult.Success) {
                     " Cache update failed; live forecast data is shown."
                 } else "",
         )
         SelectedForecastPresentationState(
-            locationName = presentation.locationName ?: "Selected location",
-            home = HomePresentationMapper.mapLiveToHome(presentation),
+            locationName = mapped.locationName ?: "Selected location",
+            home = HomePresentationMapper.mapLiveToHome(mapped),
             status = stateStatus,
             partialHorizons = horizons,
-            forecastContext = ForecastContextMapper.mapLive(presentation, horizons, stateStatus),
+            forecastContext = ForecastContextMapper.mapLive(mapped, horizons, stateStatus),
         )
     }
     is LiveForecastState.Cached -> {
         val freshness = com.oxygen.weather.application.CachedForecastFreshness.classify(cachedAt, clock)
-        val presentation = HomePresentationMapper.mapCachedForecast(forecast, cachedAt, freshness)
+        val presentation = HomePresentationMapper.mapCachedForecast(forecast, cachedAt, freshness, unitPreset)
         val name = presentation.locationName ?: "Selected location"
         val zone = java.time.ZoneId.of(presentation.timeZoneId)
         val sourceName = presentation.forecastProvenance.source?.displayName ?: "Weather source unavailable"

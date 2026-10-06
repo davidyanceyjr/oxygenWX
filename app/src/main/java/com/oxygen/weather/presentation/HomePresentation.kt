@@ -350,7 +350,7 @@ object HomePresentationMapper {
         }
         is HomePresentationInput.Data -> {
             val result = input.result
-            val content = mapState(result.bundle, input.derived)
+            val content = mapState(result.bundle, input.derived, input.unitPreset)
             val freshness = result.freshness.toPresentedFreshness()
             val origin = result.origin.toRetainedDataOrigin()
             val status = result.refreshFailure?.let { refreshFailure ->

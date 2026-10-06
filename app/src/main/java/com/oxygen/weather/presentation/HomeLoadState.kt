@@ -11,6 +11,7 @@ sealed interface HomePresentationInput {
     data class Data(
         val result: WeatherRepositoryResult,
         val derived: DerivedWeather,
+        val unitPreset: UnitPreset = UnitPreset.METRIC,
     ) : HomePresentationInput
 
     data class FailureWithoutData(val failure: RefreshFailure) : HomePresentationInput

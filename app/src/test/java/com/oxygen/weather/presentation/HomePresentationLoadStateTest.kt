@@ -58,6 +58,50 @@ class HomePresentationLoadStateTest {
     }
 
     @Test
+    fun everyPresetRemapsLiveCachedAndRetainedStateWithoutChangingLoadFacts() {
+        val canonicalSnapshot = bundle.copy(hourly = bundle.hourly.toList(), daily = bundle.daily.toList())
+        val remapped = UnitPreset.entries.map { preset ->
+            WeatherDataOrigin.entries.flatMap { origin ->
+                listOf(WeatherFreshness.CURRENT, WeatherFreshness.STALE).map { freshness ->
+                    val state = HomePresentationMapper.mapLoadState(
+                        HomePresentationInput.Data(
+                            result = result(
+                                origin = origin,
+                                freshness = freshness,
+                                refreshFailure = if (freshness == WeatherFreshness.STALE) RefreshFailure(RefreshFailureKind.NETWORK) else null,
+                            ),
+                            derived = derived,
+                            unitPreset = preset,
+                        ),
+                    )
+                    assertEquivalentStatus(state.status())
+                    state
+                }
+            }
+        }
+
+        assertEquals(canonicalSnapshot, bundle)
+        assertEquals(3, remapped.size)
+        remapped.forEach { presets ->
+            assertEquals(4, presets.size)
+            assertEquals(4, presets.distinctBy { it.status() to it::class }.size)
+        }
+        val metric = remapped[0][0] as HomeLoadState.LiveData
+        val us = remapped[1][0] as HomeLoadState.LiveData
+        val uk = remapped[2][0] as HomeLoadState.LiveData
+        val metricHome = (metric.content as HomePresentationState.Complete).presentation
+        val usHome = (us.content as HomePresentationState.Complete).presentation
+        val ukHome = (uk.content as HomePresentationState.Complete).presentation
+        assertEquals("28 °C", metricHome.current.temperature)
+        assertEquals("82 °F", usHome.current.temperature)
+        assertEquals("28 °C", ukHome.current.temperature)
+        assertEquals(metric.status, us.status)
+        assertEquals(metricHome.current.condition, usHome.current.condition)
+        assertEquals(metricHome.sourceLine, usHome.sourceLine)
+        assertEquals(metricHome.updatedLine, ukHome.updatedLine)
+    }
+
+    @Test
     fun refreshFailureRetainsDataForEveryFailureKindOriginAndFreshness() {
         for (kind in RefreshFailureKind.entries) {
             for (origin in WeatherDataOrigin.entries) {
