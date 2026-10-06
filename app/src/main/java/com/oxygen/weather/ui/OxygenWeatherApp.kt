@@ -41,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -73,6 +74,8 @@ import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
 import com.oxygen.weather.presentation.OfficialAlertDetailPresentation
+import com.oxygen.weather.presentation.OfficialAlertChoicePresentation
+import com.oxygen.weather.presentation.OfficialAlertChoiceResolver
 import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
@@ -100,6 +103,8 @@ private enum class HomePage(val label: String) {
     NOW("Now"), HOURLY("Hourly"), DAILY("Daily"), DETAILS("Details")
 }
 
+private enum class OfficialAlertRoute { HOME, SELECTION, MULTIPLE_DETAIL, SINGLE_DETAIL }
+
 /** Standard Home rendered entirely from the production five-theme component family. */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -116,6 +121,7 @@ fun OxygenWeatherApp(
     selectedForecast: SelectedForecastPresentationState? = null,
     officialAlertSummary: OfficialAlertSummaryPresentation? = null,
     officialAlertDetail: OfficialAlertDetailPresentation? = null,
+    officialAlertChoices: List<OfficialAlertChoicePresentation> = emptyList(),
     onOpenOfficialAlertSource: (String) -> Unit = {},
     layoutDirectionOverride: LayoutDirection? = null,
 ) {
@@ -137,10 +143,33 @@ fun OxygenWeatherApp(
     var pageMenuExpanded by remember { mutableStateOf(false) }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
-    var alertDetail by remember { mutableStateOf<OfficialAlertDetailPresentation?>(null) }
-    BackHandler(enabled = alertDetail != null || (!searchOpen && pagerState.currentPage > 0)) {
-        if (alertDetail != null) alertDetail = null
-        else scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
+    var alertRoute by remember { mutableStateOf(OfficialAlertRoute.HOME) }
+    var selectedAlertIdentity by remember { mutableStateOf<Pair<Long, Int>?>(null) }
+    val selectedAlert = selectedAlertIdentity?.let { identity ->
+        OfficialAlertChoiceResolver.resolve(officialAlertChoices, identity.first, identity.second)
+    }
+    val displayedAlertDetail = when (alertRoute) {
+        OfficialAlertRoute.MULTIPLE_DETAIL -> selectedAlert?.detail
+        OfficialAlertRoute.SINGLE_DETAIL -> officialAlertDetail
+        OfficialAlertRoute.HOME, OfficialAlertRoute.SELECTION -> null
+    }
+    LaunchedEffect(officialAlertChoices, officialAlertDetail, alertRoute, selectedAlertIdentity) {
+        if (alertRoute == OfficialAlertRoute.MULTIPLE_DETAIL && selectedAlert == null) {
+            selectedAlertIdentity = null
+            alertRoute = OfficialAlertRoute.HOME
+        }
+        if (alertRoute == OfficialAlertRoute.SINGLE_DETAIL && officialAlertDetail == null) alertRoute = OfficialAlertRoute.HOME
+        if (alertRoute == OfficialAlertRoute.SELECTION && officialAlertChoices.isEmpty()) alertRoute = OfficialAlertRoute.HOME
+    }
+    BackHandler(enabled = alertRoute != OfficialAlertRoute.HOME || (!searchOpen && pagerState.currentPage > 0)) {
+        when (alertRoute) {
+            OfficialAlertRoute.MULTIPLE_DETAIL -> alertRoute = OfficialAlertRoute.SELECTION
+            OfficialAlertRoute.SELECTION, OfficialAlertRoute.SINGLE_DETAIL -> {
+                selectedAlertIdentity = null
+                alertRoute = OfficialAlertRoute.HOME
+            }
+            OfficialAlertRoute.HOME -> scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
+        }
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
@@ -171,7 +200,7 @@ fun OxygenWeatherApp(
                 Box(Modifier.fillMaxSize()) {
                   Column(
                     Modifier.fillMaxSize().safeDrawingPadding().then(
-                        if (alertDetail != null) Modifier.clearAndSetSemantics { } else Modifier,
+                        if (alertRoute != OfficialAlertRoute.HOME) Modifier.clearAndSetSemantics { } else Modifier,
                     ),
                   ) {
                     val selectedPage = HomePage.entries[pagerState.currentPage]
@@ -251,7 +280,13 @@ fun OxygenWeatherApp(
                         when (HomePage.entries[page]) {
                             HomePage.NOW -> NowPage(
                                 displayPresentation, displayStatus, displayHorizons, theme, displayContext, officialAlertSummary,
-                                onOpenAlertDetail = if (pagerState.currentPage == 0) officialAlertDetail?.let { detail -> ({ alertDetail = detail }) } else null,
+                                onOpenAlertDetail = if (pagerState.currentPage == 0) {
+                                    when {
+                                        officialAlertSummary is OfficialAlertSummaryPresentation.MultipleAlerts && officialAlertChoices.isNotEmpty() -> ({ alertRoute = OfficialAlertRoute.SELECTION })
+                                        officialAlertDetail != null -> ({ alertRoute = OfficialAlertRoute.SINGLE_DETAIL })
+                                        else -> null
+                                    }
+                                } else null,
                             )
                             HomePage.HOURLY -> HourlyPage(displayPresentation, displayStatus, displayHorizons, theme)
                             HomePage.DAILY -> DailyPage(displayPresentation, displayStatus, displayHorizons, theme)
@@ -259,14 +294,74 @@ fun OxygenWeatherApp(
                         }
                     }
                   }
-                  alertDetail?.let { detail ->
+                  if (alertRoute == OfficialAlertRoute.SELECTION && officialAlertChoices.isNotEmpty()) {
+                      OfficialAlertSelectionSurface(
+                          choices = officialAlertChoices,
+                          theme = theme,
+                          onSelect = { choice ->
+                              selectedAlertIdentity = choice.generation to choice.inResultIndex
+                              alertRoute = OfficialAlertRoute.MULTIPLE_DETAIL
+                          },
+                          onReturn = { alertRoute = OfficialAlertRoute.HOME },
+                      )
+                  }
+                  displayedAlertDetail?.let { detail ->
                       OfficialAlertDetailSurface(
                           detail = detail,
                           theme = theme,
-                          onReturn = { alertDetail = null },
+                          returnLabel = if (alertRoute == OfficialAlertRoute.MULTIPLE_DETAIL) "Return to alerts" else "Return to Now",
+                          onReturn = {
+                              if (alertRoute == OfficialAlertRoute.MULTIPLE_DETAIL) alertRoute = OfficialAlertRoute.SELECTION
+                              else alertRoute = OfficialAlertRoute.HOME
+                          },
                           onOpenSource = onOpenOfficialAlertSource,
                       )
                   }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun OfficialAlertSelectionSurface(
+    choices: List<OfficialAlertChoicePresentation>,
+    theme: ResolvedTheme,
+    onSelect: (OfficialAlertChoicePresentation) -> Unit,
+    onReturn: () -> Unit,
+) {
+    Box(
+        Modifier.fillMaxSize()
+            .background(theme.palette.canvas)
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    do {
+                        val event = awaitPointerEvent()
+                        event.changes.forEach { it.consume() }
+                    } while (event.changes.any { it.pressed })
+                }
+            }
+            .testTag("official-alert-selection-surface"),
+    ) {
+        Column(
+            Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+                .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
+            verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
+        ) {
+            TextButton(
+                onClick = onReturn,
+                modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                    .testTag("official-alert-selection-return"),
+            ) { Text("Return to Now", color = theme.palette.action) }
+            Text("Official alerts", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+            choices.forEach { choice ->
+                Button(
+                    onClick = { onSelect(choice) },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                        .testTag("official-alert-choice-${choice.inResultIndex}")
+                        .semantics { contentDescription = "Open official alert: ${choice.selectionLabel}" },
+                ) {
+                    Text(choice.selectionLabel, style = theme.typography.bodyMedium, textAlign = TextAlign.Start)
                 }
             }
         }
@@ -399,6 +494,7 @@ private fun NowPage(
 private fun OfficialAlertDetailSurface(
     detail: OfficialAlertDetailPresentation,
     theme: ResolvedTheme,
+    returnLabel: String,
     onReturn: () -> Unit,
     onOpenSource: (String) -> Unit,
 ) {
@@ -425,7 +521,7 @@ private fun OfficialAlertDetailSurface(
                 onClick = onReturn,
                 modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
                     .testTag("official-alert-detail-return"),
-            ) { Text("Return to Now", color = theme.palette.action) }
+            ) { Text(returnLabel, color = theme.palette.action) }
             Text("Official alert", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
             AlertDetailField(theme, "Event", detail.eventName)
             AlertDetailField(theme, "Issuer", detail.issuer)

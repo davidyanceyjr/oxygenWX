@@ -12,6 +12,7 @@ import java.time.Instant
 import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OfficialAlertDetailMapperTest {
@@ -71,6 +72,55 @@ class OfficialAlertDetailMapperTest {
         assertNull(detail.instructions)
         assertNull(detail.sourceUrlText)
         assertNull(detail.sourceAction)
+    }
+
+    @Test
+    fun mapsMultipleChoicesInSourceOrderWithGenerationScopedIndexIdentity() {
+        val duplicateLooking = alert()
+        val second = alert().copy(
+            eventName = "Flood Warning",
+            severity = null,
+            effectiveAt = null,
+            expiresAt = null,
+            description = null,
+            instructions = null,
+            sourceUrl = null,
+        )
+        val state = OfficialAlertState.Supported(42, request, listOf(duplicateLooking, second, duplicateLooking))
+
+        val choices = OfficialAlertDetailMapper.mapChoices(state)
+
+        assertEquals(3, choices.size)
+        assertEquals(listOf(0, 1, 2), choices.map { it.inResultIndex })
+        assertEquals(listOf(42L, 42L, 42L), choices.map { it.generation })
+        assertEquals(listOf("Severe Thunderstorm Warning", "Flood Warning", "Severe Thunderstorm Warning"), choices.map { it.eventName })
+        assertEquals("National Weather Service", choices[0].detail.issuer)
+        assertEquals("Source supplied description.", choices[0].detail.description)
+        assertEquals("Oct 6, 2026 8:15 AM CDT", choices[0].detail.effectiveAtText)
+        assertEquals("https://alerts.example.test/warning/1", choices[0].detail.sourceUrlText)
+        assertNull(choices[1].severity)
+        assertNull(choices[1].detail.severity)
+        assertNull(choices[1].detail.effectiveAtText)
+        assertNull(choices[1].detail.expiresAtText)
+        assertNull(choices[1].detail.description)
+        assertNull(choices[1].detail.instructions)
+        assertNull(choices[1].detail.sourceUrlText)
+        assertNull(choices[1].detail.sourceAction)
+        assertTrue(choices[0].inResultIndex != choices[2].inResultIndex)
+        assertEquals(choices[2], OfficialAlertChoiceResolver.resolve(choices, generation = 42, inResultIndex = 2))
+        assertNull(OfficialAlertChoiceResolver.resolve(choices, generation = 43, inResultIndex = 2))
+        assertNull(OfficialAlertChoiceResolver.resolve(choices, generation = 42, inResultIndex = 3))
+    }
+
+    @Test
+    fun exposesNoChoicesForEmptyOrNonSupportedStates() {
+        assertEquals(emptyList<OfficialAlertChoicePresentation>(), OfficialAlertDetailMapper.mapChoices(OfficialAlertState.Loading(7, request)))
+        assertEquals(emptyList<OfficialAlertChoicePresentation>(), OfficialAlertDetailMapper.mapChoices(OfficialAlertState.Supported(7, request, emptyList())))
+        assertEquals(emptyList<OfficialAlertChoicePresentation>(), OfficialAlertDetailMapper.mapChoices(OfficialAlertState.Supported(7, request, listOf(alert()))))
+        assertEquals(emptyList<OfficialAlertChoicePresentation>(), OfficialAlertDetailMapper.mapChoices(OfficialAlertState.UnsupportedRegion(7, request)))
+        assertEquals(emptyList<OfficialAlertChoicePresentation>(), OfficialAlertDetailMapper.mapChoices(
+            OfficialAlertState.Failed(7, request, com.oxygen.weather.application.OfficialAlertFailureKind.SOURCE, "Source unavailable."),
+        ))
     }
 
     @Test

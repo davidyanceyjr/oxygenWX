@@ -28,6 +28,31 @@ data class OfficialAlertSourceAction(
     val label: String,
 )
 
+/** A source-ordered alert choice bound to one exact published controller result. */
+data class OfficialAlertChoicePresentation(
+    val generation: Long,
+    val inResultIndex: Int,
+    val eventName: String,
+    val severity: String?,
+    val detail: OfficialAlertDetailPresentation,
+) {
+    val selectionLabel: String get() = buildString {
+        append(eventName)
+        severity?.let { append(". Severity: ").append(it) }
+    }
+}
+
+/** Resolves only within the currently published result-scoped presentation choices. */
+object OfficialAlertChoiceResolver {
+    fun resolve(
+        choices: List<OfficialAlertChoicePresentation>,
+        generation: Long,
+        inResultIndex: Int,
+    ): OfficialAlertChoicePresentation? = choices.firstOrNull {
+        it.generation == generation && it.inResultIndex == inResultIndex
+    }
+}
+
 /** Projects a detail only when the selected generation has one unambiguous supported alert. */
 object OfficialAlertDetailMapper {
     private val timeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy h:mm a z", Locale.US)
@@ -38,6 +63,21 @@ object OfficialAlertDetailMapper {
         val alert = state.alerts.single()
         val zone = state.request.location.timeZone
         return alert.toPresentation(zone)
+    }
+
+    /** Maps each supported alert in authoritative order; identity is scoped to this result generation. */
+    fun mapChoices(state: OfficialAlertState): List<OfficialAlertChoicePresentation> {
+        if (state !is OfficialAlertState.Supported || state.alerts.size < 2) return emptyList()
+        val zone = state.request.location.timeZone
+        return state.alerts.mapIndexed { index, alert ->
+            OfficialAlertChoicePresentation(
+                generation = state.generation,
+                inResultIndex = index,
+                eventName = alert.eventName,
+                severity = alert.severity,
+                detail = alert.toPresentation(zone),
+            )
+        }
     }
 
     private fun OfficialAlert.toPresentation(zone: ZoneId) = OfficialAlertDetailPresentation(

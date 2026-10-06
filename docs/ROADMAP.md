@@ -602,7 +602,7 @@ Add concise, non-color-only summary to Now without treating forecast hazards as 
 
 Evidence: `.codex/history/2026-10-06-132-home-alert-summary.md`.
 
-### R4.4 — Alert detail surface — PLANNED
+### R4.4 — Alert detail surface — DONE
 
 Present one selected official alert's supplied text, source, and time fields in
 an accessible detail surface. Preserve the originating Home state and do not
@@ -610,12 +610,16 @@ refetch forecast data.
 
 **Exit:** Installed detail flow displays one supplied alert body, issuer, source URL, and available time fields, returns to the originating Home page/window, and makes no forecast refetch.
 
-### R4.4A — Multiple-alert selection and return — PLANNED
+Evidence: `.codex/history/2026-10-06-133-alert-detail-surface.md`.
+
+### R4.4A — Multiple-alert selection and return — DONE
 
 After R4.4, add accessible selection among multiple alerts and return to the
 same Home state without a forecast refetch.
 
 **Exit:** Installed selection among two alerts and Android Back returns to the same Home state; deterministic callback/state checks prove no forecast refetch.
+
+Evidence: `.codex/history/2026-10-06-134-multiple-alert-selection-and-return.md`.
 
 ## R5 — Settings and appearance
 

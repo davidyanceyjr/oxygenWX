@@ -65,6 +65,7 @@ import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
 import com.oxygen.weather.presentation.OfficialAlertDetailMapper
 import com.oxygen.weather.presentation.OfficialAlertDetailPresentation
+import com.oxygen.weather.presentation.OfficialAlertChoicePresentation
 import com.oxygen.weather.ui.OxygenWeatherApp
 import com.oxygen.weather.ui.EffectsLevel
 import com.oxygen.weather.platform.AndroidForegroundLocationAcquirer
@@ -94,6 +95,7 @@ class MainActivity : ComponentActivity() {
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
     private val officialAlertSummaryState = mutableStateOf<OfficialAlertSummaryPresentation?>(null)
     private val officialAlertDetailState = mutableStateOf<OfficialAlertDetailPresentation?>(null)
+    private val officialAlertChoicesState = mutableStateOf<List<OfficialAlertChoicePresentation>>(emptyList())
     private var activeOfficialAlertIdentity: Pair<OfficialAlertRequest, Long>? = null
     private val coarseLocationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         val wasPending = permissionRequestPending
@@ -288,6 +290,7 @@ class MainActivity : ComponentActivity() {
                 activeOfficialAlertIdentity = state.request to state.generation
                 officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
                 officialAlertDetailState.value = null
+                officialAlertChoicesState.value = emptyList()
                 ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state)
             } else {
                 mainHandler.post {
@@ -296,9 +299,11 @@ class MainActivity : ComponentActivity() {
                             activeOfficialAlertIdentity = state.request to state.generation
                             officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
                             officialAlertDetailState.value = null
+                            officialAlertChoicesState.value = emptyList()
                         } else if (activeOfficialAlertIdentity == (state.request to state.generation)) {
                             officialAlertSummaryState.value = OfficialAlertSummaryMapper.map(state)
                             officialAlertDetailState.value = OfficialAlertDetailMapper.map(state)
+                            officialAlertChoicesState.value = OfficialAlertDetailMapper.mapChoices(state)
                         }
                     }
                     ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state)
@@ -370,6 +375,7 @@ class MainActivity : ComponentActivity() {
                 selectedForecast = selectedForecastState.value,
                 officialAlertSummary = officialAlertSummaryState.value,
                 officialAlertDetail = officialAlertDetailState.value,
+                officialAlertChoices = officialAlertChoicesState.value,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
@@ -406,6 +412,7 @@ class MainActivity : ComponentActivity() {
         ProductionOfficialAlertTestHooks.onRequestFetched?.invoke(alertRequest)
         officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
         officialAlertDetailState.value = null
+        officialAlertChoicesState.value = emptyList()
         if (alertController == null) {
             activeOfficialAlertIdentity = null
             officialAlertSummaryState.value = null

@@ -156,7 +156,7 @@ class ProductionOfficialAlertSummaryFlowTest {
         compose.onNodeWithText("Oct 4, 2026 6:00 AM CDT", substring = false).assertIsDisplayed()
         compose.onNodeWithText("Source supplied tornado warning description.", substring = false).assertIsDisplayed()
         compose.onNodeWithText("Move to shelter immediately.", substring = false).assertIsDisplayed()
-        compose.onNodeWithText("https://api.weather.gov/alerts/ABCD", substring = false).assertIsDisplayed()
+        compose.onNodeWithText("https://api.weather.gov/alerts/ABCD", substring = false).performScrollTo().assertIsDisplayed()
         compose.onNodeWithContentDescription("Choose Home page, current: Now").assertDoesNotExist()
         compose.onNodeWithTag("official-alert-detail-surface").performTouchInput { swipeLeft() }
         compose.onNodeWithText("Tornado Warning", substring = false).assertIsDisplayed()
@@ -212,20 +212,66 @@ class ProductionOfficialAlertSummaryFlowTest {
     }
 
     @Test
-    fun showsMultipleAlertCountWithoutSelectingAnEventOrChangingForecastResult() {
+    fun selectsEachMultipleAlertAndReturnsThroughTheAlertStackWithoutRefetch() {
         alertTransport = NwsTransport { multipleAlerts }
         selectTestLocation()
         awaitSummary("2 official alerts.")
         assertForecastUnaffected()
         val state = finalAlertState()
         assertTrue(state is OfficialAlertState.Supported && state.alerts.size == 2)
-        compose.onNodeWithText("Tornado Warning", substring = true, useUnmergedTree = true).assertDoesNotExist()
-        compose.onNodeWithText("Flood Warning", substring = true, useUnmergedTree = true).assertDoesNotExist()
-        compose.onNodeWithContentDescription("Tornado Warning", substring = true).assertDoesNotExist()
-        compose.onNodeWithContentDescription("Flood Warning", substring = true).assertDoesNotExist()
-        compose.onNodeWithContentDescription("2 official alerts.").assertIsDisplayed()
-        compose.onNodeWithTag("official-alert-summary").assertHasNoClickAction()
-        captureSettled("multiple-alerts")
+        compose.onNodeWithContentDescription("2 official alerts. Open official alert details.").performScrollTo().performClick()
+        val selectionOpened = runCatching { compose.waitUntil(5_000) {
+            runCatching { compose.onNodeWithTag("official-alert-selection-surface").fetchSemanticsNode() }.isSuccess
+        } }.isSuccess
+        if (!selectionOpened) captureCycle134("selection-open-timeout")
+        assertTrue("alert summary must open the selection route", selectionOpened)
+        compose.onNodeWithTag("official-alert-selection-surface").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Open official alert: Tornado Warning. Severity: Severe").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithContentDescription("Open official alert: Flood Warning. Severity: Moderate").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").assertDoesNotExist()
+        compose.onNodeWithTag("official-alert-summary").assertDoesNotExist()
+        captureCycle134("multiple-alert-selection")
+
+        compose.onNodeWithTag("official-alert-choice-0").performClick()
+        compose.onNodeWithTag("official-alert-detail-surface").assertIsDisplayed()
+        compose.onNodeWithText("Tornado Warning", substring = false).assertIsDisplayed()
+        captureCycle134("tornado-alert-detail")
+        compose.onNodeWithText(longDescription, substring = false, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+        captureCycle134("tornado-alert-detail-long-body")
+        compose.onNodeWithTag("official-alert-source-action").performScrollTo().performClick()
+        assertEquals(listOf("https://api.weather.gov/alerts/ABCD"), openedSources)
+        performBack()
+        compose.onNodeWithTag("official-alert-selection-surface").assertIsDisplayed()
+
+        compose.onNodeWithTag("official-alert-choice-1").performClick()
+        compose.onNodeWithTag("official-alert-detail-surface").assertIsDisplayed()
+        compose.onNodeWithText("Flood Warning", substring = false).assertIsDisplayed()
+        compose.onNodeWithText("Flood source supplied description.", substring = false).assertIsDisplayed()
+        compose.onNodeWithTag("official-alert-source-action").performScrollTo().performClick()
+        assertEquals(listOf("https://api.weather.gov/alerts/ABCD", "https://api.weather.gov/alerts/EFGH"), openedSources)
+        compose.onNodeWithText("Return to alerts", substring = false).performClick()
+        compose.onNodeWithTag("official-alert-selection-surface").assertIsDisplayed()
+        compose.onNodeWithTag("official-alert-selection-return").performClick()
+        compose.onNodeWithTag("official-alert-selection-surface").assertDoesNotExist()
+        compose.onNodeWithTag("official-alert-summary").performScrollTo().assertIsDisplayed()
+        assertEquals("selection/detail/return must not refetch forecast", 1, forecastCalls.get())
+        assertEquals(1, forecastRequests.size)
+        assertEquals("selection/detail/return must not refetch alerts", 1, alertRequests.size)
+
+        compose.onNodeWithContentDescription("2 official alerts. Open official alert details.").performScrollTo().performClick()
+        compose.onNodeWithTag("official-alert-choice-1").performClick()
+        performBack()
+        compose.onNodeWithTag("official-alert-detail-surface").assertDoesNotExist()
+        compose.onNodeWithTag("official-alert-selection-surface").assertIsDisplayed()
+        performBack()
+        compose.waitUntil(5_000) {
+            runCatching { compose.onNodeWithTag("official-alert-selection-surface").fetchSemanticsNode() }.isFailure
+        }
+        compose.onNodeWithTag("official-alert-selection-surface").assertDoesNotExist()
+        compose.onNodeWithTag("official-alert-summary").assertIsDisplayed()
+        assertEquals(1, forecastCalls.get())
+        assertEquals(1, forecastRequests.size)
+        assertEquals(1, alertRequests.size)
     }
 
     @Test
@@ -361,7 +407,7 @@ class ProductionOfficialAlertSummaryFlowTest {
         }
         compose.onNodeWithTag("official-alert-summary").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText(expected, substring = false, useUnmergedTree = true).assertIsDisplayed()
-        if (expected.startsWith("Official alert:")) {
+        if (expected.startsWith("Official alert:") || expected.matches(Regex("\\d+ official alerts\\."))) {
             compose.onNodeWithContentDescription("$expected Open official alert details.").assertIsDisplayed()
         } else {
             compose.onNodeWithContentDescription(expected).assertIsDisplayed()
@@ -381,16 +427,14 @@ class ProductionOfficialAlertSummaryFlowTest {
 
     private fun assertForecastUnaffected() {
         compose.waitUntil(10_000) {
-            forecastCalls.get() == 1 && runCatching {
-                compose.onNodeWithText("12 °C", substring = true, useUnmergedTree = true).fetchSemanticsNode()
-            }.isSuccess
+            forecastCalls.get() == 1 && runCatching { compose.onNodeWithText("12 °C", substring = true, useUnmergedTree = true).fetchSemanticsNode() }.isSuccess
         }
         assertEquals("one location selection must make one forecast transport call", 1, forecastCalls.get())
         assertEquals("forecast request and official-alert request use the same selected place", 1, forecastRequests.size)
         assertEquals(1, alertRequests.size)
         assertEquals(forecastRequests.single().location, alertRequests.single().location)
         assertEquals(forecastRequests.single().coordinates, alertRequests.single().coordinates)
-        compose.onNodeWithText("12 °C", substring = true, useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithText("12 °C", substring = true, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
     }
 
     private fun assertForecastUnaffectedForTwoSelections() {
@@ -438,6 +482,25 @@ class ProductionOfficialAlertSummaryFlowTest {
         }
     }
 
+    private fun captureCycle134(name: String) {
+        compose.waitForIdle()
+        val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+        val mediaDirectory = targetContext().externalMediaDirs.firstOrNull()
+            ?: error("Android/media output directory is unavailable")
+        val directory = File(mediaDirectory, "additional_test_output/cycle134")
+        check(directory.mkdirs() || directory.isDirectory)
+        FileOutputStream(File(directory, "$name.png")).use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        }
+    }
+
+    private fun performBack() {
+        InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
+            android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK,
+        )
+        compose.waitForIdle()
+    }
+
     private fun targetContext() = InstrumentationRegistry.getInstrumentation().targetContext
 
     private companion object {
@@ -458,7 +521,7 @@ class ProductionOfficialAlertSummaryFlowTest {
         )
         val multipleAlerts = NwsHttpResponse(
             200,
-            """{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"event":"Tornado Warning","severity":"Severe","senderName":"National Weather Service","effective":"2026-10-04T10:00:00Z","expires":"2026-10-04T11:00:00Z","@id":"https://api.weather.gov/alerts/ABCD"}},{"type":"Feature","properties":{"event":"Flood Warning","severity":"Moderate","senderName":"National Weather Service","effective":"2026-10-04T10:00:00Z","expires":"2026-10-04T11:00:00Z","@id":"https://api.weather.gov/alerts/EFGH"}}]}""",
+            """{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"event":"Tornado Warning","severity":"Severe","senderName":"National Weather Service","effective":"2026-10-04T10:00:00Z","expires":"2026-10-04T11:00:00Z","description":"$longDescription","@id":"https://api.weather.gov/alerts/ABCD"}},{"type":"Feature","properties":{"event":"Flood Warning","severity":"Moderate","senderName":"National Weather Service","effective":"2026-10-04T10:00:00Z","expires":"2026-10-04T11:00:00Z","description":"Flood source supplied description.","@id":"https://api.weather.gov/alerts/EFGH"}}]}""",
         )
         const val outOfBoundsProblem = """{"type":"https://api.weather.gov/problems/InvalidParameter","title":"Invalid Parameter","status":400,"detail":"Parameter \"point\" is invalid: out of bounds"}"""
     }
