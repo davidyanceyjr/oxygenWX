@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,17 +64,22 @@ fun ProductionForecastContext(
                     if (horizon.hourly == ForecastHorizonStatus.PARTIAL) Fact(theme, "Hourly forecast", "Partial horizon")
                     if (horizon.daily == ForecastHorizonStatus.PARTIAL) Fact(theme, "Daily forecast", "Partial horizon")
                 }
-                Fact(theme, "Status", context.status.visibleText)
+                Fact(theme, "Status", context.status.visibleText, context.status.accessibilitySummary)
             }
         }
     }
 }
 
 @Composable
-private fun Fact(theme: ResolvedTheme, label: String, value: String) {
+private fun Fact(theme: ResolvedTheme, label: String, value: String, accessibilitySummary: String? = null) {
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(1.dp)) {
         Text(label, style = theme.typography.labelMedium.copy(fontSize = 13.sp), color = theme.palette.secondaryData)
-        Text(value, style = theme.typography.bodyMedium.copy(fontSize = 16.sp), color = theme.palette.content)
+        Text(
+            value,
+            modifier = accessibilitySummary?.let { summary -> Modifier.semantics { contentDescription = summary } } ?: Modifier,
+            style = theme.typography.bodyMedium.copy(fontSize = 16.sp),
+            color = theme.palette.content,
+        )
     }
 }
 

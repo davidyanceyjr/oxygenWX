@@ -2,7 +2,9 @@ package com.oxygen.weather.application
 
 import com.oxygen.weather.data.LiveWeatherResult
 import com.oxygen.weather.data.ForecastCacheReadResult
+import com.oxygen.weather.data.ForecastCacheRecord
 import com.oxygen.weather.data.ForecastCacheStore
+import com.oxygen.weather.data.ForecastCacheWriteResult
 import com.oxygen.weather.data.ForecastData
 import com.oxygen.weather.data.WeatherRepository
 import com.oxygen.weather.data.provider.ForecastRequest
@@ -23,6 +25,7 @@ sealed interface LiveForecastState {
         override val request: ForecastRequest,
         val result: LiveWeatherResult.Success,
         val presentation: LiveWeatherPresentation,
+        val cacheWriteOutcome: ForecastCacheWriteResult? = null,
     ) : LiveForecastState
     /** A restored normalized forecast while the live refresh for this request continues. */
     data class Cached(
@@ -36,6 +39,8 @@ sealed interface LiveForecastState {
         override val request: ForecastRequest,
         val kind: LiveFetchFailureKind,
         val status: String,
+        val retainedCache: ForecastCacheRecord? = null,
+        val failureOccurredAt: Instant? = null,
     ) : LiveForecastState
 }
 
@@ -86,31 +91,39 @@ class LiveForecastController(
                 val result = try {
                     repository.fetchLive(request)
                 } catch (_: Exception) {
-                    complete(loading.generation, failure(loading.generation, request, LiveFetchFailureKind.UNEXPECTED))
+                    complete(loading.generation, failure(loading.generation, request, LiveFetchFailureKind.UNEXPECTED, matchingCache))
                     return@execute
                 }
                 val state = when (result) {
                     is LiveWeatherResult.Success -> if (result.request != request) {
                         failure(loading.generation, request, LiveFetchFailureKind.UNEXPECTED)
                     } else {
-                        if (result.forecast != null && isCurrent(loading.generation)) {
+                        val cacheWriteOutcome = if (result.forecast != null && cacheStore != null && isCurrent(loading.generation)) {
                             try {
-                                cacheStore?.write(result.forecast, request.coordinates)
+                                cacheStore.write(result.forecast, request.coordinates)
                             } catch (_: Exception) {
                                 // Cache persistence is opportunistic; live success remains authoritative.
+                                ForecastCacheWriteResult.WriteFailure
                             }
-                        }
+                        } else null
                         LiveForecastState.Loaded(
                             loading.generation,
                             request,
                             result,
                             HomePresentationMapper.mapLiveSuccess(result),
+                            cacheWriteOutcome,
                         )
                     }
-                    is LiveWeatherResult.UnsupportedFields -> failure(loading.generation, request, LiveFetchFailureKind.UNSUPPORTED_FIELDS)
-                    LiveWeatherResult.NoResult -> failure(loading.generation, request, LiveFetchFailureKind.NO_RESULT)
-                    is LiveWeatherResult.TransportFailure -> failure(loading.generation, request, LiveFetchFailureKind.TRANSPORT)
-                    is LiveWeatherResult.InvalidMapping -> failure(loading.generation, request, LiveFetchFailureKind.INVALID_MAPPING)
+                    is LiveWeatherResult.UnsupportedFields -> failure(loading.generation, request, LiveFetchFailureKind.UNSUPPORTED_FIELDS, matchingCache)
+                    LiveWeatherResult.NoResult -> failure(loading.generation, request, LiveFetchFailureKind.NO_RESULT, matchingCache)
+                    is LiveWeatherResult.TransportFailure -> failure(
+                        loading.generation,
+                        request,
+                        LiveFetchFailureKind.TRANSPORT,
+                        matchingCache,
+                        result.failure.occurredAt,
+                    )
+                    is LiveWeatherResult.InvalidMapping -> failure(loading.generation, request, LiveFetchFailureKind.INVALID_MAPPING, matchingCache)
                 }
                 complete(loading.generation, state)
             }
@@ -131,8 +144,13 @@ class LiveForecastController(
 
     private fun isCurrent(generation: Long): Boolean = currentState?.generation == generation
 
-    private fun failure(generation: Long, request: ForecastRequest, kind: LiveFetchFailureKind) =
-        LiveForecastState.Failed(generation, request, kind, kind.safeStatus())
+    private fun failure(
+        generation: Long,
+        request: ForecastRequest,
+        kind: LiveFetchFailureKind,
+        retainedCache: ForecastCacheRecord? = null,
+        occurredAt: Instant? = null,
+    ) = LiveForecastState.Failed(generation, request, kind, kind.safeStatus(), retainedCache, occurredAt)
 }
 
 private fun LiveFetchFailureKind.safeStatus(): String = when (this) {

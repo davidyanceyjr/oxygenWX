@@ -14,12 +14,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.LayoutDirection
 import com.oxygen.weather.application.LiveForecastController
+import com.oxygen.weather.application.LiveFetchFailureKind
+import com.oxygen.weather.application.CachedForecastFreshness
 import com.oxygen.weather.application.LiveForecastState
 import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.data.CacheWriteOutcome
 import com.oxygen.weather.data.DataProvenance
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.data.AndroidForecastCacheStore
+import com.oxygen.weather.data.ForecastCacheStore
+import com.oxygen.weather.data.ForecastCacheWriteResult
 import com.oxygen.weather.data.RefreshFailure
 import com.oxygen.weather.data.RefreshFailureKind
 import com.oxygen.weather.data.WeatherDataOrigin
@@ -246,7 +250,8 @@ class MainActivity : ComponentActivity() {
             transport = ProductionForecastTestHooks.transportOverride ?: UrlConnectionOpenMeteoTransport(),
             clock = forecastClock,
             executor = forecastWorker,
-            cacheStore = AndroidForecastCacheStore(applicationContext, forecastClock),
+            cacheStore = ProductionForecastTestHooks.cacheStoreFactory?.invoke(applicationContext, forecastClock)
+                ?: AndroidForecastCacheStore(applicationContext, forecastClock),
             onStateChanged = { state -> mainHandler.post {
                 selectedForecastState.value = state.toSelectedPresentationState(forecastClock)
             } },
@@ -382,6 +387,7 @@ internal object LocationSearchTestHooks {
 internal object ProductionForecastTestHooks {
     @Volatile var transportOverride: OpenMeteoTransport? = null
     @Volatile var clockOverride: Clock? = null
+    @Volatile var cacheStoreFactory: ((android.content.Context, Clock) -> ForecastCacheStore)? = null
 }
 
 private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentationState(
@@ -394,8 +400,48 @@ private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.s
     is LiveForecastState.Loading -> request.loadingPresentation()
     is LiveForecastState.Failed -> SelectedForecastPresentationState(
         locationName = request.location.displayName ?: "Selected location",
-        home = emptySelectedHome(request.location.displayName ?: "Selected location"),
-        status = StatusPresentation.of(status),
+        home = retainedCache?.let { record ->
+            val cached = HomePresentationMapper.mapCachedForecast(
+                record.forecast,
+                record.cachedAt,
+                CachedForecastFreshness.classify(record.cachedAt, clock),
+            )
+            HomePresentation(
+                current = unavailableCurrent(cached.locationName ?: "Selected location"),
+                hourlyWindows = cached.hourlyWindows,
+                hourlyDateJumps = cached.hourlyDateJumps,
+                dailyWindows = cached.dailyWindows,
+                detailGroups = emptyList(),
+                sourceLine = "Forecast source: ${cached.forecastProvenance.source?.displayName ?: "Weather source unavailable"}",
+                updatedLine = cached.forecastProvenance.retrievedAt?.let { retrievedAt ->
+                    val zone = java.time.ZoneId.of(cached.timeZoneId)
+                    "Retrieved ${retrievedAt.atZone(zone).format(java.time.format.DateTimeFormatter.ofPattern("h:mm a"))} · ${zone.id}"
+                } ?: "Provider retrieval time unavailable · ${cached.timeZoneId}",
+            )
+        } ?: emptySelectedHome(request.location.displayName ?: "Selected location"),
+        status = retainedCache?.let { record ->
+            val freshness = CachedForecastFreshness.classify(record.cachedAt, clock)
+            val ageStatus = when (freshness) {
+                WeatherFreshness.CURRENT -> "Recent cache (under 2 hours)."
+                WeatherFreshness.STALE -> "Stale cache (2 hours or older)."
+                WeatherFreshness.UNKNOWN -> "Cache age unknown."
+            }
+            StatusPresentation.of("Refresh failed: ${kind.toStatusLabel()}. Retained cached forecast data is shown. $ageStatus")
+        } ?: kind.toFailureStatus(),
+        forecastContext = retainedCache?.let { record ->
+            val freshness = CachedForecastFreshness.classify(record.cachedAt, clock)
+            val cached = HomePresentationMapper.mapCachedForecast(record.forecast, record.cachedAt, freshness)
+            val retainedStatus = StatusPresentation.of(
+                "Refresh failed: ${kind.toStatusLabel()}. Retained cached forecast data is shown. " + when (freshness) {
+                    WeatherFreshness.CURRENT -> "Recent cache (under 2 hours)."
+                    WeatherFreshness.STALE -> "Stale cache (2 hours or older)."
+                    WeatherFreshness.UNKNOWN -> "Cache age unknown."
+                },
+            )
+            ForecastContextMapper.mapCached(cached, retainedStatus).copy(
+                refreshOutcome = com.oxygen.weather.presentation.PresentedRefreshOutcome.FAILED_WITH_RETAINED_DATA,
+            )
+        }
     )
     is LiveForecastState.Loaded -> {
         val hours = presentation.hourlyWindows.sumOf { it.entries.size }
@@ -404,7 +450,12 @@ private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.s
             hourly = if (hours in 1..71) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
             daily = if (days in 1..9) ForecastHorizonStatus.PARTIAL else ForecastHorizonStatus.COMPLETE,
         ) else null
-        val stateStatus = StatusPresentation.of("Live weather data from ${presentation.sourceName ?: "the selected source"}.")
+        val stateStatus = StatusPresentation.of(
+            "Live weather data from ${presentation.sourceName ?: "the selected source"}." +
+                if (cacheWriteOutcome != null && cacheWriteOutcome != ForecastCacheWriteResult.Success) {
+                    " Cache update failed; live forecast data is shown."
+                } else "",
+        )
         SelectedForecastPresentationState(
             locationName = presentation.locationName ?: "Selected location",
             home = HomePresentationMapper.mapLiveToHome(presentation),
@@ -451,6 +502,26 @@ private fun LiveForecastState.toSelectedPresentationState(clock: Clock = Clock.s
             forecastContext = ForecastContextMapper.mapCached(presentation, stateStatus),
         )
     }
+}
+
+private fun LiveFetchFailureKind.toStatusLabel(): String = when (this) {
+    LiveFetchFailureKind.UNSUPPORTED_FIELDS -> "requested weather fields are unavailable"
+    LiveFetchFailureKind.NO_RESULT -> "no weather data was returned"
+    LiveFetchFailureKind.TRANSPORT -> "the weather source could not be reached"
+    LiveFetchFailureKind.INVALID_MAPPING -> "weather data could not be interpreted"
+    LiveFetchFailureKind.UNEXPECTED -> "weather data could not be loaded"
+}
+
+private fun LiveFetchFailureKind.toFailureStatus(): StatusPresentation {
+    val kind = when (this) {
+        LiveFetchFailureKind.TRANSPORT -> RefreshFailureKind.NETWORK
+        LiveFetchFailureKind.UNSUPPORTED_FIELDS, LiveFetchFailureKind.INVALID_MAPPING -> RefreshFailureKind.SOURCE
+        LiveFetchFailureKind.NO_RESULT, LiveFetchFailureKind.UNEXPECTED -> RefreshFailureKind.UNKNOWN
+    }
+    val state = HomePresentationMapper.mapLoadState(
+        HomePresentationInput.FailureWithoutData(RefreshFailure(kind)),
+    ) as HomeLoadState.FailedWithoutData
+    return state.status
 }
 
 private fun emptySelectedHome(location: String) = HomePresentation(

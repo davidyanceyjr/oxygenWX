@@ -546,20 +546,24 @@ repository/application-state boundary with explicit cache origin and freshness.
 
 Evidence and limitations: `.codex/history/2026-10-05-125-cached-forecast-restoration.md` and `.codex/test-artifacts/125-cached-forecast-restoration/`. Focused API 37 installed restoration passed; the full Android instrumentation suite and TalkBack checks were not run.
 
-### R3.5 — Offline/stale refresh behavior — PLANNED
+### R3.5 — Offline/stale refresh behavior — DONE
 
 Implement and verify cached launch plus freshness classification and visible
 cached/stale presentation without changing live-success behavior.
 
 **Exit:** Installed cold-launch/offline and stale-time fixtures show cached origin/freshness while live-success output remains unchanged; refresh-age boundary tests pass.
 
-### R3.5A — Refresh failure and cache-write outcomes — PLANNED
+Evidence and limitations: `.codex/history/2026-10-05-126-offline-stale-refresh-presentation.md` and `.codex/test-artifacts/126-offline-stale-refresh-presentation/`. Focused cache-restoration cases passed; the full connected suite stopped after 13 of 42 cases due runtime, and TalkBack was not run.
+
+### R3.5A — Refresh failure and cache-write outcomes — DONE
 
 After R3.5, implement and verify foreground refresh failure with cache, failure
 without cache, and live-success/cache-write-failure outcomes. Reuse the typed
 R1.2A presentation states; do not fabricate a successful refresh.
 
 **Exit:** Three deterministic outcomes—refresh failure with cache, failure without cache, and live success with cache-write failure—map to truthful R1.2A states and pass repository/UI evidence.
+
+Evidence and limitations: `.codex/history/2026-10-05-127-refresh-failure-and-cache-write-outcomes.md` and `.codex/test-artifacts/127-refresh-failure-and-cache-write-outcomes/`. All three scenarios passed the compact LTR installed check; the no-cache failure also passed a large-font RTL smoke. TalkBack service traversal/speech was not run.
 
 ## R4 — Official safety information
 

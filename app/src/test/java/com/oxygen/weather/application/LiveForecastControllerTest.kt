@@ -212,7 +212,69 @@ class LiveForecastControllerTest {
         )
         controller.fetch(req)
         executor.runNext()
-        assertTrue(controller.state() is LiveForecastState.Loaded)
+        val loaded = controller.state() as LiveForecastState.Loaded
+        assertEquals(ForecastCacheWriteResult.WriteFailure, loaded.cacheWriteOutcome)
+    }
+
+    @Test fun returnedCacheWriteOutcomesArePreservedBesideLiveSuccess() {
+        val req = request(chicago)
+        listOf(
+            ForecastCacheWriteResult.Success,
+            ForecastCacheWriteResult.WriteFailure,
+            ForecastCacheWriteResult.InvalidInput,
+        ).forEach { writeResult ->
+            val executor = QueueExecutor()
+            val cache = FakeCache(ForecastCacheReadResult.Absent, writeResult = writeResult)
+            val controller = LiveForecastController(
+                repository { success(it, current = null, forecast = forecast(chicago)) }, executor,
+                cacheStore = cache,
+            )
+            controller.fetch(req)
+            executor.runNext()
+            val loaded = controller.state() as LiveForecastState.Loaded
+            assertEquals(writeResult, loaded.cacheWriteOutcome)
+            assertEquals(WeatherOrigin.LIVE, loaded.presentation.origin)
+            assertNotNull(loaded.presentation.hourlyWindows.single().entries.single().temperature)
+        }
+    }
+
+    @Test fun matchingCacheSurvivesEveryRefreshFailureIncludingRepositoryException() {
+        val req = request(chicago)
+        val cachedForecast = forecast(chicago)
+        val cachedAt = instant.minusSeconds(3 * 3600)
+        val failures: List<Pair<LiveFetchFailureKind, (ForecastRequest) -> LiveWeatherResult>> = listOf(
+            (LiveFetchFailureKind.UNSUPPORTED_FIELDS to { _: ForecastRequest -> LiveWeatherResult.UnsupportedFields(setOf(ForecastField.PRESSURE)) }),
+            (LiveFetchFailureKind.NO_RESULT to { _: ForecastRequest -> LiveWeatherResult.NoResult }),
+            (LiveFetchFailureKind.TRANSPORT to { _: ForecastRequest -> LiveWeatherResult.TransportFailure(ForecastTransportFailure(ForecastTransportFailure.Kind.NETWORK, instant)) }),
+            (LiveFetchFailureKind.INVALID_MAPPING to { _: ForecastRequest -> LiveWeatherResult.InvalidMapping(setOf(WeatherSection.CURRENT)) }),
+            (LiveFetchFailureKind.UNEXPECTED to { _: ForecastRequest -> throw IllegalStateException("private transport detail") }),
+        )
+        failures.forEach { (expectedKind, fetch) ->
+            val cache = FakeCache(ForecastCacheReadResult.Found(ForecastCacheRecord(cachedForecast, req.coordinates, cachedAt)))
+            val executor = QueueExecutor()
+            val controller = LiveForecastController(repository(fetch), executor, cacheStore = cache)
+            controller.fetch(req)
+            executor.runNext()
+            val failed = controller.state() as LiveForecastState.Failed
+            assertEquals(expectedKind, failed.kind)
+            assertEquals(instant.takeIf { expectedKind == LiveFetchFailureKind.TRANSPORT }, failed.failureOccurredAt)
+            assertEquals(cachedForecast, failed.retainedCache?.forecast)
+            assertEquals(cachedAt, failed.retainedCache?.cachedAt)
+            assertTrue(failed.status.isNotBlank())
+            assertEquals(1, cache.readIds.size)
+        }
+    }
+
+    @Test fun failureWithoutMatchingCacheHasNoRetainedWeather() {
+        val req = request(chicago)
+        val executor = QueueExecutor()
+        val controller = LiveForecastController(repository { LiveWeatherResult.NoResult }, executor,
+            cacheStore = FakeCache(ForecastCacheReadResult.Absent))
+        controller.fetch(req)
+        executor.runNext()
+        val failed = controller.state() as LiveForecastState.Failed
+        assertNull(failed.retainedCache)
+        assertEquals(LiveFetchFailureKind.NO_RESULT, failed.kind)
     }
 
     @Test fun liveFailureReplacesInterimCachedStateWithExistingFailureState() {
@@ -328,6 +390,7 @@ class LiveForecastControllerTest {
         private val outcome: ForecastCacheReadResult,
         private val throwOnRead: Boolean = false,
         private val throwOnWrite: Boolean = false,
+        private val writeResult: ForecastCacheWriteResult = ForecastCacheWriteResult.WriteFailure,
     ) : ForecastCacheStore {
         val readIds = mutableListOf<LocalLocationId>()
         val writes = mutableListOf<Pair<ForecastData, GeoCoordinates>>()
@@ -339,7 +402,7 @@ class LiveForecastControllerTest {
         override fun write(forecast: ForecastData, requestCoordinates: GeoCoordinates): ForecastCacheWriteResult {
             writes += forecast to requestCoordinates
             if (throwOnWrite) throw IllegalStateException("write failure")
-            return ForecastCacheWriteResult.WriteFailure
+            return writeResult
         }
     }
 }
