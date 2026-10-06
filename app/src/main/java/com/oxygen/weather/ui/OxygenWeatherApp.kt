@@ -4,6 +4,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -29,6 +31,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -49,7 +52,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -67,6 +72,7 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
+import com.oxygen.weather.presentation.OfficialAlertDetailPresentation
 import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
@@ -109,6 +115,8 @@ fun OxygenWeatherApp(
     savedLocationCoordinator: SavedLocationCoordinator? = null,
     selectedForecast: SelectedForecastPresentationState? = null,
     officialAlertSummary: OfficialAlertSummaryPresentation? = null,
+    officialAlertDetail: OfficialAlertDetailPresentation? = null,
+    onOpenOfficialAlertSource: (String) -> Unit = {},
     layoutDirectionOverride: LayoutDirection? = null,
 ) {
     var selectedThemeIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -129,8 +137,10 @@ fun OxygenWeatherApp(
     var pageMenuExpanded by remember { mutableStateOf(false) }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
-    BackHandler(enabled = !searchOpen && pagerState.currentPage > 0) {
-        scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
+    var alertDetail by remember { mutableStateOf<OfficialAlertDetailPresentation?>(null) }
+    BackHandler(enabled = alertDetail != null || (!searchOpen && pagerState.currentPage > 0)) {
+        if (alertDetail != null) alertDetail = null
+        else scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
@@ -158,7 +168,12 @@ fun OxygenWeatherApp(
                     )
                     return@ProductionBackdrop
                 }
-                Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+                Box(Modifier.fillMaxSize()) {
+                  Column(
+                    Modifier.fillMaxSize().safeDrawingPadding().then(
+                        if (alertDetail != null) Modifier.clearAndSetSemantics { } else Modifier,
+                    ),
+                  ) {
                     val selectedPage = HomePage.entries[pagerState.currentPage]
                     Box(Modifier.fillMaxWidth().heightIn(min = theme.headerToTabHeight())) {
                         Column(Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)) {
@@ -234,12 +249,24 @@ fun OxygenWeatherApp(
                     Spacer(Modifier.height(theme.headerToBodyGap()))
                     HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
                         when (HomePage.entries[page]) {
-                            HomePage.NOW -> NowPage(displayPresentation, displayStatus, displayHorizons, theme, displayContext, officialAlertSummary)
+                            HomePage.NOW -> NowPage(
+                                displayPresentation, displayStatus, displayHorizons, theme, displayContext, officialAlertSummary,
+                                onOpenAlertDetail = if (pagerState.currentPage == 0) officialAlertDetail?.let { detail -> ({ alertDetail = detail }) } else null,
+                            )
                             HomePage.HOURLY -> HourlyPage(displayPresentation, displayStatus, displayHorizons, theme)
                             HomePage.DAILY -> DailyPage(displayPresentation, displayStatus, displayHorizons, theme)
                             HomePage.DETAILS -> DetailsPage(displayPresentation, displayStatus, theme, displayContext)
                         }
                     }
+                  }
+                  alertDetail?.let { detail ->
+                      OfficialAlertDetailSurface(
+                          detail = detail,
+                          theme = theme,
+                          onReturn = { alertDetail = null },
+                          onOpenSource = onOpenOfficialAlertSource,
+                      )
+                  }
                 }
             }
         }
@@ -321,6 +348,7 @@ private fun NowPage(
     theme: ResolvedTheme,
     forecastContext: ForecastContextPresentation?,
     officialAlertSummary: OfficialAlertSummaryPresentation?,
+    onOpenAlertDetail: (() -> Unit)?,
 ) {
     val layout = theme.geometry
     val current = home.current
@@ -338,12 +366,22 @@ private fun NowPage(
                 theme,
                 modifier = Modifier.fillMaxWidth().testTag("official-alert-summary"),
             ) {
-                Text(
-                    summary.summaryText,
-                    modifier = Modifier.semantics { contentDescription = summary.summaryText },
-                    style = theme.typography.bodyMedium,
-                    color = theme.palette.content,
-                )
+                if (onOpenAlertDetail != null) {
+                    TextButton(
+                        onClick = onOpenAlertDetail,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = theme.geometry.controlTargetMinimum)
+                            .semantics { contentDescription = "${summary.summaryText} Open official alert details." },
+                    ) {
+                        Text(summary.summaryText, style = theme.typography.bodyMedium, color = theme.palette.content)
+                    }
+                } else {
+                    Text(
+                        summary.summaryText,
+                        modifier = Modifier.semantics { contentDescription = summary.summaryText },
+                        style = theme.typography.bodyMedium,
+                        color = theme.palette.content,
+                    )
+                }
             }
         }
         listOfNotNull(
@@ -354,6 +392,65 @@ private fun NowPage(
         }
         if (forecastContext != null) ProductionForecastContext(theme, forecastContext)
         else NowProvenanceStatus(theme, home.sourceLine, home.updatedLine, status)
+    }
+}
+
+@Composable
+private fun OfficialAlertDetailSurface(
+    detail: OfficialAlertDetailPresentation,
+    theme: ResolvedTheme,
+    onReturn: () -> Unit,
+    onOpenSource: (String) -> Unit,
+) {
+    Box(
+        Modifier.fillMaxSize()
+            .background(theme.palette.canvas)
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    do {
+                        val event = awaitPointerEvent()
+                        event.changes.forEach { it.consume() }
+                    } while (event.changes.any { it.pressed })
+                }
+            }
+            .testTag("official-alert-detail-surface"),
+    ) {
+        Column(
+            Modifier.fillMaxSize().safeDrawingPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
+            verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
+        ) {
+            TextButton(
+                onClick = onReturn,
+                modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                    .testTag("official-alert-detail-return"),
+            ) { Text("Return to Now", color = theme.palette.action) }
+            Text("Official alert", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+            AlertDetailField(theme, "Event", detail.eventName)
+            AlertDetailField(theme, "Issuer", detail.issuer)
+            detail.severity?.let { AlertDetailField(theme, "Severity", it) }
+            detail.effectiveAtText?.let { AlertDetailField(theme, "Effective", it) }
+            detail.expiresAtText?.let { AlertDetailField(theme, "Expires", it) }
+            detail.description?.let { AlertDetailField(theme, "Description", it) }
+            detail.instructions?.let { AlertDetailField(theme, "Instructions", it) }
+            detail.sourceUrlText?.let { AlertDetailField(theme, "Source", it) }
+            detail.sourceAction?.let { action ->
+                Button(
+                    onClick = { onOpenSource(action.url) },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = theme.geometry.controlTargetMinimum)
+                        .testTag("official-alert-source-action"),
+                ) { Text(action.label) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AlertDetailField(theme: ResolvedTheme, label: String, value: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+        Text(value, style = theme.typography.bodyMedium, color = theme.palette.content)
     }
 }
 

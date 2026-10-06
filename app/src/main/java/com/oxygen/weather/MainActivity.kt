@@ -3,6 +3,8 @@ package com.oxygen.weather
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.pm.ApplicationInfo
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -61,6 +63,8 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
+import com.oxygen.weather.presentation.OfficialAlertDetailMapper
+import com.oxygen.weather.presentation.OfficialAlertDetailPresentation
 import com.oxygen.weather.ui.OxygenWeatherApp
 import com.oxygen.weather.ui.EffectsLevel
 import com.oxygen.weather.platform.AndroidForegroundLocationAcquirer
@@ -89,6 +93,7 @@ class MainActivity : ComponentActivity() {
     private var activityResumed = false
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
     private val officialAlertSummaryState = mutableStateOf<OfficialAlertSummaryPresentation?>(null)
+    private val officialAlertDetailState = mutableStateOf<OfficialAlertDetailPresentation?>(null)
     private var activeOfficialAlertIdentity: Pair<OfficialAlertRequest, Long>? = null
     private val coarseLocationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         val wasPending = permissionRequestPending
@@ -282,6 +287,7 @@ class MainActivity : ComponentActivity() {
                 // fetch() publishes Loading synchronously on this selected-location handoff.
                 activeOfficialAlertIdentity = state.request to state.generation
                 officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
+                officialAlertDetailState.value = null
                 ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state)
             } else {
                 mainHandler.post {
@@ -289,8 +295,10 @@ class MainActivity : ComponentActivity() {
                         if (state is OfficialAlertState.Loading) {
                             activeOfficialAlertIdentity = state.request to state.generation
                             officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
+                            officialAlertDetailState.value = null
                         } else if (activeOfficialAlertIdentity == (state.request to state.generation)) {
                             officialAlertSummaryState.value = OfficialAlertSummaryMapper.map(state)
+                            officialAlertDetailState.value = OfficialAlertDetailMapper.map(state)
                         }
                     }
                     ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state)
@@ -361,6 +369,8 @@ class MainActivity : ComponentActivity() {
                 savedLocationCoordinator = savedLocationCoordinator,
                 selectedForecast = selectedForecastState.value,
                 officialAlertSummary = officialAlertSummaryState.value,
+                officialAlertDetail = officialAlertDetailState.value,
+                onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
         }
@@ -395,11 +405,23 @@ class MainActivity : ComponentActivity() {
         val alertRequest = OfficialAlertRequest(request.location, request.coordinates)
         ProductionOfficialAlertTestHooks.onRequestFetched?.invoke(alertRequest)
         officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
+        officialAlertDetailState.value = null
         if (alertController == null) {
             activeOfficialAlertIdentity = null
             officialAlertSummaryState.value = null
         } else {
             alertController?.fetch(alertRequest)
+        }
+    }
+
+    private fun openOfficialAlertSource(rawUrl: String) {
+        val parsed = runCatching { URI(rawUrl) }.getOrNull() ?: return
+        val scheme = parsed.scheme?.lowercase(Locale.ROOT)
+        if (!parsed.isAbsolute || scheme !in setOf("http", "https") || parsed.host.isNullOrBlank() || parsed.rawUserInfo != null) return
+        val uri = Uri.parse(rawUrl)
+        ProductionOfficialAlertTestHooks.onSourceOpened?.invoke(uri.toString())?.let { return }
+        runCatching {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
     }
 
@@ -456,6 +478,8 @@ internal object ProductionOfficialAlertTestHooks {
     @Volatile var clockOverride: Clock? = null
     @Volatile var onRequestFetched: ((OfficialAlertRequest) -> Unit)? = null
     @Volatile var onStateChanged: ((OfficialAlertState) -> Unit)? = null
+    /** A non-null observer handles source actions during instrumentation without launching another app. */
+    @Volatile var onSourceOpened: ((String) -> Unit)? = null
 }
 
 private fun ForecastRequest.loadingPresentation() = SelectedForecastPresentationState(
