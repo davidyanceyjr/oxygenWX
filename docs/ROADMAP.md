@@ -594,11 +594,13 @@ distinctions, issuer provenance, and attribution.
 
 **Exit:** Repository/state tests preserve supported/no-alert/unsupported/failure distinctions and issuer provenance for selected location; no alert copy is derived from forecast heuristics.
 
-### R4.3 — Home alert summary — PLANNED
+### R4.3 — Home alert summary — DONE
 
 Add concise, non-color-only summary to Now without treating forecast hazards as official alerts.
 
 **Exit:** Installed Now screenshots and semantics checks cover no-alert, one alert, unsupported, and failure summaries; severity/state is conveyed without color alone and forecast values do not create alerts.
+
+Evidence: `.codex/history/2026-10-06-132-home-alert-summary.md`.
 
 ### R4.4 — Alert detail surface — PLANNED
 

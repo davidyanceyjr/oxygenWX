@@ -66,6 +66,7 @@ import com.oxygen.weather.presentation.HomePresentation
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
+import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
 import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
@@ -107,6 +108,7 @@ fun OxygenWeatherApp(
     onRequestDeviceLocation: () -> Unit = {},
     savedLocationCoordinator: SavedLocationCoordinator? = null,
     selectedForecast: SelectedForecastPresentationState? = null,
+    officialAlertSummary: OfficialAlertSummaryPresentation? = null,
     layoutDirectionOverride: LayoutDirection? = null,
 ) {
     var selectedThemeIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -232,7 +234,7 @@ fun OxygenWeatherApp(
                     Spacer(Modifier.height(theme.headerToBodyGap()))
                     HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
                         when (HomePage.entries[page]) {
-                            HomePage.NOW -> NowPage(displayPresentation, displayStatus, displayHorizons, theme, displayContext)
+                            HomePage.NOW -> NowPage(displayPresentation, displayStatus, displayHorizons, theme, displayContext, officialAlertSummary)
                             HomePage.HOURLY -> HourlyPage(displayPresentation, displayStatus, displayHorizons, theme)
                             HomePage.DAILY -> DailyPage(displayPresentation, displayStatus, displayHorizons, theme)
                             HomePage.DETAILS -> DetailsPage(displayPresentation, displayStatus, theme, displayContext)
@@ -318,6 +320,7 @@ private fun NowPage(
     partialHorizons: ForecastHorizonPresentation?,
     theme: ResolvedTheme,
     forecastContext: ForecastContextPresentation?,
+    officialAlertSummary: OfficialAlertSummaryPresentation?,
 ) {
     val layout = theme.geometry
     val current = home.current
@@ -330,6 +333,19 @@ private fun NowPage(
     ) {
         NowHero(theme, current)
         NowSupportingMeasurements(theme, current)
+        officialAlertSummary?.let { summary ->
+            ProductionQuietSectionSurface(
+                theme,
+                modifier = Modifier.fillMaxWidth().testTag("official-alert-summary"),
+            ) {
+                Text(
+                    summary.summaryText,
+                    modifier = Modifier.semantics { contentDescription = summary.summaryText },
+                    style = theme.typography.bodyMedium,
+                    color = theme.palette.content,
+                )
+            }
+        }
         listOfNotNull(
             partialHorizons?.hourly?.takeIf { it == ForecastHorizonStatus.PARTIAL }?.let { "Hourly forecast horizon is partial." },
             partialHorizons?.daily?.takeIf { it == ForecastHorizonStatus.PARTIAL }?.let { "Daily forecast horizon is partial." },

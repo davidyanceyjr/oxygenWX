@@ -59,6 +59,8 @@ import com.oxygen.weather.presentation.HomePresentationState
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextMapper
+import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
+import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
 import com.oxygen.weather.ui.OxygenWeatherApp
 import com.oxygen.weather.ui.EffectsLevel
 import com.oxygen.weather.platform.AndroidForegroundLocationAcquirer
@@ -86,6 +88,8 @@ class MainActivity : ComponentActivity() {
     private var permissionRationaleConfirmed = false
     private var activityResumed = false
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
+    private val officialAlertSummaryState = mutableStateOf<OfficialAlertSummaryPresentation?>(null)
+    private var activeOfficialAlertIdentity: Pair<OfficialAlertRequest, Long>? = null
     private val coarseLocationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         val wasPending = permissionRequestPending
         permissionRequestPending = false
@@ -274,7 +278,24 @@ class MainActivity : ComponentActivity() {
             clock = ProductionOfficialAlertTestHooks.clockOverride ?: Clock.systemUTC(),
         )
         alertController = OfficialAlertController(alertRepository, alertWorker) { state ->
-            mainHandler.post { ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state) }
+            if (state is OfficialAlertState.Loading && Looper.myLooper() == Looper.getMainLooper()) {
+                // fetch() publishes Loading synchronously on this selected-location handoff.
+                activeOfficialAlertIdentity = state.request to state.generation
+                officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
+                ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state)
+            } else {
+                mainHandler.post {
+                    if (alertController?.state() == state) {
+                        if (state is OfficialAlertState.Loading) {
+                            activeOfficialAlertIdentity = state.request to state.generation
+                            officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
+                        } else if (activeOfficialAlertIdentity == (state.request to state.generation)) {
+                            officialAlertSummaryState.value = OfficialAlertSummaryMapper.map(state)
+                        }
+                    }
+                    ProductionOfficialAlertTestHooks.onStateChanged?.invoke(state)
+                }
+            }
         }
         val search = LocationSearchTestHooks.searchFactory?.invoke()
             ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
@@ -339,6 +360,7 @@ class MainActivity : ComponentActivity() {
                 onRequestDeviceLocation = ::requestDeviceLocation,
                 savedLocationCoordinator = savedLocationCoordinator,
                 selectedForecast = selectedForecastState.value,
+                officialAlertSummary = officialAlertSummaryState.value,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
         }
@@ -372,7 +394,13 @@ class MainActivity : ComponentActivity() {
     private fun dispatchOfficialAlerts(request: ForecastRequest) {
         val alertRequest = OfficialAlertRequest(request.location, request.coordinates)
         ProductionOfficialAlertTestHooks.onRequestFetched?.invoke(alertRequest)
-        alertController?.fetch(alertRequest)
+        officialAlertSummaryState.value = OfficialAlertSummaryPresentation.Checking
+        if (alertController == null) {
+            activeOfficialAlertIdentity = null
+            officialAlertSummaryState.value = null
+        } else {
+            alertController?.fetch(alertRequest)
+        }
     }
 
     override fun onResume() {
