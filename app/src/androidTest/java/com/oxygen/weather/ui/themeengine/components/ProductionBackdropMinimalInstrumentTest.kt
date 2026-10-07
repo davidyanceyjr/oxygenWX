@@ -44,17 +44,22 @@ import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.presentation.WeatherMarkCondition
+import com.oxygen.weather.ui.themeengine.AmbientBackgroundBase
+import com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay
+import com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.resolveTheme
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
 import java.io.FileOutputStream
+import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicInteger
 
 @RunWith(AndroidJUnit4::class)
@@ -176,6 +181,89 @@ class ProductionBackdropMinimalInstrumentTest {
         }
     }
 
+    @Test
+    fun instrumentContourStrengthsStayDecorativeStaticAndCanvasOnlyWhenOff() {
+        val effects = ThemeEffectsLevel.entries.toList()
+        val selected = mutableIntStateOf(0)
+        val clicks = AtomicInteger(0)
+        compose.setContent {
+            val deviceDensity = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(deviceDensity.density, fontScale = 1f),
+                LocalLayoutDirection provides LayoutDirection.Ltr,
+            ) {
+                val effect = effects[selected.intValue]
+                val theme = resolveTheme(WeatherThemeId.INSTRUMENT, effects = effect)
+                ProductionBackdrop(theme, Modifier.requiredSize(360.dp, 640.dp).testTag(BACKDROP_TAG)) {
+                    Column(Modifier.fillMaxSize().padding(24.dp)) {
+                        Text("Instrument condition", color = theme.palette.content, modifier = Modifier.testTag(CONDITION_TAG))
+                        Spacer(Modifier.weight(1f))
+                        Box(
+                            Modifier.fillMaxWidth().height(48.dp)
+                                .clickable { clicks.incrementAndGet() }
+                                .semantics { contentDescription = ACTION_LABEL },
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text("Inspect forecast", color = theme.palette.content)
+                        }
+                    }
+                }
+            }
+        }
+
+        val hashes = mutableMapOf<ThemeEffectsLevel, String>()
+        effects.forEachIndexed { index, effect ->
+            compose.runOnIdle { selected.intValue = index }
+            compose.waitForIdle()
+            val theme = resolveTheme(WeatherThemeId.INSTRUMENT, effects = effect)
+            val expectedStrength = when (effect) {
+                ThemeEffectsLevel.OFF -> AmbientBackgroundStrength.NONE
+                ThemeEffectsLevel.SUBTLE -> AmbientBackgroundStrength.SUBTLE
+                ThemeEffectsLevel.FULL -> AmbientBackgroundStrength.FULL
+            }
+            assertEquals(
+                if (effect == ThemeEffectsLevel.OFF) AmbientBackgroundBase.SOLID else AmbientBackgroundBase.TONAL_FIELD,
+                theme.ambientBackground.base,
+            )
+            assertEquals(
+                if (effect == ThemeEffectsLevel.OFF) AmbientBackgroundOverlay.NONE else AmbientBackgroundOverlay.TECHNICAL_GRID,
+                theme.ambientBackground.overlay,
+            )
+            assertEquals(expectedStrength, theme.ambientBackground.overlayStrength)
+            compose.onNodeWithTag(CONDITION_TAG).assertIsDisplayed()
+            compose.onNodeWithContentDescription(ACTION_LABEL).assertExists().performClick()
+            assertEquals("Foreground action remains available", index + 1, clicks.get())
+
+            val bitmap = compose.onNodeWithTag(BACKDROP_TAG).captureToImage().asAndroidBitmap()
+            assertTrue("$effect backdrop is opaque", (0 until bitmap.height step 24).all { y ->
+                (0 until bitmap.width step 24).all { x -> bitmap.getPixel(x, y) ushr 24 == 0xFF }
+            })
+            if (effect == ThemeEffectsLevel.OFF) {
+                assertEquals("Effects Off remains canvas-only", 0xFF0B0F14.toInt(), bitmap.getPixel(0, 0))
+            }
+            val first = bitmapHash(bitmap)
+            val second = bitmapHash(compose.onNodeWithTag(BACKDROP_TAG).captureToImage().asAndroidBitmap())
+            assertEquals("$effect remains static", first, second)
+            hashes[effect] = first
+            saveCapture(bitmap, "144-instrument-${effect.name.lowercase()}-contours-360x640-font1-ltr.png", "144-instrument-contours")
+        }
+        assertNotEquals("Subtle and Full contour fields differ", hashes[ThemeEffectsLevel.SUBTLE], hashes[ThemeEffectsLevel.FULL])
+        println("Instrument Off/Subtle/Full contour captures saved; opaque background, static output, resolved strength, semantics, and foreground action=PASS")
+    }
+
+    private fun bitmapHash(bitmap: Bitmap): String {
+        val bytes = ByteArray(bitmap.width * bitmap.height * 4)
+        var index = 0
+        for (y in 0 until bitmap.height) for (x in 0 until bitmap.width) {
+            val pixel = bitmap.getPixel(x, y)
+            bytes[index++] = (pixel ushr 24).toByte()
+            bytes[index++] = (pixel ushr 16).toByte()
+            bytes[index++] = (pixel ushr 8).toByte()
+            bytes[index++] = pixel.toByte()
+        }
+        return MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+    }
+
     private fun contrastRatio(foreground: Color, background: Color): Double {
         fun luminance(color: Color): Double {
             fun linear(value: Float): Double {
@@ -189,14 +277,18 @@ class ProductionBackdropMinimalInstrumentTest {
         return (maxOf(first, second) + 0.05) / (minOf(first, second) + 0.05)
     }
 
-    private fun saveCapture(bitmap: Bitmap, name: String) {
+    private fun saveCapture(
+        bitmap: Bitmap,
+        name: String,
+        evidenceDirectory: String = "069-tp2d-minimal-oled-instrument-backdrops",
+    ) {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val directory = File(context.getExternalFilesDir(null), "069-tp2d-minimal-oled-instrument-backdrops").apply { mkdirs() }
+        val directory = File(context.getExternalFilesDir(null), evidenceDirectory).apply { mkdirs() }
         FileOutputStream(File(directory, name)).use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/oxygen-weather-backdrops-069")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/oxygen-weather-backdrops-$evidenceDirectory")
         }
         val uri = requireNotNull(context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values))
         context.contentResolver.openOutputStream(uri, "w")!!.use {

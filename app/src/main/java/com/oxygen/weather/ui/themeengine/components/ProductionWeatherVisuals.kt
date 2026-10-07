@@ -31,6 +31,11 @@ import com.oxygen.weather.ui.themeengine.WeatherMarkStyle
 import kotlin.math.cos
 import kotlin.math.sin
 
+internal const val TERMINAL_SUBTLE_SCANLINE_ALPHA = 0.06f
+internal const val TERMINAL_FULL_SCANLINE_ALPHA = 0.10f
+internal const val TERMINAL_SUBTLE_SCANLINE_SPACING_DP = 8f
+internal const val TERMINAL_FULL_SCANLINE_SPACING_DP = 5f
+
 /** Decorative, provider-neutral condition mark. Weather meaning remains in adjacent supplied text. */
 @Composable
 fun ProductionWeatherMark(
@@ -204,15 +209,15 @@ fun ProductionBackdrop(
                 AmbientBackgroundOverlay.TECHNICAL_GRID -> {
                     when (theme.ambientBackground.overlayStrength) {
                         AmbientBackgroundStrength.NONE -> Unit
-                        AmbientBackgroundStrength.SUBTLE -> drawUniformGrid(theme.palette.outline.copy(alpha = 0.08f), 32.dp.toPx())
-                        AmbientBackgroundStrength.FULL -> drawUniformGrid(theme.palette.outline.copy(alpha = 0.14f), 24.dp.toPx())
+                        AmbientBackgroundStrength.SUBTLE -> drawInstrumentField(theme, 0.08f, 32.dp.toPx(), 0.08f)
+                        AmbientBackgroundStrength.FULL -> drawInstrumentField(theme, 0.14f, 24.dp.toPx(), 0.14f)
                     }
                 }
                 AmbientBackgroundOverlay.SCAN_LINES -> {
                     when (theme.ambientBackground.overlayStrength) {
                         AmbientBackgroundStrength.NONE -> Unit
-                        AmbientBackgroundStrength.SUBTLE -> drawScanLines(theme.palette.outline.copy(alpha = 0.07f), 8.dp.toPx())
-                        AmbientBackgroundStrength.FULL -> drawScanLines(theme.palette.outline.copy(alpha = 0.12f), 5.dp.toPx())
+                        AmbientBackgroundStrength.SUBTLE -> drawScanLines(theme.palette.outline.copy(alpha = TERMINAL_SUBTLE_SCANLINE_ALPHA), TERMINAL_SUBTLE_SCANLINE_SPACING_DP.dp.toPx())
+                        AmbientBackgroundStrength.FULL -> drawScanLines(theme.palette.outline.copy(alpha = TERMINAL_FULL_SCANLINE_ALPHA), TERMINAL_FULL_SCANLINE_SPACING_DP.dp.toPx())
                     }
                 }
             }
@@ -248,6 +253,38 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawUniformGrid(col
     while (x <= size.width) { drawLine(color, Offset(x, 0f), Offset(x, size.height), 1.dp.toPx()); x += gap }
     var y = 0f
     while (y <= size.height) { drawLine(color, Offset(0f, y), Offset(size.width, y), 1.dp.toPx()); y += gap }
+}
+
+/** Adds static, screen-relative topographic contours over Instrument's technical grid. */
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawInstrumentField(
+    theme: ResolvedTheme,
+    gridAlpha: Float,
+    gridGap: Float,
+    contourAlpha: Float,
+) {
+    drawUniformGrid(theme.palette.outline.copy(alpha = gridAlpha), gridGap)
+    val center = Offset(size.width * 0.52f, size.height * 0.52f)
+    val shortSide = size.minDimension
+    val contourColor = theme.palette.atmosphereGlow.copy(alpha = contourAlpha)
+    // Closed uneven rings read as topographic lines while remaining independent of weather.
+    listOf(0.20f, 0.29f, 0.38f, 0.47f).forEachIndexed { index, radiusFactor ->
+        val path = Path()
+        val radius = shortSide * radiusFactor
+        val pointCount = 96
+        repeat(pointCount + 1) { point ->
+            val angle = 2.0 * Math.PI * point / pointCount
+            val harmonic = 1.0 + 0.055 * sin(angle * 3.0 + index * 0.7) + 0.025 * cos(angle * 5.0 - index * 0.4)
+            val xRadius = radius * 1.38 * harmonic
+            val yRadius = radius * 0.88 * harmonic
+            val position = Offset(
+                center.x + cos(angle).toFloat() * xRadius.toFloat(),
+                center.y + sin(angle).toFloat() * yRadius.toFloat(),
+            )
+            if (point == 0) path.moveTo(position.x, position.y) else path.lineTo(position.x, position.y)
+        }
+        path.close()
+        drawPath(path, contourColor, style = Stroke(width = 1.dp.toPx()))
+    }
 }
 
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawScanLines(color: Color, gap: Float) {
