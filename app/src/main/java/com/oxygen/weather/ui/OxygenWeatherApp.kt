@@ -72,6 +72,8 @@ import androidx.compose.ui.unit.sp
 import com.oxygen.weather.presentation.ForecastHorizonStatus
 import com.oxygen.weather.presentation.ForecastHorizonPresentation
 import com.oxygen.weather.presentation.HomePresentation
+import com.oxygen.weather.presentation.HourlyEntryPresentation
+import com.oxygen.weather.presentation.DailyEntryPresentation
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
@@ -1086,6 +1088,10 @@ private fun HourlyPage(
         }
         if (window == null || window.entries.isEmpty()) {
             Text("Hourly forecast unavailable", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        } else if (theme.layout == LayoutPreset.SIMPLE) {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                window.entries.take(6).forEach { entry -> SimpleHourlyEntry(theme, entry) }
+            }
         } else {
             BoxWithConstraints(Modifier.fillMaxWidth()) {
                 val twoColumns = (maxWidth - theme.geometry.gridGap) / 2 >= 144.dp
@@ -1142,13 +1148,19 @@ private fun DailyPage(
         if (window != null && window.entries.isEmpty()) {
             Text("Daily forecast unavailable", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
         } else if (window != null) {
-            val rows: @Composable ColumnScope.() -> Unit = {
-                window.entries.take(5).forEach { entry -> ProductionDailyRow(theme, entry) }
-            }
-            if (theme.definition.id == WeatherThemeId.ATMOSPHERIC) {
-                ProductionSectionSurface(theme, Modifier.fillMaxWidth(), PaddingValues(0.dp), rows)
+            if (theme.layout == LayoutPreset.SIMPLE) {
+                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                    window.entries.take(5).forEach { entry -> SimpleDailyEntry(theme, entry) }
+                }
             } else {
-                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = rows)
+                val rows: @Composable ColumnScope.() -> Unit = {
+                    window.entries.take(5).forEach { entry -> ProductionDailyRow(theme, entry) }
+                }
+                if (theme.definition.id == WeatherThemeId.ATMOSPHERIC) {
+                    ProductionSectionSurface(theme, Modifier.fillMaxWidth(), PaddingValues(0.dp), rows)
+                } else {
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = rows)
+                }
             }
         }
         if (windows.isNotEmpty()) {
@@ -1162,6 +1174,50 @@ private fun DailyPage(
             Text("Daily forecast horizon is partial.", style = theme.typography.labelMedium, color = theme.palette.secondaryData)
         }
         StatusPanel(theme, status)
+    }
+}
+
+/** Text-first Simple layout entry. The supplied summary remains the concise spoken equivalent. */
+@Composable
+private fun SimpleHourlyEntry(theme: ResolvedTheme, entry: HourlyEntryPresentation) {
+    Column(
+        Modifier.fillMaxWidth().heightIn(min = 64.dp)
+            .drawBehind {
+                drawLine(theme.palette.outline, Offset(0f, size.height), Offset(size.width, size.height), 1.dp.toPx())
+            }
+            .padding(horizontal = theme.geometry.panelInset, vertical = 8.dp)
+            .semantics { contentDescription = entry.spokenSummary },
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Text(entry.time, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+            Text(entry.temperature, style = theme.typography.titleMedium, color = theme.palette.primaryData)
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+            entry.precipitation?.let {
+                Text("Precipitation $it", style = theme.typography.labelMedium, color = theme.palette.precipitationAccent)
+            }
+        }
+    }
+}
+
+/** Text-first Simple layout day. Every supplied fact remains visible and grouped by date. */
+@Composable
+private fun SimpleDailyEntry(theme: ResolvedTheme, entry: DailyEntryPresentation) {
+    Column(
+        Modifier.fillMaxWidth().heightIn(min = 88.dp)
+            .drawBehind {
+                drawLine(theme.palette.outline, Offset(0f, size.height), Offset(size.width, size.height), 1.dp.toPx())
+            }
+            .padding(horizontal = theme.geometry.panelInset, vertical = 10.dp)
+            .semantics { contentDescription = entry.spokenSummary },
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(entry.day, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+        Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+        Text("Low ${entry.low} · High ${entry.high}", style = theme.typography.bodyMedium, color = theme.palette.primaryData)
+        Text(entry.precipitation, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
     }
 }
 

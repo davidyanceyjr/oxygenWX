@@ -48,6 +48,8 @@ import com.oxygen.weather.data.LocalLocationId
 import com.oxygen.weather.data.WeatherBundle
 import com.oxygen.weather.data.provider.GeoCoordinates
 import com.oxygen.weather.UnitPresetTestHooks
+import com.oxygen.weather.derived.HistoricalSynthesis
+import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.ContrastLevel
@@ -519,9 +521,14 @@ class ThemeAppearanceApplicationFlowTest {
         compose.waitForIdle()
         val pages = listOf("Now", "Hourly", "Daily", "Details")
         compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
-        val fixture = canonicalSnapshot
+        val fixture = requireNotNull(canonicalSnapshot)
+        val expectedHome = HomePresentationMapper.map(fixture, HistoricalSynthesis.derive(fixture))
         val operations = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
         assertEquals(listOf(0, 0, 0, 0), operations)
+        val evidenceDirectory = File(
+            InstrumentationRegistry.getInstrumentation().targetContext.cacheDir,
+            "147-simple-forecast-surface",
+        ).apply { check(mkdirs() || isDirectory) }
 
         pages.forEachIndexed { index, page ->
             if (index > 0) {
@@ -532,16 +539,32 @@ class ThemeAppearanceApplicationFlowTest {
                 compose.waitForIdle()
             }
 
+            var selectedHourlyWindow: com.oxygen.weather.presentation.HourlyWindowPresentation? = null
+            var selectedDailyWindow: com.oxygen.weather.presentation.DailyWindowPresentation? = null
             if (page == "Hourly" || page == "Daily") {
-                val activeWindowControlsIndex = if (page == "Hourly") 0 else 1
-                compose.onAllNodesWithText("Later")[activeWindowControlsIndex]
-                    .performScrollTo().performClick()
+                performCurrentPageTextAction("Later", preferredIndex = if (page == "Hourly") 0 else 1)
                 compose.waitForIdle()
-                compose.onAllNodesWithText("Earlier")[activeWindowControlsIndex]
-                    .performScrollTo().assertIsDisplayed()
+                assertForecastTextPresent("Earlier", substring = true)
+                if (page == "Hourly") {
+                    val target = expectedHome.hourlyWindows.getOrNull(1)
+                    if (target != null) selectedHourlyWindow = target
+                    compose.onNodeWithText("Choose forecast date").performScrollTo().performClick()
+                    val jump = expectedHome.hourlyDateJumps.last()
+                    compose.onNodeWithText(jump.label).performClick()
+                    compose.waitForIdle()
+                    val dateWindow = expectedHome.hourlyWindows[jump.windowIndex]
+                    selectedHourlyWindow = dateWindow
+                    assertHourlyForecastWindow(dateWindow, simple = false)
+                } else {
+                    val target = expectedHome.dailyWindows.getOrNull(1)
+                    if (target != null) {
+                        selectedDailyWindow = target
+                        assertDailyForecastWindow(target, simple = false)
+                    }
+                }
             }
             compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
-            val pageText = visibleTextSnapshot()
+            val pageWeatherFacts = if (page == "Now") visibleWeatherFactSnapshot() else emptyList()
 
             listOf("simple", "standard").forEach { layout ->
                 compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
@@ -553,12 +576,20 @@ class ThemeAppearanceApplicationFlowTest {
                 compose.waitForIdle()
 
                 compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
+                if (layout == "simple" && page == "Hourly") saveEvidence(evidenceDirectory, "hourly-360dp-font1.0-effects-off")
+                if (layout == "simple" && page == "Daily") saveEvidence(evidenceDirectory, "daily-360dp-font1.0-effects-off")
                 if (page == "Hourly" || page == "Daily") {
-                    val activeWindowControlsIndex = if (page == "Hourly") 0 else 1
-                    compose.onAllNodesWithText("Earlier")[activeWindowControlsIndex]
-                        .performScrollTo().assertIsDisplayed()
+                    assertForecastTextPresent(expectedHome.sourceLine)
+                    assertForecastTextPresent(expectedHome.updatedLine)
+                    assertForecastTextPresent("Development fixture data", substring = true)
+                    assertForecastTextPresent("Earlier", substring = true)
+                    if (page == "Hourly") {
+                        assertHourlyForecastWindow(requireNotNull(selectedHourlyWindow), simple = layout == "simple")
+                    } else {
+                        selectedDailyWindow?.let { assertDailyForecastWindow(it, simple = layout == "simple") }
+                    }
                 }
-                assertEquals("Visible $page forecast facts changed for $layout layout", pageText, visibleTextSnapshot())
+                if (page == "Now") assertEquals("Now weather facts changed for $layout layout", pageWeatherFacts, visibleWeatherFactSnapshot())
                 compose.activityRule.scenario.onActivity {
                     assertEquals(fixture, it.canonicalWeatherFixtureForTests())
                 }
@@ -576,7 +607,7 @@ class ThemeAppearanceApplicationFlowTest {
         compose.waitForIdle()
         val evidenceDirectory = File(
             InstrumentationRegistry.getInstrumentation().targetContext.cacheDir,
-            "146-simple-layout-home-shell",
+            "147-simple-forecast-surface",
         ).apply { check(mkdirs() || isDirectory) }
         compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
         compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
@@ -598,10 +629,13 @@ class ThemeAppearanceApplicationFlowTest {
         compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
         compose.waitForIdle()
         saveEvidence(evidenceDirectory, "hourly-layout-rtl-font1.3-simple")
+        compose.onNodeWithText("Choose forecast date").performScrollTo().assertIsDisplayed()
+        scrollToCurrentPageText("Later", preferredIndex = 0)
         compose.onNodeWithContentDescription("Choose Home page, current: Hourly").performClick()
         compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
         compose.waitForIdle()
         saveEvidence(evidenceDirectory, "daily-layout-rtl-font1.3-simple")
+        scrollToCurrentPageText("Later", preferredIndex = 1)
     }
 
     @Test
@@ -927,6 +961,60 @@ class ThemeAppearanceApplicationFlowTest {
             }.joinToString(" ")
         }
     }
+
+    private fun assertHourlyForecastWindow(
+        window: com.oxygen.weather.presentation.HourlyWindowPresentation,
+        simple: Boolean,
+    ) {
+        compose.onNodeWithText(window.rangeLabel, substring = false).performScrollTo().assertIsDisplayed()
+        window.entries.forEach { entry ->
+            compose.onNodeWithContentDescription(entry.spokenSummary).performScrollTo().assertIsDisplayed()
+            if (simple) {
+                assertForecastTextPresent(entry.time)
+                assertForecastTextPresent(entry.condition)
+                assertForecastTextPresent(entry.temperature)
+                entry.precipitation?.let { assertForecastTextPresent("Precipitation $it") }
+            }
+        }
+    }
+
+    private fun assertDailyForecastWindow(
+        window: com.oxygen.weather.presentation.DailyWindowPresentation,
+        simple: Boolean,
+    ) {
+        compose.onNodeWithText(window.rangeLabel, substring = false).performScrollTo().assertIsDisplayed()
+        window.entries.forEach { entry ->
+            compose.onNodeWithContentDescription(entry.spokenSummary).performScrollTo().assertIsDisplayed()
+            if (simple) {
+                assertForecastTextPresent(entry.day)
+                assertForecastTextPresent(entry.condition)
+                assertForecastTextPresent("Low ${entry.low} · High ${entry.high}")
+                assertForecastTextPresent(entry.precipitation)
+            }
+        }
+    }
+
+    private fun assertForecastTextPresent(value: String, substring: Boolean = false) {
+        org.junit.Assert.assertTrue(
+            "Expected supplied forecast text '$value'",
+            compose.onAllNodesWithText(value, substring = substring).fetchSemanticsNodes().isNotEmpty(),
+        )
+    }
+
+    private fun performCurrentPageTextAction(text: String, preferredIndex: Int) {
+        val nodes = compose.onAllNodesWithText(text).fetchSemanticsNodes()
+        check(nodes.isNotEmpty()) { "No $text control is composed" }
+        compose.onAllNodesWithText(text)[preferredIndex.coerceIn(nodes.indices)]
+            .performScrollTo().performClick()
+    }
+
+    private fun scrollToCurrentPageText(text: String, preferredIndex: Int) {
+        val nodes = compose.onAllNodesWithText(text).fetchSemanticsNodes()
+        check(nodes.isNotEmpty()) { "No $text control is composed" }
+        compose.onAllNodesWithText(text)[preferredIndex.coerceIn(nodes.indices)]
+            .performScrollTo().assertIsDisplayed()
+    }
+
 
     private fun setFontScale(scale: Float) {
         val command = InstrumentationRegistry.getInstrumentation().uiAutomation
