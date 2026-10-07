@@ -138,6 +138,7 @@ fun OxygenWeatherApp(
     onSelectEffects: (ThemeEffectsLevel) -> Unit = {},
     systemMotionScaleOverride: Float? = null,
     onEffectiveMotionStyleForTests: ((MotionStyle) -> Unit)? = null,
+    onBackdropThemeForTests: ((ResolvedTheme) -> Unit)? = null,
     onPagerMotionChoiceForTests: ((Boolean) -> Unit)? = null,
 ) {
     val themeId = selectedThemeId
@@ -198,7 +199,7 @@ fun OxygenWeatherApp(
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
         MaterialTheme(typography = theme.typography) {
-            ProductionBackdrop(theme, Modifier.fillMaxSize()) {
+            ProductionBackdrop(theme, Modifier.fillMaxSize(), onThemeForTests = onBackdropThemeForTests) {
                 if (searchOpen && locationSearchCoordinator != null) {
                     LocationSearchRoute(
                         coordinator = locationSearchCoordinator,

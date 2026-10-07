@@ -195,14 +195,14 @@ ordered `MetricGroupPresentation` groups. The isolated debug showcase exercises
 complete, sparse, and long-text fixture states. The normal app also uses these
 components. `ProductionWeatherMark` and
 `ProductionBackdrop` add provider-neutral decorative marks and resolved static
-backdrops through this same boundary. The mark accepts the existing nullable
+ambient backgrounds through this same boundary. The mark accepts the existing nullable
 `WeatherMarkCondition`; all six conditions and all current mark styles have
 explicit rendering paths, while null draws no mark and mark semantics are
-cleared so adjacent supplied text carries the meaning. The backdrop handles
-every current `BackdropStyle`, draws before caller content, and does not own
-input. Effects Off is enforced at render time as the opaque canvas color with
-no gradients, grid, or overlay. Subtle/Full currently select only static
-procedural drawing; animation remains future work. All five theme mappings and
+cleared so adjacent supplied text carries the meaning. The backdrop consumes
+the resolved solid/tonal base, overlay family, and overlay strength, draws
+before caller content, and does not own input. Effects Off resolves to an
+opaque solid canvas with no overlay; enabled backgrounds use static gradients,
+glows, grids, or scan lines. Animation remains future work. All five theme mappings and
 the four-page production renderer are exercised in the installed app; the
 debug showcase continues to provide focused component fixtures.
 

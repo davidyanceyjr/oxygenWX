@@ -2,7 +2,6 @@ package com.oxygen.weather.ui.themeengine
 
 import com.oxygen.weather.presentation.WeatherMarkCondition
 import com.oxygen.weather.ui.themeengine.components.markStyleSignature
-import com.oxygen.weather.ui.themeengine.components.resolvedBackdropStyle
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -40,28 +39,28 @@ class ProductionWeatherVisualsTest {
     }
 
     @Test
-    fun everyBackdropStyleHasAResolvedRenderingCase() {
-        val resolved = WeatherThemeId.entries.map { id ->
-            resolvedBackdropStyle(resolveTheme(id, effects = ThemeEffectsLevel.SUBTLE))
-        }.toSet() + resolvedBackdropStyle(resolveTheme(WeatherThemeId.ATMOSPHERIC, effects = ThemeEffectsLevel.OFF))
-        assertEquals(BackdropStyle.entries.toSet(), resolved)
-    }
-
-    @Test
-    fun effectsOffAlwaysResolvesSolidBackdropAndStaticPolicy() {
+    fun effectsOffAlwaysResolvesOpaqueCanvasOnlyBackgroundAndStaticPolicy() {
         WeatherThemeId.entries.forEach { id ->
             val theme = resolveTheme(id, effects = ThemeEffectsLevel.OFF)
-            assertEquals(BackdropStyle.SOLID, theme.backdropStyle)
-            assertEquals(BackdropStyle.SOLID, resolvedBackdropStyle(theme))
+            assertEquals(AmbientBackgroundBase.SOLID, theme.ambientBackground.base)
+            assertEquals(AmbientBackgroundOverlay.NONE, theme.ambientBackground.overlay)
+            assertEquals(AmbientBackgroundStrength.NONE, theme.ambientBackground.overlayStrength)
             assertEquals(MotionStyle.OFF, theme.motionStyle)
             assertEquals(1f, theme.panelOpacity)
             assertEquals(1f, theme.outlineOpacity)
             assertEquals(1f, theme.palette.canvas.alpha, 0f)
         }
-        val inconsistentResolvedValue = resolveTheme(
-            WeatherThemeId.ATMOSPHERIC,
-            effects = ThemeEffectsLevel.OFF,
-        ).copy(backdropStyle = BackdropStyle.ATMOSPHERE)
-        assertEquals(BackdropStyle.SOLID, resolvedBackdropStyle(inconsistentResolvedValue))
+    }
+
+    @Test
+    fun enabledBackgroundsAreStaticSemanticSpecifications() {
+        WeatherThemeId.entries.forEach { id ->
+            val subtle = resolveTheme(id, effects = ThemeEffectsLevel.SUBTLE).ambientBackground
+            val full = resolveTheme(id, effects = ThemeEffectsLevel.FULL).ambientBackground
+            assertEquals(subtle.base, full.base)
+            assertEquals(subtle.overlay, full.overlay)
+            assertEquals(if (subtle.overlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.SUBTLE, subtle.overlayStrength)
+            assertEquals(if (full.overlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.FULL, full.overlayStrength)
+        }
     }
 }

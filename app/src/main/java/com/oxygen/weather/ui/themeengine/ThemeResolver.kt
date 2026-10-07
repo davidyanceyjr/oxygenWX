@@ -44,6 +44,19 @@ fun resolveTheme(
             },
         )
     }
+    val ambientBackground = if (effects == ThemeEffectsLevel.OFF) {
+        AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE)
+    } else {
+        AmbientBackground(
+            base = visual.backgroundBase,
+            overlay = visual.backgroundOverlay,
+            overlayStrength = when {
+                visual.backgroundOverlay == AmbientBackgroundOverlay.NONE -> AmbientBackgroundStrength.NONE
+                effects == ThemeEffectsLevel.SUBTLE -> AmbientBackgroundStrength.SUBTLE
+                else -> AmbientBackgroundStrength.FULL
+            },
+        )
+    }
     val motion = when (effects) {
         ThemeEffectsLevel.OFF -> MotionStyle.OFF
         ThemeEffectsLevel.SUBTLE -> if (visual.preferredMotion == MotionStyle.OFF) MotionStyle.OFF else MotionStyle.SUBTLE
@@ -58,7 +71,7 @@ fun resolveTheme(
         palette = palette,
         typography = definition.typography,
         geometry = definition.geometry.resolveLayout(layout),
-        backdropStyle = if (effects == ThemeEffectsLevel.OFF) BackdropStyle.SOLID else visual.backdropStyle,
+        ambientBackground = ambientBackground,
         surfaceStyle = visual.surfaceStyle,
         heroStyle = visual.heroStyle,
         weatherMarkStyle = visual.weatherMarkStyle,

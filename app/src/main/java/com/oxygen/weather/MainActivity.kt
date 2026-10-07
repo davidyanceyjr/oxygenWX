@@ -79,6 +79,7 @@ import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.MotionStyle
+import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -452,6 +453,7 @@ class MainActivity : ComponentActivity() {
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
                 systemMotionScaleOverride = MotionPolicyTestHooks.systemScaleOverride.value,
                 onEffectiveMotionStyleForTests = MotionPolicyTestHooks.onEffectiveMotionStyle,
+                onBackdropThemeForTests = MotionPolicyTestHooks.onBackdropTheme,
                 onPagerMotionChoiceForTests = MotionPolicyTestHooks.onPagerMotionChoice,
             )
         }
@@ -689,6 +691,7 @@ internal object EffectsPreferenceTestHooks {
 internal object MotionPolicyTestHooks {
     val systemScaleOverride = mutableStateOf<Float?>(null)
     @Volatile var onEffectiveMotionStyle: ((MotionStyle) -> Unit)? = null
+    @Volatile var onBackdropTheme: ((ResolvedTheme) -> Unit)? = null
     @Volatile var onPagerMotionChoice: ((Boolean) -> Unit)? = null
 }
 

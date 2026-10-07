@@ -32,7 +32,7 @@ class ThemeResolverTest {
             ContrastLevel.values().forEach { contrast ->
                 LayoutPreset.values().forEach { layout ->
                     val resolved = resolveTheme(id, contrast, ThemeEffectsLevel.OFF, layout)
-                    assertEquals(BackdropStyle.SOLID, resolved.backdropStyle)
+                    assertEquals(AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), resolved.ambientBackground)
                     assertEquals(MotionStyle.OFF, resolved.motionStyle)
                     assertEquals(1f, resolved.panelOpacity, 0f)
                     assertEquals(1f, resolved.outlineOpacity, 0f)
@@ -56,7 +56,7 @@ class ThemeResolverTest {
                     assertEquals(normal.definition, high.definition)
                     assertEquals(normal.typography, high.typography)
                     assertEquals(normal.geometry, high.geometry)
-                    assertEquals(normal.backdropStyle, high.backdropStyle)
+                    assertEquals(normal.ambientBackground, high.ambientBackground)
                     assertEquals(normal.surfaceStyle, high.surfaceStyle)
                     assertEquals(normal.heroStyle, high.heroStyle)
                     assertEquals(normal.weatherMarkStyle, high.weatherMarkStyle)
@@ -66,7 +66,7 @@ class ThemeResolverTest {
                     assertEquals(effects, high.effects)
                     assertEquals(layout, high.layout)
                     if (effects == ThemeEffectsLevel.OFF) {
-                        assertEquals(BackdropStyle.SOLID, high.backdropStyle)
+                        assertEquals(AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), high.ambientBackground)
                         assertEquals(MotionStyle.OFF, high.motionStyle)
                     }
                 }
@@ -158,7 +158,7 @@ class ThemeResolverTest {
                     assertNotEquals(standard.geometry, simple.geometry)
                     assertEquals(standard.palette, simple.palette)
                     assertEquals(standard.typography, simple.typography)
-                    assertEquals(standard.backdropStyle, simple.backdropStyle)
+                    assertEquals(standard.ambientBackground, simple.ambientBackground)
                     assertEquals(standard.surfaceStyle, simple.surfaceStyle)
                     assertEquals(standard.heroStyle, simple.heroStyle)
                     assertEquals(standard.weatherMarkStyle, simple.weatherMarkStyle)
@@ -184,7 +184,12 @@ class ThemeResolverTest {
                             ThemeEffectsLevel.FULL -> if (visual.supportsFullMotion && visual.preferredMotion != MotionStyle.OFF) MotionStyle.FULL else visual.preferredMotion
                         }
                         assertEquals(expectedMotion, resolved.motionStyle)
-                        assertEquals(if (effects == ThemeEffectsLevel.OFF) BackdropStyle.SOLID else visual.backdropStyle, resolved.backdropStyle)
+                        val expectedBackground = when (effects) {
+                            ThemeEffectsLevel.OFF -> AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE)
+                            ThemeEffectsLevel.SUBTLE -> AmbientBackground(visual.backgroundBase, visual.backgroundOverlay, if (visual.backgroundOverlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.SUBTLE)
+                            ThemeEffectsLevel.FULL -> AmbientBackground(visual.backgroundBase, visual.backgroundOverlay, if (visual.backgroundOverlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.FULL)
+                        }
+                        assertEquals(expectedBackground, resolved.ambientBackground)
                         assertEquals(results.first().palette, resolved.palette)
                         assertEquals(results.first().geometry, resolved.geometry)
                         assertEquals(if (effects == ThemeEffectsLevel.OFF || contrast == ContrastLevel.HIGH) 1f else visual.panelOpacity, resolved.panelOpacity, 0f)
@@ -194,6 +199,27 @@ class ThemeResolverTest {
                     }
                 }
             }
+        }
+    }
+
+    @Test
+    fun allThemeEffectCellsResolveExactAmbientFamiliesAndDistinctEnabledPalettes() {
+        val expected = mapOf(
+            WeatherThemeId.ATMOSPHERIC to (AmbientBackgroundBase.TONAL_FIELD to AmbientBackgroundOverlay.SOFT_GLOW),
+            WeatherThemeId.GLASS to (AmbientBackgroundBase.TONAL_FIELD to AmbientBackgroundOverlay.SOFT_GLOW),
+            WeatherThemeId.MINIMAL_OLED to (AmbientBackgroundBase.SOLID to AmbientBackgroundOverlay.NONE),
+            WeatherThemeId.INSTRUMENT to (AmbientBackgroundBase.TONAL_FIELD to AmbientBackgroundOverlay.TECHNICAL_GRID),
+            WeatherThemeId.TERMINAL to (AmbientBackgroundBase.SOLID to AmbientBackgroundOverlay.SCAN_LINES),
+        )
+        val enabled = WeatherThemeId.entries.map { id -> resolveTheme(id, effects = ThemeEffectsLevel.SUBTLE) }
+        assertEquals(enabled.size, enabled.map { it.ambientBackground to it.palette }.toSet().size)
+        expected.forEach { (id, family) ->
+            val (base, overlay) = family
+            val subtle = resolveTheme(id, effects = ThemeEffectsLevel.SUBTLE).ambientBackground
+            val full = resolveTheme(id, effects = ThemeEffectsLevel.FULL).ambientBackground
+            assertEquals(AmbientBackground(base, overlay, if (overlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.SUBTLE), subtle)
+            assertEquals(AmbientBackground(base, overlay, if (overlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.FULL), full)
+            assertEquals(AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), resolveTheme(id, effects = ThemeEffectsLevel.OFF).ambientBackground)
         }
     }
 

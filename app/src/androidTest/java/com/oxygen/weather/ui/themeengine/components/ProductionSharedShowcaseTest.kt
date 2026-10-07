@@ -117,7 +117,11 @@ class ProductionSharedShowcaseTest {
             )
             check(theme.effects == effects)
             if (effects == ThemeEffectsLevel.OFF) {
-                check(theme.backdropStyle == com.oxygen.weather.ui.themeengine.BackdropStyle.SOLID)
+                check(theme.ambientBackground == com.oxygen.weather.ui.themeengine.AmbientBackground(
+                    com.oxygen.weather.ui.themeengine.AmbientBackgroundBase.SOLID,
+                    com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay.NONE,
+                    com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength.NONE,
+                ))
                 check(theme.motionStyle == com.oxygen.weather.ui.themeengine.MotionStyle.OFF)
                 check(theme.panelOpacity == 1f && theme.outlineOpacity == 1f)
             }

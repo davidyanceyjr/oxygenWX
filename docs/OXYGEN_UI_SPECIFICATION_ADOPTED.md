@@ -119,11 +119,11 @@ presentation condition and resolves its drawing through the selected mark
 style and semantic palette. Clear, partly cloudy, cloudy, rain, storm, and snow
 have distinct decorative marks; a missing condition emits no mark. Mark
 semantics are cleared so adjacent condition text remains the sole accessible
-weather meaning. `ProductionBackdrop` handles each resolved backdrop style
-behind caller content without pointer handling. Effects Off draws only the
-opaque canvas color: no gradient, grid, overlay, or motion. Subtle/Full use
-static procedural backdrops in this slice. These primitives are currently
-isolated to the debug showcase; normal Home migration remains future work.
+weather meaning. `ProductionBackdrop` consumes the resolved ambient base,
+overlay family, and strength behind caller content without pointer handling.
+Effects Off draws only the opaque canvas color: no gradient, grid, overlay, or
+motion. Subtle/Full use static procedural backdrops in this slice. The normal
+Home path and the focused debug showcase share these primitives.
 
 The following roles are semantic appearance inputs, not a prescribed legacy
 palette. Their concrete values are selected by the active theme:

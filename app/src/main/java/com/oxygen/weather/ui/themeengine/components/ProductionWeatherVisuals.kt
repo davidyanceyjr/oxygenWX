@@ -1,13 +1,14 @@
 package com.oxygen.weather.ui.themeengine.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -21,10 +22,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.WeatherMarkCondition
-import com.oxygen.weather.ui.themeengine.BackdropStyle
+import com.oxygen.weather.ui.themeengine.AmbientBackgroundBase
+import com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay
+import com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
-import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherMarkStyle
 import kotlin.math.cos
 import kotlin.math.sin
@@ -184,31 +186,42 @@ fun ProductionWeatherMark(
 fun ProductionBackdrop(
     theme: ResolvedTheme,
     modifier: Modifier = Modifier,
+    onThemeForTests: ((ResolvedTheme) -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    Box(modifier.background(theme.palette.canvas)) {
-        if (theme.effects != ThemeEffectsLevel.OFF) {
-            val style = resolvedBackdropStyle(theme)
-            Canvas(Modifier.fillMaxSize().clearAndSetSemantics { }) {
-                when (style) {
-                    BackdropStyle.SOLID -> Unit
-                    BackdropStyle.ATMOSPHERE, BackdropStyle.GLASS_GRADIENT -> {
-                        drawReferenceSky(theme)
+    SideEffect { onThemeForTests?.invoke(theme) }
+    Box(modifier.clipToBounds()) {
+        Canvas(Modifier.fillMaxSize().clearAndSetSemantics { }) {
+            when (theme.ambientBackground.base) {
+                AmbientBackgroundBase.SOLID -> drawRect(theme.palette.canvas)
+                AmbientBackgroundBase.TONAL_FIELD -> drawReferenceSky(theme)
+            }
+            when (theme.ambientBackground.overlay) {
+                AmbientBackgroundOverlay.NONE -> Unit
+                AmbientBackgroundOverlay.SOFT_GLOW -> {
+                    val strength = when (theme.ambientBackground.overlayStrength) {
+                        AmbientBackgroundStrength.NONE -> 0f
+                        AmbientBackgroundStrength.SUBTLE -> 0.10f
+                        AmbientBackgroundStrength.FULL -> 0.18f
                     }
-                    BackdropStyle.PURE_BLACK -> drawRect(Color.Black)
-                    BackdropStyle.INSTRUMENT_GRID, BackdropStyle.TERMINAL_GRID -> {
-                        val isTerminal = style == BackdropStyle.TERMINAL_GRID
-                        if (isTerminal) drawRect(theme.palette.canvas) else drawReferenceSky(theme)
-                        val gap = if (isTerminal) 16.dp.toPx() else 32.dp.toPx()
-                        val grid = theme.palette.outline.copy(alpha = when {
-                            isTerminal -> 0.3f
-                            theme.contrast == ContrastLevel.HIGH -> 0.10f
-                            else -> 0.18f
-                        })
-                        var x = 0f
-                        while (x <= size.width) { drawLine(grid, Offset(x, 0f), Offset(x, size.height), 1.dp.toPx()); x += gap }
-                        var y = 0f
-                        while (y <= size.height) { drawLine(grid, Offset(0f, y), Offset(size.width, y), 1.dp.toPx()); y += gap }
+                    if (strength > 0f) drawRect(Brush.radialGradient(
+                        listOf(theme.palette.atmosphereGlow.copy(alpha = strength), Color.Transparent),
+                        center = Offset(size.width * 0.82f, size.height * 0.28f),
+                        radius = size.minDimension * 0.72f,
+                    ))
+                }
+                AmbientBackgroundOverlay.TECHNICAL_GRID -> {
+                    when (theme.ambientBackground.overlayStrength) {
+                        AmbientBackgroundStrength.NONE -> Unit
+                        AmbientBackgroundStrength.SUBTLE -> drawUniformGrid(theme.palette.outline.copy(alpha = 0.08f), 32.dp.toPx())
+                        AmbientBackgroundStrength.FULL -> drawUniformGrid(theme.palette.outline.copy(alpha = 0.14f), 24.dp.toPx())
+                    }
+                }
+                AmbientBackgroundOverlay.SCAN_LINES -> {
+                    when (theme.ambientBackground.overlayStrength) {
+                        AmbientBackgroundStrength.NONE -> Unit
+                        AmbientBackgroundStrength.SUBTLE -> drawScanLines(theme.palette.outline.copy(alpha = 0.07f), 8.dp.toPx())
+                        AmbientBackgroundStrength.FULL -> drawScanLines(theme.palette.outline.copy(alpha = 0.12f), 5.dp.toPx())
                     }
                 }
             }
@@ -217,13 +230,23 @@ fun ProductionBackdrop(
     }
 }
 
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawUniformGrid(color: Color, gap: Float) {
+    var x = 0f
+    while (x <= size.width) { drawLine(color, Offset(x, 0f), Offset(x, size.height), 1.dp.toPx()); x += gap }
+    var y = 0f
+    while (y <= size.height) { drawLine(color, Offset(0f, y), Offset(size.width, y), 1.dp.toPx()); y += gap }
+}
+
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawScanLines(color: Color, gap: Float) {
+    var y = 0f
+    while (y <= size.height) {
+        drawLine(color, Offset(0f, y), Offset(size.width, y), 1.dp.toPx())
+        y += gap
+    }
+}
+
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawReferenceSky(theme: ResolvedTheme) {
     drawRect(Brush.verticalGradient(listOf(theme.palette.atmosphereTop, theme.palette.atmosphereBottom)))
-    drawRect(Brush.radialGradient(
-        listOf(theme.palette.atmosphereGlow.copy(alpha = 0.18f), Color.Transparent),
-        center = Offset(size.width * 0.85f, size.height * 0.31f),
-        radius = size.minDimension * 0.85f,
-    ))
 }
 
 internal fun markStyleSignature(style: WeatherMarkStyle, condition: WeatherMarkCondition?): String? {
@@ -265,8 +288,3 @@ internal fun markStyleSignature(style: WeatherMarkStyle, condition: WeatherMarkC
         }
     }
 }
-
-internal fun resolvedBackdropStyle(theme: ResolvedTheme): BackdropStyle =
-    if (theme.effects == ThemeEffectsLevel.OFF) {
-        BackdropStyle.SOLID
-    } else theme.backdropStyle

@@ -30,14 +30,14 @@ object ThemeCatalog {
         WeatherThemeId.ATMOSPHERIC, "Atmospheric",
         palette("07151D", "07151D", "153444", "86E4F0", "23414D", "17313C", "F2FBFC", "B9D5DA", "7FC1CE", "8DE7F1", "79BFFF", "FFD56A", "FF6B6B", "8DE7F1", "07151D"),
         referenceTypography(firaSans), spaciousGeometry(24.dp),
-        ThemeVisualLanguage(BackdropStyle.ATMOSPHERE, SurfaceStyle.SOFT_TRANSLUCENT, HeroStyle.EDITORIAL, WeatherMarkStyle.ILLUSTRATIVE_LINE, MotionStyle.SUBTLE, true, 0.86f, 1f),
+        ThemeVisualLanguage(AmbientBackgroundBase.TONAL_FIELD, AmbientBackgroundOverlay.SOFT_GLOW, SurfaceStyle.SOFT_TRANSLUCENT, HeroStyle.EDITORIAL, WeatherMarkStyle.ILLUSTRATIVE_LINE, MotionStyle.SUBTLE, true, 0.86f, 1f),
     )
     val glass = ThemeDefinition(
         WeatherThemeId.GLASS, "Glass",
         palette("0B1220", "122B58", "281A4A", "C084FC", "31527A", "3A5E88", "F8FAFF", "C9D7EC", "A6C8FF", "60A5FA", "22D3EE", "FBBF24", "FB7185", "60A5FA", "0B1220"),
         referenceTypography(notoSans),
         spaciousGeometry(26.dp).copy(pageStackGap = 12.dp, gridGap = 10.dp, panelInset = 14.dp),
-        ThemeVisualLanguage(BackdropStyle.GLASS_GRADIENT, SurfaceStyle.GLASS, HeroStyle.LAYERED, WeatherMarkStyle.SOFT_LINE, MotionStyle.SUBTLE, true, 0.42f, 1f),
+        ThemeVisualLanguage(AmbientBackgroundBase.TONAL_FIELD, AmbientBackgroundOverlay.SOFT_GLOW, SurfaceStyle.GLASS, HeroStyle.LAYERED, WeatherMarkStyle.SOFT_LINE, MotionStyle.SUBTLE, true, 0.42f, 1f),
     )
     val minimalOled = ThemeDefinition(
         WeatherThemeId.MINIMAL_OLED, "Minimal OLED",
@@ -50,21 +50,21 @@ object ThemeCatalog {
             panelInset = 8.dp,
             panelBorderWidth = 0.dp,
         ),
-        ThemeVisualLanguage(BackdropStyle.PURE_BLACK, SurfaceStyle.MINIMAL, HeroStyle.MINIMAL, WeatherMarkStyle.MINIMAL_LINE, MotionStyle.OFF, false, 1f, 1f),
+        ThemeVisualLanguage(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, SurfaceStyle.MINIMAL, HeroStyle.MINIMAL, WeatherMarkStyle.MINIMAL_LINE, MotionStyle.OFF, false, 1f, 1f),
     )
     val instrument = ThemeDefinition(
         WeatherThemeId.INSTRUMENT, "Instrument",
         palette("0B0F14", "0B0F14", "111A22", "7CFF9B", "141A21", "1B232C", "E6EDF3", "8B96A3", "2B3742", "F4B400", "4FC3F7", "FFD65A", "EF4444", "F4B400", "0B0F14"),
         referenceTypography(notoSans),
         compactGeometry(8.dp),
-        ThemeVisualLanguage(BackdropStyle.INSTRUMENT_GRID, SurfaceStyle.INSTRUMENT_PANEL, HeroStyle.INSTRUMENT, WeatherMarkStyle.INSTRUMENT_LINE, MotionStyle.SUBTLE, false, 0.98f, 1f),
+        ThemeVisualLanguage(AmbientBackgroundBase.TONAL_FIELD, AmbientBackgroundOverlay.TECHNICAL_GRID, SurfaceStyle.INSTRUMENT_PANEL, HeroStyle.INSTRUMENT, WeatherMarkStyle.INSTRUMENT_LINE, MotionStyle.SUBTLE, false, 0.98f, 1f),
     )
     val terminal = ThemeDefinition(
         WeatherThemeId.TERMINAL, "Terminal",
         palette("020704", "020704", "041009", "7CFF9B", "020704", "05110A", "A4FFB6", "65B879", "246233", "7CFF9B", "77E3FF", "FFE36E", "FF7272", "7CFF9B", "020704"),
         referenceTypography(notoSansMono, displaySize = 48),
         compactGeometry(0.dp).copy(pageStackGap = 10.dp),
-        ThemeVisualLanguage(BackdropStyle.TERMINAL_GRID, SurfaceStyle.TERMINAL_FLAT, HeroStyle.TEXT_CONSOLE, WeatherMarkStyle.TERMINAL_GLYPH, MotionStyle.OFF, false, 1f, 1f),
+        ThemeVisualLanguage(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.SCAN_LINES, SurfaceStyle.TERMINAL_FLAT, HeroStyle.TEXT_CONSOLE, WeatherMarkStyle.TERMINAL_GLYPH, MotionStyle.OFF, false, 1f, 1f),
     )
 
     val all: List<ThemeDefinition> = listOf(atmospheric, glass, minimalOled, instrument, terminal)

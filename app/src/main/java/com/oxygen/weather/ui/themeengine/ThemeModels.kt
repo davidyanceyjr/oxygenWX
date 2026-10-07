@@ -15,7 +15,9 @@ enum class WeatherThemeId { ATMOSPHERIC, GLASS, MINIMAL_OLED, INSTRUMENT, TERMIN
 enum class ContrastLevel { STANDARD, HIGH }
 enum class LayoutPreset { STANDARD, SIMPLE }
 enum class ThemeEffectsLevel { OFF, SUBTLE, FULL }
-enum class BackdropStyle { SOLID, ATMOSPHERE, GLASS_GRADIENT, PURE_BLACK, INSTRUMENT_GRID, TERMINAL_GRID }
+enum class AmbientBackgroundBase { SOLID, TONAL_FIELD }
+enum class AmbientBackgroundOverlay { NONE, SOFT_GLOW, TECHNICAL_GRID, SCAN_LINES }
+enum class AmbientBackgroundStrength { NONE, SUBTLE, FULL }
 enum class SurfaceStyle { SOFT_TRANSLUCENT, GLASS, MINIMAL, INSTRUMENT_PANEL, TERMINAL_FLAT }
 enum class HeroStyle { EDITORIAL, LAYERED, MINIMAL, INSTRUMENT, TEXT_CONSOLE }
 enum class WeatherMarkStyle { ILLUSTRATIVE_LINE, SOFT_LINE, MINIMAL_LINE, INSTRUMENT_LINE, TERMINAL_GLYPH }
@@ -69,7 +71,8 @@ data class ThemeGeometry(
 
 @Immutable
 data class ThemeVisualLanguage(
-    val backdropStyle: BackdropStyle,
+    val backgroundBase: AmbientBackgroundBase,
+    val backgroundOverlay: AmbientBackgroundOverlay,
     val surfaceStyle: SurfaceStyle,
     val heroStyle: HeroStyle,
     val weatherMarkStyle: WeatherMarkStyle,
@@ -77,6 +80,14 @@ data class ThemeVisualLanguage(
     val supportsFullMotion: Boolean,
     val panelOpacity: Float,
     val outlineOpacity: Float,
+)
+
+/** Theme-neutral background choices; drawing geometry and color roles stay in the renderer. */
+@Immutable
+data class AmbientBackground(
+    val base: AmbientBackgroundBase,
+    val overlay: AmbientBackgroundOverlay,
+    val overlayStrength: AmbientBackgroundStrength,
 )
 
 @Immutable
@@ -96,7 +107,7 @@ data class ResolvedTheme(
     val palette: ThemePalette,
     val typography: Typography,
     val geometry: ThemeGeometry,
-    val backdropStyle: BackdropStyle,
+    val ambientBackground: AmbientBackground,
     val surfaceStyle: SurfaceStyle,
     val heroStyle: HeroStyle,
     val weatherMarkStyle: WeatherMarkStyle,
