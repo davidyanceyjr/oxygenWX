@@ -12,10 +12,13 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.MainActivity
+import com.oxygen.weather.ThemePreferenceTestHooks
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.DailyWindowPresentation
@@ -29,16 +32,33 @@ import com.oxygen.weather.ui.themeengine.ThemeCatalog
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.LocalDateTime
 
 @RunWith(AndroidJUnit4::class)
 class ProductionDailyDetailsCompositionTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 
+    @Before
+    fun resetStoredTheme() {
+        ThemePreferenceTestHooks.fixtureAnchorOverride = LocalDateTime.of(2026, 9, 23, 9, 0)
+        InstrumentationRegistry.getInstrumentation().targetContext
+            .getSharedPreferences("theme_preference_v1", android.content.Context.MODE_PRIVATE)
+            .edit().clear().commit()
+        compose.activityRule.scenario.recreate()
+    }
+
+    @After
+    fun clearThemeFixture() {
+        ThemePreferenceTestHooks.fixtureAnchorOverride = null
+    }
+
     private val home by lazy {
-        val bundle = DemoWeatherRepository.load()
+        val bundle = DemoWeatherRepository.load(LocalDateTime.of(2026, 9, 23, 9, 0))
         HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle))
     }
 
@@ -51,9 +71,9 @@ class ProductionDailyDetailsCompositionTest {
 
         WeatherThemeId.entries.forEachIndexed { themeIndex, themeId ->
             val nextTheme = ThemeCatalog.definition(themeId).displayName
-            compose.onNodeWithContentDescription("Theme, $themeName").performClick()
-            compose.onNodeWithText(nextTheme, substring = false).performClick()
+            selectTheme(themeName, themeId)
             themeName = nextTheme
+            compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertExists()
 
             if (themeIndex > 0) {
                 assertDailyWindow(1)
@@ -69,7 +89,7 @@ class ProductionDailyDetailsCompositionTest {
             later.assertIsNotEnabled()
             assertControlHeight(later.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
 
-            compose.onNodeWithContentDescription("Theme, $themeName").assertExists()
+            compose.onNodeWithContentDescription("Appearance, current theme: $themeName").assertExists()
         }
     }
 
@@ -79,8 +99,7 @@ class ProductionDailyDetailsCompositionTest {
         openPage("Details", 4)
         WeatherThemeId.entries.forEach { themeId ->
             val nextTheme = ThemeCatalog.definition(themeId).displayName
-            compose.onNodeWithContentDescription("Theme, $themeName").performClick()
-            compose.onNodeWithText(nextTheme, substring = false).performClick()
+            selectTheme(themeName, themeId)
             themeName = nextTheme
 
             assertText(home.sourceLine)
@@ -114,6 +133,13 @@ class ProductionDailyDetailsCompositionTest {
                 }
             })
         }
+    }
+
+    private fun selectTheme(currentThemeName: String, nextTheme: WeatherThemeId) {
+        compose.onNodeWithContentDescription("Appearance, current theme: $currentThemeName").performClick()
+        compose.onNodeWithTag("appearance-theme-${nextTheme.name.lowercase()}").performClick()
+        compose.onNodeWithTag("appearance-return").performClick()
+        compose.waitForIdle()
     }
 
     private fun assertDailyWindow(index: Int) {

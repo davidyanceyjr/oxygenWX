@@ -635,14 +635,16 @@ preset across recreation/relaunch without changing canonical cached data.
 
 Evidence: `.codex/history/2026-10-06-135-persisted-unit-presets.md`.
 
-### R5.1A — Unit-preset application regression — PLANNED
+### R5.1A — Unit-preset application regression — DONE
 
 After R5.1, apply the restored choice across all Home presentation surfaces and
 verify no canonical value/cache mutation or unit mismatch occurs.
 
 **Exit:** Presentation tests and installed captures cover each preset on all four Home pages; one canonical fixture maps consistently and no weather fetch/cache mutation occurs on unit switch.
 
-### R5.2 — Persisted theme preference — PLANNED
+Evidence: `.codex/history/2026-10-06-136-unit-preset-application-regression.md`.
+
+### R5.2 — Persisted theme preference — DONE
 
 Persist and restore one of Atmospheric, Glass, Minimal OLED, Instrument, or
 Terminal without changing canonical weather/cache values or causing a forecast
@@ -650,12 +652,16 @@ refetch. Depends on the production resolver, renderer, and verification work in 
 
 **Exit:** Persistence tests restore each of the five themes and verify a theme switch changes only resolved appearance, with no forecast request or canonical/cache mutation.
 
-### R5.2A — Theme selection settings surface — PLANNED
+Evidence: `.codex/history/2026-10-06-137-persisted-theme-preference.md`.
+
+### R5.2A — Theme selection settings surface — DONE
 
 Expose the five built-in themes through accessible Appearance settings using the
 existing resolver/catalog. Selection changes presentation only.
 
 **Exit:** Installed Appearance settings expose all five themes with readable selected state and 48dp targets; selecting each updates the visible theme without a weather refetch.
+
+Evidence: `.codex/history/2026-10-06-138-theme-selection-appearance-surface.md`.
 
 ### R5.3 — Contrast preference — PLANNED
 

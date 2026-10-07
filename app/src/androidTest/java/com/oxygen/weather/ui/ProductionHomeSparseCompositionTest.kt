@@ -7,13 +7,17 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.runtime.mutableStateOf
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.DateJumpPresentation
 import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.presentation.StatusPresentation
+import com.oxygen.weather.ui.themeengine.ThemeCatalog
+import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -31,11 +35,14 @@ class ProductionHomeSparseCompositionTest {
         )
         val derived = HistoricalSynthesis.derive(sparse)
         val presentation = HomePresentationMapper.map(sparse, derived)
+        val selectedTheme = mutableStateOf(WeatherThemeId.ATMOSPHERIC)
         compose.setContent {
             OxygenWeatherApp(
                 presentation = presentation,
                 status = StatusPresentation.of("Sparse development fixture status."),
                 partialHorizons = null,
+                selectedThemeId = selectedTheme.value,
+                onSelectTheme = { selectedTheme.value = it },
             )
         }
 
@@ -54,8 +61,10 @@ class ProductionHomeSparseCompositionTest {
     }
 
     private fun selectTheme(theme: String, currentTheme: String) {
-        compose.onNodeWithContentDescription("Theme, $currentTheme").performClick()
-        compose.onNodeWithText(theme, useUnmergedTree = true).performClick()
+        val id = WeatherThemeId.entries.first { ThemeCatalog.definition(it).displayName == theme }
+        compose.onNodeWithContentDescription("Appearance, current theme: $currentTheme").performClick()
+        compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performClick()
+        compose.onNodeWithTag("appearance-return").performClick()
     }
 
     @Test

@@ -5,11 +5,16 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotSelected
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
+import com.oxygen.weather.ui.EffectsLevel
 import com.oxygen.weather.ProductionForecastTestHooks
 import com.oxygen.weather.ProductionOfficialAlertTestHooks
 import com.oxygen.weather.SharedPreferencesSelectedLocationStore
@@ -37,9 +42,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import androidx.compose.ui.unit.LayoutDirection
 
 @RunWith(AndroidJUnit4::class)
-class ThemePreferenceApplicationFlowTest {
+class ThemeAppearanceApplicationFlowTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 
     private val store = MemoryThemePreferenceStore()
@@ -55,6 +61,7 @@ class ThemePreferenceApplicationFlowTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         SharedPreferencesSelectedLocationStore(context).clear()
         ThemePreferenceTestHooks.fixtureAnchorOverride = LocalDateTime.of(2026, 9, 23, 9, 0)
+        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
         ThemePreferenceTestHooks.storeFactory = { store }
         ThemePreferenceTestHooks.onThemeApplied = { id, outcome -> synchronized(applied) { applied += id to outcome } }
         ProductionForecastTestHooks.transportOverride = com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport {
@@ -76,7 +83,7 @@ class ThemePreferenceApplicationFlowTest {
     }
 
     @Test
-    fun pickerUsesActivityOwnerAndRestoresEveryThemeAcrossActivityRecreation() {
+    fun appearanceUsesActivityOwnerAndRestoresEveryThemeAcrossActivityRecreation() {
         compose.waitForIdle()
         val startupBaseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
         assertEquals(listOf(0, 0, 0, 0), startupBaseline)
@@ -87,24 +94,33 @@ class ThemePreferenceApplicationFlowTest {
         var currentTheme = WeatherThemeId.ATMOSPHERIC
         WeatherThemeId.entries.forEach { id ->
             val name = ThemeCatalog.definition(id).displayName
-            compose.onNodeWithContentDescription("Theme, ${ThemeCatalog.definition(currentTheme).displayName}")
+            compose.onNodeWithContentDescription("Appearance, current theme: ${ThemeCatalog.definition(currentTheme).displayName}")
                 .performClick()
-            compose.onNodeWithText(name, substring = false).assertIsDisplayed().performClick()
+            compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}")
+                .assertIsDisplayed().performClick()
             compose.waitForIdle()
 
             assertEquals(id, store.value)
-            compose.onNodeWithContentDescription("Theme, $name").assertIsDisplayed()
+            compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").assertIsSelected()
+            WeatherThemeId.entries.forEach { optionId ->
+                val option = compose.onNodeWithTag("appearance-theme-${optionId.name.lowercase()}")
+                if (optionId == id) option.assertIsSelected() else option.assertIsNotSelected()
+            }
+            compose.onNodeWithContentDescription("$name, selected").assertIsDisplayed()
             assertEquals(id, ThemeCatalog.definition(id).id)
             assertEquals(id, resolveTheme(id).definition.id)
             compose.activityRule.scenario.onActivity {
                 assertEquals(canonicalSnapshot, it.canonicalWeatherFixtureForTests())
             }
-            assertWeatherFactsUnchanged()
             assertEquals(startupBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
 
+            compose.onNodeWithTag("appearance-return").performClick()
+            compose.waitForIdle()
+            assertWeatherFactsUnchanged()
+            compose.onNodeWithContentDescription("Appearance, current theme: $name").assertIsDisplayed()
             compose.activityRule.scenario.recreate()
             compose.waitForIdle()
-            compose.onNodeWithContentDescription("Theme, $name").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Appearance, current theme: $name").assertIsDisplayed()
             compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
             compose.activityRule.scenario.onActivity {
                 assertEquals(canonicalSnapshot, it.canonicalWeatherFixtureForTests())
@@ -117,8 +133,54 @@ class ThemePreferenceApplicationFlowTest {
         assertEquals(WeatherThemeId.entries.map { it to ThemePreferenceWriteResult.SUCCESS }, synchronized(applied) { applied.toList() })
     }
 
+    @Test
+    fun appearanceBackAndReturnRestoreEveryOpeningHomePage() {
+        compose.waitForIdle()
+        val pages = listOf("Now", "Hourly", "Daily", "Details")
+        pages.forEachIndexed { index, page ->
+            if (index > 0) {
+                compose.onNodeWithContentDescription("Choose Home page, current: ${pages[index - 1]}")
+                    .performClick()
+                compose.onNodeWithContentDescription("$page page, ${index + 1} of 4, not selected").performClick()
+                compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
+            }
+            compose.onNodeWithContentDescription("Appearance, current theme: ${ThemeCatalog.definition(store.value ?: WeatherThemeId.ATMOSPHERIC).displayName}")
+                .performClick()
+            compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
+            WeatherThemeId.entries.forEach { id ->
+                val option = compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}")
+                option.assertIsDisplayed()
+                if (id == (store.value ?: WeatherThemeId.ATMOSPHERIC)) option.assertIsSelected() else option.assertIsNotSelected()
+            }
+            if (index % 2 == 0) {
+                compose.onNodeWithTag("appearance-return").performClick()
+            } else {
+                compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+            }
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun appearanceRemainsUsableWithLargeFontAndRtl() {
+        compose.waitForIdle()
+        setFontScale(1.3f)
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
+        WeatherThemeId.entries.forEach { id ->
+            compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performScrollTo().assertIsDisplayed()
+        }
+        compose.onNodeWithTag("appearance-return").performScrollTo().assertIsDisplayed()
+    }
+
     @After
     fun clearHooks() {
+        setFontScale(1f)
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = null
         ThemePreferenceTestHooks.storeFactory = null
         ThemePreferenceTestHooks.onRead = null
         ThemePreferenceTestHooks.onThemeApplied = null
@@ -146,5 +208,11 @@ class ThemePreferenceApplicationFlowTest {
         compose.onNodeWithText("Partly cloudy", substring = true).assertIsDisplayed()
         org.junit.Assert.assertTrue(compose.onAllNodesWithText("Model estimate", substring = true).fetchSemanticsNodes().isNotEmpty())
         org.junit.Assert.assertTrue(compose.onAllNodesWithText("Updated", substring = true).fetchSemanticsNodes().isNotEmpty())
+    }
+
+    private fun setFontScale(scale: Float) {
+        val command = InstrumentationRegistry.getInstrumentation().uiAutomation
+            .executeShellCommand("settings put system font_scale $scale")
+        command.close()
     }
 }

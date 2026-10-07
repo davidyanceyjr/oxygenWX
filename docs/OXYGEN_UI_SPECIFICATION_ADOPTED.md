@@ -6,7 +6,8 @@ Art Sheet v0.2. The upstream material recorded in
 `upstream/OXYGEN_SOURCE_REFERENCE.md` is historical research, not a visual
 reference or a screen-composition source. The normal four-page app now uses the
 production theme renderer. Atmospheric, Glass, Minimal OLED, Instrument, and
-Terminal are selectable through the existing picker, with the choice persisted
+Terminal are selectable from the focused Appearance destination reachable
+from the Home header, with the choice persisted
 in application-private storage and Atmospheric as the default when no
 recognized preference is available. The Theme B implementation sketch is
 historical; it is no longer the normal app

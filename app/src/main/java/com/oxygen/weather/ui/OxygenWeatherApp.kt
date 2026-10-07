@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,6 +57,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -141,9 +143,13 @@ fun OxygenWeatherApp(
     val locationAction = savedLocationCoordinator?.actionPresentation?.value
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
     val scope = rememberCoroutineScope()
+    var hourlyWindowIndex by rememberSaveable { mutableIntStateOf(0) }
+    var dailyWindowIndex by rememberSaveable { mutableIntStateOf(0) }
     var pageMenuExpanded by remember { mutableStateOf(false) }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
+    var appearanceOpen by rememberSaveable { mutableStateOf(false) }
+    var appearanceOpeningPage by rememberSaveable { mutableIntStateOf(0) }
     var alertRoute by remember { mutableStateOf(OfficialAlertRoute.HOME) }
     var selectedAlertIdentity by remember { mutableStateOf<Pair<Long, Int>?>(null) }
     val selectedAlert = selectedAlertIdentity?.let { identity ->
@@ -172,6 +178,10 @@ fun OxygenWeatherApp(
             OfficialAlertRoute.HOME -> scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
         }
     }
+    BackHandler(enabled = appearanceOpen) {
+        appearanceOpen = false
+        scope.launch { pagerState.moveToPage(appearanceOpeningPage, effects) }
+    }
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
         MaterialTheme(typography = theme.typography) {
@@ -194,6 +204,18 @@ fun OxygenWeatherApp(
                             deviceLocationCoordinator?.dismiss()
                             searchOpen = false
                             scope.launch { pagerState.moveToPage(searchOpeningPage, effects) }
+                        },
+                    )
+                    return@ProductionBackdrop
+                }
+                if (appearanceOpen) {
+                    ThemeAppearanceSurface(
+                        theme = theme,
+                        selected = themeId,
+                        onSelect = onSelectTheme,
+                        onReturn = {
+                            appearanceOpen = false
+                            scope.launch { pagerState.moveToPage(appearanceOpeningPage, effects) }
                         },
                     )
                     return@ProductionBackdrop
@@ -255,7 +277,12 @@ fun OxygenWeatherApp(
                         ThemePicker(
                             theme,
                             themeId,
-                            onSelect = onSelectTheme,
+                            onOpenAppearance = {
+                                if (!searchOpen && alertRoute == OfficialAlertRoute.HOME) {
+                                    appearanceOpeningPage = pagerState.currentPage
+                                    appearanceOpen = true
+                                }
+                            },
                             onSearch = locationSearchCoordinator?.let {
                                 {
                                     searchOpeningPage = pagerState.currentPage
@@ -289,8 +316,16 @@ fun OxygenWeatherApp(
                                     }
                                 } else null,
                             )
-                            HomePage.HOURLY -> HourlyPage(displayPresentation, displayStatus, displayHorizons, theme)
-                            HomePage.DAILY -> DailyPage(displayPresentation, displayStatus, displayHorizons, theme)
+                            HomePage.HOURLY -> HourlyPage(
+                                displayPresentation, displayStatus, displayHorizons, theme,
+                                windowIndex = hourlyWindowIndex,
+                                onWindowIndexChange = { hourlyWindowIndex = it },
+                            )
+                            HomePage.DAILY -> DailyPage(
+                                displayPresentation, displayStatus, displayHorizons, theme,
+                                windowIndex = dailyWindowIndex,
+                                onWindowIndexChange = { dailyWindowIndex = it },
+                            )
                             HomePage.DETAILS -> DetailsPage(displayPresentation, displayStatus, theme, displayContext)
                         }
                     }
@@ -397,10 +432,9 @@ private suspend fun PagerState.moveToPage(page: Int, effects: EffectsLevel) {
 private fun ThemePicker(
     theme: ResolvedTheme,
     selected: WeatherThemeId,
-    onSelect: (WeatherThemeId) -> Unit,
+    onOpenAppearance: () -> Unit,
     onSearch: (() -> Unit)? = null,
 ) {
-    var expanded by remember { mutableStateOf(false) }
     Row(
         Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter),
         verticalAlignment = Alignment.CenterVertically,
@@ -408,31 +442,60 @@ private fun ThemePicker(
     ) {
         if (onSearch != null) SearchEntry(theme, onSearch)
         TextButton(
-            onClick = { expanded = true },
-            modifier = Modifier.heightIn(min = theme.geometry.controlTargetMinimum)
-                .semantics { contentDescription = "Theme, ${ThemeCatalog.definition(selected).displayName}" },
+            onClick = onOpenAppearance,
+            modifier = Modifier.heightIn(min = 48.dp).testTag("appearance-entry")
+                .semantics { contentDescription = "Appearance, current theme: ${ThemeCatalog.definition(selected).displayName}" },
             colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
         ) {
-            Text("⋮", style = theme.typography.headlineMedium)
+            Text("Appearance", style = theme.typography.labelLarge)
         }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            shape = RoundedCornerShape(theme.geometry.panelCornerRadius),
-            containerColor = theme.palette.surface,
-            tonalElevation = 0.dp,
-            border = BorderStroke(theme.geometry.panelBorderWidth, theme.palette.outline),
-        ) {
-            WeatherThemeId.entries.forEach { id ->
-                val name = ThemeCatalog.definition(id).displayName
-                DropdownMenuItem(
-                    text = { Text(name, style = theme.typography.bodyMedium) },
-                    onClick = { onSelect(id); expanded = false },
-                    modifier = Modifier.semantics { this.selected = id == selected },
-                    colors = MenuDefaults.itemColors(textColor = theme.palette.content),
+    }
+}
+
+@Composable
+private fun ThemeAppearanceSurface(
+    theme: ResolvedTheme,
+    selected: WeatherThemeId,
+    onSelect: (WeatherThemeId) -> Unit,
+    onReturn: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp)
+            .testTag("theme-appearance-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("Appearance", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text("Choose a theme", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        WeatherThemeId.entries.forEach { id ->
+            val name = ThemeCatalog.definition(id).displayName
+            val isSelected = id == selected
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 56.dp)
+                    .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .clickable(role = Role.RadioButton, onClick = { onSelect(id) })
+                    .semantics {
+                        this.selected = isSelected
+                        contentDescription = "$name, ${if (isSelected) "selected" else "not selected"}"
+                    }
+                    .testTag("appearance-theme-${id.name.lowercase()}"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = if (isSelected) "●" else "○",
+                    modifier = Modifier.padding(start = 16.dp, end = 12.dp),
+                    style = theme.typography.titleMedium,
+                    color = if (isSelected) theme.palette.action else theme.palette.secondaryData,
                 )
+                Text(name, modifier = Modifier.weight(1f).padding(end = 16.dp), style = theme.typography.bodyLarge, color = theme.palette.content)
             }
         }
+        TextButton(
+            onClick = onReturn,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("appearance-return"),
+            colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
+        ) { Text("Return to Home", style = theme.typography.labelLarge) }
     }
 }
 
@@ -804,8 +867,9 @@ private fun HourlyPage(
     status: StatusPresentation,
     partialHorizons: ForecastHorizonPresentation?,
     theme: ResolvedTheme,
+    windowIndex: Int,
+    onWindowIndexChange: (Int) -> Unit,
 ) {
-    var windowIndex by rememberSaveable { mutableIntStateOf(0) }
     var datesExpanded by remember { mutableStateOf(false) }
     val windows = home.hourlyWindows
     val selected = if (windows.isEmpty()) 0 else windowIndex.coerceIn(0, windows.lastIndex)
@@ -880,7 +944,7 @@ private fun HourlyPage(
                         validJumps.forEach { jump ->
                             DropdownMenuItem(
                                 text = { Text(jump.label, style = theme.typography.bodyMedium) },
-                                onClick = { windowIndex = jump.windowIndex; datesExpanded = false },
+                                onClick = { onWindowIndexChange(jump.windowIndex); datesExpanded = false },
                                 modifier = Modifier.semantics { this.selected = jump.windowIndex == selected },
                             )
                         }
@@ -915,7 +979,7 @@ private fun HourlyPage(
         if (windows.isNotEmpty()) {
             ProductionWindowControls(
                 theme, selected > 0, selected < windows.lastIndex,
-                onEarlier = { windowIndex = selected - 1 }, onLater = { windowIndex = selected + 1 },
+                onEarlier = { onWindowIndexChange(selected - 1) }, onLater = { onWindowIndexChange(selected + 1) },
                 hourly = true,
             )
         }
@@ -932,8 +996,9 @@ private fun DailyPage(
     status: StatusPresentation,
     partialHorizons: ForecastHorizonPresentation?,
     theme: ResolvedTheme,
+    windowIndex: Int,
+    onWindowIndexChange: (Int) -> Unit,
 ) {
-    var windowIndex by rememberSaveable { mutableIntStateOf(0) }
     val windows = home.dailyWindows
     val selected = if (windows.isEmpty()) 0 else windowIndex.coerceIn(0, windows.lastIndex)
     val window = windows.getOrNull(selected)
@@ -958,7 +1023,7 @@ private fun DailyPage(
         if (windows.isNotEmpty()) {
             ProductionWindowControls(
                 theme, selected > 0, selected < windows.lastIndex,
-                onEarlier = { windowIndex = selected - 1 }, onLater = { windowIndex = selected + 1 },
+                onEarlier = { onWindowIndexChange(selected - 1) }, onLater = { onWindowIndexChange(selected + 1) },
             )
         }
         ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine)

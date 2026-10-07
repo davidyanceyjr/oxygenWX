@@ -10,12 +10,14 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomePresentationMapper
@@ -23,6 +25,7 @@ import com.oxygen.weather.MainActivity
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,6 +34,15 @@ import org.junit.runner.RunWith
 class ProductionHomeCompositionTest {
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
     private var selectedThemeName: String = "Atmospheric"
+
+    @Before
+    fun resetStoredTheme() {
+        selectedThemeName = "Atmospheric"
+        InstrumentationRegistry.getInstrumentation().targetContext
+            .getSharedPreferences("theme_preference_v1", android.content.Context.MODE_PRIVATE)
+            .edit().clear().commit()
+        compose.activityRule.scenario.recreate()
+    }
 
     private val presentation by lazy {
         val bundle = DemoWeatherRepository.load()
@@ -89,7 +101,7 @@ class ProductionHomeCompositionTest {
         val visitedThemes = mutableListOf<WeatherThemeId>()
         WeatherThemeId.entries.forEach { themeId ->
             visitedThemes += themeId
-            selectTheme(themeId.displayName)
+            selectTheme(themeId)
             pageLabels.forEach { pageLabel ->
                 selectPage(pageLabel)
                 assertThemeContentPreserved(home, pageLabel)
@@ -99,7 +111,7 @@ class ProductionHomeCompositionTest {
         selectPage("Details")
         assertTextPresent("Forecast pattern")
         WeatherThemeId.entries.forEach { themeId ->
-            selectTheme(themeId.displayName)
+            selectTheme(themeId)
             assertTextPresent("Source")
             assertTextPresent("Update time")
             assertTextPresent("Status")
@@ -204,10 +216,11 @@ class ProductionHomeCompositionTest {
         compose.waitForIdle()
     }
 
-    private fun selectTheme(displayName: String) {
-        compose.onNodeWithContentDescription("Theme, $selectedThemeName").performClick()
-        compose.onNodeWithText(displayName, substring = false).performClick()
-        selectedThemeName = displayName
+    private fun selectTheme(themeId: WeatherThemeId) {
+        compose.onNodeWithContentDescription("Appearance, current theme: $selectedThemeName").performClick()
+        compose.onNodeWithTag("appearance-theme-${themeId.name.lowercase()}").performClick()
+        compose.onNodeWithTag("appearance-return").performClick()
+        selectedThemeName = themeId.displayName
     }
 
     private fun assertTextPresent(text: String) {
