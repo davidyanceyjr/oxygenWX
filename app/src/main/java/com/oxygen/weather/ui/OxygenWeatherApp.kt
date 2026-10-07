@@ -84,6 +84,7 @@ import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.LayoutPreset
 import com.oxygen.weather.ui.themeengine.MotionStyle
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
@@ -143,9 +144,10 @@ fun OxygenWeatherApp(
 ) {
     val themeId = selectedThemeId
     val scope = rememberCoroutineScope()
+    var layoutPreset by rememberSaveable { mutableStateOf(LayoutPreset.STANDARD) }
     val systemMotionScale = rememberSystemAnimatorScale(systemMotionScaleOverride)
-    val baseTheme = remember(themeId, selectedContrast, selectedEffects) {
-        resolveTheme(themeId, contrast = selectedContrast, effects = selectedEffects)
+    val baseTheme = remember(themeId, selectedContrast, selectedEffects, layoutPreset) {
+        resolveTheme(themeId, contrast = selectedContrast, effects = selectedEffects, layout = layoutPreset)
     }
     val theme = remember(baseTheme, systemMotionScale) {
         applySystemMotionPolicy(baseTheme, systemMotionScale)
@@ -231,6 +233,8 @@ fun OxygenWeatherApp(
                         onSelectContrast = onSelectContrast,
                         selectedEffects = selectedEffects,
                         onSelectEffects = onSelectEffects,
+                        selectedLayout = layoutPreset,
+                        onSelectLayout = { layoutPreset = it },
                         onReturn = {
                             appearanceOpen = false
                             scope.launch { pagerState.moveToPage(appearanceOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
@@ -489,6 +493,8 @@ private fun ThemeAppearanceSurface(
     onSelectContrast: (ContrastLevel) -> Unit,
     selectedEffects: ThemeEffectsLevel,
     onSelectEffects: (ThemeEffectsLevel) -> Unit,
+    selectedLayout: LayoutPreset,
+    onSelectLayout: (LayoutPreset) -> Unit,
     onReturn: () -> Unit,
 ) {
     Column(
@@ -580,6 +586,40 @@ private fun ThemeAppearanceSurface(
             ) {
                 Text(if (isSelected) "●" else "○", modifier = Modifier.padding(start = 16.dp, end = 12.dp), style = theme.typography.titleMedium, color = if (isSelected) theme.palette.action else theme.palette.secondaryData)
                 Text(if (isSelected) "$label · selected" else label, modifier = Modifier.weight(1f).padding(end = 16.dp), style = theme.typography.bodyLarge, color = theme.palette.content)
+            }
+        }
+        Text("Layout", style = theme.typography.titleMedium, color = theme.palette.primaryData)
+        Text("Choose a Home layout", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        LayoutPreset.entries.forEach { layout ->
+            val label = when (layout) {
+                LayoutPreset.STANDARD -> "Standard layout"
+                LayoutPreset.SIMPLE -> "Simple layout"
+            }
+            val isSelected = layout == selectedLayout
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .clickable(role = Role.RadioButton, onClick = { onSelectLayout(layout) })
+                    .semantics {
+                        this.selected = isSelected
+                        contentDescription = "$label, ${if (isSelected) "selected" else "not selected"}"
+                    }
+                    .testTag("appearance-layout-${layout.name.lowercase()}"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    if (isSelected) "●" else "○",
+                    modifier = Modifier.padding(start = 16.dp, end = 12.dp),
+                    style = theme.typography.titleMedium,
+                    color = if (isSelected) theme.palette.action else theme.palette.secondaryData,
+                )
+                Text(
+                    if (isSelected) "$label · selected" else label,
+                    modifier = Modifier.weight(1f).padding(end = 16.dp),
+                    style = theme.typography.bodyLarge,
+                    color = theme.palette.content,
+                )
             }
         }
         TextButton(

@@ -515,12 +515,69 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     @Test
+    fun simpleLayoutSwitchRetainsHomeAndWindowStateWithoutWeatherRequests() {
+        compose.waitForIdle()
+        val pages = listOf("Now", "Hourly", "Daily", "Details")
+        compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
+        val fixture = canonicalSnapshot
+        val operations = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        assertEquals(listOf(0, 0, 0, 0), operations)
+
+        pages.forEachIndexed { index, page ->
+            if (index > 0) {
+                compose.onNodeWithContentDescription("Choose Home page, current: ${pages[index - 1]}")
+                    .performClick()
+                compose.onNodeWithContentDescription("$page page, ${index + 1} of 4, not selected")
+                    .performClick()
+                compose.waitForIdle()
+            }
+
+            if (page == "Hourly" || page == "Daily") {
+                val activeWindowControlsIndex = if (page == "Hourly") 0 else 1
+                compose.onAllNodesWithText("Later")[activeWindowControlsIndex]
+                    .performScrollTo().performClick()
+                compose.waitForIdle()
+                compose.onAllNodesWithText("Earlier")[activeWindowControlsIndex]
+                    .performScrollTo().assertIsDisplayed()
+            }
+            compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
+            val pageText = visibleTextSnapshot()
+
+            listOf("simple", "standard").forEach { layout ->
+                compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+                val option = compose.onNodeWithTag("appearance-layout-$layout").performScrollTo()
+                option.assertIsDisplayed().performClick()
+                compose.waitForIdle()
+                option.assertIsSelected()
+                compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+                compose.waitForIdle()
+
+                compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
+                if (page == "Hourly" || page == "Daily") {
+                    val activeWindowControlsIndex = if (page == "Hourly") 0 else 1
+                    compose.onAllNodesWithText("Earlier")[activeWindowControlsIndex]
+                        .performScrollTo().assertIsDisplayed()
+                }
+                assertEquals("Visible $page forecast facts changed for $layout layout", pageText, visibleTextSnapshot())
+                compose.activityRule.scenario.onActivity {
+                    assertEquals(fixture, it.canonicalWeatherFixtureForTests())
+                }
+                assertEquals(operations, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+            }
+        }
+    }
+
+    @Test
     fun appearanceRemainsUsableWithLargeFontAndRtl() {
         compose.waitForIdle()
         setFontScale(1.3f)
         LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
+        val evidenceDirectory = File(
+            InstrumentationRegistry.getInstrumentation().targetContext.cacheDir,
+            "146-simple-layout-home-shell",
+        ).apply { check(mkdirs() || isDirectory) }
         compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
         compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
         WeatherThemeId.entries.forEach { id ->
@@ -529,7 +586,22 @@ class ThemeAppearanceApplicationFlowTest {
         ContrastLevel.entries.forEach { level ->
             compose.onNodeWithTag("appearance-contrast-${level.name.lowercase()}").performScrollTo().assertIsDisplayed()
         }
+        compose.onNodeWithTag("appearance-layout-standard").performScrollTo().assertIsSelected()
+        compose.onNodeWithTag("appearance-layout-simple").performScrollTo().performClick().assertIsSelected()
+        saveEvidence(evidenceDirectory, "appearance-layout-rtl-font1.3-simple")
         compose.onNodeWithTag("appearance-return").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("appearance-return").performClick()
+        compose.waitForIdle()
+        saveEvidence(evidenceDirectory, "home-layout-rtl-font1.3-simple")
+
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+        compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+        compose.waitForIdle()
+        saveEvidence(evidenceDirectory, "hourly-layout-rtl-font1.3-simple")
+        compose.onNodeWithContentDescription("Choose Home page, current: Hourly").performClick()
+        compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
+        compose.waitForIdle()
+        saveEvidence(evidenceDirectory, "daily-layout-rtl-font1.3-simple")
     }
 
     @Test
@@ -832,6 +904,17 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     private fun assertWeatherFactsUnchanged() = visibleWeatherFactSnapshot()
+
+    private fun visibleTextSnapshot(): List<String> {
+        val root = compose.onRoot().fetchSemanticsNode()
+        fun collect(node: androidx.compose.ui.semantics.SemanticsNode): List<String> {
+            val ownText = if (node.config.contains(SemanticsProperties.Text)) {
+                node.config[SemanticsProperties.Text].map { it.text }
+            } else emptyList()
+            return ownText + node.children.flatMap(::collect)
+        }
+        return collect(root)
+    }
 
     private fun visibleWeatherFactSnapshot(): List<String> {
         val expected = listOf("28 °C", "Partly cloudy", "Model estimate", "Updated 9:00 AM", "Freshness: unknown")
