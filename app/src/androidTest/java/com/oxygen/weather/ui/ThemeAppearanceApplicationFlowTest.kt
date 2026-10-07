@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertIsNotSelected
@@ -26,6 +27,7 @@ import com.oxygen.weather.SharedPreferencesSelectedLocationStore
 import com.oxygen.weather.ThemePreferenceTestHooks
 import com.oxygen.weather.ContrastPreferenceTestHooks
 import com.oxygen.weather.EffectsPreferenceTestHooks
+import com.oxygen.weather.MotionPolicyTestHooks
 import com.oxygen.weather.application.EffectsPreferenceReadResult
 import com.oxygen.weather.application.EffectsPreferenceStore
 import com.oxygen.weather.application.EffectsPreferenceWriteResult
@@ -50,13 +52,21 @@ import com.oxygen.weather.ui.themeengine.ThemeCatalog
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.resolveTheme
+import com.oxygen.weather.ui.themeengine.MotionStyle
+import com.oxygen.weather.data.locationsearch.LocationCandidate
+import com.oxygen.weather.data.locationsearch.LocationSearch
+import com.oxygen.weather.data.locationsearch.LocationSearchResult
 import androidx.compose.ui.semantics.SemanticsProperties
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.ConcurrentLinkedQueue
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -77,6 +87,8 @@ class ThemeAppearanceApplicationFlowTest {
     private val applied = mutableListOf<Pair<WeatherThemeId, ThemePreferenceWriteResult>>()
     private val contrastApplied = mutableListOf<Pair<ContrastLevel, ContrastPreferenceWriteResult>>()
     private var canonicalSnapshot: WeatherBundle? = null
+    private val observedMotionStyle = AtomicReference<MotionStyle?>()
+    private val pagerMotionChoices = ConcurrentLinkedQueue<Boolean>()
 
     @Before
     fun installThemeOwnerAndZeroRequestFixture() {
@@ -84,6 +96,23 @@ class ThemeAppearanceApplicationFlowTest {
         SharedPreferencesSelectedLocationStore(context).clear()
         ThemePreferenceTestHooks.fixtureAnchorOverride = LocalDateTime.of(2026, 9, 23, 9, 0)
         LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
+        LocationSearchTestHooks.searchFactory = {
+            LocationSearch {
+                LocationSearchResult.Success(listOf(LocationCandidate(
+                    providerId = 314,
+                    displayName = "Motion Test Place",
+                    latitude = 39.0,
+                    longitude = -89.0,
+                    timeZone = ZoneId.of("America/Chicago"),
+                    admin1 = "Illinois",
+                    country = "United States",
+                    countryCode = "US",
+                )))
+            }
+        }
+        MotionPolicyTestHooks.systemScaleOverride.value = null
+        MotionPolicyTestHooks.onEffectiveMotionStyle = { observedMotionStyle.set(it) }
+        MotionPolicyTestHooks.onPagerMotionChoice = { pagerMotionChoices.add(it) }
         ThemePreferenceTestHooks.storeFactory = { store }
         ThemePreferenceTestHooks.onThemeApplied = { id, outcome -> synchronized(applied) { applied += id to outcome } }
         ContrastPreferenceTestHooks.storeFactory = { contrastStore }
@@ -104,6 +133,114 @@ class ThemeAppearanceApplicationFlowTest {
         } }
         ProductionOfficialAlertTestHooks.onRequestFetched = { alertRequests.incrementAndGet() }
         compose.activityRule.scenario.recreate()
+    }
+
+    @Test
+    fun liveSystemMotionOverrideCapsPagerMovementWithoutChangingSavedEffectsOrWeather() {
+        compose.waitForIdle()
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.activityRule.scenario.onActivity { activity ->
+            assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.ATMOSPHERIC))
+            assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(ThemeEffectsLevel.FULL))
+            MotionPolicyTestHooks.systemScaleOverride.value = 1f
+        }
+        LocationSearchTestHooks.suppressSelectedForecastForTests = true
+        waitForMotion(MotionStyle.FULL)
+        var originalActivity: MainActivity? = null
+        compose.activityRule.scenario.onActivity { originalActivity = it }
+        val startupBaseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        val initialFixture = compose.activityRule.scenario.onActivity { it.canonicalWeatherFixtureForTests() }
+
+        // Named Home page menu and Home Back use animation while saved Full is allowed.
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+        compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+        compose.waitForIdle()
+        assertEquals(true, pagerMotionChoices.poll())
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertEquals(true, pagerMotionChoices.poll())
+
+        compose.activityRule.scenario.onActivity { MotionPolicyTestHooks.systemScaleOverride.value = 0f }
+        waitForMotion(MotionStyle.OFF)
+        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        compose.onNodeWithTag("appearance-effects-full").performScrollTo().assertIsSelected()
+        saveMotionEvidence("appearance-full-at-system-motion-off")
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertEquals(false, pagerMotionChoices.poll())
+
+        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+        compose.waitForIdle()
+        assertEquals(false, pagerMotionChoices.poll())
+
+        // Search selection returns to its opening page through the same effective policy.
+        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("location-search-query").performTextInput("motion")
+        compose.onNodeWithTag("location-search-submit").performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Motion Test Place", substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithTag("location-search-result-0").performClick()
+        compose.waitForIdle()
+        assertEquals(false, pagerMotionChoices.poll())
+
+        compose.activityRule.scenario.onActivity { MotionPolicyTestHooks.systemScaleOverride.value = 1f }
+        waitForMotion(MotionStyle.FULL)
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+        compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
+        compose.waitForIdle()
+        assertEquals(true, pagerMotionChoices.poll())
+        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        compose.onNodeWithTag("appearance-effects-full").performScrollTo().assertIsSelected()
+        compose.activityRule.scenario.onActivity { activity -> assertSame(originalActivity, activity) }
+        assertEquals(ThemeEffectsLevel.FULL, effectsStore.value)
+        assertEquals(initialFixture, compose.activityRule.scenario.onActivity { it.canonicalWeatherFixtureForTests() })
+        assertEquals(startupBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+        saveMotionEvidence("appearance-full-after-system-motion-restored")
+    }
+
+    @Test
+    fun actualAnimatorSettingUpdatesOpenActivityThroughComposeMotionScale() {
+        compose.waitForIdle()
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.activityRule.scenario.onActivity { activity ->
+            assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.ATMOSPHERIC))
+            assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(ThemeEffectsLevel.FULL))
+            MotionPolicyTestHooks.systemScaleOverride.value = null
+        }
+        LocationSearchTestHooks.suppressSelectedForecastForTests = true
+        val originalScale = shell("settings get global animator_duration_scale").trim().toFloat()
+        val originalActivity = compose.activity
+        val baseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        try {
+            shell("settings put global animator_duration_scale 1")
+            waitForMotion(MotionStyle.FULL)
+            shell("settings put global animator_duration_scale 0")
+            waitForMotion(MotionStyle.OFF)
+            compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+            compose.onNodeWithContentDescription("Details page, 4 of 4, not selected").performClick()
+            compose.waitForIdle()
+            assertEquals(false, pagerMotionChoices.poll())
+
+            shell("settings put global animator_duration_scale 1")
+            waitForMotion(MotionStyle.FULL)
+            compose.onNodeWithContentDescription("Choose Home page, current: Details").performClick()
+            compose.onNodeWithContentDescription("Now page, 1 of 4, not selected").performClick()
+            compose.waitForIdle()
+            assertEquals(true, pagerMotionChoices.poll())
+            compose.activityRule.scenario.onActivity { activity -> assertSame(originalActivity, activity) }
+            assertEquals(ThemeEffectsLevel.FULL, effectsStore.value)
+            assertEquals(baseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+        } finally {
+            shell("settings put global animator_duration_scale $originalScale")
+        }
     }
 
     @Test
@@ -366,6 +503,11 @@ class ThemeAppearanceApplicationFlowTest {
     fun clearHooks() {
         setFontScale(1f)
         LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+        LocationSearchTestHooks.searchFactory = null
+        LocationSearchTestHooks.suppressSelectedForecastForTests = false
+        MotionPolicyTestHooks.systemScaleOverride.value = null
+        MotionPolicyTestHooks.onEffectiveMotionStyle = null
+        MotionPolicyTestHooks.onPagerMotionChoice = null
         ThemePreferenceTestHooks.storeFactory = null
         ThemePreferenceTestHooks.onRead = null
         ThemePreferenceTestHooks.onThemeApplied = null
@@ -422,6 +564,31 @@ class ThemeAppearanceApplicationFlowTest {
             value = effects
             return EffectsPreferenceWriteResult.SUCCESS
         }
+    }
+
+    private fun waitForMotion(expected: MotionStyle) {
+        runCatching { compose.waitUntil(5_000) { observedMotionStyle.get() == expected } }
+        assertEquals("effective MotionStyle", expected, observedMotionStyle.get())
+    }
+
+    private fun saveMotionEvidence(name: String) {
+        val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "141-$name.png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/141-reduced-motion-effects-policy")
+        }
+        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            ?: error("Unable to create motion evidence media record for $name")
+        context.contentResolver.openOutputStream(uri)?.use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        } ?: error("Unable to open motion evidence output for $name")
+    }
+
+    private fun shell(command: String): String {
+        val descriptor = InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
+        return android.os.ParcelFileDescriptor.AutoCloseInputStream(descriptor).bufferedReader().use { it.readText() }
     }
 
     private fun saveEvidence(directory: File, name: String) {

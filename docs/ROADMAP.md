@@ -679,13 +679,15 @@ added in this slice.
 
 **Exit:** Persistence/resolver tests cover Off/Subtle/Full for every theme; Off is opaque, static, and complete, and changing effects does not refetch or alter weather.
 
-### R5.4A — Reduced-motion effects policy — PLANNED
+### R5.4A — Reduced-motion effects policy — DONE
 
 After R5.4, integrate system reduced-motion/disabled-animation policy and
 verify it resolves an effective appearance without rewriting the saved choice
 or changing weather meaning.
 
 **Exit:** System reduced-motion enabled/disabled cases resolve effective motion policy while persisted choice remains unchanged; installed motion is absent when the system policy disables it.
+
+Evidence and limitations: `.codex/history/2026-10-07-141-reduced-motion-effects-policy.md` and `.codex/test-artifacts/141-reduced-motion-effects-policy/`.
 
 ### R5.4B — Compose ambient background foundation — PLANNED
 

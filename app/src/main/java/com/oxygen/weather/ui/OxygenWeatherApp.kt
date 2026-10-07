@@ -43,6 +43,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -83,6 +84,7 @@ import com.oxygen.weather.application.DeviceLocationCoordinator
 import com.oxygen.weather.application.SavedLocationCoordinator
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.MotionStyle
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.SurfaceStyle
@@ -99,6 +101,7 @@ import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
 import com.oxygen.weather.ui.themeengine.components.ProductionWindowControls
 import com.oxygen.weather.ui.themeengine.components.ProductionForecastContext
 import com.oxygen.weather.ui.themeengine.resolveTheme
+import com.oxygen.weather.ui.themeengine.applySystemMotionPolicy
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import kotlinx.coroutines.launch
 
@@ -133,18 +136,26 @@ fun OxygenWeatherApp(
     onSelectContrast: (ContrastLevel) -> Unit = {},
     selectedEffects: ThemeEffectsLevel = effects,
     onSelectEffects: (ThemeEffectsLevel) -> Unit = {},
+    systemMotionScaleOverride: Float? = null,
+    onEffectiveMotionStyleForTests: ((MotionStyle) -> Unit)? = null,
+    onPagerMotionChoiceForTests: ((Boolean) -> Unit)? = null,
 ) {
     val themeId = selectedThemeId
-    val theme = remember(themeId, selectedContrast, selectedEffects) {
+    val scope = rememberCoroutineScope()
+    val systemMotionScale = rememberSystemAnimatorScale(systemMotionScaleOverride)
+    val baseTheme = remember(themeId, selectedContrast, selectedEffects) {
         resolveTheme(themeId, contrast = selectedContrast, effects = selectedEffects)
     }
+    val theme = remember(baseTheme, systemMotionScale) {
+        applySystemMotionPolicy(baseTheme, systemMotionScale)
+    }
+    SideEffect { onEffectiveMotionStyleForTests?.invoke(theme.motionStyle) }
     val displayPresentation = selectedForecast?.home ?: presentation
     val displayStatus = selectedForecast?.status ?: status
     val displayHorizons = if (selectedForecast != null) selectedForecast.partialHorizons else partialHorizons
     val displayContext = if (selectedForecast != null) selectedForecast.forecastContext else forecastContext
     val locationAction = savedLocationCoordinator?.actionPresentation?.value
     val pagerState = rememberPagerState(pageCount = { HomePage.entries.size })
-    val scope = rememberCoroutineScope()
     var hourlyWindowIndex by rememberSaveable { mutableIntStateOf(0) }
     var dailyWindowIndex by rememberSaveable { mutableIntStateOf(0) }
     var pageMenuExpanded by remember { mutableStateOf(false) }
@@ -177,12 +188,12 @@ fun OxygenWeatherApp(
                 selectedAlertIdentity = null
                 alertRoute = OfficialAlertRoute.HOME
             }
-            OfficialAlertRoute.HOME -> scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, effects) }
+            OfficialAlertRoute.HOME -> scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, theme.motionStyle, onPagerMotionChoiceForTests) }
         }
     }
     BackHandler(enabled = appearanceOpen) {
         appearanceOpen = false
-        scope.launch { pagerState.moveToPage(appearanceOpeningPage, effects) }
+        scope.launch { pagerState.moveToPage(appearanceOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
@@ -205,7 +216,7 @@ fun OxygenWeatherApp(
                             locationSearchCoordinator.dismiss()
                             deviceLocationCoordinator?.dismiss()
                             searchOpen = false
-                            scope.launch { pagerState.moveToPage(searchOpeningPage, effects) }
+                            scope.launch { pagerState.moveToPage(searchOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
                         },
                     )
                     return@ProductionBackdrop
@@ -221,7 +232,7 @@ fun OxygenWeatherApp(
                         onSelectEffects = onSelectEffects,
                         onReturn = {
                             appearanceOpen = false
-                            scope.launch { pagerState.moveToPage(appearanceOpeningPage, effects) }
+                            scope.launch { pagerState.moveToPage(appearanceOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
                         },
                     )
                     return@ProductionBackdrop
@@ -267,7 +278,7 @@ fun OxygenWeatherApp(
                                             text = { Text(page.label, style = theme.typography.bodyMedium) },
                                             onClick = {
                                                 pageMenuExpanded = false
-                                                scope.launch { pagerState.moveToPage(index, effects) }
+                                                scope.launch { pagerState.moveToPage(index, theme.motionStyle, onPagerMotionChoiceForTests) }
                                             },
                                             modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
                                                 .semantics {
@@ -427,10 +438,20 @@ private fun ResolvedTheme.headerToBodyGap() = when (definition.id) {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private suspend fun PagerState.moveToPage(page: Int, effects: ThemeEffectsLevel) {
-    when (effects) {
-        ThemeEffectsLevel.OFF -> scrollToPage(page)
-        ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL -> animateScrollToPage(page)
+private suspend fun PagerState.moveToPage(
+    page: Int,
+    motionStyle: MotionStyle,
+    onMotionChoiceForTests: ((Boolean) -> Unit)?,
+) {
+    when (motionStyle) {
+        MotionStyle.OFF -> {
+            onMotionChoiceForTests?.invoke(false)
+            scrollToPage(page)
+        }
+        MotionStyle.SUBTLE, MotionStyle.FULL -> {
+            onMotionChoiceForTests?.invoke(true)
+            animateScrollToPage(page)
+        }
     }
 }
 

@@ -78,6 +78,7 @@ import com.oxygen.weather.presentation.UnitPreset
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.MotionStyle
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -384,8 +385,10 @@ class MainActivity : ComponentActivity() {
                 if (!isDestroyed) {
                     LocationSearchTestHooks.onSelectedRequest?.invoke(request)
                     selectedForecastState.value = request.loadingPresentation()
-                    forecastController?.fetch(request)
-                    dispatchOfficialAlerts(request)
+                    if (!LocationSearchTestHooks.suppressSelectedForecastForTests) {
+                        forecastController?.fetch(request)
+                        dispatchOfficialAlerts(request)
+                    }
                 }
             },
             onRestoredRequest = { request ->
@@ -447,6 +450,9 @@ class MainActivity : ComponentActivity() {
                 onSelectEffects = ::selectEffectsForTests,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
+                systemMotionScaleOverride = MotionPolicyTestHooks.systemScaleOverride.value,
+                onEffectiveMotionStyleForTests = MotionPolicyTestHooks.onEffectiveMotionStyle,
+                onPagerMotionChoiceForTests = MotionPolicyTestHooks.onPagerMotionChoice,
             )
         }
     }
@@ -635,6 +641,7 @@ internal object LocationSearchTestHooks {
     @Volatile var selectedStoreFactory: ((android.content.Context) -> SelectedLocationStore)? = null
     @Volatile var effectsOverrideForTests: ThemeEffectsLevel? = null
     @Volatile var layoutDirectionOverrideForTests: LayoutDirection? = null
+    @Volatile var suppressSelectedForecastForTests: Boolean = false
 }
 
 /** Injection seam for installed Activity tests; production uses the Open-Meteo URL transport. */
@@ -676,6 +683,13 @@ internal object EffectsPreferenceTestHooks {
     @Volatile var onRead: ((EffectsPreferenceReadResult) -> Unit)? = null
     @Volatile var onEffectsApplied: ((ThemeEffectsLevel, EffectsPreferenceWriteResult) -> Unit)? = null
     @Volatile var selectEffects: ((ThemeEffectsLevel) -> EffectsPreferenceWriteResult)? = null
+}
+
+/** Test seam for live system-motion changes and observing the selected pager branch. */
+internal object MotionPolicyTestHooks {
+    val systemScaleOverride = mutableStateOf<Float?>(null)
+    @Volatile var onEffectiveMotionStyle: ((MotionStyle) -> Unit)? = null
+    @Volatile var onPagerMotionChoice: ((Boolean) -> Unit)? = null
 }
 
 /** Injection seam for exercising the Activity's independent official-alert composition. */
