@@ -99,6 +99,7 @@ import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
 import com.oxygen.weather.ui.themeengine.components.ProductionWindowControls
 import com.oxygen.weather.ui.themeengine.components.ProductionForecastContext
 import com.oxygen.weather.ui.themeengine.resolveTheme
+import com.oxygen.weather.ui.themeengine.ContrastLevel
 import kotlinx.coroutines.launch
 
 private enum class HomePage(val label: String) {
@@ -128,6 +129,8 @@ fun OxygenWeatherApp(
     layoutDirectionOverride: LayoutDirection? = null,
     selectedThemeId: WeatherThemeId = WeatherThemeId.ATMOSPHERIC,
     onSelectTheme: (WeatherThemeId) -> Unit = {},
+    selectedContrast: ContrastLevel = ContrastLevel.STANDARD,
+    onSelectContrast: (ContrastLevel) -> Unit = {},
 ) {
     val themeId = selectedThemeId
     val themeEffects = when {
@@ -135,7 +138,9 @@ fun OxygenWeatherApp(
         themeId == WeatherThemeId.MINIMAL_OLED || themeId == WeatherThemeId.TERMINAL -> ThemeEffectsLevel.OFF
         else -> ThemeEffectsLevel.SUBTLE
     }
-    val theme = remember(themeId, themeEffects) { resolveTheme(themeId, effects = themeEffects) }
+    val theme = remember(themeId, selectedContrast, themeEffects) {
+        resolveTheme(themeId, contrast = selectedContrast, effects = themeEffects)
+    }
     val displayPresentation = selectedForecast?.home ?: presentation
     val displayStatus = selectedForecast?.status ?: status
     val displayHorizons = if (selectedForecast != null) selectedForecast.partialHorizons else partialHorizons
@@ -213,6 +218,8 @@ fun OxygenWeatherApp(
                         theme = theme,
                         selected = themeId,
                         onSelect = onSelectTheme,
+                        selectedContrast = selectedContrast,
+                        onSelectContrast = onSelectContrast,
                         onReturn = {
                             appearanceOpen = false
                             scope.launch { pagerState.moveToPage(appearanceOpeningPage, effects) }
@@ -457,6 +464,8 @@ private fun ThemeAppearanceSurface(
     theme: ResolvedTheme,
     selected: WeatherThemeId,
     onSelect: (WeatherThemeId) -> Unit,
+    selectedContrast: ContrastLevel,
+    onSelectContrast: (ContrastLevel) -> Unit,
     onReturn: () -> Unit,
 ) {
     Column(
@@ -489,6 +498,40 @@ private fun ThemeAppearanceSurface(
                     color = if (isSelected) theme.palette.action else theme.palette.secondaryData,
                 )
                 Text(name, modifier = Modifier.weight(1f).padding(end = 16.dp), style = theme.typography.bodyLarge, color = theme.palette.content)
+            }
+        }
+        Text("Contrast", style = theme.typography.titleMedium, color = theme.palette.primaryData)
+        Text("Choose a contrast level", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        ContrastLevel.entries.forEach { level ->
+            val label = when (level) {
+                ContrastLevel.STANDARD -> "Standard contrast"
+                ContrastLevel.HIGH -> "High contrast"
+            }
+            val isSelected = level == selectedContrast
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .clickable(role = Role.RadioButton, onClick = { onSelectContrast(level) })
+                    .semantics {
+                        this.selected = isSelected
+                        contentDescription = "$label, ${if (isSelected) "selected" else "not selected"}"
+                    }
+                    .testTag("appearance-contrast-${level.name.lowercase()}"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = if (isSelected) "●" else "○",
+                    modifier = Modifier.padding(start = 16.dp, end = 12.dp),
+                    style = theme.typography.titleMedium,
+                    color = if (isSelected) theme.palette.action else theme.palette.secondaryData,
+                )
+                Text(
+                    text = if (isSelected) "$label · selected" else label,
+                    modifier = Modifier.weight(1f).padding(end = 16.dp),
+                    style = theme.typography.bodyLarge,
+                    color = theme.palette.content,
+                )
             }
         }
         TextButton(

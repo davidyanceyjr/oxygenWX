@@ -663,11 +663,13 @@ existing resolver/catalog. Selection changes presentation only.
 
 Evidence: `.codex/history/2026-10-06-138-theme-selection-appearance-surface.md`.
 
-### R5.3 — Contrast preference — PLANNED
+### R5.3 — Contrast preference — DONE
 
 Standard/High contrast remains independent of theme and weather semantics.
 
 **Exit:** Preference/resolver tests cover Standard and High contrast independently for all five themes; installed samples show non-color selection/unavailable cues and unchanged facts.
+
+Evidence: `.codex/history/2026-10-07-139-contrast-preference.md`. Focused contrast acceptance and installed 10-pair captures passed; the broader connected suite had 8 failures, with details and unverified boundaries in the cycle record.
 
 ### R5.4 — Effects preference — PLANNED
 

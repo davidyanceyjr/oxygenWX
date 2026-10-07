@@ -152,6 +152,10 @@ Theme selection + contrast + effects + system motion policy
 ```
 
 Effects Off must resolve to an opaque, static, complete interface. High contrast is an overlay on a selected theme rather than a separate weather interpretation.
+The Standard/High contrast choice is persisted separately from theme selection
+in application-private storage and is available alongside theme selection in
+the focused Appearance destination. Standard preserves the theme's normal
+palette; High uses the resolver's accessible palette and opacity rules.
 
 ## Availability and honesty
 
@@ -227,7 +231,7 @@ Still separate future slices:
 - location and saved locations;
 - unit preferences;
 - persisted selection among Atmospheric, Glass, Minimal OLED, Instrument, and Terminal (implemented in R5.2);
-- high contrast preference;
+- persisted Standard/High contrast choice (implemented in R5.3);
 - persisted Off/Subtle/Full effects preference;
 - Simple layout;
 - installed screenshot/accessibility evidence matrix;

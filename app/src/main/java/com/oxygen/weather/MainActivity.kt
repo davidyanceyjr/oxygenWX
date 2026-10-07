@@ -52,6 +52,10 @@ import com.oxygen.weather.application.UnitPresetWriteResult
 import com.oxygen.weather.application.ThemePreferenceSelection
 import com.oxygen.weather.application.ThemePreferenceStore
 import com.oxygen.weather.application.ThemePreferenceWriteResult
+import com.oxygen.weather.application.ContrastPreferenceSelection
+import com.oxygen.weather.application.ContrastPreferenceStore
+import com.oxygen.weather.application.ContrastPreferenceWriteResult
+import com.oxygen.weather.application.ContrastPreferenceReadResult
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoCoordinateTimeZoneLookup
 import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
@@ -68,6 +72,7 @@ import com.oxygen.weather.presentation.SelectedForecastPresentationState
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.UnitPreset
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
+import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -104,6 +109,8 @@ class MainActivity : ComponentActivity() {
     private var unitPresetSelection: UnitPresetSelection? = null
     private var themePreferenceSelection: ThemePreferenceSelection? = null
     private val selectedThemeIdState = mutableStateOf(WeatherThemeId.ATMOSPHERIC)
+    private var contrastPreferenceSelection: ContrastPreferenceSelection? = null
+    private val selectedContrastState = mutableStateOf(ContrastLevel.STANDARD)
     private var fixtureBundle: com.oxygen.weather.data.WeatherBundle? = null
     private var fixtureDerived: com.oxygen.weather.derived.DerivedWeather? = null
     private var fixtureStatus: StatusPresentation? = null
@@ -140,6 +147,12 @@ class MainActivity : ComponentActivity() {
         selectedThemeIdState.value = themePreferenceSelection!!.effectiveThemeId
         ThemePreferenceTestHooks.onRead?.invoke(themePreferenceSelection!!.readResult)
         ThemePreferenceTestHooks.selectTheme = ::selectThemeForTests
+        val contrastStore = ContrastPreferenceTestHooks.storeFactory?.invoke(applicationContext)
+            ?: SharedPreferencesContrastPreferenceStore(applicationContext)
+        contrastPreferenceSelection = ContrastPreferenceSelection(contrastStore)
+        selectedContrastState.value = contrastPreferenceSelection!!.effectiveContrast
+        ContrastPreferenceTestHooks.onRead?.invoke(contrastPreferenceSelection!!.readResult)
+        ContrastPreferenceTestHooks.selectContrast = ::selectContrastForTests
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
@@ -415,6 +428,8 @@ class MainActivity : ComponentActivity() {
                 officialAlertChoices = officialAlertChoicesState.value,
                 selectedThemeId = selectedThemeIdState.value,
                 onSelectTheme = ::selectThemeForTests,
+                selectedContrast = selectedContrastState.value,
+                onSelectContrast = ::selectContrastForTests,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
@@ -473,6 +488,14 @@ class MainActivity : ComponentActivity() {
         val outcome = selection.select(themeId)
         selectedThemeIdState.value = selection.effectiveThemeId
         ThemePreferenceTestHooks.onThemeApplied?.invoke(themeId, outcome)
+        return outcome
+    }
+
+    internal fun selectContrastForTests(contrast: ContrastLevel): ContrastPreferenceWriteResult {
+        val selection = checkNotNull(contrastPreferenceSelection) { "Contrast preference store has not been initialized" }
+        val outcome = selection.select(contrast)
+        selectedContrastState.value = selection.effectiveContrast
+        ContrastPreferenceTestHooks.onContrastApplied?.invoke(contrast, outcome)
         return outcome
     }
 
@@ -615,6 +638,14 @@ internal object ThemePreferenceTestHooks {
     @Volatile var onThemeApplied: ((WeatherThemeId, ThemePreferenceWriteResult) -> Unit)? = null
     @Volatile var selectTheme: ((WeatherThemeId) -> ThemePreferenceWriteResult)? = null
     @Volatile var fixtureAnchorOverride: LocalDateTime? = null
+}
+
+/** Narrow instrumentation seam for persisted contrast selection through the Activity owner. */
+internal object ContrastPreferenceTestHooks {
+    @Volatile var storeFactory: ((android.content.Context) -> ContrastPreferenceStore)? = null
+    @Volatile var onRead: ((ContrastPreferenceReadResult) -> Unit)? = null
+    @Volatile var onContrastApplied: ((ContrastLevel, ContrastPreferenceWriteResult) -> Unit)? = null
+    @Volatile var selectContrast: ((ContrastLevel) -> ContrastPreferenceWriteResult)? = null
 }
 
 /** Injection seam for exercising the Activity's independent official-alert composition. */
