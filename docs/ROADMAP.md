@@ -707,17 +707,21 @@ Apply layered gradients, soft color fields, haze/glow forms, and restrained moti
 
 Evidence and limitations: `.codex/history/2026-10-07-143-atmospheric-glass-ambient-treatments.md` and `.codex/test-artifacts/143-atmospheric-glass-ambient-treatments/`. The six installed cells, four reduced-motion captures, focused pixel/semantics/interaction checks, and no-refetch application-flow evidence passed. Broad accessibility verification and profiling remain open for R6/R5.4E.
 
-### R5.4D — Instrument, Terminal, and Minimal OLED treatments — PLANNED
+### R5.4D — Instrument, Terminal, and Minimal OLED treatments — DONE
 
 Apply theme-native backgrounds to the remaining themes: grid/contour fields for Instrument, restrained phosphor/scanline texture for Terminal, and a predominantly true-black treatment for Minimal OLED. Do not force common decorative effects where they weaken theme identity.
 
 **Exit:** Installed Now captures verify all three themes under Off/Subtle/Full; Minimal OLED preserves its black-field identity, Terminal remains text-dominant, and Instrument overlays remain decorative rather than weather data.
 
-### R5.4E — Ambient background performance and fallback — PLANNED
+Evidence and limitations: `.codex/history/2026-10-07-144-instrument-terminal-minimal-oled-ambient-treatments.md` and `.codex/test-artifacts/144-instrument-terminal-minimal-oled-ambient-treatments/`. Installed theme captures and focused checks passed; performance characterization followed in R5.4E.
+
+### R5.4E — Ambient background performance and fallback — DONE
 
 Bound animation, drawing, blur, and layer cost; provide static fallback behavior for reduced motion or unavailable effects. Background rendering must never gate weather content or make animation necessary for a complete appearance.
 
 **Exit:** Installed compact and large-font checks show complete static fallback states for all five themes, reduced-motion disables ambient motion, and focused profiling finds no blocking rendering or interaction regression.
+
+Evidence and limitations: `.codex/history/2026-10-07-145-ambient-background-performance-fallback-hardening.md` and `.codex/test-artifacts/145-ambient-background-performance-fallback-hardening/`. The installed 30-cell matrix and focused checks passed. API 37 emulator profiling recorded zero idle frames and completed all 15 foreground actions; high whole-app interaction jank prevents a device-independent performance claim or backdrop cost attribution. Existing compact large-font Now content clipping remains assigned to R6.2.
 
 ### R5.5 — Simple layout — PLANNED
 

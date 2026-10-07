@@ -69,6 +69,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -306,6 +307,91 @@ class ThemeAppearanceApplicationFlowTest {
                         }
                     }).joinToString("\n"),
         )
+    }
+
+    @Test
+    fun cycle145InstalledFallbackAndReducedMotionMatrix() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val evidence = File(context.getExternalFilesDir(null), "145-ambient-background-performance-fallback-hardening")
+            .apply { check(mkdirs() || isDirectory) }
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Ltr
+        setFontScale(1f)
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        val fixture = compose.activityRule.scenario.onActivity { it.canonicalWeatherFixtureForTests() }
+        val operations = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        val index = mutableListOf<String>()
+        val originalAnimatorScale = shell("settings get global animator_duration_scale").trim().toFloat()
+
+        fun capture(themeId: WeatherThemeId, effects: ThemeEffectsLevel, scale: Float, font: Float): android.graphics.Bitmap {
+            shell("settings put global animator_duration_scale ${scale.toInt()}")
+            compose.activityRule.scenario.onActivity { activity ->
+                assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(themeId))
+                assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(effects))
+            }
+            val expectedMotion = if (scale == 0f) MotionStyle.OFF
+                else resolveTheme(themeId, effects = effects).motionStyle
+            compose.waitUntil(5_000) {
+                observedBackdropTheme.get()?.let {
+                    it.definition.id == themeId && it.effects == effects && it.motionStyle == expectedMotion
+                } == true
+            }
+            compose.waitForIdle()
+            assertEquals(effects, effectsStore.value)
+            assertEquals(expectedMotion, observedMotionStyle.get())
+            assertWeatherFactsUnchanged()
+            compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
+            assertEquals(fixture, compose.activityRule.scenario.onActivity { it.canonicalWeatherFixtureForTests() })
+            assertEquals(operations, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+            val name = "now-${themeId.name.lowercase().replace('_', '-')}-${effects.name.lowercase()}-font$font-scale${scale.toInt()}.png"
+            val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+            FileOutputStream(File(evidence, name)).use { check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it)) }
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, name)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/145-ambient-background-performance-fallback-hardening")
+            }
+            val uri = checkNotNull(context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
+            context.contentResolver.openOutputStream(uri)?.use {
+                check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it))
+            } ?: error("Unable to persist installed capture $name")
+            index += "$name theme=$themeId savedEffects=${effectsStore.value} effectiveEffects=${observedBackdropTheme.get()?.effects} motion=$expectedMotion animatorScale=$scale fontScale=$font"
+            return bitmap
+        }
+
+        try {
+            listOf(1f, 1.3f).forEach { font ->
+                setFontScale(font)
+                compose.activityRule.scenario.recreate()
+                compose.waitForIdle()
+                WeatherThemeId.entries.forEach { capture(it, ThemeEffectsLevel.OFF, 1f, font) }
+            }
+            setFontScale(1f)
+            compose.activityRule.scenario.recreate()
+            compose.waitForIdle()
+            WeatherThemeId.entries.forEach { themeId ->
+                listOf(ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL).forEach { effects ->
+                    val normal = capture(themeId, effects, 1f, 1f)
+                    val reduced = capture(themeId, effects, 0f, 1f)
+                    assertTrue("Static app pixels changed with reduced motion: $themeId $effects", normal.sameAs(reduced))
+                }
+            }
+            pagerMotionChoices.clear()
+            compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+            compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+            assertEquals(false, pagerMotionChoices.poll())
+            assertEquals(operations, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+            File(evidence, "capture-index.txt").writeText(
+                "MainActivity -> OxygenWeatherApp -> ProductionBackdrop; device=${android.os.Build.MODEL}; API=${android.os.Build.VERSION.SDK_INT}; LTR; Standard contrast; Demo Station fixture=$fixture; operations=$operations\n" +
+                    index.joinToString("\n", postfix = "\n"),
+            )
+        } finally {
+            shell("settings put global animator_duration_scale $originalAnimatorScale")
+        }
     }
 
     @Test
