@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import android.content.ContentValues
 import android.provider.MediaStore
 import androidx.compose.ui.test.assertIsDisplayed
@@ -19,12 +20,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
-import com.oxygen.weather.ui.EffectsLevel
 import com.oxygen.weather.ProductionForecastTestHooks
 import com.oxygen.weather.ProductionOfficialAlertTestHooks
 import com.oxygen.weather.SharedPreferencesSelectedLocationStore
 import com.oxygen.weather.ThemePreferenceTestHooks
 import com.oxygen.weather.ContrastPreferenceTestHooks
+import com.oxygen.weather.EffectsPreferenceTestHooks
+import com.oxygen.weather.application.EffectsPreferenceReadResult
+import com.oxygen.weather.application.EffectsPreferenceStore
+import com.oxygen.weather.application.EffectsPreferenceWriteResult
 import com.oxygen.weather.SharedPreferencesContrastPreferenceStore
 import com.oxygen.weather.application.ThemePreferenceReadResult
 import com.oxygen.weather.application.ThemePreferenceStore
@@ -65,6 +69,7 @@ class ThemeAppearanceApplicationFlowTest {
 
     private val store = MemoryThemePreferenceStore()
     private val contrastStore = MemoryContrastPreferenceStore()
+    private val effectsStore = MemoryEffectsPreferenceStore()
     private val forecastRequests = AtomicInteger()
     private val cacheReads = AtomicInteger()
     private val cacheWrites = AtomicInteger()
@@ -78,7 +83,7 @@ class ThemeAppearanceApplicationFlowTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         SharedPreferencesSelectedLocationStore(context).clear()
         ThemePreferenceTestHooks.fixtureAnchorOverride = LocalDateTime.of(2026, 9, 23, 9, 0)
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         ThemePreferenceTestHooks.storeFactory = { store }
         ThemePreferenceTestHooks.onThemeApplied = { id, outcome -> synchronized(applied) { applied += id to outcome } }
         ContrastPreferenceTestHooks.storeFactory = { contrastStore }
@@ -314,6 +319,49 @@ class ThemeAppearanceApplicationFlowTest {
         compose.onNodeWithTag("appearance-contrast-high").assertIsSelected()
     }
 
+    @Test
+    fun effectsAreSelectablePersistedAndDoNotTouchWeatherOperations() {
+        compose.waitForIdle()
+        val baseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        val activityContext = InstrumentationRegistry.getInstrumentation().targetContext
+        val evidence = File(activityContext.cacheDir, "140-effects-preference").apply { check(mkdirs() || isDirectory) }
+        EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        val canonicalBefore = java.util.concurrent.atomic.AtomicReference<WeatherBundle?>()
+        compose.activityRule.scenario.onActivity { canonicalBefore.set(it.canonicalWeatherFixtureForTests()) }
+        ThemeEffectsLevel.entries.forEach { level ->
+            val label = when (level) {
+                ThemeEffectsLevel.OFF -> "Effects off"
+                ThemeEffectsLevel.SUBTLE -> "Subtle effects"
+                ThemeEffectsLevel.FULL -> "Full effects"
+            }
+            compose.activityRule.scenario.onActivity { assertEquals(EffectsPreferenceWriteResult.SUCCESS, it.selectEffectsForTests(level)) }
+            compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+            compose.onNodeWithTag("appearance-effects-${level.name.lowercase()}").performScrollTo().assertIsDisplayed().assertIsSelected()
+            compose.onNodeWithContentDescription("$label, selected").assertIsDisplayed()
+            saveEvidence(evidence, "appearance-${level.name.lowercase()}")
+            savePublicEffectsEvidence(activityContext, "appearance-${level.name.lowercase()}")
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            saveEvidence(evidence, "now-${level.name.lowercase()}")
+            savePublicEffectsEvidence(activityContext, "now-${level.name.lowercase()}")
+            assertEquals(level, effectsStore.value)
+            assertEquals(baseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+            compose.activityRule.scenario.onActivity { assertEquals(canonicalBefore.get(), it.canonicalWeatherFixtureForTests()) }
+            compose.activityRule.scenario.recreate()
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+            compose.onNodeWithTag("appearance-effects-${level.name.lowercase()}").performScrollTo().assertIsSelected()
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            assertEquals(baseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+        }
+        check(File(evidence, "operation-counts.txt").also { it.writeText("baseline=$baseline; final=${listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())}; fixture=${canonicalBefore.get()}\n") }.exists())
+        assertEquals(ThemeEffectsLevel.entries.size * 2, evidence.listFiles()?.count { it.extension == "png" })
+    }
+
     @After
     fun clearHooks() {
         setFontScale(1f)
@@ -327,6 +375,10 @@ class ThemeAppearanceApplicationFlowTest {
         ContrastPreferenceTestHooks.onRead = null
         ContrastPreferenceTestHooks.onContrastApplied = null
         ContrastPreferenceTestHooks.selectContrast = null
+        EffectsPreferenceTestHooks.storeFactory = null
+        EffectsPreferenceTestHooks.onRead = null
+        EffectsPreferenceTestHooks.onEffectsApplied = null
+        EffectsPreferenceTestHooks.selectEffects = null
         InstrumentationRegistry.getInstrumentation().targetContext
             .getSharedPreferences("contrast_preference_v1", android.content.Context.MODE_PRIVATE)
             .edit().clear().commit()
@@ -362,6 +414,16 @@ class ThemeAppearanceApplicationFlowTest {
         }
     }
 
+    private class MemoryEffectsPreferenceStore : EffectsPreferenceStore {
+        @Volatile var value: ThemeEffectsLevel? = null
+        override fun read(): EffectsPreferenceReadResult = value?.let(EffectsPreferenceReadResult::Found)
+            ?: EffectsPreferenceReadResult.Defaulted()
+        override fun save(effects: ThemeEffectsLevel): EffectsPreferenceWriteResult {
+            value = effects
+            return EffectsPreferenceWriteResult.SUCCESS
+        }
+    }
+
     private fun saveEvidence(directory: File, name: String) {
         val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
         FileOutputStream(File(directory, "$name.png")).use { output ->
@@ -378,6 +440,20 @@ class ThemeAppearanceApplicationFlowTest {
         context.contentResolver.openOutputStream(uri)?.use { output ->
             check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
         } ?: error("Unable to open installed screenshot media output for $name")
+    }
+
+    private fun savePublicEffectsEvidence(context: android.content.Context, name: String) {
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "140-effects-$name.png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/140-effects-preference")
+        }
+        val uri = checkNotNull(context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
+        context.contentResolver.openOutputStream(uri).use { output ->
+            checkNotNull(output)
+            val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        }
     }
 
     private fun assertWeatherFactsUnchanged() = visibleWeatherFactSnapshot()

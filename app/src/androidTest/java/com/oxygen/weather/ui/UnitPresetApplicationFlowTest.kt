@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import android.graphics.Bitmap
 import android.content.ContentValues
 import android.provider.MediaStore
@@ -24,7 +25,6 @@ import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.presentation.UnitPreset
-import com.oxygen.weather.ui.EffectsLevel
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDateTime
@@ -45,7 +45,7 @@ class UnitPresetApplicationFlowTest {
     fun installedFixtureSwitchesAllPagesAndRestoresEachPersistedPreset() {
         UnitPresetTestHooks.storeFactory = { store }
         UnitPresetTestHooks.fixtureAnchorOverride = LocalDateTime.of(2026, 9, 23, 9, 0)
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
         val cacheDirectory = AtomicReference<File>()

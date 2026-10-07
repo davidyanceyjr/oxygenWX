@@ -21,7 +21,7 @@ import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.presentation.PresentedDataOrigin
 import com.oxygen.weather.presentation.PresentedRefreshOutcome
 import com.oxygen.weather.presentation.StatusPresentation
-import com.oxygen.weather.ui.EffectsLevel
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.Assert.assertTrue
@@ -44,7 +44,7 @@ class ForecastContextPagesTest {
             OxygenWeatherApp(
                 presentation = currentHome.value!!,
                 status = currentStatus.value,
-                effects = EffectsLevel.OFF,
+                effects = ThemeEffectsLevel.OFF,
                 forecastContext = currentContext.value,
             )
         }

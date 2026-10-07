@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.captureToImage
@@ -29,7 +30,6 @@ import com.oxygen.weather.data.locationsearch.LocationSearchResult
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoHttpResponse
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
-import com.oxygen.weather.ui.EffectsLevel
 import java.io.File
 import java.io.FileOutputStream
 import java.time.ZoneId
@@ -101,7 +101,7 @@ class ManualLocationSearchFlowTest {
         ProductionForecastTestHooks.transportOverride = OpenMeteoTransport {
             OpenMeteoHttpResponse(503, "deterministic test failure")
         }
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
         compose.activityRule.scenario.recreate()
     }

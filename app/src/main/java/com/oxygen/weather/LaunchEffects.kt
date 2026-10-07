@@ -1,6 +1,6 @@
 package com.oxygen.weather
 
-import com.oxygen.weather.ui.EffectsLevel
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 
 internal const val EFFECTS_OFF_LAUNCH_EXTRA = "oxygen_effects_off"
 internal const val DETERMINISTIC_CAPTURE_LAUNCH_EXTRA = "oxygen_deterministic_capture"
@@ -31,5 +31,5 @@ internal fun selectSparseFixture(isDebugBuild: Boolean, sparseFixtureRequested: 
     isDebugBuild && sparseFixtureRequested
 
 /** Keeps the debug-only installed-verification hook out of release behavior. */
-internal fun selectLaunchEffects(isDebugBuild: Boolean, effectsOffRequested: Boolean): EffectsLevel =
-    if (isDebugBuild && effectsOffRequested) EffectsLevel.OFF else EffectsLevel.SUBTLE
+internal fun selectLaunchEffects(isDebugBuild: Boolean, effectsOffRequested: Boolean): ThemeEffectsLevel =
+    if (isDebugBuild && effectsOffRequested) ThemeEffectsLevel.OFF else ThemeEffectsLevel.SUBTLE

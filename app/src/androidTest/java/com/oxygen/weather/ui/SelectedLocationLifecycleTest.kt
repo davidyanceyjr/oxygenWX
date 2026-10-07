@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -32,7 +33,6 @@ import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.data.alerts.OfficialAlertRequest
 import com.oxygen.weather.data.alerts.nws.NwsHttpResponse
 import com.oxygen.weather.data.alerts.nws.NwsTransport
-import com.oxygen.weather.ui.EffectsLevel
 import java.io.File
 import java.io.FileOutputStream
 import java.time.ZoneId
@@ -84,7 +84,7 @@ class SelectedLocationLifecycleTest {
         }
         LocationSearchTestHooks.onSelectedRequest = { requests += it }
         LocationSearchTestHooks.onRestoredRequest = { requests += it }
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         ProductionForecastTestHooks.transportOverride = OpenMeteoTransport {
             forecastCalls.incrementAndGet()
             forecastEnteredTwice.countDown()

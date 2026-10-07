@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -117,7 +118,7 @@ class CachedForecastRestorationTest {
         )
         val record = (store.read(id) as ForecastCacheReadResult.Found).record
         cachedAtText = "${record.cachedAt.atZone(location.timeZone).format(DateTimeFormatter.ofPattern("MMM d, yyyy h:mm a"))} ${location.timeZone.id}"
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         ProductionForecastTestHooks.transportOverride = OpenMeteoTransport {
             transportCalls.incrementAndGet()
             transportEntered.countDown()

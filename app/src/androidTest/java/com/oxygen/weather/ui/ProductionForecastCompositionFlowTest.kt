@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.captureToImage
@@ -137,7 +138,7 @@ class ProductionForecastCompositionFlowTest {
             }
         } }
         LocationSearchTestHooks.onSelectedRequest = { selectedRequest.set(it) }
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         ProductionForecastTestHooks.transportOverride = OpenMeteoTransport { uri ->
             observedUri.set(uri)
             forecastCalls.incrementAndGet()

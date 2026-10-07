@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -70,7 +71,7 @@ class RefreshOutcomeFlowTest {
             clear()
             save(SelectedLocation(locationId, "Chicago", coordinates, location.timeZone))
         }
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         setFontScale(1.0f)
         ProductionForecastTestHooks.clockOverride = Clock.fixed(now, ZoneId.of("UTC"))
     }

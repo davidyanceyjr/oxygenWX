@@ -1,5 +1,6 @@
 package com.oxygen.weather.ui
 
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -80,7 +81,7 @@ class SavedLocationFlowTest {
         }
         LocationSearchTestHooks.onSelectedRequest = selectedRequests::add
         LocationSearchTestHooks.onRestoredRequest = restoredRequests::add
-        LocationSearchTestHooks.effectsOverrideForTests = EffectsLevel.OFF
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.OFF
         LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Ltr
         ProductionForecastTestHooks.transportOverride = OpenMeteoTransport {
             forecastCalls.incrementAndGet()

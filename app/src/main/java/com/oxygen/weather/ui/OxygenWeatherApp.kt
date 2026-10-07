@@ -115,7 +115,7 @@ fun OxygenWeatherApp(
     presentation: HomePresentation,
     status: StatusPresentation,
     partialHorizons: ForecastHorizonPresentation? = null,
-    effects: EffectsLevel = EffectsLevel.SUBTLE,
+    effects: ThemeEffectsLevel = ThemeEffectsLevel.SUBTLE,
     forecastContext: ForecastContextPresentation? = null,
     locationSearchCoordinator: LocationSearchCoordinator? = null,
     deviceLocationCoordinator: DeviceLocationCoordinator? = null,
@@ -131,15 +131,12 @@ fun OxygenWeatherApp(
     onSelectTheme: (WeatherThemeId) -> Unit = {},
     selectedContrast: ContrastLevel = ContrastLevel.STANDARD,
     onSelectContrast: (ContrastLevel) -> Unit = {},
+    selectedEffects: ThemeEffectsLevel = effects,
+    onSelectEffects: (ThemeEffectsLevel) -> Unit = {},
 ) {
     val themeId = selectedThemeId
-    val themeEffects = when {
-        effects == EffectsLevel.OFF -> ThemeEffectsLevel.OFF
-        themeId == WeatherThemeId.MINIMAL_OLED || themeId == WeatherThemeId.TERMINAL -> ThemeEffectsLevel.OFF
-        else -> ThemeEffectsLevel.SUBTLE
-    }
-    val theme = remember(themeId, selectedContrast, themeEffects) {
-        resolveTheme(themeId, contrast = selectedContrast, effects = themeEffects)
+    val theme = remember(themeId, selectedContrast, selectedEffects) {
+        resolveTheme(themeId, contrast = selectedContrast, effects = selectedEffects)
     }
     val displayPresentation = selectedForecast?.home ?: presentation
     val displayStatus = selectedForecast?.status ?: status
@@ -220,6 +217,8 @@ fun OxygenWeatherApp(
                         onSelect = onSelectTheme,
                         selectedContrast = selectedContrast,
                         onSelectContrast = onSelectContrast,
+                        selectedEffects = selectedEffects,
+                        onSelectEffects = onSelectEffects,
                         onReturn = {
                             appearanceOpen = false
                             scope.launch { pagerState.moveToPage(appearanceOpeningPage, effects) }
@@ -428,10 +427,10 @@ private fun ResolvedTheme.headerToBodyGap() = when (definition.id) {
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-private suspend fun PagerState.moveToPage(page: Int, effects: EffectsLevel) {
+private suspend fun PagerState.moveToPage(page: Int, effects: ThemeEffectsLevel) {
     when (effects) {
-        EffectsLevel.OFF -> scrollToPage(page)
-        EffectsLevel.SUBTLE -> animateScrollToPage(page)
+        ThemeEffectsLevel.OFF -> scrollToPage(page)
+        ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL -> animateScrollToPage(page)
     }
 }
 
@@ -466,6 +465,8 @@ private fun ThemeAppearanceSurface(
     onSelect: (WeatherThemeId) -> Unit,
     selectedContrast: ContrastLevel,
     onSelectContrast: (ContrastLevel) -> Unit,
+    selectedEffects: ThemeEffectsLevel,
+    onSelectEffects: (ThemeEffectsLevel) -> Unit,
     onReturn: () -> Unit,
 ) {
     Column(
@@ -532,6 +533,31 @@ private fun ThemeAppearanceSurface(
                     style = theme.typography.bodyLarge,
                     color = theme.palette.content,
                 )
+            }
+        }
+        Text("Effects", style = theme.typography.titleMedium, color = theme.palette.primaryData)
+        Text("Choose how much visual motion and treatment to use", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        ThemeEffectsLevel.entries.forEach { level ->
+            val label = when (level) {
+                ThemeEffectsLevel.OFF -> "Effects off"
+                ThemeEffectsLevel.SUBTLE -> "Subtle effects"
+                ThemeEffectsLevel.FULL -> "Full effects"
+            }
+            val isSelected = level == selectedEffects
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .clickable(role = Role.RadioButton, onClick = { onSelectEffects(level) })
+                    .semantics {
+                        this.selected = isSelected
+                        contentDescription = "$label, ${if (isSelected) "selected" else "not selected"}"
+                    }
+                    .testTag("appearance-effects-${level.name.lowercase()}"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(if (isSelected) "●" else "○", modifier = Modifier.padding(start = 16.dp, end = 12.dp), style = theme.typography.titleMedium, color = if (isSelected) theme.palette.action else theme.palette.secondaryData)
+                Text(if (isSelected) "$label · selected" else label, modifier = Modifier.weight(1f).padding(end = 16.dp), style = theme.typography.bodyLarge, color = theme.palette.content)
             }
         }
         TextButton(

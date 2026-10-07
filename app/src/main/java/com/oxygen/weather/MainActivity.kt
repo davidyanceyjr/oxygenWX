@@ -56,6 +56,10 @@ import com.oxygen.weather.application.ContrastPreferenceSelection
 import com.oxygen.weather.application.ContrastPreferenceStore
 import com.oxygen.weather.application.ContrastPreferenceWriteResult
 import com.oxygen.weather.application.ContrastPreferenceReadResult
+import com.oxygen.weather.application.EffectsPreferenceSelection
+import com.oxygen.weather.application.EffectsPreferenceStore
+import com.oxygen.weather.application.EffectsPreferenceReadResult
+import com.oxygen.weather.application.EffectsPreferenceWriteResult
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoCoordinateTimeZoneLookup
 import com.oxygen.weather.data.provider.openmeteo.UrlConnectionOpenMeteoTransport
@@ -73,6 +77,7 @@ import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.UnitPreset
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.ContrastLevel
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.presentation.ForecastContextMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryMapper
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -80,7 +85,6 @@ import com.oxygen.weather.presentation.OfficialAlertDetailMapper
 import com.oxygen.weather.presentation.OfficialAlertDetailPresentation
 import com.oxygen.weather.presentation.OfficialAlertChoicePresentation
 import com.oxygen.weather.ui.OxygenWeatherApp
-import com.oxygen.weather.ui.EffectsLevel
 import com.oxygen.weather.platform.AndroidForegroundLocationAcquirer
 import java.time.LocalDateTime
 import java.time.Clock
@@ -111,6 +115,8 @@ class MainActivity : ComponentActivity() {
     private val selectedThemeIdState = mutableStateOf(WeatherThemeId.ATMOSPHERIC)
     private var contrastPreferenceSelection: ContrastPreferenceSelection? = null
     private val selectedContrastState = mutableStateOf(ContrastLevel.STANDARD)
+    private var effectsPreferenceSelection: EffectsPreferenceSelection? = null
+    private val selectedEffectsState = mutableStateOf(ThemeEffectsLevel.SUBTLE)
     private var fixtureBundle: com.oxygen.weather.data.WeatherBundle? = null
     private var fixtureDerived: com.oxygen.weather.derived.DerivedWeather? = null
     private var fixtureStatus: StatusPresentation? = null
@@ -153,14 +159,20 @@ class MainActivity : ComponentActivity() {
         selectedContrastState.value = contrastPreferenceSelection!!.effectiveContrast
         ContrastPreferenceTestHooks.onRead?.invoke(contrastPreferenceSelection!!.readResult)
         ContrastPreferenceTestHooks.selectContrast = ::selectContrastForTests
+        val effectsStore = EffectsPreferenceTestHooks.storeFactory?.invoke(applicationContext)
+            ?: SharedPreferencesEffectsPreferenceStore(applicationContext)
+        effectsPreferenceSelection = EffectsPreferenceSelection(effectsStore)
+        selectedEffectsState.value = effectsPreferenceSelection!!.effectiveEffects
+        EffectsPreferenceTestHooks.onRead?.invoke(effectsPreferenceSelection!!.readResult)
+        EffectsPreferenceTestHooks.selectEffects = ::selectEffectsForTests
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
         )
-        val effects = LocationSearchTestHooks.effectsOverrideForTests ?: selectLaunchEffects(
-            isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
-            effectsOffRequested = intent?.getBooleanExtra(EFFECTS_OFF_LAUNCH_EXTRA, false) == true,
-        )
+        val launchEffectsOverride = LocationSearchTestHooks.effectsOverrideForTests ?: if (
+            applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 &&
+            intent?.getBooleanExtra(EFFECTS_OFF_LAUNCH_EXTRA, false) == true
+        ) ThemeEffectsLevel.OFF else null
         val captureMode = selectDeterministicCapture(
             isDebugBuild = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
             captureRequested = intent?.getBooleanExtra(DETERMINISTIC_CAPTURE_LAUNCH_EXTRA, false) == true,
@@ -411,12 +423,13 @@ class MainActivity : ComponentActivity() {
             },
         )
         deviceLocationCoordinator = deviceCoordinator
+        val initialEffects = launchEffectsOverride ?: selectedEffectsState.value
         setContent {
             OxygenWeatherApp(
                 presentation = presentation,
                 status = status,
                 partialHorizons = partialHorizons,
-                effects = effects,
+                effects = if (launchEffectsOverride != null) initialEffects else selectedEffectsState.value,
                 forecastContext = context.takeIf { reviewScenario != null },
                 locationSearchCoordinator = coordinator,
                 deviceLocationCoordinator = deviceCoordinator,
@@ -430,6 +443,8 @@ class MainActivity : ComponentActivity() {
                 onSelectTheme = ::selectThemeForTests,
                 selectedContrast = selectedContrastState.value,
                 onSelectContrast = ::selectContrastForTests,
+                selectedEffects = if (launchEffectsOverride != null) initialEffects else selectedEffectsState.value,
+                onSelectEffects = ::selectEffectsForTests,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
             )
@@ -496,6 +511,14 @@ class MainActivity : ComponentActivity() {
         val outcome = selection.select(contrast)
         selectedContrastState.value = selection.effectiveContrast
         ContrastPreferenceTestHooks.onContrastApplied?.invoke(contrast, outcome)
+        return outcome
+    }
+
+    internal fun selectEffectsForTests(effects: ThemeEffectsLevel): EffectsPreferenceWriteResult {
+        val selection = checkNotNull(effectsPreferenceSelection) { "Effects preference store has not been initialized" }
+        val outcome = selection.select(effects)
+        selectedEffectsState.value = selection.effectiveEffects
+        EffectsPreferenceTestHooks.onEffectsApplied?.invoke(effects, outcome)
         return outcome
     }
 
@@ -610,7 +633,7 @@ internal object LocationSearchTestHooks {
     @Volatile var onSelectedRequest: ((ForecastRequest) -> Unit)? = null
     @Volatile var onRestoredRequest: ((ForecastRequest) -> Unit)? = null
     @Volatile var selectedStoreFactory: ((android.content.Context) -> SelectedLocationStore)? = null
-    @Volatile var effectsOverrideForTests: EffectsLevel? = null
+    @Volatile var effectsOverrideForTests: ThemeEffectsLevel? = null
     @Volatile var layoutDirectionOverrideForTests: LayoutDirection? = null
 }
 
@@ -646,6 +669,13 @@ internal object ContrastPreferenceTestHooks {
     @Volatile var onRead: ((ContrastPreferenceReadResult) -> Unit)? = null
     @Volatile var onContrastApplied: ((ContrastLevel, ContrastPreferenceWriteResult) -> Unit)? = null
     @Volatile var selectContrast: ((ContrastLevel) -> ContrastPreferenceWriteResult)? = null
+}
+
+internal object EffectsPreferenceTestHooks {
+    @Volatile var storeFactory: ((android.content.Context) -> EffectsPreferenceStore)? = null
+    @Volatile var onRead: ((EffectsPreferenceReadResult) -> Unit)? = null
+    @Volatile var onEffectsApplied: ((ThemeEffectsLevel, EffectsPreferenceWriteResult) -> Unit)? = null
+    @Volatile var selectEffects: ((ThemeEffectsLevel) -> EffectsPreferenceWriteResult)? = null
 }
 
 /** Injection seam for exercising the Activity's independent official-alert composition. */
