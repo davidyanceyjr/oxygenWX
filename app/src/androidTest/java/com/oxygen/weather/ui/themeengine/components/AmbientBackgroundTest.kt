@@ -34,6 +34,7 @@ import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.resolveTheme
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -78,6 +79,7 @@ class AmbientBackgroundTest {
 
         assertEquals("test viewport width", 360f, compose.onNodeWithTag(ROOT_TAG).fetchSemanticsNode().size.width / compose.density.density, 0.5f)
         val hashes = mutableMapOf<Pair<WeatherThemeId, ThemeEffectsLevel>, String>()
+        val cornerPixels = mutableMapOf<Pair<WeatherThemeId, ThemeEffectsLevel>, Int>()
         cases.forEachIndexed { index, (id, effects) ->
             compose.runOnIdle { selected.intValue = index }
             compose.waitForIdle()
@@ -91,11 +93,19 @@ class AmbientBackgroundTest {
             val second = hash(compose.onNodeWithTag(ROOT_TAG).captureToImage().asAndroidBitmap())
             assertEquals("$id/$effects must stay static", first, second)
             hashes[id to effects] = first
+            cornerPixels[id to effects] = bitmap.getPixel(0, 0)
             save(bitmap, "${id.name.lowercase()}-${effects.name.lowercase()}.png")
         }
         assertEquals("foreground action remains active through every background", cases.size, clicks.get())
         WeatherThemeId.entries.filter { it != WeatherThemeId.MINIMAL_OLED }.forEach { id ->
             assertTrue("$id Full strength should render differently from Subtle", hashes.getValue(id to ThemeEffectsLevel.FULL) != hashes.getValue(id to ThemeEffectsLevel.SUBTLE))
+        }
+        ThemeEffectsLevel.entries.forEach { effects ->
+            assertNotEquals(
+                "Atmospheric and Glass $effects field colors come from their resolved palettes",
+                cornerPixels.getValue(WeatherThemeId.ATMOSPHERIC to effects),
+                cornerPixels.getValue(WeatherThemeId.GLASS to effects),
+            )
         }
         assertEquals("Minimal OLED has no overlay strength", hashes.getValue(WeatherThemeId.MINIMAL_OLED to ThemeEffectsLevel.SUBTLE), hashes.getValue(WeatherThemeId.MINIMAL_OLED to ThemeEffectsLevel.FULL))
     }
@@ -115,12 +125,12 @@ class AmbientBackgroundTest {
 
     private fun save(bitmap: Bitmap, filename: String) {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val directory = File(context.getExternalFilesDir(null), "142-compose-ambient-background-foundation").apply { mkdirs() }
+        val directory = File(context.getExternalFilesDir(null), "143-atmospheric-glass-ambient-treatments").apply { mkdirs() }
         FileOutputStream(File(directory, filename)).use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "142-component-$filename")
+            put(MediaStore.Images.Media.DISPLAY_NAME, "143-component-$filename")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/142-compose-ambient-background-foundation/components")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/143-atmospheric-glass-ambient-treatments/components")
         }
         val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             ?: error("Unable to persist component capture $filename")

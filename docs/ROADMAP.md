@@ -671,13 +671,15 @@ Standard/High contrast remains independent of theme and weather semantics.
 
 Evidence: `.codex/history/2026-10-07-139-contrast-preference.md`. Focused contrast acceptance and installed 10-pair captures passed; the broader connected suite had 8 failures, with details and unverified boundaries in the cycle record.
 
-### R5.4 — Effects preference — PLANNED
+### R5.4 — Effects preference — DONE
 
 Implement persisted Off/Subtle/Full preference selection and resolver behavior.
 Off remains opaque, static, and complete; system reduced-motion policy is not
 added in this slice.
 
 **Exit:** Persistence/resolver tests cover Off/Subtle/Full for every theme; Off is opaque, static, and complete, and changing effects does not refetch or alter weather.
+
+Evidence and limitations: `.codex/history/2026-10-07-140-effects-preference.md` and `.codex/test-artifacts/140-effects-preference/`. The full connected Android suite was stopped during unrelated Home/alert tests; no full-suite result is claimed.
 
 ### R5.4A — Reduced-motion effects policy — DONE
 
@@ -689,17 +691,21 @@ or changing weather meaning.
 
 Evidence and limitations: `.codex/history/2026-10-07-141-reduced-motion-effects-policy.md` and `.codex/test-artifacts/141-reduced-motion-effects-policy/`.
 
-### R5.4B — Compose ambient background foundation — PLANNED
+### R5.4B — Compose ambient background foundation — DONE
 
 Add a theme-resolved, Compose-native background layer supporting gradients, radial fields, abstract shapes, and low-cost overlays without changing page composition or weather semantics. Effects Off remains opaque, static, and complete.
 
 **Exit:** All five themes resolve a deterministic base background through the existing appearance boundary; focused tests cover Off/Subtle/Full resolution and existing Home content remains unchanged.
 
-### R5.4C — Atmospheric and Glass ambient treatments — PLANNED
+Evidence and limitations: `.codex/history/2026-10-07-142-compose-ambient-background-foundation.md` and `.codex/test-artifacts/142-compose-ambient-background-foundation/`. The focused font-scale 1.3 sample found lower Now metric/source content below the 360 × 640 dp viewport; broader accessibility matrices and performance profiling remain open for R6/R5.4E.
+
+### R5.4C — Atmospheric and Glass ambient treatments — DONE
 
 Apply layered gradients, soft color fields, haze/glow forms, and restrained motion to Atmospheric and Glass. Atmospheric should suggest sky and weather mood; Glass should gain depth behind translucent surfaces without photographic assets.
 
 **Exit:** Installed Now captures show distinct Atmospheric and Glass treatments under Off/Subtle/Full, with readable content, no layout change, and no weather refetch or semantic change.
+
+Evidence and limitations: `.codex/history/2026-10-07-143-atmospheric-glass-ambient-treatments.md` and `.codex/test-artifacts/143-atmospheric-glass-ambient-treatments/`. The six installed cells, four reduced-motion captures, focused pixel/semantics/interaction checks, and no-refetch application-flow evidence passed. Broad accessibility verification and profiling remain open for R6/R5.4E.
 
 ### R5.4D — Instrument, Terminal, and Minimal OLED treatments — PLANNED
 

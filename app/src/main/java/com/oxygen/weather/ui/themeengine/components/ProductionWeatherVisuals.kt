@@ -199,16 +199,7 @@ fun ProductionBackdrop(
             when (theme.ambientBackground.overlay) {
                 AmbientBackgroundOverlay.NONE -> Unit
                 AmbientBackgroundOverlay.SOFT_GLOW -> {
-                    val strength = when (theme.ambientBackground.overlayStrength) {
-                        AmbientBackgroundStrength.NONE -> 0f
-                        AmbientBackgroundStrength.SUBTLE -> 0.10f
-                        AmbientBackgroundStrength.FULL -> 0.18f
-                    }
-                    if (strength > 0f) drawRect(Brush.radialGradient(
-                        listOf(theme.palette.atmosphereGlow.copy(alpha = strength), Color.Transparent),
-                        center = Offset(size.width * 0.82f, size.height * 0.28f),
-                        radius = size.minDimension * 0.72f,
-                    ))
+                    drawSoftAtmosphere(theme)
                 }
                 AmbientBackgroundOverlay.TECHNICAL_GRID -> {
                     when (theme.ambientBackground.overlayStrength) {
@@ -228,6 +219,28 @@ fun ProductionBackdrop(
         }
         content()
     }
+}
+
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawSoftAtmosphere(theme: ResolvedTheme) {
+    val (glowAlpha, fieldAlpha) = when (theme.ambientBackground.overlayStrength) {
+        AmbientBackgroundStrength.NONE -> return
+        AmbientBackgroundStrength.SUBTLE -> 0.10f to 0.07f
+        AmbientBackgroundStrength.FULL -> 0.18f to 0.13f
+    }
+    drawRect(
+        Brush.radialGradient(
+            listOf(theme.palette.atmosphereGlow.copy(alpha = glowAlpha), Color.Transparent),
+            center = Offset(size.width * 0.82f, size.height * 0.28f),
+            radius = size.minDimension * 0.72f,
+        ),
+    )
+    drawRect(
+        Brush.radialGradient(
+            listOf(theme.palette.atmosphereBottom.copy(alpha = fieldAlpha), Color.Transparent),
+            center = Offset(size.width * 0.24f, size.height * 0.76f),
+            radius = size.maxDimension * 0.82f,
+        ),
+    )
 }
 
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawUniformGrid(color: Color, gap: Float) {

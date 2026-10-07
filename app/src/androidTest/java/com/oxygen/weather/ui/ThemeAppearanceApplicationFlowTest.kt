@@ -233,7 +233,7 @@ class ThemeAppearanceApplicationFlowTest {
         }
         val fixture = compose.activityRule.scenario.onActivity { it.canonicalWeatherFixtureForTests() }
         val operationBaseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
-        val evidence = File(context.getExternalFilesDir(null), "142-compose-ambient-background-foundation/application-now").apply { check(mkdirs() || isDirectory) }
+        val evidence = File(context.getExternalFilesDir(null), "143-atmospheric-glass-ambient-treatments/application-now").apply { check(mkdirs() || isDirectory) }
         val effects = listOf(ThemeEffectsLevel.OFF, ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL)
         WeatherThemeId.entries.forEach { themeId ->
             effects.forEach { effectLevel ->
@@ -251,21 +251,31 @@ class ThemeAppearanceApplicationFlowTest {
                 assertEquals(operationBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
             }
         }
-        compose.activityRule.scenario.onActivity { activity ->
-            assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.GLASS))
-            assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(ThemeEffectsLevel.FULL))
-            MotionPolicyTestHooks.systemScaleOverride.value = 0f
+        listOf(WeatherThemeId.ATMOSPHERIC, WeatherThemeId.GLASS).forEach { themeId ->
+            listOf(ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL).forEach { effectLevel ->
+                compose.activityRule.scenario.onActivity { activity ->
+                    assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(themeId))
+                    assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(effectLevel))
+                    MotionPolicyTestHooks.systemScaleOverride.value = 0f
+                }
+                compose.waitUntil(5_000) {
+                    observedBackdropTheme.get()?.let {
+                        it.definition.id == themeId && it.effects == effectLevel &&
+                            it.motionStyle == MotionStyle.OFF && it.ambientBackground.overlayStrength ==
+                            if (effectLevel == ThemeEffectsLevel.SUBTLE) AmbientBackgroundStrength.SUBTLE else AmbientBackgroundStrength.FULL
+                    } == true
+                }
+                assertEquals("Reduced motion preserves saved effects", effectLevel, effectsStore.value)
+                assertWeatherFactsUnchanged()
+                val reducedMotionBitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+                saveAmbientApplicationCapture(
+                    context,
+                    evidence,
+                    "now-${themeId.name.lowercase().replace('_', '-')}-${effectLevel.name.lowercase()}-animator-scale-zero.png",
+                    reducedMotionBitmap,
+                )
+            }
         }
-        compose.waitUntil(5_000) {
-            observedBackdropTheme.get()?.let {
-                it.definition.id == WeatherThemeId.GLASS && it.effects == ThemeEffectsLevel.FULL &&
-                    it.motionStyle == MotionStyle.OFF && it.ambientBackground.overlayStrength == AmbientBackgroundStrength.FULL
-            } == true
-        }
-        assertEquals(ThemeEffectsLevel.FULL, effectsStore.value)
-        assertWeatherFactsUnchanged()
-        val reducedMotionBitmap = compose.onRoot().captureToImage().asAndroidBitmap()
-        saveAmbientApplicationCapture(context, evidence, "now-glass-full-animator-scale-zero.png", reducedMotionBitmap)
         compose.activityRule.scenario.onActivity { MotionPolicyTestHooks.systemScaleOverride.value = 1f }
         compose.waitUntil(5_000) { observedBackdropTheme.get()?.motionStyle == MotionStyle.FULL }
 
@@ -287,9 +297,14 @@ class ThemeAppearanceApplicationFlowTest {
         saveAmbientApplicationCapture(context, evidence, "now-glass-off-font1.3-rtl.png", stressBitmap)
         assertEquals(operationBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
         File(evidence, "capture-index.txt").writeText(
-            "Installed MainActivity -> OxygenWeatherApp -> ProductionBackdrop. AVD viewport 360x640 dp, baseline font scale 1.0, LTR, Standard contrast, animator scale 1. PNG captures are of the Compose root. " +
+            "Installed MainActivity -> OxygenWeatherApp -> ProductionBackdrop. AVD viewport 360x640 dp, baseline font scale 1.0, LTR, Standard contrast, animator scale 1 for baseline cells; reduced-motion captures use scale 0 with saved effects preserved. PNG captures are of the Compose root. " +
                 "Fixture=$fixture; request/cache/alert counts=$operationBaseline.\n" +
-                WeatherThemeId.entries.flatMap { id -> effects.map { "now-${id.name.lowercase().replace('_', '-')}-${it.name.lowercase()}-font1-ltr.png" } }.joinToString("\n"),
+                WeatherThemeId.entries.flatMap { id -> effects.map { "now-${id.name.lowercase().replace('_', '-')}-${it.name.lowercase()}-font1-ltr.png" } }
+                    .plus(listOf(WeatherThemeId.ATMOSPHERIC, WeatherThemeId.GLASS).flatMap { id ->
+                        listOf(ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL).map {
+                            "now-${id.name.lowercase().replace('_', '-')}-${it.name.lowercase()}-animator-scale-zero.png"
+                        }
+                    }).joinToString("\n"),
         )
     }
 
@@ -705,9 +720,9 @@ class ThemeAppearanceApplicationFlowTest {
             check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
         }
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "142-rootprobe-$name")
+            put(MediaStore.Images.Media.DISPLAY_NAME, "143-final-$name")
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/142-compose-ambient-background-foundation/application-now")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/143-atmospheric-glass-ambient-treatments/application-now")
         }
         val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             ?: error("Unable to create persisted ambient capture for $name")
