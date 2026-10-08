@@ -6,6 +6,7 @@ import com.oxygen.weather.data.provider.ForecastCoverage
 import com.oxygen.weather.data.provider.ForecastField
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.data.provider.GeoCoordinates
+import com.oxygen.weather.presentation.SelectedLocationIdentityPresentation
 import java.time.ZoneId
 import java.util.ArrayDeque
 import java.util.concurrent.Executor
@@ -18,6 +19,47 @@ class SavedLocationCoordinatorTest {
     private val requestA = request("a", 39.8, -89.6, "America/Chicago")
     private val requestB = request("b", 42.1, -72.5, "America/New_York")
     private val requestC = request("c", 47.6, -122.3, "America/Los_Angeles")
+
+    @Test fun selectedIdentityDistinguishesLoadingNoSelectionSelectedAndUnavailableRestoreStates() {
+        val empty = identityAfterRestore(FakeSelectedStore())
+        assertEquals(SelectedLocationIdentityPresentation.NoSelection, empty)
+
+        val found = identityAfterRestore(FakeSelectedStore(initial = requestA.toSelected()))
+        assertEquals(SelectedLocationIdentityPresentation.Selected("a"), found)
+
+        val invalidStore = FakeSelectedStore().apply { readOverride = SelectedLocationReadResult.Invalid }
+        assertEquals(
+            SelectedLocationIdentityPresentation.Unavailable,
+            identityAfterRestore(invalidStore),
+        )
+        val failedStore = FakeSelectedStore().apply { readOverride = SelectedLocationReadResult.Failure }
+        assertEquals(
+            SelectedLocationIdentityPresentation.Unavailable,
+            identityAfterRestore(failedStore),
+        )
+    }
+
+    @Test fun selectedIdentityStartsLoadingAndChangesOnlyWhenSelectionIsCommitted() {
+        val worker = QueueExecutor()
+        val publisher = QueueExecutor()
+        val selected = FakeSelectedStore(initial = requestA.toSelected())
+        val coordinator = coordinator(FakeSavedStore(), selected, worker, publisher) {}
+
+        assertEquals(SelectedLocationIdentityPresentation.Loading, coordinator.selectedLocationIdentityState.value)
+        assertTrue(coordinator.restoreOnce())
+        worker.runNext() // saved-place read
+        worker.runNext() // selected-location read
+        assertEquals(SelectedLocationIdentityPresentation.Loading, coordinator.selectedLocationIdentityState.value)
+        publisher.runAll()
+        assertEquals(SelectedLocationIdentityPresentation.Selected("a"), coordinator.selectedLocationIdentityState.value)
+
+        assertTrue(coordinator.select(requestB))
+        publisher.runAll() // pending action only; active identity stays at A until persistence succeeds.
+        assertEquals(SelectedLocationIdentityPresentation.Selected("a"), coordinator.selectedLocationIdentityState.value)
+        worker.runNext()
+        publisher.runAll()
+        assertEquals(SelectedLocationIdentityPresentation.Selected("b"), coordinator.selectedLocationIdentityState.value)
+    }
 
     @Test fun searchSelectionPersistsExactRequestBeforeOneHandoff() {
         val worker = QueueExecutor()
@@ -283,6 +325,18 @@ class SavedLocationCoordinatorTest {
         onRequest: (ForecastRequest) -> Unit,
     ) = SavedLocationCoordinator(saved, selected, worker, publisher, onRequest)
 
+    private fun identityAfterRestore(selected: FakeSelectedStore): SelectedLocationIdentityPresentation {
+        val worker = QueueExecutor()
+        val publisher = QueueExecutor()
+        val coordinator = coordinator(FakeSavedStore(), selected, worker, publisher) {}
+        assertEquals(SelectedLocationIdentityPresentation.Loading, coordinator.selectedLocationIdentityState.value)
+        assertTrue(coordinator.restoreOnce())
+        worker.runNext()
+        worker.runNext()
+        publisher.runAll()
+        return coordinator.selectedLocationIdentityState.value
+    }
+
     private fun request(id: String, lat: Double, lon: Double, zone: String) = ForecastRequest(
         WeatherLocation(LocalLocationId(id), "Place $id", ZoneId.of(zone)),
         GeoCoordinates(lat, lon),
@@ -314,6 +368,7 @@ class SavedLocationCoordinatorTest {
 
     private class FakeSelectedStore(initial: SelectedLocation? = null) : SelectedLocationStore {
         var current = initial
+        var readOverride: SelectedLocationReadResult? = null
         val writes = mutableListOf<SelectedLocation>()
         var lastResult: SelectedLocationWriteResult? = null
         var onSave: (SelectedLocation) -> SelectedLocationWriteResult = { value ->
@@ -321,7 +376,7 @@ class SavedLocationCoordinatorTest {
             current = value
             SelectedLocationWriteResult.SUCCESS
         }
-        override fun read() = current?.let(SelectedLocationReadResult::Found) ?: SelectedLocationReadResult.Empty
+        override fun read() = readOverride ?: (current?.let(SelectedLocationReadResult::Found) ?: SelectedLocationReadResult.Empty)
         override fun save(location: SelectedLocation): SelectedLocationWriteResult = onSave(location).also { lastResult = it }
         override fun clear(): SelectedLocationWriteResult {
             current = null

@@ -64,6 +64,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
@@ -77,6 +78,12 @@ import com.oxygen.weather.presentation.DailyEntryPresentation
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
+import com.oxygen.weather.presentation.SelectedLocationIdentityPresentation
+import com.oxygen.weather.presentation.SavedLocationsPresentation
+import com.oxygen.weather.presentation.LocationActionPresentation
+import com.oxygen.weather.presentation.MetadataValue
+import com.oxygen.weather.presentation.PresentedDataOrigin
+import com.oxygen.weather.presentation.PresentedFreshness
 import com.oxygen.weather.presentation.UnitPreset
 import com.oxygen.weather.application.UnitPresetWriteResult
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
@@ -115,7 +122,7 @@ private enum class HomePage(val label: String) {
 }
 
 private enum class OfficialAlertRoute { HOME, SELECTION, MULTIPLE_DETAIL, SINGLE_DETAIL }
-private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS }
+private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS, LOCATIONS, DATA_SOURCES }
 
 /** Standard Home rendered entirely from the production five-theme component family. */
 @OptIn(ExperimentalFoundationApi::class)
@@ -207,7 +214,7 @@ fun OxygenWeatherApp(
     }
     BackHandler(enabled = settingsRoute != SettingsRoute.HOME) {
         settingsRoute = when (settingsRoute) {
-            SettingsRoute.APPEARANCE, SettingsRoute.UNITS -> SettingsRoute.SETTINGS
+            SettingsRoute.APPEARANCE, SettingsRoute.UNITS, SettingsRoute.LOCATIONS, SettingsRoute.DATA_SOURCES -> SettingsRoute.SETTINGS
             SettingsRoute.SETTINGS -> SettingsRoute.HOME.also { leaveSettings() }
             SettingsRoute.HOME -> SettingsRoute.HOME
         }
@@ -240,7 +247,14 @@ fun OxygenWeatherApp(
                 }
                 when (settingsRoute) {
                     SettingsRoute.SETTINGS -> {
-                        SettingsSurface(theme, onAppearance = { settingsRoute = SettingsRoute.APPEARANCE }, onUnits = { settingsRoute = SettingsRoute.UNITS }, onReturn = leaveSettings)
+                        SettingsSurface(
+                            theme,
+                            onAppearance = { settingsRoute = SettingsRoute.APPEARANCE },
+                            onUnits = { settingsRoute = SettingsRoute.UNITS },
+                            onLocations = { settingsRoute = SettingsRoute.LOCATIONS },
+                            onDataSources = { settingsRoute = SettingsRoute.DATA_SOURCES },
+                            onReturn = leaveSettings,
+                        )
                         return@ProductionBackdrop
                     }
                     SettingsRoute.APPEARANCE -> {
@@ -260,6 +274,34 @@ fun OxygenWeatherApp(
                     }
                     SettingsRoute.UNITS -> {
                         UnitsSurface(theme, selectedUnitPreset, onSelectUnitPreset, onReturn = { settingsRoute = SettingsRoute.SETTINGS })
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.LOCATIONS -> {
+                        LocationsSurface(
+                            theme = theme,
+                            savedLocations = savedLocationCoordinator?.presentationState?.value ?: SavedLocationsPresentation.Unavailable("Saved places are unavailable."),
+                            selectedIdentity = savedLocationCoordinator?.selectedLocationIdentityState?.value ?: SelectedLocationIdentityPresentation.Unavailable,
+                            selectedLocationName = selectedForecast?.locationName,
+                            action = locationAction,
+                            onSelect = { savedLocationCoordinator?.selectSaved(it) },
+                            onRemove = { savedLocationCoordinator?.remove(it) },
+                            onReturn = { settingsRoute = SettingsRoute.SETTINGS },
+                        )
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.DATA_SOURCES -> {
+                        DataSourcesSurface(
+                            theme = theme,
+                            context = displayContext,
+                            alertDetails = buildList {
+                                officialAlertDetail?.let(::add)
+                                officialAlertChoices.forEach { choice ->
+                                    if (none { it === choice.detail }) add(choice.detail)
+                                }
+                            },
+                            onOpenSource = onOpenOfficialAlertSource,
+                            onReturn = { settingsRoute = SettingsRoute.SETTINGS },
+                        )
                         return@ProductionBackdrop
                     }
                     SettingsRoute.HOME -> Unit
@@ -511,6 +553,8 @@ private fun SettingsSurface(
     theme: ResolvedTheme,
     onAppearance: () -> Unit,
     onUnits: () -> Unit,
+    onLocations: () -> Unit,
+    onDataSources: () -> Unit,
     onReturn: () -> Unit,
 ) {
     Column(
@@ -522,10 +566,183 @@ private fun SettingsSurface(
         Text("Settings", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
         SettingsDestination(theme, "Appearance", "Choose a theme, contrast, effects, and Home layout", "settings-appearance", onAppearance)
         SettingsDestination(theme, "Units", "Choose Metric, US, or UK units", "settings-units", onUnits)
+        SettingsDestination(theme, "Locations", "View and manage saved places", "settings-locations", onLocations)
+        SettingsDestination(theme, "Data Sources", "Inspect forecast and alert source details", "settings-data-sources", onDataSources)
         TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings-return")) {
             Text("Return to Home", style = theme.typography.labelLarge, color = theme.palette.action)
         }
     }
+}
+
+@Composable
+private fun LocationsSurface(
+    theme: ResolvedTheme,
+    savedLocations: SavedLocationsPresentation,
+    selectedIdentity: SelectedLocationIdentityPresentation,
+    selectedLocationName: String?,
+    action: LocationActionPresentation?,
+    onSelect: (String) -> Unit,
+    onRemove: (String) -> Unit,
+    onReturn: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp)
+            .testTag("locations-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("Locations", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text("Selected location", style = theme.typography.titleMedium, color = theme.palette.content)
+        when (selectedIdentity) {
+            SelectedLocationIdentityPresentation.Loading -> Text("Checking selected location…", Modifier.testTag("selected-location-loading"), style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            SelectedLocationIdentityPresentation.NoSelection -> Text("No location is selected.", Modifier.testTag("selected-location-none"), style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            SelectedLocationIdentityPresentation.Unavailable -> Text("Selected location is unavailable.", Modifier.testTag("selected-location-unavailable"), style = theme.typography.bodyMedium, color = theme.palette.warning)
+            is SelectedLocationIdentityPresentation.Selected -> {
+                val savedMatch = (savedLocations as? SavedLocationsPresentation.Ready)?.locations
+                    ?.firstOrNull { it.localId == selectedIdentity.localId }
+                val label = savedMatch?.displayName?.takeIf(String::isNotBlank)
+                    ?: selectedLocationName?.takeIf(String::isNotBlank)
+                    ?: "Selected place"
+                Text("Active location: $label", Modifier.testTag("selected-location-active"), style = theme.typography.bodyLarge, color = theme.palette.content)
+            }
+        }
+        Text("Saved places", style = theme.typography.titleMedium, color = theme.palette.content)
+        when (savedLocations) {
+            SavedLocationsPresentation.Loading -> Text("Loading saved places…", Modifier.testTag("saved-locations-loading"), style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            SavedLocationsPresentation.Empty -> Text("No saved places yet.", Modifier.testTag("saved-locations-empty"), style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            is SavedLocationsPresentation.Unavailable -> Text(savedLocations.message, Modifier.fillMaxWidth().semantics { contentDescription = savedLocations.message }.testTag("saved-locations-unavailable"), style = theme.typography.bodyMedium, color = theme.palette.warning)
+            is SavedLocationsPresentation.Ready -> {
+                if (savedLocations.locations.isEmpty()) {
+                    Text("No saved places yet.", Modifier.testTag("saved-locations-empty"), style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+                }
+                savedLocations.locations.forEachIndexed { index, place ->
+                    val active = selectedIdentity is SelectedLocationIdentityPresentation.Selected &&
+                        selectedIdentity.localId == place.localId
+                    Column(
+                        Modifier.fillMaxWidth()
+                            .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                            .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                            .padding(horizontal = 14.dp, vertical = 8.dp)
+                            .semantics { selected = active }
+                            .testTag("locations-saved-place-$index"),
+                    ) {
+                        Text(
+                            text = (place.displayName?.takeIf(String::isNotBlank) ?: "Unnamed saved place") + if (active) " · selected" else "",
+                            modifier = Modifier.semantics {
+                                selected = active
+                                contentDescription = "${place.displayName?.takeIf(String::isNotBlank) ?: "Unnamed saved place"}, ${if (active) "selected" else "not selected"}"
+                            },
+                            style = theme.typography.bodyLarge,
+                            color = theme.palette.content,
+                        )
+                        Text(
+                            "${place.latitude}, ${place.longitude} · ${place.timeZone}",
+                            style = theme.typography.bodySmall.copy(textDirection = TextDirection.Ltr),
+                            color = theme.palette.secondaryData,
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TextButton(onClick = { onSelect(place.localId) }, modifier = Modifier.heightIn(min = 48.dp).testTag("locations-select-$index")) {
+                                Text(if (active) "Selected" else "Select", style = theme.typography.labelLarge, color = theme.palette.action)
+                            }
+                            TextButton(onClick = { onRemove(place.localId) }, modifier = Modifier.heightIn(min = 48.dp).testTag("locations-remove-$index")) {
+                                Text("Remove", style = theme.typography.labelLarge, color = theme.palette.action)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        action?.let {
+            Text(
+                it.message,
+                Modifier.fillMaxWidth().semantics { contentDescription = it.message }.testTag("locations-action-status"),
+                style = theme.typography.bodyMedium,
+                color = if (it.isError) theme.palette.warning else theme.palette.secondaryData,
+            )
+        }
+        TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("locations-return")) {
+            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+@Composable
+private fun DataSourcesSurface(
+    theme: ResolvedTheme,
+    context: ForecastContextPresentation?,
+    alertDetails: List<OfficialAlertDetailPresentation>,
+    onOpenSource: (String) -> Unit,
+    onReturn: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding()
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp)
+            .testTag("data-sources-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("Data Sources", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Column(
+            Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+        Text("Selected forecast", style = theme.typography.titleMedium, color = theme.palette.content)
+        if (context == null) {
+            Text("Forecast source details are unavailable.", Modifier.testTag("forecast-source-unavailable"), style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        } else {
+            context.sources.forEachIndexed { index, source ->
+                Column(
+                    Modifier.fillMaxWidth().background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                        .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                        .padding(14.dp).testTag("forecast-source-$index"),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text("Data type: ${source.dataType}", style = theme.typography.bodyLarge, color = theme.palette.content)
+                    Text("Source: ${source.source.asDisplayText()}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+                }
+            }
+            if (context.validTimes.isNotEmpty()) {
+                Text("Valid times", style = theme.typography.titleSmall, color = theme.palette.content)
+                context.validTimes.forEach { Text("${it.dataType}: ${it.instant.asDisplayText()}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData) }
+            }
+            if (context.retrievalTimes.isNotEmpty()) {
+                Text("Retrieval times", style = theme.typography.titleSmall, color = theme.palette.content)
+                context.retrievalTimes.forEach { Text("${it.dataType}: ${it.instant.asDisplayText()}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData) }
+            }
+            Text("Origin: ${when (context.origin) { PresentedDataOrigin.LIVE -> "Live"; PresentedDataOrigin.CACHED -> "Cached"; PresentedDataOrigin.UNAVAILABLE -> "Unavailable" }}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            Text("Freshness: ${when (context.freshness) { PresentedFreshness.CURRENT -> "Current"; PresentedFreshness.STALE -> "Stale"; PresentedFreshness.UNKNOWN -> "Unknown" }}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            if (context.cachedAt != MetadataValue.Unavailable || context.origin == PresentedDataOrigin.CACHED) {
+                Text("Cached at: ${context.cachedAt.asDisplayText()}", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+            }
+        }
+        if (alertDetails.isNotEmpty()) {
+            Text("Official alert source details", style = theme.typography.titleMedium, color = theme.palette.content)
+            alertDetails.forEachIndexed { index, detail ->
+                Column(
+                    Modifier.fillMaxWidth().background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                        .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                        .padding(14.dp).testTag("alert-source-$index"),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text("Issuer: ${detail.issuer.ifBlank { "Unavailable" }}", style = theme.typography.bodyMedium, color = theme.palette.content)
+                    detail.sourceUrlText?.let { Text("Source URL: $it", style = theme.typography.bodySmall, color = theme.palette.secondaryData) }
+                    detail.sourceAction?.let { action ->
+                        TextButton(onClick = { onOpenSource(action.url) }, modifier = Modifier.heightIn(min = 48.dp)) {
+                            Text(action.label, style = theme.typography.labelLarge, color = theme.palette.action)
+                        }
+                    }
+                }
+            }
+        }
+        }
+        TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("data-sources-return")) {
+            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+private fun MetadataValue.asDisplayText(): String = when (this) {
+    is MetadataValue.Available -> value
+    MetadataValue.Unavailable -> "Unavailable"
 }
 
 @Composable

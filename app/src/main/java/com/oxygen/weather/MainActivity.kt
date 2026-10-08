@@ -337,6 +337,7 @@ class MainActivity : ComponentActivity() {
                 state.toSelectedPresentationState(forecastClock, unitPresetSelection?.effectivePreset ?: UnitPreset.METRIC)
                     .also { mapped ->
                         selectedForecastState.value = mapped
+                        ProductionForecastTestHooks.onPresentationChanged?.invoke(mapped)
                         UnitPresetTestHooks.onPresentationChanged?.invoke(mapped)
                     }
             } },
@@ -659,6 +660,7 @@ internal object ProductionForecastTestHooks {
     @Volatile var transportOverride: OpenMeteoTransport? = null
     @Volatile var clockOverride: Clock? = null
     @Volatile var cacheStoreFactory: ((android.content.Context, Clock) -> ForecastCacheStore)? = null
+    @Volatile var onPresentationChanged: ((SelectedForecastPresentationState) -> Unit)? = null
 }
 
 /** Narrow instrumentation seam for unit-preset persistence and in-place presentation changes. */

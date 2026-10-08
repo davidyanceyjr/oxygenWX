@@ -9,6 +9,7 @@ import com.oxygen.weather.data.provider.ForecastCoverage
 import com.oxygen.weather.data.provider.ForecastField
 import com.oxygen.weather.data.provider.ForecastRequest
 import com.oxygen.weather.presentation.LocationActionPresentation
+import com.oxygen.weather.presentation.SelectedLocationIdentityPresentation
 import com.oxygen.weather.presentation.SavedLocationsPresentation
 import java.util.ArrayDeque
 import java.util.concurrent.Executor
@@ -45,6 +46,9 @@ class SavedLocationCoordinator(
     private val cancelledSwitches = mutableSetOf<Long>()
     private var visibleSelection: SelectedLocation? = null
     private var selectionRestoreKnown = false
+    private val mutableSelectedIdentity = mutableStateOf<SelectedLocationIdentityPresentation>(
+        SelectedLocationIdentityPresentation.Loading,
+    )
     private val mutableCollection = mutableStateOf<CollectionState>(CollectionState.Loading)
     private val mutableAction = mutableStateOf<LocationActionPresentation?>(null)
     val presentationState: State<SavedLocationsPresentation> = derivedStateOf {
@@ -65,6 +69,8 @@ class SavedLocationCoordinator(
             )
         }
     }
+    /** Selected stable local ID with explicit restore and unavailable states; this never reads storage. */
+    val selectedLocationIdentityState: State<SelectedLocationIdentityPresentation> = mutableSelectedIdentity
     val actionPresentation: State<LocationActionPresentation?> = mutableAction
 
     /** Reads saved and selected records once, off the UI thread. */
@@ -93,6 +99,13 @@ class SavedLocationCoordinator(
             synchronized(lock) {
                 selectionRestoreKnown = result is SelectedLocationReadResult.Empty || selected != null
                 if (selected != null) visibleSelection = selected
+            }
+            publish {
+                mutableSelectedIdentity.value = when (result) {
+                    is SelectedLocationReadResult.Found -> SelectedLocationIdentityPresentation.Selected(result.location.id.value)
+                    SelectedLocationReadResult.Empty -> SelectedLocationIdentityPresentation.NoSelection
+                    SelectedLocationReadResult.Invalid, SelectedLocationReadResult.Failure -> SelectedLocationIdentityPresentation.Unavailable
+                }
             }
             if (selected != null) {
                 val request = selected.toForecastRequest()
@@ -222,6 +235,9 @@ class SavedLocationCoordinator(
                             visibleSelection = rollback
                             selectionRestoreKnown = true
                         }
+                        publish { mutableSelectedIdentity.value = rollback.toIdentityPresentation() }
+                    } else {
+                        publish { mutableSelectedIdentity.value = SelectedLocationIdentityPresentation.Unavailable }
                     }
                     publish { onComplete(false) }
                     return@enqueue
@@ -231,6 +247,7 @@ class SavedLocationCoordinator(
                         if (isCurrent(intent) && shouldCommit()) {
                             visibleSelection = location.toSelectedLocation()
                             selectionRestoreKnown = true
+                            mutableSelectedIdentity.value = location.toIdentityPresentation()
                             true
                         } else false
                     }
@@ -245,8 +262,18 @@ class SavedLocationCoordinator(
                                 visibleSelection = rollback
                                 selectionRestoreKnown = true
                             }
+                            publish {
+                                mutableSelectedIdentity.value = if (restored == SelectedLocationWriteResult.SUCCESS) {
+                                    rollback.toIdentityPresentation()
+                                } else SelectedLocationIdentityPresentation.Unavailable
+                            }
                             publish { onComplete(false) }
-                        }, onRejected = { publish { onComplete(false) } })
+                        }, onRejected = {
+                            publish {
+                                mutableSelectedIdentity.value = SelectedLocationIdentityPresentation.Unavailable
+                                onComplete(false)
+                            }
+                        })
                     }
                 }
             } else {
@@ -259,6 +286,11 @@ class SavedLocationCoordinator(
                         publish {
                             val stillCurrent = synchronized(lock) { latestSwitch == intent }
                             if (stillCurrent) {
+                                mutableSelectedIdentity.value = if (restored == SelectedLocationWriteResult.SUCCESS) {
+                                    rollback.toIdentityPresentation()
+                                } else SelectedLocationIdentityPresentation.Unavailable
+                            }
+                            if (stillCurrent) {
                                 mutableAction.value = if (restored == SelectedLocationWriteResult.SUCCESS) {
                                     LocationActionPresentation("Could not switch places. Your previous forecast is still shown.", true, showOnHome = true)
                                 } else {
@@ -270,6 +302,7 @@ class SavedLocationCoordinator(
                     }, onRejected = {
                         publish {
                             if (synchronized(lock) { latestSwitch == intent }) {
+                                mutableSelectedIdentity.value = SelectedLocationIdentityPresentation.Unavailable
                                 mutableAction.value = LocationActionPresentation("Could not restore the previously selected place. Your previous forecast is still shown.", true, showOnHome = true)
                             }
                             onComplete(false)
@@ -374,6 +407,11 @@ class SavedLocationCoordinator(
     }
 
     private fun SavedLocation.toSelectedLocation() = SelectedLocation(id, displayName, coordinates, timeZone)
+    private fun SavedLocation.toIdentityPresentation() = SelectedLocationIdentityPresentation.Selected(id.value)
+    private fun SelectedLocation?.toIdentityPresentation(): SelectedLocationIdentityPresentation =
+        this?.let { SelectedLocationIdentityPresentation.Selected(it.id.value) }
+            ?: if (selectionRestoreKnown) SelectedLocationIdentityPresentation.NoSelection
+            else SelectedLocationIdentityPresentation.Unavailable
     private fun SavedLocation.toRequest() = ForecastRequest(
         location = WeatherLocation(id, displayName, timeZone),
         coordinates = coordinates,
