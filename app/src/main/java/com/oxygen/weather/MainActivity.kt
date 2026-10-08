@@ -113,6 +113,7 @@ class MainActivity : ComponentActivity() {
     private var activityResumed = false
     private val selectedForecastState = mutableStateOf<SelectedForecastPresentationState?>(null)
     private var unitPresetSelection: UnitPresetSelection? = null
+    private val selectedUnitPresetState = mutableStateOf(UnitPreset.METRIC)
     private var themePreferenceSelection: ThemePreferenceSelection? = null
     private val selectedThemeIdState = mutableStateOf(WeatherThemeId.ATMOSPHERIC)
     private var contrastPreferenceSelection: ContrastPreferenceSelection? = null
@@ -147,6 +148,7 @@ class MainActivity : ComponentActivity() {
         val presetStore = UnitPresetTestHooks.storeFactory?.invoke(applicationContext)
             ?: SharedPreferencesUnitPresetStore(applicationContext)
         unitPresetSelection = UnitPresetSelection(presetStore)
+        selectedUnitPresetState.value = unitPresetSelection!!.effectivePreset
         UnitPresetTestHooks.onRead?.invoke(unitPresetSelection!!.readResult)
         UnitPresetTestHooks.applyPreset = ::applyUnitPresetForTests
         val themeStore = ThemePreferenceTestHooks.storeFactory?.invoke(applicationContext)
@@ -449,6 +451,8 @@ class MainActivity : ComponentActivity() {
                 onSelectContrast = ::selectContrastForTests,
                 selectedEffects = if (launchEffectsOverride != null) initialEffects else selectedEffectsState.value,
                 onSelectEffects = ::selectEffectsForTests,
+                selectedUnitPreset = selectedUnitPresetState.value,
+                onSelectUnitPreset = ::selectUnitPreset,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
                 systemMotionScaleOverride = MotionPolicyTestHooks.systemScaleOverride.value,
@@ -484,18 +488,20 @@ class MainActivity : ComponentActivity() {
         coarseLocationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
-    /** Test seam for the not-yet-built selector; changing units only remaps retained canonical input. */
-    internal fun applyUnitPresetForTests(preset: UnitPreset): UnitPresetWriteResult {
+    /** Save the effective display preference and remap the retained canonical forecast in place. */
+    internal fun selectUnitPreset(preset: UnitPreset): UnitPresetWriteResult {
         val selection = checkNotNull(unitPresetSelection) { "Unit preset store has not been initialized" }
         val outcome = selection.select(preset)
+        val effectivePreset = selection.effectivePreset
+        selectedUnitPresetState.value = effectivePreset
         val forecastState = forecastController?.state()
         selectedForecastState.value = if (forecastState != null) {
-            forecastState.toSelectedPresentationState(ProductionForecastTestHooks.clockOverride ?: Clock.systemUTC(), preset)
+            forecastState.toSelectedPresentationState(ProductionForecastTestHooks.clockOverride ?: Clock.systemUTC(), effectivePreset)
         } else {
             fixtureBundle?.let { bundle -> fixtureDerived?.let { derived ->
                 bundle.toSelectedPresentationState(
                     derived,
-                    preset,
+                    effectivePreset,
                     status = fixtureStatus,
                     forecastContext = fixtureForecastContext,
                 )
@@ -505,6 +511,8 @@ class MainActivity : ComponentActivity() {
         UnitPresetTestHooks.onPresetApplied?.invoke(preset, outcome, selectedForecastState.value)
         return outcome
     }
+
+    internal fun applyUnitPresetForTests(preset: UnitPreset): UnitPresetWriteResult = selectUnitPreset(preset)
 
     internal fun selectThemeForTests(themeId: WeatherThemeId): ThemePreferenceWriteResult {
         val selection = checkNotNull(themePreferenceSelection) { "Theme preference store has not been initialized" }

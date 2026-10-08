@@ -62,9 +62,11 @@ class ProductionHomeSparseCompositionTest {
 
     private fun selectTheme(theme: String, currentTheme: String) {
         val id = WeatherThemeId.entries.first { ThemeCatalog.definition(it).displayName == theme }
-        compose.onNodeWithContentDescription("Appearance, current theme: $currentTheme").performClick()
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-appearance").performClick()
         compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performClick()
         compose.onNodeWithTag("appearance-return").performClick()
+        compose.onNodeWithTag("settings-return").performClick()
     }
 
     @Test

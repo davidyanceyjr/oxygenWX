@@ -217,9 +217,11 @@ class ProductionHomeCompositionTest {
     }
 
     private fun selectTheme(themeId: WeatherThemeId) {
-        compose.onNodeWithContentDescription("Appearance, current theme: $selectedThemeName").performClick()
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-appearance").performClick()
         compose.onNodeWithTag("appearance-theme-${themeId.name.lowercase()}").performClick()
         compose.onNodeWithTag("appearance-return").performClick()
+        compose.onNodeWithTag("settings-return").performClick()
         selectedThemeName = themeId.displayName
     }
 

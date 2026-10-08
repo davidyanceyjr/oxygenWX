@@ -77,6 +77,8 @@ import com.oxygen.weather.presentation.DailyEntryPresentation
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.presentation.ForecastContextPresentation
 import com.oxygen.weather.presentation.SelectedForecastPresentationState
+import com.oxygen.weather.presentation.UnitPreset
+import com.oxygen.weather.application.UnitPresetWriteResult
 import com.oxygen.weather.presentation.OfficialAlertSummaryPresentation
 import com.oxygen.weather.presentation.OfficialAlertDetailPresentation
 import com.oxygen.weather.presentation.OfficialAlertChoicePresentation
@@ -113,6 +115,7 @@ private enum class HomePage(val label: String) {
 }
 
 private enum class OfficialAlertRoute { HOME, SELECTION, MULTIPLE_DETAIL, SINGLE_DETAIL }
+private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS }
 
 /** Standard Home rendered entirely from the production five-theme component family. */
 @OptIn(ExperimentalFoundationApi::class)
@@ -139,6 +142,8 @@ fun OxygenWeatherApp(
     onSelectContrast: (ContrastLevel) -> Unit = {},
     selectedEffects: ThemeEffectsLevel = effects,
     onSelectEffects: (ThemeEffectsLevel) -> Unit = {},
+    selectedUnitPreset: UnitPreset = UnitPreset.METRIC,
+    onSelectUnitPreset: (UnitPreset) -> UnitPresetWriteResult = { UnitPresetWriteResult.SUCCESS },
     systemMotionScaleOverride: Float? = null,
     onEffectiveMotionStyleForTests: ((MotionStyle) -> Unit)? = null,
     onBackdropThemeForTests: ((ResolvedTheme) -> Unit)? = null,
@@ -166,8 +171,8 @@ fun OxygenWeatherApp(
     var pageMenuExpanded by remember { mutableStateOf(false) }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
-    var appearanceOpen by rememberSaveable { mutableStateOf(false) }
-    var appearanceOpeningPage by rememberSaveable { mutableIntStateOf(0) }
+    var settingsRoute by rememberSaveable { mutableStateOf(SettingsRoute.HOME) }
+    var settingsOpeningPage by rememberSaveable { mutableIntStateOf(0) }
     var alertRoute by remember { mutableStateOf(OfficialAlertRoute.HOME) }
     var selectedAlertIdentity by remember { mutableStateOf<Pair<Long, Int>?>(null) }
     val selectedAlert = selectedAlertIdentity?.let { identity ->
@@ -177,6 +182,10 @@ fun OxygenWeatherApp(
         OfficialAlertRoute.MULTIPLE_DETAIL -> selectedAlert?.detail
         OfficialAlertRoute.SINGLE_DETAIL -> officialAlertDetail
         OfficialAlertRoute.HOME, OfficialAlertRoute.SELECTION -> null
+    }
+    val leaveSettings: () -> Unit = {
+        settingsRoute = SettingsRoute.HOME
+        scope.launch { pagerState.moveToPage(settingsOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
     }
     LaunchedEffect(officialAlertChoices, officialAlertDetail, alertRoute, selectedAlertIdentity) {
         if (alertRoute == OfficialAlertRoute.MULTIPLE_DETAIL && selectedAlert == null) {
@@ -196,9 +205,12 @@ fun OxygenWeatherApp(
             OfficialAlertRoute.HOME -> scope.launch { pagerState.moveToPage(pagerState.currentPage - 1, theme.motionStyle, onPagerMotionChoiceForTests) }
         }
     }
-    BackHandler(enabled = appearanceOpen) {
-        appearanceOpen = false
-        scope.launch { pagerState.moveToPage(appearanceOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
+    BackHandler(enabled = settingsRoute != SettingsRoute.HOME) {
+        settingsRoute = when (settingsRoute) {
+            SettingsRoute.APPEARANCE, SettingsRoute.UNITS -> SettingsRoute.SETTINGS
+            SettingsRoute.SETTINGS -> SettingsRoute.HOME.also { leaveSettings() }
+            SettingsRoute.HOME -> SettingsRoute.HOME
+        }
     }
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
@@ -226,23 +238,31 @@ fun OxygenWeatherApp(
                     )
                     return@ProductionBackdrop
                 }
-                if (appearanceOpen) {
-                    ThemeAppearanceSurface(
-                        theme = theme,
-                        selected = themeId,
-                        onSelect = onSelectTheme,
-                        selectedContrast = selectedContrast,
-                        onSelectContrast = onSelectContrast,
-                        selectedEffects = selectedEffects,
-                        onSelectEffects = onSelectEffects,
-                        selectedLayout = layoutPreset,
-                        onSelectLayout = { layoutPreset = it },
-                        onReturn = {
-                            appearanceOpen = false
-                            scope.launch { pagerState.moveToPage(appearanceOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
-                        },
-                    )
-                    return@ProductionBackdrop
+                when (settingsRoute) {
+                    SettingsRoute.SETTINGS -> {
+                        SettingsSurface(theme, onAppearance = { settingsRoute = SettingsRoute.APPEARANCE }, onUnits = { settingsRoute = SettingsRoute.UNITS }, onReturn = leaveSettings)
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.APPEARANCE -> {
+                        ThemeAppearanceSurface(
+                            theme = theme,
+                            selected = themeId,
+                            onSelect = onSelectTheme,
+                            selectedContrast = selectedContrast,
+                            onSelectContrast = onSelectContrast,
+                            selectedEffects = selectedEffects,
+                            onSelectEffects = onSelectEffects,
+                            selectedLayout = layoutPreset,
+                            onSelectLayout = { layoutPreset = it },
+                            onReturn = { settingsRoute = SettingsRoute.SETTINGS },
+                        )
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.UNITS -> {
+                        UnitsSurface(theme, selectedUnitPreset, onSelectUnitPreset, onReturn = { settingsRoute = SettingsRoute.SETTINGS })
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.HOME -> Unit
                 }
                 Box(Modifier.fillMaxSize()) {
                   Column(
@@ -301,10 +321,10 @@ fun OxygenWeatherApp(
                         ThemePicker(
                             theme,
                             themeId,
-                            onOpenAppearance = {
+                            onOpenSettings = {
                                 if (!searchOpen && alertRoute == OfficialAlertRoute.HOME) {
-                                    appearanceOpeningPage = pagerState.currentPage
-                                    appearanceOpen = true
+                                    settingsOpeningPage = pagerState.currentPage
+                                    settingsRoute = SettingsRoute.SETTINGS
                                 }
                             },
                             onSearch = locationSearchCoordinator?.let {
@@ -466,7 +486,7 @@ private suspend fun PagerState.moveToPage(
 private fun ThemePicker(
     theme: ResolvedTheme,
     selected: WeatherThemeId,
-    onOpenAppearance: () -> Unit,
+    onOpenSettings: () -> Unit,
     onSearch: (() -> Unit)? = null,
 ) {
     Row(
@@ -476,12 +496,103 @@ private fun ThemePicker(
     ) {
         if (onSearch != null) SearchEntry(theme, onSearch)
         TextButton(
-            onClick = onOpenAppearance,
-            modifier = Modifier.heightIn(min = 48.dp).testTag("appearance-entry")
-                .semantics { contentDescription = "Appearance, current theme: ${ThemeCatalog.definition(selected).displayName}" },
+            onClick = onOpenSettings,
+            modifier = Modifier.heightIn(min = 48.dp).testTag("settings-entry")
+                .semantics { contentDescription = "Settings, current theme: ${ThemeCatalog.definition(selected).displayName}" },
             colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
         ) {
-            Text("Appearance", style = theme.typography.labelLarge)
+            Text("Settings", style = theme.typography.labelLarge)
+        }
+    }
+}
+
+@Composable
+private fun SettingsSurface(
+    theme: ResolvedTheme,
+    onAppearance: () -> Unit,
+    onUnits: () -> Unit,
+    onReturn: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp)
+            .testTag("settings-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("Settings", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        SettingsDestination(theme, "Appearance", "Choose a theme, contrast, effects, and Home layout", "settings-appearance", onAppearance)
+        SettingsDestination(theme, "Units", "Choose Metric, US, or UK units", "settings-units", onUnits)
+        TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings-return")) {
+            Text("Return to Home", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+@Composable
+private fun SettingsDestination(
+    theme: ResolvedTheme,
+    title: String,
+    summary: String,
+    tag: String,
+    onClick: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxWidth().heightIn(min = 64.dp)
+            .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+            .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+            .clickable(role = Role.Button, onClick = onClick)
+            .semantics { contentDescription = "$title. $summary" }
+            .testTag(tag)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Text(title, style = theme.typography.titleMedium, color = theme.palette.content)
+        Text(summary, style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+    }
+}
+
+@Composable
+private fun UnitsSurface(
+    theme: ResolvedTheme,
+    selected: UnitPreset,
+    onSelect: (UnitPreset) -> UnitPresetWriteResult,
+    onReturn: () -> Unit,
+) {
+    var writeFailed by remember { mutableStateOf(false) }
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp)
+            .testTag("units-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("Units", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text("Choose the units used to display weather", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
+        UnitPreset.entries.forEach { preset ->
+            val label = when (preset) {
+                UnitPreset.METRIC -> "Metric"
+                UnitPreset.US -> "US"
+                UnitPreset.UK -> "UK"
+            }
+            val active = preset == selected
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 56.dp)
+                    .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
+                    .clickable(role = Role.RadioButton) { writeFailed = onSelect(preset) == UnitPresetWriteResult.FAILURE }
+                    .semantics {
+                        this.selected = active
+                        contentDescription = "$label units, ${if (active) "selected" else "not selected"}"
+                    }
+                    .testTag("units-${preset.name.lowercase()}"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(if (active) "●" else "○", modifier = Modifier.padding(start = 16.dp, end = 12.dp), style = theme.typography.titleMedium, color = if (active) theme.palette.action else theme.palette.secondaryData)
+                Text(if (active) "$label · selected" else label, modifier = Modifier.weight(1f).padding(end = 16.dp), style = theme.typography.bodyLarge, color = theme.palette.content)
+            }
+        }
+        if (writeFailed) Text("Could not save unit preference. Current display uses the selected units for this session.", Modifier.testTag("units-save-error"), style = theme.typography.bodyMedium, color = theme.palette.warning)
+        TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("units-return")) {
+            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
         }
     }
 }
@@ -628,7 +739,7 @@ private fun ThemeAppearanceSurface(
             onClick = onReturn,
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("appearance-return"),
             colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
-        ) { Text("Return to Home", style = theme.typography.labelLarge) }
+        ) { Text("Back to Settings", style = theme.typography.labelLarge) }
     }
 }
 

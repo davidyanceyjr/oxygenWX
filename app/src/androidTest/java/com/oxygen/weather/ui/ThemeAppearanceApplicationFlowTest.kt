@@ -48,6 +48,10 @@ import com.oxygen.weather.data.LocalLocationId
 import com.oxygen.weather.data.WeatherBundle
 import com.oxygen.weather.data.provider.GeoCoordinates
 import com.oxygen.weather.UnitPresetTestHooks
+import com.oxygen.weather.application.UnitPresetReadResult
+import com.oxygen.weather.application.UnitPresetStore
+import com.oxygen.weather.application.UnitPresetWriteResult
+import com.oxygen.weather.presentation.UnitPreset
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
@@ -178,7 +182,7 @@ class ThemeAppearanceApplicationFlowTest {
                     it.ambientBackground.overlayStrength == AmbientBackgroundStrength.FULL
             } == true
         }
-        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        openAppearanceFromHome()
         compose.onNodeWithTag("appearance-effects-full").performScrollTo().assertIsSelected()
         saveMotionEvidence("appearance-full-at-system-motion-off")
         val reducedMotionTheme = observedBackdropTheme.get()
@@ -187,10 +191,14 @@ class ThemeAppearanceApplicationFlowTest {
         assertEquals(AmbientBackgroundStrength.FULL, reducedMotionTheme?.ambientBackground?.overlayStrength)
         compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         compose.waitForIdle()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        assertEquals(null, pagerMotionChoices.poll())
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
         assertEquals(false, pagerMotionChoices.poll())
 
-        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
-        compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+        openAppearanceFromHome()
+        returnFromAppearanceToHome()
         compose.waitForIdle()
         saveMotionEvidence("now-atmospheric-full-at-system-motion-off")
         assertEquals(false, pagerMotionChoices.poll())
@@ -212,7 +220,7 @@ class ThemeAppearanceApplicationFlowTest {
         compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
         compose.waitForIdle()
         assertEquals(true, pagerMotionChoices.poll())
-        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        openAppearanceFromHome()
         compose.onNodeWithTag("appearance-effects-full").performScrollTo().assertIsSelected()
         compose.activityRule.scenario.onActivity { activity -> assertSame(originalActivity, activity) }
         assertEquals(ThemeEffectsLevel.FULL, effectsStore.value)
@@ -448,8 +456,7 @@ class ThemeAppearanceApplicationFlowTest {
         var currentTheme = WeatherThemeId.ATMOSPHERIC
         WeatherThemeId.entries.forEach { id ->
             val name = ThemeCatalog.definition(id).displayName
-            compose.onNodeWithContentDescription("Appearance, current theme: ${ThemeCatalog.definition(currentTheme).displayName}")
-                .performClick()
+            openAppearanceFromHome()
             compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performScrollTo()
                 .assertIsDisplayed().performClick()
             compose.waitForIdle()
@@ -468,13 +475,13 @@ class ThemeAppearanceApplicationFlowTest {
             }
             assertEquals(startupBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
 
-            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            returnFromAppearanceToHome()
             compose.waitForIdle()
             assertWeatherFactsUnchanged()
-            compose.onNodeWithContentDescription("Appearance, current theme: $name").assertIsDisplayed()
+            assertHomeSettingsVisible(name)
             compose.activityRule.scenario.recreate()
             compose.waitForIdle()
-            compose.onNodeWithContentDescription("Appearance, current theme: $name").assertIsDisplayed()
+            assertHomeSettingsVisible(name)
             compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
             compose.activityRule.scenario.onActivity {
                 assertEquals(canonicalSnapshot, it.canonicalWeatherFixtureForTests())
@@ -498,8 +505,7 @@ class ThemeAppearanceApplicationFlowTest {
                 compose.onNodeWithContentDescription("$page page, ${index + 1} of 4, not selected").performClick()
                 compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
             }
-            compose.onNodeWithContentDescription("Appearance, current theme: ${ThemeCatalog.definition(store.value ?: WeatherThemeId.ATMOSPHERIC).displayName}")
-                .performClick()
+            openAppearanceFromHome()
             compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
             WeatherThemeId.entries.forEach { id ->
                 val option = compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performScrollTo()
@@ -507,13 +513,119 @@ class ThemeAppearanceApplicationFlowTest {
                 if (id == (store.value ?: WeatherThemeId.ATMOSPHERIC)) option.assertIsSelected() else option.assertIsNotSelected()
             }
             if (index % 2 == 0) {
-                compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+                returnFromAppearanceToHome()
             } else {
+                compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+                compose.waitForIdle()
+                compose.onNodeWithTag("settings-surface").assertIsDisplayed()
                 compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
             }
             compose.waitForIdle()
             compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
         }
+    }
+
+    @Test
+    fun settingsRoutesPreserveOpeningPageAndUnitsRemapWithoutWeatherWork() {
+        val unitStore = MemoryUnitPresetStore()
+        UnitPresetTestHooks.storeFactory = { unitStore }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        val evidenceDirectory = File(
+            InstrumentationRegistry.getInstrumentation().targetContext.cacheDir,
+            "148-settings-information-architecture",
+        ).apply { check(mkdirs() || isDirectory) }
+        val startup = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        assertEquals(listOf(0, 0, 0, 0), startup)
+        val uiMappedForecast = AtomicReference<com.oxygen.weather.presentation.SelectedForecastPresentationState?>()
+        UnitPresetTestHooks.onPresentationChanged = { uiMappedForecast.set(it) }
+        compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
+        val fixture = requireNotNull(canonicalSnapshot)
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+        compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
+        compose.waitForIdle()
+        performCurrentPageTextAction("Later", preferredIndex = 1)
+        compose.waitForIdle()
+        scrollToCurrentPageText("Earlier", preferredIndex = 1)
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        assertTagTargetHeight("settings-appearance")
+        assertTagTargetHeight("settings-units")
+        saveSettingsEvidence(evidenceDirectory, "settings-360dp-font1.0-ltr-off-daily")
+        compose.onNodeWithTag("settings-appearance").performClick()
+        compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
+        saveSettingsEvidence(evidenceDirectory, "appearance-360dp-font1.0-ltr-off")
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        compose.onNodeWithTag("settings-units").performClick()
+        compose.onNodeWithTag("units-surface").assertIsDisplayed()
+        listOf("units-metric", "units-us", "units-uk").forEach(::assertTagTargetHeight)
+        saveSettingsEvidence(evidenceDirectory, "units-360dp-font1.0-ltr-off")
+        compose.onNodeWithTag("units-us").assertIsNotSelected().performClick()
+        compose.waitForIdle()
+        compose.onNodeWithTag("units-us").assertIsSelected()
+        assertEquals(UnitPreset.US, unitStore.value)
+        val expectedUs = HomePresentationMapper.map(fixture, HistoricalSynthesis.derive(fixture), UnitPreset.US)
+        assertEquals(expectedUs.current.temperature, uiMappedForecast.get()?.home?.current?.temperature)
+        unitStore.failWrites = true
+        compose.onNodeWithTag("units-uk").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithTag("units-uk").assertIsSelected()
+        compose.onNodeWithTag("units-save-error").assertIsDisplayed()
+        assertEquals(UnitPreset.US, unitStore.value)
+        val expectedUk = HomePresentationMapper.map(fixture, HistoricalSynthesis.derive(fixture), UnitPreset.UK)
+        assertEquals(expectedUk.current.temperature, uiMappedForecast.get()?.home?.current?.temperature)
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertIsDisplayed()
+        scrollToCurrentPageText("Earlier", preferredIndex = 1)
+        compose.activityRule.scenario.onActivity { assertEquals(fixture, it.canonicalWeatherFixtureForTests()) }
+        val after = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        assertEquals(startup, after)
+
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").performClick()
+        compose.onNodeWithContentDescription("Now page, 1 of 4, not selected").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithText(expectedUk.current.temperature, substring = true).assertIsDisplayed()
+        assertEquals(startup, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+        compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
+        compose.waitForIdle()
+
+        val environment = compose.activityRule.scenario.onActivity { activity ->
+            "api=${android.os.Build.VERSION.SDK_INT}; dp=${activity.resources.configuration.screenWidthDp}x${activity.resources.configuration.screenHeightDp}; font=${activity.resources.configuration.fontScale}; layout=${LocationSearchTestHooks.layoutDirectionOverrideForTests ?: "LTR"}; theme=${store.value ?: WeatherThemeId.ATMOSPHERIC}; effects=${LocationSearchTestHooks.effectsOverrideForTests}; route=Settings/Appearance/Units; origin=Daily"
+        }
+        File(evidenceDirectory, "verification-metadata.txt").writeText(
+            "conditions=$environment\noperations-before=$startup\noperations-after=$after\neffective-unit=UK; persisted-unit=US after simulated write failure\nunit-presentation-callback=US then UK mapper values checked\ncanonical-fixture-retained=true\n",
+        )
+        setFontScale(1.3f)
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        saveSettingsEvidence(evidenceDirectory, "settings-360dp-font1.3-rtl-off")
+        compose.onNodeWithTag("settings-appearance").performClick()
+        compose.onNodeWithTag("appearance-layout-simple").performScrollTo().assertIsDisplayed()
+        saveSettingsEvidence(evidenceDirectory, "appearance-360dp-font1.3-rtl-off")
+        compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+        compose.onNodeWithTag("settings-units").performClick()
+        compose.onNodeWithTag("units-metric").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("units-us").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("units-uk").performScrollTo().assertIsNotSelected()
+        compose.onNodeWithTag("units-us").assertIsSelected()
+        saveSettingsEvidence(evidenceDirectory, "units-360dp-font1.3-rtl-off")
+        compose.onNodeWithTag("units-return").performScrollTo().performClick()
+        compose.onNodeWithTag("settings-return").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertIsDisplayed()
+        File(evidenceDirectory, "large-rtl-observations.txt").writeText(
+            "fontScale=1.3; layout=RTL; effects=Off; Appearance layout choices reachable by scroll; all Metric/US/UK rows reachable; persisted US is effective again after Activity recreation; Home returned to Daily.\n",
+        )
     }
 
     @Test
@@ -567,12 +679,12 @@ class ThemeAppearanceApplicationFlowTest {
             val pageWeatherFacts = if (page == "Now") visibleWeatherFactSnapshot() else emptyList()
 
             listOf("simple", "standard").forEach { layout ->
-                compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+                openAppearanceFromHome()
                 val option = compose.onNodeWithTag("appearance-layout-$layout").performScrollTo()
                 option.assertIsDisplayed().performClick()
                 compose.waitForIdle()
                 option.assertIsSelected()
-                compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+                returnFromAppearanceToHome()
                 compose.waitForIdle()
 
                 compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
@@ -609,7 +721,7 @@ class ThemeAppearanceApplicationFlowTest {
             InstrumentationRegistry.getInstrumentation().targetContext.cacheDir,
             "147-simple-forecast-surface",
         ).apply { check(mkdirs() || isDirectory) }
-        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        openAppearanceFromHome()
         compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
         WeatherThemeId.entries.forEach { id ->
             compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performScrollTo().assertIsDisplayed()
@@ -622,6 +734,7 @@ class ThemeAppearanceApplicationFlowTest {
         saveEvidence(evidenceDirectory, "appearance-layout-rtl-font1.3-simple")
         compose.onNodeWithTag("appearance-return").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("appearance-return").performClick()
+        compose.onNodeWithTag("settings-return").performClick()
         compose.waitForIdle()
         saveEvidence(evidenceDirectory, "home-layout-rtl-font1.3-simple")
 
@@ -664,8 +777,7 @@ class ThemeAppearanceApplicationFlowTest {
             }
             compose.waitForIdle()
             listOf(ContrastLevel.STANDARD, ContrastLevel.HIGH).forEach { contrast ->
-                compose.onNodeWithContentDescription("Appearance, current theme: ${ThemeCatalog.definition(themeId).displayName}")
-                    .performClick()
+                openAppearanceFromHome()
                 if (contrast != ContrastLevel.STANDARD) {
                     compose.onNodeWithTag("appearance-contrast-${contrast.name.lowercase()}").performScrollTo().performClick()
                 }
@@ -676,6 +788,9 @@ class ThemeAppearanceApplicationFlowTest {
                     "${if (contrast == ContrastLevel.HIGH) "High" else "Standard"} contrast, selected",
                 ).assertIsDisplayed()
                 saveEvidence(artifactDirectory, "appearance-${themeId.name.lowercase()}-${contrast.name.lowercase()}")
+                compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+                compose.waitForIdle()
+                compose.onNodeWithTag("settings-surface").assertIsDisplayed()
                 compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
                 compose.waitForIdle()
                 compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
@@ -722,12 +837,14 @@ class ThemeAppearanceApplicationFlowTest {
 
             compose.activityRule.scenario.recreate()
             compose.waitForIdle()
-            compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+            openAppearanceFromHome()
             compose.onNodeWithTag("appearance-contrast-${level.name.lowercase()}")
                 .performScrollTo().assertIsSelected()
             compose.onNodeWithContentDescription(
                 "${if (level == ContrastLevel.HIGH) "High" else "Standard"} contrast, selected",
             ).assertIsDisplayed()
+            compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+            compose.waitForIdle()
             compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
             compose.waitForIdle()
         }
@@ -743,7 +860,7 @@ class ThemeAppearanceApplicationFlowTest {
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
         assertEquals(ContrastPreferenceReadResult.Failure, readResult.get())
-        compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+        openAppearanceFromHome()
         compose.onNodeWithTag("appearance-contrast-standard").performScrollTo().assertIsSelected()
         compose.onNodeWithTag("appearance-contrast-high").performScrollTo().performClick()
         compose.waitForIdle()
@@ -772,12 +889,12 @@ class ThemeAppearanceApplicationFlowTest {
                 ThemeEffectsLevel.FULL -> "Full effects"
             }
             compose.activityRule.scenario.onActivity { assertEquals(EffectsPreferenceWriteResult.SUCCESS, it.selectEffectsForTests(level)) }
-            compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+            openAppearanceFromHome()
             compose.onNodeWithTag("appearance-effects-${level.name.lowercase()}").performScrollTo().assertIsDisplayed().assertIsSelected()
             compose.onNodeWithContentDescription("$label, selected").assertIsDisplayed()
             saveEvidence(evidence, "appearance-${level.name.lowercase()}")
             savePublicEffectsEvidence(activityContext, "appearance-${level.name.lowercase()}")
-            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            returnFromAppearanceToHome()
             compose.waitForIdle()
             saveEvidence(evidence, "now-${level.name.lowercase()}")
             savePublicEffectsEvidence(activityContext, "now-${level.name.lowercase()}")
@@ -786,9 +903,9 @@ class ThemeAppearanceApplicationFlowTest {
             compose.activityRule.scenario.onActivity { assertEquals(canonicalBefore.get(), it.canonicalWeatherFixtureForTests()) }
             compose.activityRule.scenario.recreate()
             compose.waitForIdle()
-            compose.onNodeWithContentDescription("Appearance, current theme: Atmospheric").performClick()
+            openAppearanceFromHome()
             compose.onNodeWithTag("appearance-effects-${level.name.lowercase()}").performScrollTo().assertIsSelected()
-            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            returnFromAppearanceToHome()
             compose.waitForIdle()
             assertEquals(baseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
         }
@@ -826,6 +943,12 @@ class ThemeAppearanceApplicationFlowTest {
         ProductionForecastTestHooks.cacheStoreFactory = null
         ProductionOfficialAlertTestHooks.onRequestFetched = null
         LocationSearchTestHooks.effectsOverrideForTests = null
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+        UnitPresetTestHooks.storeFactory = null
+        UnitPresetTestHooks.onRead = null
+        UnitPresetTestHooks.onPresetApplied = null
+        UnitPresetTestHooks.onPresentationChanged = null
+        UnitPresetTestHooks.applyPreset = null
         UnitPresetTestHooks.fixtureAnchorOverride = null
     }
 
@@ -861,6 +984,18 @@ class ThemeAppearanceApplicationFlowTest {
         override fun save(effects: ThemeEffectsLevel): EffectsPreferenceWriteResult {
             value = effects
             return EffectsPreferenceWriteResult.SUCCESS
+        }
+    }
+
+    private class MemoryUnitPresetStore : UnitPresetStore {
+        @Volatile var value: UnitPreset? = null
+        @Volatile var failWrites = false
+        override fun read(): UnitPresetReadResult = value?.let(UnitPresetReadResult::Found)
+            ?: UnitPresetReadResult.Defaulted()
+        override fun save(preset: UnitPreset): UnitPresetWriteResult {
+            if (failWrites) return UnitPresetWriteResult.FAILURE
+            value = preset
+            return UnitPresetWriteResult.SUCCESS
         }
     }
 
@@ -905,6 +1040,45 @@ class ThemeAppearanceApplicationFlowTest {
         context.contentResolver.openOutputStream(uri)?.use { output ->
             check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
         } ?: error("Unable to open installed screenshot media output for $name")
+    }
+
+    private fun saveSettingsEvidence(directory: File, name: String) {
+        val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+        FileOutputStream(File(directory, "$name.png")).use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        }
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "$name.png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/148-settings-information-architecture")
+        }
+        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            ?: error("Unable to create installed Settings capture for $name")
+        context.contentResolver.openOutputStream(uri)?.use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        } ?: error("Unable to write installed Settings capture for $name")
+    }
+
+    private fun openAppearanceFromHome() {
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-appearance").performClick()
+        compose.waitForIdle()
+    }
+
+    private fun returnFromAppearanceToHome() {
+        compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+        compose.onNodeWithTag("settings-return").performClick()
+        compose.waitForIdle()
+    }
+
+    private fun assertHomeSettingsVisible(themeName: String) {
+        compose.onNodeWithContentDescription("Settings, current theme: $themeName").assertIsDisplayed()
+    }
+
+    private fun assertTagTargetHeight(tag: String) {
+        val heightDp = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot.height / compose.density.density
+        assertTrue("$tag target height $heightDp dp is below 48 dp", heightDp >= 48f)
     }
 
     private fun saveAmbientApplicationCapture(context: android.content.Context, directory: File, name: String, bitmap: android.graphics.Bitmap) {

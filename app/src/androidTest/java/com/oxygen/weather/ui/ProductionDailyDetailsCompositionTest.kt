@@ -89,7 +89,7 @@ class ProductionDailyDetailsCompositionTest {
             later.assertIsNotEnabled()
             assertControlHeight(later.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
 
-            compose.onNodeWithContentDescription("Appearance, current theme: $themeName").assertExists()
+            compose.onNodeWithContentDescription("Settings, current theme: $themeName").assertExists()
         }
     }
 
@@ -136,9 +136,11 @@ class ProductionDailyDetailsCompositionTest {
     }
 
     private fun selectTheme(currentThemeName: String, nextTheme: WeatherThemeId) {
-        compose.onNodeWithContentDescription("Appearance, current theme: $currentThemeName").performClick()
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-appearance").performClick()
         compose.onNodeWithTag("appearance-theme-${nextTheme.name.lowercase()}").performClick()
         compose.onNodeWithTag("appearance-return").performClick()
+        compose.onNodeWithTag("settings-return").performClick()
         compose.waitForIdle()
     }
 
