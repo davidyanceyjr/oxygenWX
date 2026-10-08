@@ -817,7 +817,7 @@ unverified boundaries. R6.2 follows only after this bounded follow-up closes.
 Evidence: `.codex/history/2026-10-08-153-alert-settings-semantics-acceptance-follow-up.md`
 and `.codex/test-artifacts/153-alert-settings-semantics-acceptance-follow-up/`.
 
-### R6.2 — Compact and large-font resilience — PLANNED
+### R6.2 — Compact and large-font resilience — DONE
 
 Verify the project compact baseline and large-font conditions for all four Home
 pages, including the five production themes and Effects Off states.
@@ -841,7 +841,7 @@ suspected critical issue has reproduction and Compose ownership evidence or is
 recorded as an unresolved blocker. This portion does not close the full R6.2
 acceptance gate.
 
-### R6.2.2 — Daily and Details resilience and R6.2 closure — PLANNED
+### R6.2.2 — Daily and Details resilience and R6.2 closure — DONE
 
 After R6.2.1, capture and review Daily and Details for all five production
 themes at the same three conditions (30 additional cells). Resolve the
@@ -854,6 +854,8 @@ matching hierarchy evidence, a manifest, and evidence-based dispositions;
 all critical findings are corrected and pass affected-cell recapture, or R6.2
 is recorded blocked with the exact evidence and unresolved boundary. Only
 then is the aggregate R6.2 exit met.
+
+Evidence and limitations: `.codex/history/2026-10-08-155-daily-details-resilience-r62-closure.md` and `.codex/test-artifacts/155-daily-details-resilience-r62-closure/`. The full 60-cell installed matrix and Daily window/page navigation actions passed; no correction was needed. RTL, Simple layout, High contrast, other effects levels, live-provider request counters, and TalkBack remain outside these portions.
 
 ### R6.2A — Settings compact and large-font resilience — PLANNED
 
