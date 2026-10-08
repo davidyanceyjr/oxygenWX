@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -246,6 +247,108 @@ class HomePresentationTest {
         assertEquals("-2.5 °C", metric.detailGroups[1].metrics.first().value)
         assertEquals("-2.5 °C", uk.detailGroups[1].metrics.first().value)
         assertEquals("+12.0 hPa", metric.detailGroups[1].metrics[1].value)
+    }
+
+    @Test
+    fun spokenSummariesUseSelectedUnitsForCurrentHourlyAndDailyFacts() {
+        val metric = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle), UnitPreset.METRIC)
+        val us = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle), UnitPreset.US)
+        val uk = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle), UnitPreset.UK)
+
+        assertEquals(
+            "Demo Station, Partly cloudy, 28 °C, feels like 29 °C. Humidity 56%. Wind 13 km/h.",
+            metric.current.spokenSummary,
+        )
+        assertEquals(
+            "Demo Station, Partly cloudy, 82 °F, feels like 85 °F. Humidity 56%. Wind 8 mph.",
+            us.current.spokenSummary,
+        )
+        assertEquals(
+            "Demo Station, Partly cloudy, 28 °C, feels like 29 °C. Humidity 56%. Wind 8 mph.",
+            uk.current.spokenSummary,
+        )
+
+        assertEquals(
+            "Conditions. Feels like: 29 °C. Humidity: 56%. Dew point: 18 °C. " +
+                "Pressure: 1012.6 hPa. Cloud cover: 36%. Visibility: 16.0 km",
+            metric.detailGroups.first { it.title == "Conditions" }.spokenSummary,
+        )
+        val usConditions = us.detailGroups.first { it.title == "Conditions" }
+        assertEquals(
+            "Conditions. Feels like: 85 °F. Humidity: 56%. Dew point: 65 °F. " +
+                "Pressure: 29.9 inHg. Cloud cover: 36%. Visibility: 9.9 mi",
+            usConditions.spokenSummary,
+        )
+        assertEquals(
+            metric.detailGroups.first { it.title == "Conditions" }.spokenSummary,
+            uk.detailGroups.first { it.title == "Conditions" }.spokenSummary,
+        )
+        assertTrue(us.detailGroups.first { it.title == "Forecast pattern" }.spokenSummary.startsWith("Forecast pattern."))
+        assertTrue(us.detailGroups.first { it.title == "Historical context" }.spokenSummary.startsWith("Historical context."))
+
+        assertEquals("12 PM, Clear, 19 °C", metric.hourlyWindows.first().entries.first().spokenSummary)
+        assertEquals("12 PM, Clear, 66 °F", us.hourlyWindows.first().entries.first().spokenSummary)
+        assertEquals(
+            metric.hourlyWindows.first().entries.first().spokenSummary,
+            uk.hourlyWindows.first().entries.first().spokenSummary,
+        )
+        assertEquals(
+            "TODAY, Clear, low 19 °C, high 31 °C, precipitation 8% · 0.0 mm",
+            metric.dailyWindows.first().entries.first().spokenSummary,
+        )
+        assertEquals(
+            "TODAY, Clear, low 66 °F, high 88 °F, precipitation 8% · 0.0 in",
+            us.dailyWindows.first().entries.first().spokenSummary,
+        )
+        assertEquals(
+            metric.dailyWindows.first().entries.first().spokenSummary,
+            uk.dailyWindows.first().entries.first().spokenSummary,
+        )
+    }
+
+    @Test
+    fun spokenSummariesNameMissingMeasurementsAndDoNotSubstituteZero() {
+        val sparseBundle = bundle.copy(
+            current = bundle.current.copy(
+                condition = null,
+                temperatureC = null,
+                apparentC = null,
+                dewPointC = null,
+                relativeHumidityPct = null,
+                windSpeedKph = null,
+            ),
+            hourly = bundle.hourly.take(1).map { it.copy(condition = null, temperatureC = null) },
+            daily = bundle.daily.take(1).map {
+                it.copy(condition = null, lowC = null, highC = null, precipitationProbabilityPct = null)
+            },
+        )
+
+        listOf(UnitPreset.METRIC, UnitPreset.US, UnitPreset.UK).forEach { preset ->
+            val mapped = HomePresentationMapper.map(
+                sparseBundle,
+                HistoricalSynthesis.derive(sparseBundle),
+                preset,
+            )
+
+            assertEquals(
+                "Demo Station, Unavailable, Unavailable, feels like Unavailable. Humidity Unavailable. Wind unavailable.",
+                mapped.current.spokenSummary,
+            )
+            assertEquals("12 PM, Unavailable, Unavailable", mapped.hourlyWindows.first().entries.first().spokenSummary)
+            assertEquals(
+                "TODAY, Unavailable, low Unavailable, high Unavailable, precipitation Precipitation unavailable",
+                mapped.dailyWindows.first().entries.first().spokenSummary,
+            )
+            assertFalse(mapped.current.spokenSummary.contains("0 °"))
+            assertFalse(mapped.hourlyWindows.first().entries.first().spokenSummary.contains("0 °"))
+            assertFalse(mapped.dailyWindows.first().entries.first().spokenSummary.contains("0 °"))
+            val sparseConditions = mapped.detailGroups.first { it.title == "Conditions" }.spokenSummary
+            assertTrue(sparseConditions.startsWith("Conditions."))
+            assertFalse(sparseConditions.contains("Feels like:"))
+            assertFalse(sparseConditions.contains("Humidity:"))
+            assertFalse(sparseConditions.contains("Dew point:"))
+            assertTrue(mapped.detailGroups.all { group -> group.spokenSummary.startsWith(group.title) })
+        }
     }
 
     @Test

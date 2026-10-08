@@ -763,12 +763,17 @@ inventing policy, attribution, or license text.
 ## R6 — Accessibility and environment verification
 
 
-### R6.1 — Spoken semantics contract — PLANNED
+### R6.1 — Spoken semantics contract — DONE
 
 Implement provider-neutral concise spoken semantics for current, hourly, daily,
 and Details with resolved units and honest missing values.
 
 **Exit:** Compose semantics tests assert concise spoken labels for current/hourly/daily/Details facts under Metric/US/UK and missing values, including chronological ordering.
+
+Evidence: `.codex/history/2026-10-08-151-spoken-semantics-contract.md` and
+`.codex/test-artifacts/151-spoken-semantics-contract/`. Focused connected
+semantics and JVM checks passed; full connected-suite limitations are recorded
+in the cycle evidence.
 
 ### R6.1A — Alert and settings spoken semantics — PLANNED
 

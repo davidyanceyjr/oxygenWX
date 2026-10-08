@@ -210,7 +210,23 @@ data class DailyEntryPresentation(
 data class MetricGroupPresentation(
     val title: String,
     val metrics: List<MetricPresentation>,
-)
+) {
+    /** Group-aware spoken form of the supplied inspection facts. */
+    val spokenSummary: String
+        get() = buildString {
+            append(title)
+            metrics.forEach { metric ->
+                append(". ")
+                append(metric.label)
+                append(": ")
+                append(metric.value)
+                metric.supporting?.let {
+                    append(". ")
+                    append(it)
+                }
+            }
+        }
+}
 
 data class MetricPresentation(
     val label: String,

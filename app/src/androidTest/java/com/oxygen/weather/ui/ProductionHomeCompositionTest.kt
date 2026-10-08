@@ -1,9 +1,12 @@
 package com.oxygen.weather.ui
 
+import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -174,6 +177,29 @@ class ProductionHomeCompositionTest {
         assertPageIdentity("Daily")
     }
 
+    @Test
+    fun fourPageForecastRowsStayChronologicalAndDetailsKeepGroupIdentity() {
+        val home = presentation
+
+        selectPage("Hourly")
+        assertPageIdentity("Hourly")
+        assertDescriptionOrder(home.hourlyWindows.first().entries.take(6).map { it.spokenSummary })
+
+        selectPage("Daily")
+        assertPageIdentity("Daily")
+        assertDescriptionOrder(home.dailyWindows.first().entries.take(5).map { it.spokenSummary })
+
+        selectPage("Details")
+        assertPageIdentity("Details")
+        val groups = home.detailGroups.filter { it.metrics.isNotEmpty() }
+        assertTrue("fixture should include named Details groups", groups.isNotEmpty())
+        assertDescriptionOrder(groups.map { it.spokenSummary })
+        groups.forEach { group ->
+            assertTrue("spoken summary should retain group title '${group.title}'", group.spokenSummary.startsWith(group.title))
+            compose.onAllNodesWithContentDescription(group.spokenSummary, useUnmergedTree = true).assertCountEquals(1)
+        }
+    }
+
     private fun selectPage(label: String) {
         val current = PAGE_LABELS.first {
             compose.onAllNodesWithContentDescription("Choose Home page, current: $it").fetchSemanticsNodes().isNotEmpty()
@@ -202,6 +228,25 @@ class ProductionHomeCompositionTest {
             compose.onNodeWithContentDescription(menuItemDescription(label, index, selected = false)).assertDoesNotExist()
         }
     }
+
+    /** Checks Compose traversal order for semantics belonging to the selected page. */
+    private fun assertDescriptionOrder(expected: List<String>) {
+        val viewport = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+        val descriptions = collectVisibleDescriptions(
+            compose.onNode(isRoot(), useUnmergedTree = true).fetchSemanticsNode(),
+            viewport.left,
+            viewport.right,
+        )
+        val positions = expected.map { description -> descriptions.indexOf(description) }
+        assertTrue("missing selected-page descriptions: $positions", positions.all { it >= 0 })
+        assertTrue("selected-page descriptions are out of order: $positions", positions.zipWithNext().all { (a, b) -> a < b })
+    }
+
+    private fun collectVisibleDescriptions(node: SemanticsNode, left: Float, right: Float): List<String> =
+        (if (node.boundsInRoot.center.x >= left && node.boundsInRoot.center.x < right &&
+            node.config.contains(SemanticsProperties.ContentDescription)
+        ) node.config[SemanticsProperties.ContentDescription] else emptyList()) +
+            node.children.flatMap { collectVisibleDescriptions(it, left, right) }
 
     private fun assertMinimumTarget(widthPx: Float, heightPx: Float) {
         val minimumPx = 48f * compose.density.density

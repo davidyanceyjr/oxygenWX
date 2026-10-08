@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,7 +75,13 @@ fun ProductionInspectionMetricGroup(
     if (group.metrics.isEmpty()) return
     MaterialTheme(typography = theme.typography) {
         ProductionSectionSurface(theme, modifier.fillMaxWidth()) {
-            Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
+            Column(
+                modifier = Modifier.semantics(mergeDescendants = true) {
+                    contentDescription = group.spokenSummary
+                    heading()
+                },
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+            ) {
                 Text(
                     text = group.title,
                     modifier = Modifier.semantics { heading() },
