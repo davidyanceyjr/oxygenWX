@@ -785,12 +785,37 @@ Evidence: `.codex/history/2026-10-08-151-spoken-semantics-contract.md` and
 semantics and JVM checks passed; full connected-suite limitations are recorded
 in the cycle evidence.
 
-### R6.1A — Alert and settings spoken semantics — PLANNED
+### R6.1A — Alert and settings spoken semantics — DONE
 
 After R6.1, add equivalent semantics for official alerts and Settings
 destinations, including non-color-only status and unavailable states.
 
 **Exit:** Semantics tests cover official alert severity/issuer/time and every Settings destination, including selected, unavailable, and non-color-only states.
+
+Evidence: cycle 152 established the alert and Settings spoken-semantics coverage;
+cycle 153 closed the recorded route-return and missing-state acceptance gaps.
+The combined verification is recorded in
+`.codex/history/2026-10-08-152-alert-settings-spoken-semantics.md`,
+`.codex/history/2026-10-08-153-alert-settings-semantics-acceptance-follow-up.md`,
+and `.codex/test-artifacts/153-alert-settings-semantics-acceptance-follow-up/`.
+TalkBack service/manual traversal remains tracked for R6.5.
+
+### R6.1A1 — Alert and Settings semantics acceptance follow-up — DONE
+
+Cycle 152 closed without satisfying the full R6.1A exit. Complete only the
+remaining recorded acceptance gaps: diagnose the two Settings route-return test
+failures, cover saved-list loading/unavailable and About missing-metadata
+semantics, and verify the existing Settings/alert outcomes still hold. Do not
+broaden this into unrelated accessibility work.
+
+**Exit:** The two focused route-return flows pass or are documented as a
+reproducible blocker with evidence; saved-list loading/unavailable and About
+missing-metadata cases have production-path semantics assertions; the R6.1A
+alert and Settings contract is rechecked. Close with exact commands and any
+unverified boundaries. R6.2 follows only after this bounded follow-up closes.
+
+Evidence: `.codex/history/2026-10-08-153-alert-settings-semantics-acceptance-follow-up.md`
+and `.codex/test-artifacts/153-alert-settings-semantics-acceptance-follow-up/`.
 
 ### R6.2 — Compact and large-font resilience — PLANNED
 

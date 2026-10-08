@@ -128,6 +128,7 @@ private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS, LOCATIONS,
 
 internal object SettingsLegalContentTestHooks {
     var licenseAssetReader: ((String) -> String?)? = null
+    var aboutMetadataReader: ((android.content.Context) -> Pair<String?, String?>)? = null
 }
 
 /** Standard Home rendered entirely from the production five-theme component family. */
@@ -709,8 +710,14 @@ private fun FontLicenseSurface(theme: ResolvedTheme, fontName: String, assetPath
 @Composable
 private fun AboutSurface(theme: ResolvedTheme, onReturn: () -> Unit) {
     val context = LocalContext.current
-    val appLabel = remember(context) { runCatching { context.packageManager.getApplicationLabel(context.applicationInfo).toString() }.getOrNull()?.takeIf(String::isNotBlank) }
-    val versionName = remember(context) { runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull()?.takeIf(String::isNotBlank) }
+    val metadata = remember(context) {
+        SettingsLegalContentTestHooks.aboutMetadataReader?.invoke(context) ?: (
+            runCatching { context.packageManager.getApplicationLabel(context.applicationInfo).toString() }.getOrNull() to
+                runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull()
+            )
+    }
+    val appLabel = metadata.first?.takeIf(String::isNotBlank)
+    val versionName = metadata.second?.takeIf(String::isNotBlank)
     Column(
         Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
             .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp).testTag("about-surface"),

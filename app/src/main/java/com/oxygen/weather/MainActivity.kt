@@ -45,6 +45,7 @@ import com.oxygen.weather.application.LocationSearchCoordinator
 import com.oxygen.weather.application.ProductionForecastComposition
 import com.oxygen.weather.application.ProductionOfficialAlertComposition
 import com.oxygen.weather.application.SavedLocationCoordinator
+import com.oxygen.weather.application.SavedLocationStore
 import com.oxygen.weather.application.SelectedLocationStore
 import com.oxygen.weather.application.UnitPresetSelection
 import com.oxygen.weather.application.UnitPresetStore
@@ -380,7 +381,8 @@ class MainActivity : ComponentActivity() {
         val search = LocationSearchTestHooks.searchFactory?.invoke()
             ?: OpenMeteoLocationSearch(UrlConnectionLocationSearchTransport())
         val savedLocationCoordinator = SavedLocationCoordinator(
-            savedStore = SharedPreferencesSavedLocationStore(applicationContext),
+            savedStore = LocationSearchTestHooks.savedStoreFactory?.invoke(applicationContext)
+                ?: SharedPreferencesSavedLocationStore(applicationContext),
             selectedStore = LocationSearchTestHooks.selectedStoreFactory?.invoke(applicationContext)
                 ?: SharedPreferencesSelectedLocationStore(applicationContext),
             worker = selectedLocationWorker,
@@ -650,6 +652,7 @@ internal object LocationSearchTestHooks {
     @Volatile var onSelectedRequest: ((ForecastRequest) -> Unit)? = null
     @Volatile var onRestoredRequest: ((ForecastRequest) -> Unit)? = null
     @Volatile var selectedStoreFactory: ((android.content.Context) -> SelectedLocationStore)? = null
+    @Volatile var savedStoreFactory: ((android.content.Context) -> SavedLocationStore)? = null
     @Volatile var effectsOverrideForTests: ThemeEffectsLevel? = null
     @Volatile var layoutDirectionOverrideForTests: LayoutDirection? = null
     @Volatile var suppressSelectedForecastForTests: Boolean = false

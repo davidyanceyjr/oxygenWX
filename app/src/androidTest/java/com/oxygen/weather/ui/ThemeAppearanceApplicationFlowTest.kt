@@ -6,6 +6,8 @@ import android.provider.MediaStore
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
@@ -606,6 +608,12 @@ class ThemeAppearanceApplicationFlowTest {
         LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
+        val openingPageAfterRecreate = homePageSelector()
+        assertEquals(
+            "Home selector immediately before opening Settings after Activity recreation",
+            "Daily",
+            openingPageAfterRecreate,
+        )
         compose.onNodeWithTag("settings-entry").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         saveSettingsEvidence(evidenceDirectory, "settings-360dp-font1.3-rtl-off")
@@ -620,9 +628,17 @@ class ThemeAppearanceApplicationFlowTest {
         compose.onNodeWithTag("units-us").assertIsSelected()
         saveSettingsEvidence(evidenceDirectory, "units-360dp-font1.3-rtl-off")
         compose.onNodeWithTag("units-return").performScrollTo().performClick()
-        compose.onNodeWithTag("settings-return").performClick()
+        compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithTag("settings-surface").fetchSemanticsNodes().isEmpty()
+        }
         compose.waitForIdle()
-        compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertIsDisplayed()
+        val returnedPage = homePageSelector()
+        assertEquals(
+            "Home selector after Settings return; expected captured opening page Daily; ${routeStateSummary()}",
+            "Daily",
+            returnedPage,
+        )
         File(evidenceDirectory, "large-rtl-observations.txt").writeText(
             "fontScale=1.3; layout=RTL; effects=Off; Appearance layout choices reachable by scroll; all Metric/US/UK rows reachable; persisted US is effective again after Activity recreation; Home returned to Daily.\n",
         )
@@ -1195,4 +1211,14 @@ class ThemeAppearanceApplicationFlowTest {
             .executeShellCommand("settings put system font_scale $scale")
         command.close()
     }
+
+    private fun homePageSelector(): String? = listOf("Now", "Hourly", "Daily", "Details").firstOrNull { page ->
+        compose.onAllNodesWithContentDescription("Choose Home page, current: $page")
+            .fetchSemanticsNodes().isNotEmpty()
+    }
+
+    private fun routeStateSummary(): String = listOf(
+        "settings-surface", "units-surface", "theme-appearance-surface",
+    ).joinToString { tag -> "$tag=${compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}" } +
+        "; home=${homePageSelector()}"
 }

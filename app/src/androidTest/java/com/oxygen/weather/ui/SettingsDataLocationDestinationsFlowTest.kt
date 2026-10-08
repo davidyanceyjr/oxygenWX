@@ -211,8 +211,17 @@ class SettingsDataLocationDestinationsFlowTest {
             activity.onBackPressedDispatcher.onBackPressed()
         }
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
-        compose.onNodeWithTag("settings-return").performClick()
-        compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+        compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithTag("settings-surface").fetchSemanticsNodes().isEmpty()
+        }
+        compose.waitForIdle()
+        val returnedPage = homePageSelector()
+        assertEquals(
+            "Home selector after Settings return; expected captured opening page Hourly; ${routeStateSummary()}",
+            "Hourly",
+            returnedPage,
+        )
         compose.onNodeWithContentDescription("Earlier").assertIsDisplayed()
         compose.onAllNodesWithContentDescription("Later unavailable").assertCountEquals(2)
         assertEquals(beforePassiveNavigation, operationCounts())
@@ -285,6 +294,16 @@ class SettingsDataLocationDestinationsFlowTest {
         compose.onNodeWithContentDescription("$page page, ${index + 1} of 4, not selected").performClick()
         compose.waitForIdle()
     }
+
+    private fun homePageSelector(): String? = listOf("Now", "Hourly", "Daily", "Details").firstOrNull { page ->
+        compose.onAllNodesWithContentDescription("Choose Home page, current: $page")
+            .fetchSemanticsNodes().isNotEmpty()
+    }
+
+    private fun routeStateSummary(): String = listOf(
+        "settings-surface", "locations-surface", "data-sources-surface",
+    ).joinToString { tag -> "$tag=${compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}" } +
+        "; home=${homePageSelector()}"
 
     private fun operationCounts(): List<Int> = listOf(
         forecastCalls.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get(),

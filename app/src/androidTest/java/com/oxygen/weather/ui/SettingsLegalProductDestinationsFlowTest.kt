@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -26,8 +27,11 @@ import com.oxygen.weather.MainActivity
 import com.oxygen.weather.ProductionForecastTestHooks
 import com.oxygen.weather.ProductionOfficialAlertTestHooks
 import com.oxygen.weather.SharedPreferencesSelectedLocationStore
+import com.oxygen.weather.SharedPreferencesSavedLocationStore
 import com.oxygen.weather.application.SelectedLocationReadResult
 import com.oxygen.weather.application.SelectedLocationStore
+import com.oxygen.weather.application.SavedLocationCollectionReadResult
+import com.oxygen.weather.application.SavedLocationStore
 import com.oxygen.weather.data.ForecastCacheReadResult
 import com.oxygen.weather.data.ForecastCacheStore
 import com.oxygen.weather.data.ForecastCacheWriteResult
@@ -36,6 +40,8 @@ import com.oxygen.weather.data.LocalLocationId
 import com.oxygen.weather.data.provider.GeoCoordinates
 import com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -82,6 +88,7 @@ class SettingsLegalProductDestinationsFlowTest {
         } }
         ProductionOfficialAlertTestHooks.onRequestFetched = { alertRequests.incrementAndGet() }
         SettingsLegalContentTestHooks.licenseAssetReader = null
+        SettingsLegalContentTestHooks.aboutMetadataReader = null
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
     }
@@ -93,6 +100,7 @@ class SettingsLegalProductDestinationsFlowTest {
         LocationSearchTestHooks.effectsOverrideForTests = null
         LocationSearchTestHooks.layoutDirectionOverrideForTests = null
         LocationSearchTestHooks.selectedStoreFactory = null
+        LocationSearchTestHooks.savedStoreFactory = null
         ProductionForecastTestHooks.transportOverride = null
         ProductionForecastTestHooks.cacheStoreFactory = null
         ProductionOfficialAlertTestHooks.onRequestFetched = null
@@ -198,6 +206,58 @@ class SettingsLegalProductDestinationsFlowTest {
         compose.onNodeWithTag("selected-location-unavailable")
             .assertTextEquals("Selected location is unavailable.")
         compose.onNodeWithTag("saved-locations-empty").assertTextEquals("No saved places yet.")
+    }
+
+    @Test
+    fun savedListLoadingAndUnavailableAreSpokenOnProductionLocationsRoute() {
+        val readStarted = CountDownLatch(1)
+        val releaseRead = CountDownLatch(1)
+        LocationSearchTestHooks.savedStoreFactory = { context ->
+            val delegate = SharedPreferencesSavedLocationStore(context)
+            object : SavedLocationStore by delegate {
+                override fun read(): SavedLocationCollectionReadResult {
+                    readStarted.countDown()
+                    check(releaseRead.await(10, TimeUnit.SECONDS)) { "Test must release the saved-store read" }
+                    return SavedLocationCollectionReadResult.Failure
+                }
+            }
+        }
+
+        try {
+            compose.activityRule.scenario.recreate()
+            assertEquals("controlled production saved-store read started", true, readStarted.await(5, TimeUnit.SECONDS))
+            compose.onNodeWithTag("settings-entry").performClick()
+            compose.onNodeWithTag("settings-locations").performScrollTo().performClick()
+            compose.onNodeWithTag("saved-locations-loading").assertTextEquals("Loading saved places…")
+            compose.onAllNodesWithTag("locations-saved-place-0").assertCountEquals(0)
+
+            releaseRead.countDown()
+            compose.onNodeWithTag("saved-locations-unavailable")
+                .assertTextEquals("Saved places are unavailable because their stored data could not be read safely.")
+            compose.onNodeWithContentDescription(
+                "Saved places are unavailable because their stored data could not be read safely.",
+            ).assertIsDisplayed()
+            compose.onNodeWithTag("locations-return").performScrollTo().assertIsDisplayed()
+        } finally {
+            releaseRead.countDown()
+            LocationSearchTestHooks.savedStoreFactory = null
+        }
+    }
+
+    @Test
+    fun aboutMissingLabelAndVersionMetadataAreSpokenAsUnavailable() {
+        compose.onNodeWithTag("settings-entry").performClick()
+        SettingsLegalContentTestHooks.aboutMetadataReader = { null to "4.2-test" }
+        compose.onNodeWithTag("settings-about").performScrollTo().performClick()
+        compose.onNodeWithTag("about-app-label").assertTextEquals("App name: Unavailable")
+        compose.onNodeWithTag("about-version").assertTextEquals("Version: 4.2-test")
+        compose.onNodeWithTag("about-return").assertIsDisplayed().performClick()
+
+        SettingsLegalContentTestHooks.aboutMetadataReader = { "Oxygen Test" to " " }
+        compose.onNodeWithTag("settings-about").performScrollTo().performClick()
+        compose.onNodeWithTag("about-app-label").assertTextEquals("App name: Oxygen Test")
+        compose.onNodeWithTag("about-version").assertTextEquals("Version: Unavailable")
+        compose.onNodeWithTag("about-return").assertIsDisplayed()
     }
 
     @Test
