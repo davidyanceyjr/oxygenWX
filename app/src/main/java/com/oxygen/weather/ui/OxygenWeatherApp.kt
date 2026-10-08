@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -62,6 +63,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
@@ -122,7 +124,11 @@ private enum class HomePage(val label: String) {
 }
 
 private enum class OfficialAlertRoute { HOME, SELECTION, MULTIPLE_DETAIL, SINGLE_DETAIL }
-private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS, LOCATIONS, DATA_SOURCES }
+private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS, LOCATIONS, DATA_SOURCES, PRIVACY, OPEN_SOURCE_LICENSES, FONT_LICENSE, ABOUT }
+
+internal object SettingsLegalContentTestHooks {
+    var licenseAssetReader: ((String) -> String?)? = null
+}
 
 /** Standard Home rendered entirely from the production five-theme component family. */
 @OptIn(ExperimentalFoundationApi::class)
@@ -180,6 +186,8 @@ fun OxygenWeatherApp(
     var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
     var settingsRoute by rememberSaveable { mutableStateOf(SettingsRoute.HOME) }
     var settingsOpeningPage by rememberSaveable { mutableIntStateOf(0) }
+    var selectedFontLicense by rememberSaveable { mutableStateOf("") }
+    val settingsScrollState = rememberScrollState()
     var alertRoute by remember { mutableStateOf(OfficialAlertRoute.HOME) }
     var selectedAlertIdentity by remember { mutableStateOf<Pair<Long, Int>?>(null) }
     val selectedAlert = selectedAlertIdentity?.let { identity ->
@@ -214,7 +222,10 @@ fun OxygenWeatherApp(
     }
     BackHandler(enabled = settingsRoute != SettingsRoute.HOME) {
         settingsRoute = when (settingsRoute) {
-            SettingsRoute.APPEARANCE, SettingsRoute.UNITS, SettingsRoute.LOCATIONS, SettingsRoute.DATA_SOURCES -> SettingsRoute.SETTINGS
+            SettingsRoute.APPEARANCE, SettingsRoute.UNITS, SettingsRoute.LOCATIONS, SettingsRoute.DATA_SOURCES,
+            SettingsRoute.PRIVACY, SettingsRoute.OPEN_SOURCE_LICENSES -> SettingsRoute.SETTINGS
+            SettingsRoute.FONT_LICENSE -> SettingsRoute.OPEN_SOURCE_LICENSES
+            SettingsRoute.ABOUT -> SettingsRoute.SETTINGS
             SettingsRoute.SETTINGS -> SettingsRoute.HOME.also { leaveSettings() }
             SettingsRoute.HOME -> SettingsRoute.HOME
         }
@@ -249,10 +260,14 @@ fun OxygenWeatherApp(
                     SettingsRoute.SETTINGS -> {
                         SettingsSurface(
                             theme,
+                            scrollState = settingsScrollState,
                             onAppearance = { settingsRoute = SettingsRoute.APPEARANCE },
                             onUnits = { settingsRoute = SettingsRoute.UNITS },
                             onLocations = { settingsRoute = SettingsRoute.LOCATIONS },
                             onDataSources = { settingsRoute = SettingsRoute.DATA_SOURCES },
+                            onPrivacy = { settingsRoute = SettingsRoute.PRIVACY },
+                            onOpenSourceLicenses = { settingsRoute = SettingsRoute.OPEN_SOURCE_LICENSES },
+                            onAbout = { settingsRoute = SettingsRoute.ABOUT },
                             onReturn = leaveSettings,
                         )
                         return@ProductionBackdrop
@@ -302,6 +317,40 @@ fun OxygenWeatherApp(
                             onOpenSource = onOpenOfficialAlertSource,
                             onReturn = { settingsRoute = SettingsRoute.SETTINGS },
                         )
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.PRIVACY -> {
+                        LegalInformationSurface(theme, "Privacy", "Privacy policy unavailable.", "privacy-surface", onReturn = { settingsRoute = SettingsRoute.SETTINGS })
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.OPEN_SOURCE_LICENSES -> {
+                        OpenSourceLicensesSurface(
+                            theme = theme,
+                            hasFiraSans = fontFamilyResourceExists("fira_sans_regular"),
+                            hasNotoSans = fontFamilyResourceExists("noto_sans_regular"),
+                            onOpenLicense = { fontName ->
+                                selectedFontLicense = fontName
+                                settingsRoute = SettingsRoute.FONT_LICENSE
+                            },
+                            onReturn = { settingsRoute = SettingsRoute.SETTINGS },
+                        )
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.FONT_LICENSE -> {
+                        FontLicenseSurface(
+                            theme = theme,
+                            fontName = selectedFontLicense,
+                            assetPath = when (selectedFontLicense) {
+                                "Fira Sans" -> "licenses/fira_sans_OFL.txt"
+                                "Noto Sans" -> "licenses/noto_fonts_LICENSE.txt"
+                                else -> ""
+                            },
+                            onReturn = { settingsRoute = SettingsRoute.OPEN_SOURCE_LICENSES },
+                        )
+                        return@ProductionBackdrop
+                    }
+                    SettingsRoute.ABOUT -> {
+                        AboutSurface(theme, onReturn = { settingsRoute = SettingsRoute.SETTINGS })
                         return@ProductionBackdrop
                     }
                     SettingsRoute.HOME -> Unit
@@ -551,27 +600,135 @@ private fun ThemePicker(
 @Composable
 private fun SettingsSurface(
     theme: ResolvedTheme,
+    scrollState: ScrollState,
     onAppearance: () -> Unit,
     onUnits: () -> Unit,
     onLocations: () -> Unit,
     onDataSources: () -> Unit,
+    onPrivacy: () -> Unit,
+    onOpenSourceLicenses: () -> Unit,
+    onAbout: () -> Unit,
     onReturn: () -> Unit,
 ) {
     Column(
-        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(scrollState)
             .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp)
             .testTag("settings-surface"),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text("Settings", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
-        SettingsDestination(theme, "Appearance", "Choose a theme, contrast, effects, and Home layout", "settings-appearance", onAppearance)
-        SettingsDestination(theme, "Units", "Choose Metric, US, or UK units", "settings-units", onUnits)
-        SettingsDestination(theme, "Locations", "View and manage saved places", "settings-locations", onLocations)
-        SettingsDestination(theme, "Data Sources", "Inspect forecast and alert source details", "settings-data-sources", onDataSources)
+        SettingsDestination(theme, "Appearance", "Choose a theme, contrast, effects, and Home layout", "settings-appearance", onClick = onAppearance)
+        SettingsDestination(theme, "Units", "Choose Metric, US, or UK units", "settings-units", onClick = onUnits)
+        SettingsDestination(theme, "Locations", "View and manage saved places", "settings-locations", onClick = onLocations)
+        SettingsDestination(theme, "Data Sources", "Inspect forecast and alert source details", "settings-data-sources", onClick = onDataSources)
+        SettingsDestination(theme, "Privacy", "Privacy policy availability", "settings-privacy", onClick = onPrivacy)
+        SettingsDestination(theme, "Open Source Licenses", "View bundled font license files", "settings-open-source-licenses", onClick = onOpenSourceLicenses)
+        SettingsDestination(theme, "About", "App name and installed version", "settings-about", onClick = onAbout)
         TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings-return")) {
             Text("Return to Home", style = theme.typography.labelLarge, color = theme.palette.action)
         }
     }
+}
+
+@Composable
+private fun LegalInformationSurface(theme: ResolvedTheme, title: String, message: String, tag: String, onReturn: () -> Unit) {
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp).testTag(tag),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(title, style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text(message, Modifier.testTag("privacy-unavailable"), style = theme.typography.bodyLarge.copy(textDirection = TextDirection.Ltr), color = theme.palette.secondaryData)
+        TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("privacy-return")) {
+            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+@Composable
+private fun OpenSourceLicensesSurface(
+    theme: ResolvedTheme,
+    hasFiraSans: Boolean,
+    hasNotoSans: Boolean,
+    onOpenLicense: (String) -> Unit,
+    onReturn: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp).testTag("open-source-licenses-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("Open Source Licenses", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text("License files bundled with font assets", style = theme.typography.bodyLarge.copy(textDirection = TextDirection.Ltr), color = theme.palette.content)
+        Text("This is not a complete dependency notice catalog.", Modifier.testTag("license-scope-notice"), style = theme.typography.bodyMedium.copy(textDirection = TextDirection.Ltr), color = theme.palette.secondaryData)
+        LicenseEntry(theme, "Fira Sans", hasFiraSans, "fira-sans-license-entry", onOpenLicense)
+        LicenseEntry(theme, "Noto Sans", hasNotoSans, "noto-sans-license-entry", onOpenLicense)
+        TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("licenses-return")) {
+            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+@Composable
+private fun LicenseEntry(theme: ResolvedTheme, fontName: String, available: Boolean, tag: String, onOpen: (String) -> Unit) {
+    SettingsDestination(
+        theme, fontName,
+        if (available) "Open bundled $fontName license" else "$fontName license unavailable",
+        tag,
+        enabled = available,
+    ) { if (available) onOpen(fontName) }
+}
+
+@Composable
+private fun FontLicenseSurface(theme: ResolvedTheme, fontName: String, assetPath: String, onReturn: () -> Unit) {
+    val context = LocalContext.current
+    val licenseText = remember(assetPath) {
+        if (assetPath.isBlank()) null else runCatching {
+            val override = SettingsLegalContentTestHooks.licenseAssetReader
+            if (override != null) override(assetPath)
+            else context.assets.open(assetPath).bufferedReader(Charsets.UTF_8).use { it.readText() }
+        }.getOrNull()?.takeIf(String::isNotEmpty)
+    }
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp).testTag("font-license-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("$fontName License", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        if (licenseText == null) {
+            Text("License content unavailable.", Modifier.testTag("font-license-unavailable"), style = theme.typography.bodyLarge, color = theme.palette.warning)
+        } else {
+            Text(licenseText, Modifier.testTag("font-license-text"), style = theme.typography.bodySmall.copy(textDirection = TextDirection.Ltr), color = theme.palette.content)
+        }
+        TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("font-license-return")) {
+            Text("Back to Open Source Licenses", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+@Composable
+private fun AboutSurface(theme: ResolvedTheme, onReturn: () -> Unit) {
+    val context = LocalContext.current
+    val appLabel = remember(context) { runCatching { context.packageManager.getApplicationLabel(context.applicationInfo).toString() }.getOrNull()?.takeIf(String::isNotBlank) }
+    val versionName = remember(context) { runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull()?.takeIf(String::isNotBlank) }
+    Column(
+        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp).testTag("about-surface"),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text("About", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text("App name: ${appLabel ?: "Unavailable"}", Modifier.testTag("about-app-label"), style = theme.typography.bodyLarge, color = theme.palette.content)
+        Text("Version: ${versionName ?: "Unavailable"}", Modifier.testTag("about-version"), style = theme.typography.bodyLarge, color = theme.palette.content)
+        TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("about-return")) {
+            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
+        }
+    }
+}
+
+@Composable
+private fun fontFamilyResourceExists(resourceName: String): Boolean {
+    val context = LocalContext.current
+    return remember(resourceName) { context.resources.getIdentifier(resourceName, "font", context.packageName) != 0 }
 }
 
 @Composable
@@ -751,13 +908,14 @@ private fun SettingsDestination(
     title: String,
     summary: String,
     tag: String,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     Column(
         Modifier.fillMaxWidth().heightIn(min = 64.dp)
             .background(theme.palette.surface, RoundedCornerShape(theme.geometry.panelCornerRadius))
             .border(theme.geometry.panelBorderWidth, theme.palette.outline, RoundedCornerShape(theme.geometry.panelCornerRadius))
-            .clickable(role = Role.Button, onClick = onClick)
+            .clickable(enabled = enabled, role = if (enabled) Role.Button else null, onClick = onClick)
             .semantics { contentDescription = "$title. $summary" }
             .testTag(tag)
             .padding(horizontal = 16.dp, vertical = 12.dp),
