@@ -17,12 +17,17 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.MainActivity
 import com.oxygen.weather.ProductionForecastTestHooks
 import com.oxygen.weather.ProductionOfficialAlertTestHooks
 import com.oxygen.weather.SharedPreferencesSelectedLocationStore
+import com.oxygen.weather.application.SelectedLocationReadResult
+import com.oxygen.weather.application.SelectedLocationStore
 import com.oxygen.weather.data.ForecastCacheReadResult
 import com.oxygen.weather.data.ForecastCacheStore
 import com.oxygen.weather.data.ForecastCacheWriteResult
@@ -55,6 +60,7 @@ class SettingsLegalProductDestinationsFlowTest {
         LocationSearchTestHooks.layoutDirectionOverrideForTests = null
         LocationSearchTestHooks.suppressSelectedForecastForTests = true
         LocationSearchTestHooks.effectsOverrideForTests = com.oxygen.weather.ui.themeengine.ThemeEffectsLevel.OFF
+        context.getSharedPreferences("saved_locations_v1", 0).edit().clear().commit()
         SharedPreferencesSelectedLocationStore(context).clear()
         forecastCalls.set(0)
         cacheReads.set(0)
@@ -86,9 +92,11 @@ class SettingsLegalProductDestinationsFlowTest {
         LocationSearchTestHooks.suppressSelectedForecastForTests = false
         LocationSearchTestHooks.effectsOverrideForTests = null
         LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+        LocationSearchTestHooks.selectedStoreFactory = null
         ProductionForecastTestHooks.transportOverride = null
         ProductionForecastTestHooks.cacheStoreFactory = null
         ProductionOfficialAlertTestHooks.onRequestFetched = null
+        context.getSharedPreferences("saved_locations_v1", 0).edit().clear().commit()
         SharedPreferencesSelectedLocationStore(context).clear()
         setFontScale(1.0f)
     }
@@ -102,8 +110,17 @@ class SettingsLegalProductDestinationsFlowTest {
 
         compose.onNodeWithTag("settings-entry").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        assertSettingsDestinations()
         val countsBefore = operationCounts()
         saveCapture("settings")
+
+        compose.onNodeWithTag("settings-locations").performScrollTo().performClick()
+        compose.onNodeWithTag("selected-location-none").assertTextEquals("No location is selected.")
+        compose.onNodeWithTag("saved-locations-empty").assertTextEquals("No saved places yet.")
+        compose.onNodeWithTag("locations-return").performClick()
+        compose.onNodeWithTag("settings-data-sources").performScrollTo().performClick()
+        compose.onNodeWithTag("forecast-source-unavailable").assertTextEquals("Forecast source details are unavailable.")
+        compose.onNodeWithTag("data-sources-return").performClick()
 
         compose.onNodeWithTag("settings-privacy").performScrollTo().performClick()
         compose.onNodeWithTag("privacy-surface").assertIsDisplayed()
@@ -167,6 +184,23 @@ class SettingsLegalProductDestinationsFlowTest {
     }
 
     @Test
+    fun selectedLocationReadFailureIsSpokenAsUnavailable() {
+        LocationSearchTestHooks.selectedStoreFactory = { context ->
+            object : SelectedLocationStore by SharedPreferencesSelectedLocationStore(context) {
+                override fun read() = SelectedLocationReadResult.Failure
+            }
+        }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-locations").performScrollTo().performClick()
+        compose.onNodeWithTag("selected-location-unavailable")
+            .assertTextEquals("Selected location is unavailable.")
+        compose.onNodeWithTag("saved-locations-empty").assertTextEquals("No saved places yet.")
+    }
+
+    @Test
     fun informationSurfacesRemainScrollableAtLargeFontRtlWithEffectsOff() {
         setFontScale(1.3f)
         LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
@@ -214,6 +248,28 @@ class SettingsLegalProductDestinationsFlowTest {
     }
 
     private fun operationCounts() = listOf(forecastCalls.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+
+    private fun assertSettingsDestinations() {
+        val destinations = listOf(
+            "settings-appearance" to "Appearance. Choose a theme, contrast, effects, and Home layout",
+            "settings-units" to "Units. Choose Metric, US, or UK units",
+            "settings-locations" to "Locations. View and manage saved places",
+            "settings-data-sources" to "Data Sources. Inspect forecast and alert source details",
+            "settings-privacy" to "Privacy. Privacy policy availability",
+            "settings-open-source-licenses" to "Open Source Licenses. View bundled font license files",
+            "settings-about" to "About. App name and installed version",
+        )
+        destinations.forEach { (tag, spokenLabel) ->
+            val node = compose.onNodeWithTag(tag)
+            node.assertIsDisplayed()
+            val config = node.fetchSemanticsNode().config
+            assertEquals(Role.Button, config[SemanticsProperties.Role])
+            assertEquals(true, config.contains(SemanticsActions.OnClick))
+            assertEquals("Settings destination must not pretend to be a selected preference: $tag", false,
+                config.contains(SemanticsProperties.Selected))
+            compose.onNodeWithContentDescription(spokenLabel).assertIsDisplayed()
+        }
+    }
 
     private fun saveCapture(name: String) {
         val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()

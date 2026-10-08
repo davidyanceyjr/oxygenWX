@@ -151,16 +151,20 @@ class ProductionOfficialAlertSummaryFlowTest {
         ).performClick()
         compose.onNodeWithTag("official-alert-detail-surface").assertIsDisplayed()
         compose.onNodeWithText("Official alert", substring = false).assertIsDisplayed()
-        compose.onNodeWithText("Tornado Warning", substring = false).assertIsDisplayed()
-        compose.onNodeWithText("National Weather Service", substring = false).assertIsDisplayed()
-        compose.onNodeWithText("Oct 4, 2026 5:00 AM CDT", substring = false).assertIsDisplayed()
-        compose.onNodeWithText("Oct 4, 2026 6:00 AM CDT", substring = false).assertIsDisplayed()
+        compose.onNodeWithContentDescription(
+            "Official alert. Event: Tornado Warning. Issuer: National Weather Service. " +
+                "Severity: Severe. Effective: Oct 4, 2026 5:00 AM CDT. Expires: Oct 4, 2026 6:00 AM CDT.",
+        ).assertIsDisplayed()
+        compose.onNodeWithText("Tornado Warning", substring = false, useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithText("National Weather Service", substring = false, useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithText("Oct 4, 2026 5:00 AM CDT", substring = false, useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithText("Oct 4, 2026 6:00 AM CDT", substring = false, useUnmergedTree = true).assertIsDisplayed()
         compose.onNodeWithText("Source supplied tornado warning description.", substring = false).assertIsDisplayed()
         compose.onNodeWithText("Move to shelter immediately.", substring = false).assertIsDisplayed()
         compose.onNodeWithText("https://api.weather.gov/alerts/ABCD", substring = false).performScrollTo().assertIsDisplayed()
         compose.onNodeWithContentDescription("Choose Home page, current: Now").assertDoesNotExist()
         compose.onNodeWithTag("official-alert-detail-surface").performTouchInput { swipeLeft() }
-        compose.onNodeWithText("Tornado Warning", substring = false).assertIsDisplayed()
+        compose.onNodeWithText("Tornado Warning", substring = false, useUnmergedTree = true).assertIsDisplayed()
         compose.onNodeWithTag("official-alert-source-action").performClick()
         assertEquals(listOf("https://api.weather.gov/alerts/ABCD"), openedSources)
         assertEquals(1, forecastCalls.get())
@@ -193,6 +197,23 @@ class ProductionOfficialAlertSummaryFlowTest {
             hostActivity.isFinishing || hostActivity.isDestroyed
         }
         assertTrue("Back from Now should use the host activity behavior", hostActivity.isFinishing || hostActivity.isDestroyed)
+    }
+
+    @Test
+    fun detailSpokenSummaryOmitsSourceFactsThatWereNotSupplied() {
+        alertTransport = NwsTransport { minimalAlert }
+        selectTestLocation()
+        awaitSummary("Official alert: Wind Advisory.")
+        compose.onNodeWithContentDescription("Official alert: Wind Advisory. Open official alert details.")
+            .performClick()
+
+        compose.onNodeWithContentDescription(
+            "Official alert. Event: Wind Advisory. Issuer: National Weather Service.",
+        ).assertIsDisplayed()
+        compose.onNodeWithContentDescription("Official alert. Event: Wind Advisory. Issuer: National Weather Service. Severity: Unavailable.")
+            .assertDoesNotExist()
+        compose.onNodeWithText("Description", substring = false).assertDoesNotExist()
+        compose.onNodeWithTag("official-alert-source-action").assertDoesNotExist()
     }
 
     @Test
@@ -235,7 +256,7 @@ class ProductionOfficialAlertSummaryFlowTest {
 
         compose.onNodeWithTag("official-alert-choice-0").performClick()
         compose.onNodeWithTag("official-alert-detail-surface").assertIsDisplayed()
-        compose.onNodeWithText("Tornado Warning", substring = false).assertIsDisplayed()
+        compose.onNodeWithText("Tornado Warning", substring = false, useUnmergedTree = true).assertIsDisplayed()
         captureCycle134("tornado-alert-detail")
         compose.onNodeWithText(longDescription, substring = false, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
         captureCycle134("tornado-alert-detail-long-body")
@@ -246,7 +267,7 @@ class ProductionOfficialAlertSummaryFlowTest {
 
         compose.onNodeWithTag("official-alert-choice-1").performClick()
         compose.onNodeWithTag("official-alert-detail-surface").assertIsDisplayed()
-        compose.onNodeWithText("Flood Warning", substring = false).assertIsDisplayed()
+        compose.onNodeWithText("Flood Warning", substring = false, useUnmergedTree = true).assertIsDisplayed()
         compose.onNodeWithText("Flood source supplied description.", substring = false).assertIsDisplayed()
         compose.onNodeWithTag("official-alert-source-action").performScrollTo().performClick()
         assertEquals(listOf("https://api.weather.gov/alerts/ABCD", "https://api.weather.gov/alerts/EFGH"), openedSources)
@@ -419,7 +440,13 @@ class ProductionOfficialAlertSummaryFlowTest {
     }
 
     private fun assertCheckingVisible() {
-        compose.onNodeWithTag("official-alert-summary").assertIsDisplayed()
+        compose.onNodeWithTag("official-alert-summary").performScrollTo().assertIsDisplayed()
+        compose.waitUntil(5_000) {
+            runCatching {
+                compose.onNodeWithText("Checking for official alerts.", substring = false, useUnmergedTree = true)
+                    .fetchSemanticsNode()
+            }.isSuccess
+        }
         compose.onNodeWithText("Checking for official alerts.", substring = false, useUnmergedTree = true).assertIsDisplayed()
         compose.onNodeWithContentDescription("Checking for official alerts.").assertIsDisplayed()
         compose.onNodeWithTag("official-alert-summary").assertHasNoClickAction()
@@ -509,6 +536,10 @@ class ProductionOfficialAlertSummaryFlowTest {
         val oneAlert = NwsHttpResponse(
             200,
             """{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"event":"Tornado Warning","severity":"Severe","senderName":"National Weather Service","effective":"2026-10-04T10:00:00Z","expires":"2026-10-04T11:00:00Z","description":"Source supplied tornado warning description.","instruction":"Move to shelter immediately.","@id":"https://api.weather.gov/alerts/ABCD"}}]}""",
+        )
+        val minimalAlert = NwsHttpResponse(
+            200,
+            """{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"event":"Wind Advisory","senderName":"National Weather Service"}}]}""",
         )
         val longDescription = (1..8).joinToString(" ") {
             "Source supplied warning description segment $it: take shelter in a substantial interior room away from windows."

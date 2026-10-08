@@ -21,7 +21,19 @@ data class OfficialAlertDetailPresentation(
     val sourceUrlText: String?,
     /** An explicit user action is offered only for validated absolute HTTP(S) links. */
     val sourceAction: OfficialAlertSourceAction?,
-)
+) {
+    /** Concise spoken identity and source-supplied timing/severity facts for the detail heading. */
+    val spokenSummary: String get() = buildString {
+        append("Official alert. Event: ")
+        append(eventName)
+        append(". Issuer: ")
+        append(issuer)
+        severity?.let { append(". Severity: ").append(it) }
+        effectiveAtText?.let { append(". Effective: ").append(it) }
+        expiresAtText?.let { append(". Expires: ").append(it) }
+        append('.')
+    }
+}
 
 data class OfficialAlertSourceAction(
     val url: String,

@@ -723,7 +723,7 @@ Bound animation, drawing, blur, and layer cost; provide static fallback behavior
 
 Evidence and limitations: `.codex/history/2026-10-07-145-ambient-background-performance-fallback-hardening.md` and `.codex/test-artifacts/145-ambient-background-performance-fallback-hardening/`. The installed 30-cell matrix and focused checks passed. API 37 emulator profiling recorded zero idle frames and completed all 15 foreground actions; high whole-app interaction jank prevents a device-independent performance claim or backdrop cost attribution. Existing compact large-font Now content clipping remains assigned to R6.2.
 
-### R5.5 — Simple layout — PLANNED
+### R5.5 — Simple layout — DONE
 
 Implement Simple layout's Home page model and navigation shell, preserving
 existing selected forecast data and no-refetch behavior. The reduced Forecast
@@ -731,14 +731,18 @@ surface itself is excluded.
 
 **Exit:** Simple layout switches the Home shell while retaining the same selected forecast and navigation state; deterministic state check confirms no repository fetch.
 
-### R5.5A — Simple Forecast surface — PLANNED
+Evidence: `.codex/history/2026-10-07-146-simple-layout-home-shell.md`.
+
+### R5.5A — Simple Forecast surface — DONE
 
 After R5.5, implement the Simple layout Forecast choice/surface using the same
 hourly/daily weather meaning without a provider refetch or alternate forecast.
 
 **Exit:** Installed Simple Forecast presents supplied hourly/daily meaning with visible window controls and matches Standard values; switching layouts causes no fetch.
 
-### R5.6 — Settings information architecture — PLANNED
+Evidence: `.codex/history/2026-10-07-147-simple-forecast-surface.md`.
+
+### R5.6 — Settings information architecture — DONE
 
 Implement the Settings navigation shell plus Appearance and Units destinations,
 using the completed preference boundaries. No location, data-source, or legal
@@ -746,19 +750,25 @@ content surfaces belong here.
 
 **Exit:** Installed Settings shell reaches Appearance and Units and returns to its prior Home state; destinations are accessible and no location/data/legal routes are included.
 
-### R5.6A — Settings data and location destinations — PLANNED
+Evidence: `.codex/history/2026-10-07-148-settings-information-architecture.md`.
+
+### R5.6A — Settings data and location destinations — DONE
 
 After R5.6, add Locations and Data Sources destinations using the existing
 selected/saved location and provenance contracts.
 
 **Exit:** Installed Locations and Data Sources destinations show the existing saved/selected locations and actual provenance contracts, with working return navigation.
 
-### R5.6B — Settings legal and product-information destinations — PLANNED
+Evidence: `.codex/history/2026-10-07-149-settings-data-location-destinations.md`.
+
+### R5.6B — Settings legal and product-information destinations — DONE
 
 After R5.6A, add Privacy, Open Source Licenses, and About destinations without
 inventing policy, attribution, or license text.
 
 **Exit:** Installed Privacy, Licenses, and About pages contain only reviewed project/source text with verified links; absent policy or attribution text remains explicitly unavailable.
+
+Evidence: `.codex/history/2026-10-08-150-settings-legal-product-destinations.md`.
 
 ## R6 — Accessibility and environment verification
 

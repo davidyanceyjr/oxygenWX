@@ -1206,11 +1206,16 @@ private fun OfficialAlertDetailSurface(
                     .testTag("official-alert-detail-return"),
             ) { Text(returnLabel, color = theme.palette.action) }
             Text("Official alert", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
-            AlertDetailField(theme, "Event", detail.eventName)
-            AlertDetailField(theme, "Issuer", detail.issuer)
-            detail.severity?.let { AlertDetailField(theme, "Severity", it) }
-            detail.effectiveAtText?.let { AlertDetailField(theme, "Effective", it) }
-            detail.expiresAtText?.let { AlertDetailField(theme, "Expires", it) }
+            Column(
+                Modifier.clearAndSetSemantics { contentDescription = detail.spokenSummary },
+                verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
+            ) {
+                AlertDetailField(theme, "Event", detail.eventName)
+                AlertDetailField(theme, "Issuer", detail.issuer)
+                detail.severity?.let { AlertDetailField(theme, "Severity", it) }
+                detail.effectiveAtText?.let { AlertDetailField(theme, "Effective", it) }
+                detail.expiresAtText?.let { AlertDetailField(theme, "Expires", it) }
+            }
             detail.description?.let { AlertDetailField(theme, "Description", it) }
             detail.instructions?.let { AlertDetailField(theme, "Instructions", it) }
             detail.sourceUrlText?.let { AlertDetailField(theme, "Source", it) }

@@ -24,6 +24,7 @@ class OfficialAlertDetailMapperTest {
     @Test
     fun mapsOneSupportedAlertAndFormatsTimesInRequestedLocationZone() {
         val state = OfficialAlertState.Supported(7, request, listOf(alert()))
+        val detail = OfficialAlertDetailMapper.map(state)!!
 
         assertEquals(
             OfficialAlertDetailPresentation(
@@ -40,7 +41,12 @@ class OfficialAlertDetailMapperTest {
                     label = "View official alert",
                 ),
             ),
-            OfficialAlertDetailMapper.map(state),
+            detail,
+        )
+        assertEquals(
+            "Official alert. Event: Severe Thunderstorm Warning. Issuer: National Weather Service. " +
+                "Severity: Severe. Effective: Oct 6, 2026 8:15 AM CDT. Expires: Oct 6, 2026 9:30 AM CDT.",
+            detail.spokenSummary,
         )
     }
 
@@ -72,6 +78,10 @@ class OfficialAlertDetailMapperTest {
         assertNull(detail.instructions)
         assertNull(detail.sourceUrlText)
         assertNull(detail.sourceAction)
+        assertEquals(
+            "Official alert. Event: Severe Thunderstorm Warning. Issuer: National Weather Service.",
+            detail.spokenSummary,
+        )
     }
 
     @Test
