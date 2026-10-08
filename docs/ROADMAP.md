@@ -824,6 +824,37 @@ pages, including the five production themes and Effects Off states.
 
 **Exit:** Capture 20 baseline screenshots (five themes × four pages), 20 compact screenshots (all cells at 360 × 640 dp), and 20 large-font screenshots (all cells at font scale 1.3), with hierarchy evidence; no critical clipping or unreachable control remains.
 
+Deliver R6.2 through the following ordered verification portions. R6.2 is
+complete only after both portions close and the aggregate exit above is met.
+
+### R6.2.1 — Now and Hourly resilience evidence — DONE
+
+First R6.2 portion. Capture and review Now and Hourly for all five production
+themes at the design baseline, compact viewport, and compact large-font
+condition (30 page/theme/condition cells). Classify findings and reproduce and
+trace each suspected critical issue. Do not make production corrections in
+this evidence-gathering portion; carry confirmed findings into R6.2.2.
+
+**Exit:** 30 installed screenshots and matching hierarchy evidence are
+inventoried and reviewed; every observed issue is classified, and each
+suspected critical issue has reproduction and Compose ownership evidence or is
+recorded as an unresolved blocker. This portion does not close the full R6.2
+acceptance gate.
+
+### R6.2.2 — Daily and Details resilience and R6.2 closure — PLANNED
+
+After R6.2.1, capture and review Daily and Details for all five production
+themes at the same three conditions (30 additional cells). Resolve the
+confirmed critical findings carried from R6.2.1 and any found here with the
+smallest evidence-supported Home layout correction. Re-capture every cell
+using a changed layout owner, including earlier R6.2.1 cells when affected.
+
+**Exit:** The complete 60-cell matrix has valid final installed screenshots,
+matching hierarchy evidence, a manifest, and evidence-based dispositions;
+all critical findings are corrected and pass affected-cell recapture, or R6.2
+is recorded blocked with the exact evidence and unresolved boundary. Only
+then is the aggregate R6.2 exit met.
+
 ### R6.2A — Settings compact and large-font resilience — PLANNED
 
 After R6.2, verify compact and large-font conditions for Settings destinations
