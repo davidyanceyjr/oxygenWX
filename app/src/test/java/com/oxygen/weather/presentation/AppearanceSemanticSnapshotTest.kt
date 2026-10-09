@@ -66,6 +66,38 @@ class AppearanceSemanticSnapshotTest {
     }
 
     @Test
+    fun typedFactsAndForecastControlsAreEqualAcrossThemesAndLayouts() {
+        val input = fixtureInput()
+        val hourly = snapshot(input, HomePageId.HOURLY, requestedHourlyIndex = 7, requestedDailyIndex = 0)
+        val daily = snapshot(input, HomePageId.DAILY, requestedHourlyIndex = 0, requestedDailyIndex = 1)
+
+        assertEquals(7, hourly.navigation.hourlyIndex)
+        assertTrue(hourly.hourlyDateJumps.single { it.selected }.windowIndex == 7)
+        assertEquals(1, daily.navigation.dailyIndex)
+        assertTrue(daily.navigation.controls.single { it.id == NavControlId.DAILY_EARLIER }.enabled)
+        assertFalse(daily.navigation.controls.single { it.id == NavControlId.DAILY_LATER }.enabled)
+
+        WeatherThemeId.entries.forEach { theme ->
+            val standard = resolveTheme(theme, ContrastLevel.STANDARD, ThemeEffectsLevel.OFF, LayoutPreset.STANDARD)
+            val simple = resolveTheme(theme, ContrastLevel.STANDARD, ThemeEffectsLevel.OFF, LayoutPreset.SIMPLE)
+
+            assertNotEquals("$theme Simple layout must resolve geometry", standard.geometry, simple.geometry)
+            assertEquals("$theme layout changes geometry and layout identity only", standard,
+                simple.copy(geometry = standard.geometry, layout = standard.layout))
+            val hourlyByLayout = LayoutPreset.entries.map { layout ->
+                resolveTheme(theme, ContrastLevel.STANDARD, ThemeEffectsLevel.OFF, layout)
+                snapshot(input, HomePageId.HOURLY, requestedHourlyIndex = 7, requestedDailyIndex = 0)
+            }
+            val dailyByLayout = LayoutPreset.entries.map { layout ->
+                resolveTheme(theme, ContrastLevel.STANDARD, ThemeEffectsLevel.OFF, layout)
+                snapshot(input, HomePageId.DAILY, requestedHourlyIndex = 0, requestedDailyIndex = 1)
+            }
+            assertEquals("$theme hourly facts, selected date jump, and controls", listOf(hourly, hourly), hourlyByLayout)
+            assertEquals("$theme daily facts, selected window, and controls", listOf(daily, daily), dailyByLayout)
+        }
+    }
+
+    @Test
     fun fixedFixtureProjectionAndMapperExposeTheSameTypedFactsAndWindowShape() {
         val input = fixtureInput()
         val result = input.bundle

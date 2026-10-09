@@ -942,12 +942,20 @@ animator scale 0. The 40 screenshots were fully opaque; paired idle app frames
 were pixel-identical. Cycle 158/159 limitations remain; large-font, RTL, Simple
 layout, Settings, other effects, and TalkBack were not part of this portion.
 
-### R6.4A — Cross-theme and layout appearance invariance — PLANNED
+### R6.4A — Cross-theme and layout appearance invariance — DONE
 
 After R6.4, extend the matrix across the five production themes, Simple layout, and Settings
 while preserving the same semantic/control invariants.
 
 **Exit:** Capture all 40 Home combinations (five themes × two layouts × four pages) and seven Settings destinations; deterministic state checks prove values, controls, provenance, and request count remain invariant.
+
+Evidence and limits: `.codex/history/2026-10-09-161-cross-theme-layout-appearance-invariance.md`
+and `.codex/test-artifacts/161-cross-theme-layout-appearance-invariance/`.
+All 47 installed cells and 41 scroll-end states passed review at the recorded
+API 37 compact baseline. Typed state and persisted production-flow checks
+passed; forecast, official-alert, and cache read/write deltas were zero across
+appearance and Settings actions. Large-font, RTL, alternate contrast/effects,
+TalkBack, other devices/APIs, and provider/network behavior remain unverified.
 
 ### R6.5 — Accessibility evidence closure — PLANNED
 

@@ -909,6 +909,166 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     @Test
+    fun persistedAppearanceChoicesAndSettingsReturnRetainHomeWindowWithoutSensitiveRequests() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        val alertTransportRequests = AtomicInteger()
+        val selectedRead = AtomicReference<com.oxygen.weather.application.SelectedLocationReadResult?>()
+        LocationSearchTestHooks.selectedStoreFactory = { appContext ->
+            val delegate = SharedPreferencesSelectedLocationStore(appContext)
+            object : com.oxygen.weather.application.SelectedLocationStore by delegate {
+                override fun read() = delegate.read().also(selectedRead::set)
+            }
+        }
+        ProductionForecastTestHooks.transportOverride = com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport {
+            forecastRequests.incrementAndGet()
+            com.oxygen.weather.data.provider.openmeteo.OpenMeteoHttpResponse(
+                200,
+                """{"timezone":"America/Chicago","current":{"time":"2026-10-04T10:00","temperature_2m":12,"weather_code":3},"current_units":{"temperature_2m":"°C","weather_code":"wmo code"}}""",
+            )
+        }
+        ProductionOfficialAlertTestHooks.transportOverride = com.oxygen.weather.data.alerts.nws.NwsTransport {
+            alertTransportRequests.incrementAndGet()
+            com.oxygen.weather.data.alerts.nws.NwsHttpResponse(200, """{"type":"FeatureCollection","features":[]}""")
+        }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+
+        // Prove each sensitive transport counter can observe a request before the no-work interval.
+        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("location-search-query").performTextInput("Motion")
+        compose.onNodeWithTag("location-search-submit").performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithTag("location-search-result-0").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("location-search-result-0").performClick()
+        compose.waitUntil(20_000) { forecastRequests.get() > 0 && alertTransportRequests.get() > 0 }
+        compose.waitForIdle()
+        assertTrue("forecast positive control must increment", forecastRequests.get() > 0)
+        assertTrue("official alert positive control must increment", alertTransportRequests.get() > 0)
+        assertEquals(com.oxygen.weather.application.SelectedLocationWriteResult.SUCCESS,
+            SharedPreferencesSelectedLocationStore(context).clear())
+        selectedRead.set(null)
+        compose.activityRule.scenario.recreate()
+        compose.waitUntil(10_000) {
+            selectedRead.get() == com.oxygen.weather.application.SelectedLocationReadResult.Empty &&
+                compose.onAllNodesWithText("Demo Station").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.waitForIdle()
+
+        val bundleRef = AtomicReference<WeatherBundle?>()
+        compose.activityRule.scenario.onActivity { bundleRef.set(it.canonicalWeatherFixtureForTests()) }
+        val bundle = requireNotNull(bundleRef.get())
+        val expected = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle))
+        val baseline = listOf(
+            forecastRequests.get(),
+            alertTransportRequests.get(),
+            cacheReads.get(),
+            cacheWrites.get(),
+        )
+        val flowEvidence = File(context.getExternalFilesDir(null), "161-cross-theme-layout-appearance-invariance/flow")
+            .apply { check(mkdirs() || isDirectory) }
+        val observations = mutableListOf("positive-controls forecast=${baseline[0]} alert=${baseline[1]}")
+
+        // Select an explicitly noninitial Hourly window before changing appearance or visiting Settings.
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+        compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+        compose.waitForIdle()
+        val selectedWindow = expected.hourlyWindows.getOrNull(1)
+            ?: error("Fixture must provide a noninitial hourly window")
+        performCurrentPageTextAction("Later", preferredIndex = 0)
+        compose.waitForIdle()
+        assertHourlyForecastWindow(selectedWindow, simple = false)
+        val openingState = "Hourly/window=${selectedWindow.rangeLabel}"
+        observations += "opening=$openingState"
+
+        listOf("simple", "standard").forEach { layout ->
+            openAppearanceFromHome()
+            compose.onNodeWithTag("appearance-layout-$layout").performScrollTo().performClick().assertIsSelected()
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+            compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+            assertHourlyForecastWindow(selectedWindow, simple = layout == "simple")
+            openAppearanceFromHome()
+            compose.onNodeWithTag("appearance-layout-$layout").performScrollTo().assertIsSelected()
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+            assertHourlyForecastWindow(selectedWindow, simple = layout == "simple")
+            assertEquals("forecast/alert/cache counters after $layout layout selection", baseline,
+                listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get()))
+            observations += "layout=$layout selected and read back after Home return; retained=$openingState; forecast/alert/cache=${listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())}"
+        }
+
+        WeatherThemeId.entries.forEach { theme ->
+            openAppearanceFromHome()
+            val themeOption = compose.onNodeWithTag("appearance-theme-${theme.name.lowercase()}").performScrollTo()
+            themeOption.performClick().assertIsSelected()
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+            compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+            assertHourlyForecastWindow(selectedWindow, simple = false)
+            openAppearanceFromHome()
+            compose.onNodeWithTag("appearance-theme-${theme.name.lowercase()}").performScrollTo().assertIsSelected()
+            compose.onNodeWithTag("appearance-layout-standard").performScrollTo().assertIsSelected()
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+            assertHourlyForecastWindow(selectedWindow, simple = false)
+            assertEquals("forecast/alert/cache counters after $theme theme selection", baseline,
+                listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get()))
+            observations += "theme=${theme.name.lowercase()} selected and read back after Home return; retained=$openingState; forecast/alert/cache=${listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())}"
+        }
+
+        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        compose.onNodeWithTag("settings-appearance").performClick()
+        compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
+        compose.onNodeWithTag("appearance-layout-simple").performScrollTo().assertIsNotSelected().performClick().assertIsSelected()
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        compose.onNodeWithTag("settings-return").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+        assertHourlyForecastWindow(selectedWindow, simple = true)
+        assertEquals("forecast/alert/cache counters after Settings Appearance entry/return", baseline,
+            listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get()))
+        observations += "settings=Appearance enter/return; returned=$openingState; forecast/alert/cache=${listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())}"
+
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+        openAppearanceFromHome()
+        compose.onNodeWithTag("appearance-layout-simple").performScrollTo().assertIsSelected()
+        compose.onNodeWithTag("appearance-theme-terminal").performScrollTo().assertIsSelected()
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertHourlyForecastWindow(selectedWindow, simple = true)
+        assertEquals("forecast/alert/cache counters after Activity recreation", baseline,
+            listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get()))
+        observations += "recreated=theme-terminal/layout-simple retained; returned=$openingState; forecast/alert/cache=${listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())}"
+
+        compose.activityRule.scenario.onActivity { assertEquals(bundle, it.canonicalWeatherFixtureForTests()) }
+        val flowSummary =
+            "fixture=Demo Station; positive-controls forecast=${baseline[0]} alert=${baseline[1]}\n" +
+                "cache-baseline reads=${baseline[2]} writes=${baseline[3]}\n" +
+                observations.joinToString("\n") + "\nfinal forecast/alert/cache=${listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())}\n"
+        android.util.Log.i("Cycle161Flow", flowSummary)
+        File(flowEvidence, "appearance-settings-flow.txt").writeText(flowSummary)
+    }
+
+    @Test
     fun appearanceRemainsUsableWithLargeFontAndRtl() {
         compose.waitForIdle()
         setFontScale(1.3f)
