@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 057-tp1d-r3-owner-disposition
 Roadmap item: TP.1D
 Closed: 2026-09-25
-Plan: .codex/plans/057-tp1d-r3-owner-disposition.md
+Plan: .codex/history/plans/057-tp1d-r3-owner-disposition.md
 Evidence: .codex/test-artifacts/057-tp1d-r3-owner-disposition/
 
 ## Outcome

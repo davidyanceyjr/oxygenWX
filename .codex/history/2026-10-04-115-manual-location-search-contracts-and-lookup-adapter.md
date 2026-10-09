@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 115-manual-location-search-contracts-and-lookup-adapter
 Roadmap item: R3.1
 Closed: 2026-10-04
-Plan: .codex/plans/115-manual-location-search-contracts-and-lookup-adapter.md
+Plan: .codex/history/plans/115-manual-location-search-contracts-and-lookup-adapter.md
 Evidence: .codex/test-artifacts/115-manual-location-search-contracts-and-lookup-adapter/
 
 ## Outcome

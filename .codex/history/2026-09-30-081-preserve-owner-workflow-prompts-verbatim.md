@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 081-preserve-owner-workflow-prompts-verbatim
 Roadmap item: DX.2
 Closed: 2026-09-30
-Plan: .codex/plans/081-preserve-owner-workflow-prompts-verbatim.md
+Plan: .codex/history/plans/081-preserve-owner-workflow-prompts-verbatim.md
 Evidence: .codex/test-artifacts/081-preserve-owner-workflow-prompts-verbatim/
 
 ## Outcome

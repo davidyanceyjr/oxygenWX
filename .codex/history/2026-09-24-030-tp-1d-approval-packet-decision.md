@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 030-tp-1d-approval-packet-decision
 Roadmap item: TP.1D-partial-A-partial-B-partial-A
 Closed: 2026-09-24
-Plan: .codex/plans/030-tp-1d-approval-packet-decision.md
+Plan: .codex/history/plans/030-tp-1d-approval-packet-decision.md
 Evidence: .codex/test-artifacts/030-tp-1d-approval-packet-decision/
 
 ## Outcome
@@ -21,4 +21,4 @@ D28/D29/D31 remain open owner choices. No installed app visual result, alternate
 
 ## Follow-up
 
-Create and activate a new cycle from .codex/plans/030-tp-1d-approval-packet-decision-partial-A.md to freeze the exact packet and obtain explicit owner disposition. Do not release TP.2 before approval.
+Create and activate a new cycle from .codex/history/plans/030-tp-1d-approval-packet-decision-partial-A.md to freeze the exact packet and obtain explicit owner disposition. Do not release TP.2 before approval.

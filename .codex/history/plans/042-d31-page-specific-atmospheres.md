@@ -13,7 +13,7 @@ specification with explicit handling for source gaps.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/042-d31-page-specific-atmospheres.md`,
+Documentation only: `.codex/history/plans/042-d31-page-specific-atmospheres.md`,
 `docs/theme-pack-roadmap.md`, and cycle history/evidence.
 
 ## Functional invariants

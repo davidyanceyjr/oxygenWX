@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 123-optional-coarse-device-location
 Roadmap item: R3.3
 Closed: 2026-10-05
-Plan: .codex/plans/123-optional-coarse-device-location.md
+Plan: .codex/history/plans/123-optional-coarse-device-location.md
 Evidence: .codex/test-artifacts/123-optional-coarse-device-location/
 
 ## Outcome

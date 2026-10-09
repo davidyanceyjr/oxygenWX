@@ -14,7 +14,7 @@ and deliverables accordingly.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/039-d31-atmosphere-source-fidelity.md`,
+Documentation only: `.codex/history/plans/039-d31-atmosphere-source-fidelity.md`,
 `docs/theme-pack-roadmap.md`, and cycle history/evidence. No source artwork,
 design references, production code, or pinned packet contents change.
 

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 083-add-planned-draft-review-skill
 Roadmap item: DX.4
 Closed: 2026-09-30
-Plan: .codex/plans/083-add-planned-draft-review-skill.md
+Plan: .codex/history/plans/083-add-planned-draft-review-skill.md
 Evidence: .codex/test-artifacts/083-add-planned-draft-review-skill/
 
 ## Outcome

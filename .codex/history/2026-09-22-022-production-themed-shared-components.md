@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 022-production-themed-shared-components
 Roadmap item: R0.11C
 Closed: 2026-09-22
-Plan: .codex/plans/022-production-themed-shared-components.md
+Plan: .codex/history/plans/022-production-themed-shared-components.md
 Evidence: .codex/test-artifacts/022-production-themed-shared-components/
 
 ## Outcome

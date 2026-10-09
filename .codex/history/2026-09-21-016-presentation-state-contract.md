@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 016-presentation-state-contract
 Roadmap item: R1.2
 Closed: 2026-09-21
-Plan: .codex/plans/016-presentation-state-contract.md
+Plan: .codex/history/plans/016-presentation-state-contract.md
 Evidence: .codex/test-artifacts/016-presentation-state-contract/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 140-effects-preference
 Roadmap item: R5.4
 Closed: 2026-10-07
-Plan: .codex/plans/140-effects-preference.md
+Plan: .codex/history/plans/140-effects-preference.md
 Evidence: .codex/test-artifacts/140-effects-preference/
 
 ## Outcome

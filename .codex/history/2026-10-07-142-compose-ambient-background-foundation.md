@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 142-compose-ambient-background-foundation
 Roadmap item: R5.4B
 Closed: 2026-10-07
-Plan: .codex/plans/142-compose-ambient-background-foundation.md
+Plan: .codex/history/plans/142-compose-ambient-background-foundation.md
 Evidence: .codex/test-artifacts/142-compose-ambient-background-foundation/
 
 ## Outcome

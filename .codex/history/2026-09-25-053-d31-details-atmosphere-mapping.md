@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 053-d31-details-atmosphere-mapping
 Roadmap item: TP.1D-D31-partial-C
 Closed: 2026-09-25
-Plan: .codex/plans/053-d31-details-atmosphere-mapping.md
+Plan: .codex/history/plans/053-d31-details-atmosphere-mapping.md
 Evidence: .codex/test-artifacts/053-d31-details-atmosphere-mapping/
 
 ## Outcome

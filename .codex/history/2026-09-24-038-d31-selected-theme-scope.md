@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 038-d31-selected-theme-scope
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/038-d31-selected-theme-scope.md
+Plan: .codex/history/plans/038-d31-selected-theme-scope.md
 Evidence: .codex/test-artifacts/038-d31-selected-theme-scope/
 
 ## Outcome

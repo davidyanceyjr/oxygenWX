@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 146-simple-layout-home-shell
 Roadmap item: R5.5
 Closed: 2026-10-07
-Plan: .codex/plans/146-simple-layout-home-shell.md
+Plan: .codex/history/plans/146-simple-layout-home-shell.md
 Evidence: .codex/test-artifacts/146-simple-layout-home-shell/
 
 ## Outcome

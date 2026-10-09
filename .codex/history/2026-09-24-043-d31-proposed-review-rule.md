@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 043-d31-proposed-review-rule
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/043-d31-proposed-review-rule.md
+Plan: .codex/history/plans/043-d31-proposed-review-rule.md
 Evidence: .codex/test-artifacts/043-d31-proposed-review-rule/
 
 ## Outcome

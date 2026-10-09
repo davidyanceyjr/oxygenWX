@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 104-tp3-theme-pack-exit-gate
 Roadmap item: TP.3
 Closed: 2026-10-03
-Plan: .codex/plans/104-tp3-theme-pack-exit-gate.md
+Plan: .codex/history/plans/104-tp3-theme-pack-exit-gate.md
 Evidence: .codex/test-artifacts/104-tp3-theme-pack-exit-gate/
 
 ## Outcome

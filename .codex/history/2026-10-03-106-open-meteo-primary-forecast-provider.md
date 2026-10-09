@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 106-open-meteo-primary-forecast-provider
 Roadmap item: R2.2
 Closed: 2026-10-03
-Plan: .codex/plans/106-open-meteo-primary-forecast-provider.md
+Plan: .codex/history/plans/106-open-meteo-primary-forecast-provider.md
 Evidence: .codex/test-artifacts/106-open-meteo-primary-forecast-provider/
 
 ## Outcome

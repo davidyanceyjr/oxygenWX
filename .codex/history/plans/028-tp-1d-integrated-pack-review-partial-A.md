@@ -14,7 +14,7 @@ Context budget: target at most 35% of a fresh context window; stop before 45%. D
 Complete and individually review the five Daily and five Details design cells,
 ten primary renders, and six environment examples using the established
 integrated-pack schema. The dependent initial plan
-`.codex/plans/028-tp-1d-integrated-pack-review-partial-A-partial-B.md`
+`.codex/history/plans/028-tp-1d-integrated-pack-review-partial-A-partial-B.md`
 owns final 20-cell review, owner decision, and TP.1 closure. TP.2 stays gated.
 
 ## Production boundary

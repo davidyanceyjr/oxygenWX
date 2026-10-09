@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 129-noaa-nws-us-alert-provider
 Roadmap item: R4.2
 Closed: 2026-10-05
-Plan: .codex/plans/129-noaa-nws-us-alert-provider.md
+Plan: .codex/history/plans/129-noaa-nws-us-alert-provider.md
 Evidence: .codex/test-artifacts/129-noaa-nws-us-alert-provider/
 
 ## Outcome

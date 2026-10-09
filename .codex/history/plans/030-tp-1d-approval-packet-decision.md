@@ -7,7 +7,7 @@ Parent item: TP.1D-partial-A-partial-B
 Evidence: .codex/test-artifacts/030-tp-1d-approval-packet-decision/
 Created: 2026-09-24
 Revised: 2026-09-24
-Context budget: Target 30–35% of a fresh context window; stop before 45%. This is the upstream half of the former packet-and-decision draft. Dependent initial plan: `.codex/plans/030-tp-1d-approval-packet-decision-partial-A.md`.
+Context budget: Target 30–35% of a fresh context window; stop before 45%. This is the upstream half of the former packet-and-decision draft. Dependent initial plan: `.codex/history/plans/030-tp-1d-approval-packet-decision-partial-A.md`.
 Planned implementation difficulty: 6/10
 
 ## Objective

@@ -1,8 +1,8 @@
 # Superseded initial draft — TP.1D-partial-A-partial-B final pack review
 
 This first draft was split under the 45% context rule. Active upstream plan:
-`.codex/plans/029-tp-1d-final-integrated-pack-review.md`. Dependent initial
-plan: `.codex/plans/029-tp-1d-final-integrated-pack-review-partial-A.md`.
+`.codex/history/plans/029-tp-1d-final-integrated-pack-review.md`. Dependent initial
+plan: `.codex/history/plans/029-tp-1d-final-integrated-pack-review-partial-A.md`.
 Use those plans and the execution head of `docs/theme-pack-roadmap.md` for
 implementation and gate status; the text below is retained as planning history.
 

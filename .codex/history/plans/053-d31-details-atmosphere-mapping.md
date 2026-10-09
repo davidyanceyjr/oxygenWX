@@ -27,7 +27,7 @@ Only these paths may change in this cycle:
 - `scripts/verification/test_d31_page_mapping.py`: add 20-cell contract, Details-specific, and prior-cell stability coverage;
 - `docs/theme-system/design-pack/README.md`: update only the D31 mapping entry;
 - `docs/theme-pack-roadmap.md`: update only the D31 execution progress/head to record the twenty-cell proposal and remaining D31 work;
-- `.codex/plans/053-d31-details-atmosphere-mapping.md`, `.codex/current.md`, cycle evidence, and its eventual history record.
+- `.codex/history/plans/053-d31-details-atmosphere-mapping.md`, `.codex/current.md`, cycle evidence, and its eventual history record.
 
 Do not modify Android production code/resources, source artwork or its manifest, `D31_SOURCE_AUDIT.md`, `DETAILS.md`, prior mapping cells, D29/D28/D32 decisions, immutable TP.1D packets, product semantics, or the broad `scripts/dev.py` command surface. Do not generate art, crops, source reproductions, or page renders.
 

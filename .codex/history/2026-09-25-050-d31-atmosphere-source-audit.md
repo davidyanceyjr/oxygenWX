@@ -1,7 +1,7 @@
 # Cycle 050 — D31 five-theme atmosphere source audit
 
 **Roadmap item:** TP.1D-D31-partial-A
-**Plan:** `.codex/plans/050-d31-atmosphere-source-audit.md`
+**Plan:** `.codex/history/plans/050-d31-atmosphere-source-audit.md`
 **Status:** Completed bounded source-audit slice; D31 remains open.
 
 ## Delivered

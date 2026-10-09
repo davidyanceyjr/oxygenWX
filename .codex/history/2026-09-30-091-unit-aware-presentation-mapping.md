@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 091-unit-aware-presentation-mapping
 Roadmap item: R1.3A
 Closed: 2026-09-30
-Plan: .codex/plans/091-unit-aware-presentation-mapping.md
+Plan: .codex/history/plans/091-unit-aware-presentation-mapping.md
 Evidence: .codex/test-artifacts/091-unit-aware-presentation-mapping/
 
 ## Outcome

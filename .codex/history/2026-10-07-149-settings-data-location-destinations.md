@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 149-settings-data-location-destinations
 Roadmap item: R5.6A
 Closed: 2026-10-07
-Plan: .codex/plans/149-settings-data-location-destinations.md
+Plan: .codex/history/plans/149-settings-data-location-destinations.md
 Evidence: .codex/test-artifacts/149-settings-data-location-destinations/
 
 ## Outcome

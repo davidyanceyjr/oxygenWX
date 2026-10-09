@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 059-tp2a-spacing-alignment
 Roadmap item: TP.2A-part-one-spacing-alignment
 Closed: 2026-09-26
-Plan: .codex/plans/059-tp2a-spacing-alignment.md
+Plan: .codex/history/plans/059-tp2a-spacing-alignment.md
 Evidence: .codex/test-artifacts/059-tp2a-spacing-alignment/
 
 ## Outcome

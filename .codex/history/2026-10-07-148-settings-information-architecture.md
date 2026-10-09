@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 148-settings-information-architecture
 Roadmap item: R5.6
 Closed: 2026-10-07
-Plan: .codex/plans/148-settings-information-architecture.md
+Plan: .codex/history/plans/148-settings-information-architecture.md
 Evidence: .codex/test-artifacts/148-settings-information-architecture/
 
 ## Outcome

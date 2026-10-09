@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 068-tp2d-atmospheric-glass-backdrops
 Roadmap item: TP.2D-partial3
 Closed: 2026-09-27
-Plan: .codex/plans/068-tp2d-atmospheric-glass-backdrops.md
+Plan: .codex/history/plans/068-tp2d-atmospheric-glass-backdrops.md
 Evidence: .codex/test-artifacts/068-tp2d-atmospheric-glass-backdrops/
 
 ## Outcome

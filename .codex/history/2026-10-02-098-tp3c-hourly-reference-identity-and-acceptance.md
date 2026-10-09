@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 098-tp3c-hourly-reference-identity-and-acceptance
 Roadmap item: TP.3C-recovery-partial-A
 Closed: 2026-10-02
-Plan: .codex/plans/098-tp3c-hourly-reference-identity-and-acceptance.md
+Plan: .codex/history/plans/098-tp3c-hourly-reference-identity-and-acceptance.md
 Evidence: .codex/test-artifacts/098-tp3c-hourly-reference-identity-and-acceptance/
 
 ## Outcome

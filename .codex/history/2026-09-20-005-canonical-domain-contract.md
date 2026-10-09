@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 005-canonical-domain-contract
 Roadmap item: R1.1
 Closed: 2026-09-20
-Plan: .codex/plans/005-canonical-domain-contract.md
+Plan: .codex/history/plans/005-canonical-domain-contract.md
 Evidence: .codex/test-artifacts/005-canonical-domain-contract/
 
 ## Outcome

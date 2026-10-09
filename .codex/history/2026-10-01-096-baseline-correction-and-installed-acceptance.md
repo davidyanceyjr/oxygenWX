@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 096-baseline-correction-and-installed-acceptance
 Roadmap item: TP.3C-partial-A
 Closed: 2026-10-01
-Plan: .codex/plans/096-baseline-correction-and-installed-acceptance.md
+Plan: .codex/history/plans/096-baseline-correction-and-installed-acceptance.md
 Evidence: .codex/test-artifacts/096-baseline-correction-and-installed-acceptance/
 
 ## Outcome

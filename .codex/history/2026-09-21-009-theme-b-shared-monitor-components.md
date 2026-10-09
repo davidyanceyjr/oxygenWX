@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 009-theme-b-shared-monitor-components
 Roadmap item: R0.6
 Closed: 2026-09-21
-Plan: .codex/plans/009-theme-b-shared-monitor-components.md
+Plan: .codex/history/plans/009-theme-b-shared-monitor-components.md
 Evidence: .codex/test-artifacts/009-theme-b-shared-monitor-components/
 
 ## Outcome

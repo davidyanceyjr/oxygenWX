@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 125-cached-forecast-restoration
 Roadmap item: R3.4A
 Closed: 2026-10-05
-Plan: .codex/plans/125-cached-forecast-restoration.md
+Plan: .codex/history/plans/125-cached-forecast-restoration.md
 Evidence: .codex/test-artifacts/125-cached-forecast-restoration/
 
 ## Outcome

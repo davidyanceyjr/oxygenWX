@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 130-nws-alert-repository-integration
 Roadmap item: R4.2A
 Closed: 2026-10-05
-Plan: .codex/plans/130-nws-alert-repository-integration.md
+Plan: .codex/history/plans/130-nws-alert-repository-integration.md
 Evidence: .codex/test-artifacts/130-nws-alert-repository-integration/
 
 ## Outcome

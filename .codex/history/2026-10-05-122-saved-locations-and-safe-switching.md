@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 122-saved-locations-and-safe-switching
 Roadmap item: R3.2A
 Closed: 2026-10-05
-Plan: .codex/plans/122-saved-locations-and-safe-switching.md
+Plan: .codex/history/plans/122-saved-locations-and-safe-switching.md
 Evidence: .codex/test-artifacts/122-saved-locations-and-safe-switching/
 
 ## Outcome

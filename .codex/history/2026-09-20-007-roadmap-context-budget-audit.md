@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 007-roadmap-context-budget-audit
 Roadmap item: R0.11
 Closed: 2026-09-20
-Plan: .codex/plans/007-roadmap-context-budget-audit.md
+Plan: .codex/history/plans/007-roadmap-context-budget-audit.md
 Evidence: .codex/test-artifacts/007-roadmap-context-budget-audit/
 
 ## Outcome

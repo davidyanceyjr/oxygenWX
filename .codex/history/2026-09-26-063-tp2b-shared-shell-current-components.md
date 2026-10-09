@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 063-tp2b-shared-shell-current-components
 Roadmap item: TP.2B
 Closed: 2026-09-26
-Plan: .codex/plans/063-tp2b-shared-shell-current-components.md
+Plan: .codex/history/plans/063-tp2b-shared-shell-current-components.md
 Evidence: .codex/test-artifacts/063-tp2b-shared-shell-current-components/
 
 ## Outcome

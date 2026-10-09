@@ -14,7 +14,7 @@ planning question needed to turn it into a reviewable target.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/038-d31-selected-theme-scope.md`,
+Documentation only: `.codex/history/plans/038-d31-selected-theme-scope.md`,
 `docs/theme-pack-roadmap.md`, and this cycle's history/evidence. No production
 code, artwork, or pinned packet changes.
 

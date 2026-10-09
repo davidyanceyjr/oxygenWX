@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 067-tp2d-effects-off-backdrop-resume
 Roadmap item: TP.2D-partial2
 Closed: 2026-09-27
-Plan: .codex/plans/067-tp2d-effects-off-backdrop-resume.md
+Plan: .codex/history/plans/067-tp2d-effects-off-backdrop-resume.md
 Evidence: .codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/
 
 ## Outcome

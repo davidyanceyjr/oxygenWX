@@ -47,4 +47,4 @@ The environment used for the bootstrap did not have a usable Android SDK/depende
 
 Next roadmap slice: R0.2 Installed baseline verification.
 
-Planned execution file: `.codex/plans/001-installed-baseline-verification.md`.
+Planned execution file: `.codex/history/plans/001-installed-baseline-verification.md`.

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 117-selected-location-persistence-and-forecast-handoff
 Roadmap item: R3.2
 Closed: 2026-10-04
-Plan: .codex/plans/117-selected-location-persistence-and-forecast-handoff.md
+Plan: .codex/history/plans/117-selected-location-persistence-and-forecast-handoff.md
 Evidence: .codex/test-artifacts/117-selected-location-persistence-and-forecast-handoff/
 
 ## Outcome

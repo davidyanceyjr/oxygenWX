@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 031-tp-1d-owner-packet-decision
 Roadmap item: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A
 Closed: 2026-09-24
-Plan: .codex/plans/031-tp-1d-owner-packet-decision.md
+Plan: .codex/history/plans/031-tp-1d-owner-packet-decision.md
 Evidence: .codex/test-artifacts/031-tp-1d-owner-packet-decision/
 
 ## Outcome
@@ -21,4 +21,4 @@ Proposed static design packet only. No owner disposition/approval, installed-app
 
 ## Follow-up
 
-Activate planned .codex/plans/032-tp-1d-owner-disposition.md only after an explicit owner response for this exact packet revision and manifest digest; preserve the packet unchanged. Revisions requested by the owner require a separately planned design-reference cycle.
+Activate planned .codex/history/plans/032-tp-1d-owner-disposition.md only after an explicit owner response for this exact packet revision and manifest digest; preserve the packet unchanged. Revisions requested by the owner require a separately planned design-reference cycle.

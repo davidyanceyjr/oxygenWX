@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 150-settings-legal-product-destinations
 Roadmap item: R5.6B
 Closed: 2026-10-08
-Plan: .codex/plans/150-settings-legal-product-destinations.md
+Plan: .codex/history/plans/150-settings-legal-product-destinations.md
 Evidence: .codex/test-artifacts/150-settings-legal-product-destinations/
 
 ## Outcome

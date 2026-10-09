@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 111-weather-repository-live-path
 Roadmap item: R2.3
 Closed: 2026-10-03
-Plan: .codex/plans/111-weather-repository-live-path.md
+Plan: .codex/history/plans/111-weather-repository-live-path.md
 Evidence: .codex/test-artifacts/111-weather-repository-live-path/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 141-reduced-motion-effects-policy
 Roadmap item: R5.4A
 Closed: 2026-10-07
-Plan: .codex/plans/141-reduced-motion-effects-policy.md
+Plan: .codex/history/plans/141-reduced-motion-effects-policy.md
 Evidence: .codex/test-artifacts/141-reduced-motion-effects-policy/
 
 ## Outcome

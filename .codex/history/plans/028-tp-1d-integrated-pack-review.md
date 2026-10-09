@@ -13,7 +13,7 @@ Integrate the five Now and five Hourly design cells into one measurable pack,
 produce their ten primary reference renders and bounded responsive examples,
 and review them against source art and typed presentation facts. This is the
 upstream half of TP.1D. The dependent initial plan is
-`.codex/plans/028-tp-1d-integrated-pack-review-partial-A.md` for Daily and
+`.codex/history/plans/028-tp-1d-integrated-pack-review-partial-A.md` for Daily and
 Details, final cross-page review, and owner approval. Close this cycle with
 exact evidence before activating that item. TP.1 and TP.1D remain incomplete
 until partial-A records explicit approval.

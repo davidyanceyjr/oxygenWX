@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 077-tp2e-effects-off-remaining-family-pages
 Roadmap item: TP.2E-effects-off-per-family-pages-partial2
 Closed: 2026-09-29
-Plan: .codex/plans/077-tp2e-effects-off-remaining-family-pages.md
+Plan: .codex/history/plans/077-tp2e-effects-off-remaining-family-pages.md
 Evidence: .codex/test-artifacts/077-tp2e-effects-off-remaining-family-pages/
 
 ## Outcome

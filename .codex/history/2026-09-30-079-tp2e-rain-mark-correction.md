@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 079-tp2e-rain-mark-correction
 Roadmap item: TP.2E correction prerequisite to closure
 Closed: 2026-09-30
-Plan: .codex/plans/079-tp2e-rain-mark-correction.md
+Plan: .codex/history/plans/079-tp2e-rain-mark-correction.md
 Evidence: .codex/test-artifacts/079-tp2e-rain-mark-correction/
 
 ## Outcome

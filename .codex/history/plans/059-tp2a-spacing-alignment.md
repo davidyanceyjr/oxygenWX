@@ -29,7 +29,7 @@ if a non-obvious constructor or test-runner issue appears.
 - `docs/theme-pack-roadmap.md` — identify this active plan while in progress;
   at cycle close record PASS or the exact blocker and evidence. Never claim
   catalog conformance or TP.2A completion from this cycle.
-- `.codex/plans/059-tp2a-spacing-alignment.md`, `.codex/current.md`,
+- `.codex/history/plans/059-tp2a-spacing-alignment.md`, `.codex/current.md`,
   `.codex/test-artifacts/059-tp2a-spacing-alignment/`, and the generated cycle
   history record — lifecycle, evidence, and exact disposition.
 

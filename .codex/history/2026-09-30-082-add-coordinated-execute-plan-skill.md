@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 082-add-coordinated-execute-plan-skill
 Roadmap item: DX.3
 Closed: 2026-09-30
-Plan: .codex/plans/082-add-coordinated-execute-plan-skill.md
+Plan: .codex/history/plans/082-add-coordinated-execute-plan-skill.md
 Evidence: .codex/test-artifacts/082-add-coordinated-execute-plan-skill/
 
 ## Outcome

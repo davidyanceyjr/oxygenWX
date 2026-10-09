@@ -14,7 +14,7 @@ Hourly date selector against their typed-value, callback, accessibility, and
 resolved-theme contracts. Keep chronology and selected-window state with the
 existing callers. This is the first bounded half of TP.2C; Details/source
 components are the dependent `TP.2C-partial2` slice in
-`.codex/plans/064-tp2c-forecast-details-components-partial2.md`.
+`.codex/history/plans/064-tp2c-forecast-details-components-partial2.md`.
 
 ## Production boundary
 

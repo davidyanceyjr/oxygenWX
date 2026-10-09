@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 085-tp3a-now-hourly-compositions
 Roadmap item: TP.3A
 Closed: 2026-09-30
-Plan: .codex/plans/085-tp3a-now-hourly-compositions.md
+Plan: .codex/history/plans/085-tp3a-now-hourly-compositions.md
 Evidence: .codex/test-artifacts/085-tp3a-now-hourly-compositions/
 
 ## Outcome

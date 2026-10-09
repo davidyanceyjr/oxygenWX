@@ -13,7 +13,7 @@ planning question about review granularity for such derivations.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/043-d31-proposed-review-rule.md`,
+Documentation only: `.codex/history/plans/043-d31-proposed-review-rule.md`,
 `docs/theme-pack-roadmap.md`, and cycle history/evidence.
 
 ## Functional invariants

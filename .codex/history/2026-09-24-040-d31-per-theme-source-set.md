@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 040-d31-per-theme-source-set
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/040-d31-per-theme-source-set.md
+Plan: .codex/history/plans/040-d31-per-theme-source-set.md
 Evidence: .codex/test-artifacts/040-d31-per-theme-source-set/
 
 ## Outcome

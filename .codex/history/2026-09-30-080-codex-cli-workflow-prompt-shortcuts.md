@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 080-codex-cli-workflow-prompt-shortcuts
 Roadmap item: DX.1
 Closed: 2026-09-30
-Plan: .codex/plans/080-codex-cli-workflow-prompt-shortcuts.md
+Plan: .codex/history/plans/080-codex-cli-workflow-prompt-shortcuts.md
 Evidence: .codex/test-artifacts/080-codex-cli-workflow-prompt-shortcuts/
 
 ## Outcome

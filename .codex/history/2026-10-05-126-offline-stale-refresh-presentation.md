@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 126-offline-stale-refresh-presentation
 Roadmap item: R3.5
 Closed: 2026-10-05
-Plan: .codex/plans/126-offline-stale-refresh-presentation.md
+Plan: .codex/history/plans/126-offline-stale-refresh-presentation.md
 Evidence: .codex/test-artifacts/126-offline-stale-refresh-presentation/
 
 ## Outcome

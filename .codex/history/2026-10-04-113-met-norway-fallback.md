@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 113-met-norway-fallback
 Roadmap item: R2.4
 Closed: 2026-10-04
-Plan: .codex/plans/113-met-norway-fallback.md
+Plan: .codex/history/plans/113-met-norway-fallback.md
 Evidence: .codex/test-artifacts/113-met-norway-fallback/
 
 ## Outcome

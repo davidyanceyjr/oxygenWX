@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 054-d31-integrated-atmosphere-review-package
 Roadmap item: TP.1D-D31-review-package
 Closed: 2026-09-25
-Plan: .codex/plans/054-d31-integrated-atmosphere-review-package.md
+Plan: .codex/history/plans/054-d31-integrated-atmosphere-review-package.md
 Evidence: .codex/test-artifacts/054-d31-integrated-atmosphere-review-package/
 
 ## Outcome

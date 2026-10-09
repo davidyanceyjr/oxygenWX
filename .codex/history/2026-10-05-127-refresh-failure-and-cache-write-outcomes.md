@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 127-refresh-failure-and-cache-write-outcomes
 Roadmap item: R3.5A
 Closed: 2026-10-05
-Plan: .codex/plans/127-refresh-failure-and-cache-write-outcomes.md
+Plan: .codex/history/plans/127-refresh-failure-and-cache-write-outcomes.md
 Evidence: .codex/test-artifacts/127-refresh-failure-and-cache-write-outcomes/
 
 ## Outcome

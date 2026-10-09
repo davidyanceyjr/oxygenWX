@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 061-tp2a-catalog-parity-remediation
 Roadmap item: TP.2A-part-one-parity-remediation
 Closed: 2026-09-26
-Plan: .codex/plans/061-tp2a-catalog-parity-remediation.md
+Plan: .codex/history/plans/061-tp2a-catalog-parity-remediation.md
 Evidence: .codex/test-artifacts/061-tp2a-catalog-parity-remediation/
 
 ## Outcome

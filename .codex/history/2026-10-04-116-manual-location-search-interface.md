@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 116-manual-location-search-interface
 Roadmap item: R3.1A
 Closed: 2026-10-04
-Plan: .codex/plans/116-manual-location-search-interface.md
+Plan: .codex/history/plans/116-manual-location-search-interface.md
 Evidence: .codex/test-artifacts/116-manual-location-search-interface/
 
 ## Outcome

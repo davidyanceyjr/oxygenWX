@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 138-theme-selection-appearance-surface
 Roadmap item: R5.2A
 Closed: 2026-10-06
-Plan: .codex/plans/138-theme-selection-appearance-surface.md
+Plan: .codex/history/plans/138-theme-selection-appearance-surface.md
 Evidence: .codex/test-artifacts/138-theme-selection-appearance-surface/
 
 ## Outcome

@@ -15,7 +15,7 @@ boundaries of dependent slices to future planning and review.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/037-d29-d31-design-followup.md`,
+Documentation only: `.codex/history/plans/037-d29-d31-design-followup.md`,
 `docs/theme-pack-roadmap.md`, and this cycle's history/evidence. No Android
 production code or pinned packet contents change.
 

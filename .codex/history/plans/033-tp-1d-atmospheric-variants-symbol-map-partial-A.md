@@ -56,4 +56,4 @@ Run workflow and contract checks, the focused palette/contrast checker, determin
 - Theme-specific symbol mapping (upstream cycle 033), full packet inventory/manifest reconstruction, owner disposition, approval, TP.2/TP.3, Android source/runtime, persisted appearance settings, weather/data semantics, and changes to other themes or primary page geometry.
 
 
-Superseded as an execution record by `.codex/plans/034-tp-1d-atmospheric-light-palette-proposal.md` after cycle 033 consumed the shared numeric prefix. Scope and acceptance criteria carry forward unchanged.
+Superseded as an execution record by `.codex/history/plans/034-tp-1d-atmospheric-light-palette-proposal.md` after cycle 033 consumed the shared numeric prefix. Scope and acceptance criteria carry forward unchanged.

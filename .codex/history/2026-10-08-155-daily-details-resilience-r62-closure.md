@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 155-daily-details-resilience-r62-closure
 Roadmap item: R6.2.2
 Closed: 2026-10-08
-Plan: .codex/plans/155-daily-details-resilience-r62-closure.md
+Plan: .codex/history/plans/155-daily-details-resilience-r62-closure.md
 Evidence: .codex/test-artifacts/155-daily-details-resilience-r62-closure/
 
 ## Outcome

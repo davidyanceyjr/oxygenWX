@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 041-d31-source-gap-handling
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/041-d31-source-gap-handling.md
+Plan: .codex/history/plans/041-d31-source-gap-handling.md
 Evidence: .codex/test-artifacts/041-d31-source-gap-handling/
 
 ## Outcome

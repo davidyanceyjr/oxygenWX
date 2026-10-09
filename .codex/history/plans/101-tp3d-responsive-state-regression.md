@@ -89,7 +89,7 @@ viewport cannot show all required content.
 ## Implementation steps
 
 1. Record initial `git status --short`; inspect and preserve existing edits.
-   Read `.codex/plans/100-tp3c-now-cases-and-full-baseline-gate.md`, cycle 100
+   Read `.codex/history/plans/100-tp3c-now-cases-and-full-baseline-gate.md`, cycle 100
    history/evidence, TP.3C accepted case records, current UI test harness,
    visual workflow, and relevant production UI owners. Treat the existing
    user changes to `.codex/current.md` and this plan as inputs; do not discard

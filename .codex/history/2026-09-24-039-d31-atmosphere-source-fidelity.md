@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 039-d31-atmosphere-source-fidelity
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/039-d31-atmosphere-source-fidelity.md
+Plan: .codex/history/plans/039-d31-atmosphere-source-fidelity.md
 Evidence: .codex/test-artifacts/039-d31-atmosphere-source-fidelity/
 
 ## Outcome

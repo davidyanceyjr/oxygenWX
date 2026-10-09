@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 152-alert-settings-spoken-semantics
 Roadmap item: R6.1A
 Closed: 2026-10-08
-Plan: .codex/plans/152-alert-settings-spoken-semantics.md
+Plan: .codex/history/plans/152-alert-settings-spoken-semantics.md
 Evidence: .codex/test-artifacts/152-alert-settings-spoken-semantics/
 
 ## Outcome

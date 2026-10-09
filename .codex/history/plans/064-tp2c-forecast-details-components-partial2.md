@@ -26,7 +26,7 @@ for every resolved theme and the bounded responsive cases below.
 - `app/src/androidTest/java/com/oxygen/weather/ui/themeengine/components/ProductionDetailsComponentsTest.kt`:
   focused installed Compose contract and rendering checks for those
   components, including screenshot artifact capture described below.
-- `.codex/plans/064-tp2c-forecast-details-components-partial2.md`,
+- `.codex/history/plans/064-tp2c-forecast-details-components-partial2.md`,
   `.codex/current.md`, `docs/theme-pack-roadmap.md`, and
   `.codex/test-artifacts/064-tp2c-forecast-details-components-partial2/`:
   active-cycle record, roadmap state, and cycle evidence.

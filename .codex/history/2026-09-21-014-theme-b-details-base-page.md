@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 014-theme-b-details-base-page
 Roadmap item: R0.9
 Closed: 2026-09-21
-Plan: .codex/plans/014-theme-b-details-base-page.md
+Plan: .codex/history/plans/014-theme-b-details-base-page.md
 Evidence: .codex/test-artifacts/014-theme-b-details-base-page/
 
 ## Outcome

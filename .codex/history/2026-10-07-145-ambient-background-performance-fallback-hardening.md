@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 145-ambient-background-performance-fallback-hardening
 Roadmap item: R5.4E
 Closed: 2026-10-07
-Plan: .codex/plans/145-ambient-background-performance-fallback-hardening.md
+Plan: .codex/history/plans/145-ambient-background-performance-fallback-hardening.md
 Evidence: .codex/test-artifacts/145-ambient-background-performance-fallback-hardening/
 
 ## Outcome

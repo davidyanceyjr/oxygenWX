@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 147-simple-forecast-surface
 Roadmap item: R5.5A
 Closed: 2026-10-07
-Plan: .codex/plans/147-simple-forecast-surface.md
+Plan: .codex/history/plans/147-simple-forecast-surface.md
 Evidence: .codex/test-artifacts/147-simple-forecast-surface/
 
 ## Outcome

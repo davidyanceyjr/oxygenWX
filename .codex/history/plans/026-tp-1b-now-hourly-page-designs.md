@@ -24,7 +24,7 @@ Glass, Minimal OLED, Instrument, and Terminal. This remains the active parent
 plan. Divide its ten theme/page cells into two dependent, roughly equal parts:
 
 1. `TP.1B-partial-A`: Now composition, five theme mappings, and Now states.
-   Initial plan: `.codex/plans/026-tp-1b-now-hourly-page-designs-partial-A.md`.
+   Initial plan: `.codex/history/plans/026-tp-1b-now-hourly-page-designs-partial-A.md`.
 2. `TP.1B-partial-B`: Hourly composition, five theme mappings, window/date
    interactions, and Hourly states. Plan after A is reviewed.
 

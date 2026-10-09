@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 021-production-theme-resolver-foundation
 Roadmap item: R0.11B
 Closed: 2026-09-22
-Plan: .codex/plans/021-production-theme-resolver-foundation.md
+Plan: .codex/history/plans/021-production-theme-resolver-foundation.md
 Evidence: .codex/test-artifacts/021-production-theme-resolver-foundation/
 
 ## Outcome

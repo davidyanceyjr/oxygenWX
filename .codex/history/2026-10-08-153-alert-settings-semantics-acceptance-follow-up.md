@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 153-alert-settings-semantics-acceptance-follow-up
 Roadmap item: R6.1A1
 Closed: 2026-10-08
-Plan: .codex/plans/153-alert-settings-semantics-acceptance-follow-up.md
+Plan: .codex/history/plans/153-alert-settings-semantics-acceptance-follow-up.md
 Evidence: .codex/test-artifacts/153-alert-settings-semantics-acceptance-follow-up/
 
 ## Outcome

@@ -13,7 +13,7 @@ Capture the next design-planning question on how atmosphere spans Home pages.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/041-d31-source-gap-handling.md`,
+Documentation only: `.codex/history/plans/041-d31-source-gap-handling.md`,
 `docs/theme-pack-roadmap.md`, and cycle history/evidence. No source assets or
 production code change.
 

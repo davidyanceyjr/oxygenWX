@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 124-normalized-forecast-cache
 Roadmap item: R3.4
 Closed: 2026-10-05
-Plan: .codex/plans/124-normalized-forecast-cache.md
+Plan: .codex/history/plans/124-normalized-forecast-cache.md
 Evidence: .codex/test-artifacts/124-normalized-forecast-cache/
 
 ## Outcome

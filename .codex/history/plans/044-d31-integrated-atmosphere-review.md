@@ -13,7 +13,7 @@ before packet approval.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/044-d31-integrated-atmosphere-review.md`,
+Documentation only: `.codex/history/plans/044-d31-integrated-atmosphere-review.md`,
 `docs/theme-pack-roadmap.md`, and cycle history/evidence.
 
 ## Functional invariants

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 044-d31-integrated-atmosphere-review
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/044-d31-integrated-atmosphere-review.md
+Plan: .codex/history/plans/044-d31-integrated-atmosphere-review.md
 Evidence: .codex/test-artifacts/044-d31-integrated-atmosphere-review/
 
 ## Outcome

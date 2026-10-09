@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 055-d31-integrated-owner-disposition
 Roadmap item: TP.1D-D31-owner-disposition
 Closed: 2026-09-25
-Plan: .codex/plans/055-d31-integrated-owner-disposition.md
+Plan: .codex/history/plans/055-d31-integrated-owner-disposition.md
 Evidence: .codex/test-artifacts/055-d31-integrated-owner-disposition/
 
 ## Outcome

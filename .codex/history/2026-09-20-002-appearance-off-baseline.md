@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 002-appearance-off-baseline
 Roadmap item: R0.3
 Closed: 2026-09-20
-Plan: .codex/plans/002-appearance-off-baseline.md
+Plan: .codex/history/plans/002-appearance-off-baseline.md
 Evidence: .codex/test-artifacts/002-appearance-off-baseline/
 
 ## Outcome

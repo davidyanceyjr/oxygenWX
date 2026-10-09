@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 151-spoken-semantics-contract
 Roadmap item: R6.1
 Closed: 2026-10-08
-Plan: .codex/plans/151-spoken-semantics-contract.md
+Plan: .codex/history/plans/151-spoken-semantics-contract.md
 Evidence: .codex/test-artifacts/151-spoken-semantics-contract/
 
 ## Outcome

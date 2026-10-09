@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 036-tp-1d-pinned-owner-disposition
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/036-tp-1d-pinned-owner-disposition.md
+Plan: .codex/history/plans/036-tp-1d-pinned-owner-disposition.md
 Evidence: .codex/test-artifacts/036-tp-1d-pinned-owner-disposition/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 025-codifiable-theme-design-pack
 Roadmap item: TP.1A
 Closed: 2026-09-23
-Plan: .codex/plans/025-codifiable-theme-design-pack.md
+Plan: .codex/history/plans/025-codifiable-theme-design-pack.md
 Evidence: .codex/test-artifacts/025-codifiable-theme-design-pack/
 
 ## Outcome

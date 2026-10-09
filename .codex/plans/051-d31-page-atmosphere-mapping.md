@@ -21,7 +21,7 @@ The original ten-cell Now/Hourly draft would exceed the slice budget once
 source inspection, prose review, validator implementation, negative tests, and
 evidence are included. It is therefore divided equally by page: this active
 slice owns five Now cells and retains the original cycle ID; the dependent
-`.codex/plans/051-d31-page-atmosphere-mapping-partial2.md` owns five Hourly
+`.codex/history/plans/051-d31-page-atmosphere-mapping-partial2.md` owns five Hourly
 cells. Each half targets 35–40% and must stop before 45%.
 
 ## Independently observable outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 034-tp-1d-atmospheric-light-palette-proposal
 Roadmap item: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A-partial-A
 Closed: 2026-09-24
-Plan: .codex/plans/034-tp-1d-atmospheric-light-palette-proposal.md
+Plan: .codex/history/plans/034-tp-1d-atmospheric-light-palette-proposal.md
 Evidence: .codex/test-artifacts/034-tp-1d-atmospheric-light-palette-proposal/
 
 ## Outcome

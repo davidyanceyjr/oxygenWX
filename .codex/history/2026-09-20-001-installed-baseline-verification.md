@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 001-installed-baseline-verification
 Roadmap item: R0.2
 Closed: 2026-09-20
-Plan: .codex/plans/001-installed-baseline-verification.md
+Plan: .codex/history/plans/001-installed-baseline-verification.md
 Evidence: .codex/test-artifacts/001-installed-baseline-verification/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 008-theme-b-semantic-appearance-resolver
 Roadmap item: R0.5
 Closed: 2026-09-21
-Plan: .codex/plans/008-theme-b-semantic-appearance-resolver.md
+Plan: .codex/history/plans/008-theme-b-semantic-appearance-resolver.md
 Evidence: .codex/test-artifacts/008-theme-b-semantic-appearance-resolver/
 
 ## Outcome

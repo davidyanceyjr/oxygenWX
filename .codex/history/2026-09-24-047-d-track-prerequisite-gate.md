@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 047-d-track-prerequisite-gate
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/047-d-track-prerequisite-gate.md
+Plan: .codex/history/plans/047-d-track-prerequisite-gate.md
 Evidence: .codex/test-artifacts/047-d-track-prerequisite-gate/
 
 ## Outcome

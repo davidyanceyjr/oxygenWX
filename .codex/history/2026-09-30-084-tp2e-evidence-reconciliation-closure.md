@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 084-tp2e-evidence-reconciliation-closure
 Roadmap item: TP.2E-closure
 Closed: 2026-09-30
-Plan: .codex/plans/084-tp2e-evidence-reconciliation-closure.md
+Plan: .codex/history/plans/084-tp2e-evidence-reconciliation-closure.md
 Evidence: .codex/test-artifacts/084-tp2e-evidence-reconciliation-closure/
 
 ## Outcome

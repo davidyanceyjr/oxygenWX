@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 003-canonical-domain-foundation
 Roadmap item: R1.1
 Closed: 2026-09-20
-Plan: .codex/plans/003-canonical-domain-foundation.md
+Plan: .codex/history/plans/003-canonical-domain-foundation.md
 Evidence: .codex/test-artifacts/003-canonical-domain-foundation/
 
 ## Outcome

@@ -21,7 +21,7 @@ executes two sequential, narrowly bounded work packages:
 
 1. **TP.1C-partial-A — Daily:** five theme treatments, five-day window rules,
    sparse/unavailable cases, and handoff review. Initial plan:
-   `.codex/plans/027-tp-1c-daily-details-page-designs-partial-A.md`.
+   `.codex/history/plans/027-tp-1c-daily-details-page-designs-partial-A.md`.
 2. **TP.1C-partial-B — Details:** typed metric groups, provenance separation,
    five theme treatments, and the combined ten-cell review. Create its initial
    plan only after A has passed review; it must use A's accepted shared-shell

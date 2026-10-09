@@ -18,7 +18,7 @@ Verify and, only if evidence requires it, correct the shared `ProductionBackdrop
 - `app/src/main/java/com/oxygen/weather/ui/themeengine/components/ProductionWeatherVisuals.kt`: `ProductionBackdrop` Effects Off branch only, if an observed defect requires a production correction.
 - `app/src/test/java/com/oxygen/weather/ui/themeengine/ProductionWeatherVisualsTest.kt`: deterministic resolved-style/static-policy assertions for all five themes; retain the existing D29 matrix unchanged.
 - New `app/src/androidTest/java/com/oxygen/weather/ui/themeengine/components/ProductionBackdropEffectsOffTest.kt`: installed five-theme Effects Off rendering, caller-content/semantics, foreground click, and screenshot checks.
-- `.codex/plans/067-tp2d-effects-off-backdrop-resume.md`, `.codex/current.md`, `docs/theme-pack-roadmap.md`, and `.codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/`: active cycle record, next-slice sequence, and verification evidence.
+- `.codex/history/plans/067-tp2d-effects-off-backdrop-resume.md`, `.codex/current.md`, `docs/theme-pack-roadmap.md`, and `.codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/`: active cycle record, next-slice sequence, and verification evidence.
 
 Do not change public composable APIs. Do not change non-Off rendering, mark treatments, callers/page layout, resolver/catalog tokens, presentation/domain models, weather meaning/data behavior, navigation, or settings. If the defect requires one of those changes, record it and stop.
 

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 144-instrument-terminal-minimal-oled-ambient-treatments
 Roadmap item: R5.4D
 Closed: 2026-10-07
-Plan: .codex/plans/144-instrument-terminal-minimal-oled-ambient-treatments.md
+Plan: .codex/history/plans/144-instrument-terminal-minimal-oled-ambient-treatments.md
 Evidence: .codex/test-artifacts/144-instrument-terminal-minimal-oled-ambient-treatments/
 
 ## Outcome

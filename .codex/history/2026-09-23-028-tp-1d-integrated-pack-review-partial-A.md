@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 028-tp-1d-integrated-pack-review-partial-A
 Roadmap item: TP.1D-partial-A
 Closed: 2026-09-23
-Plan: .codex/plans/028-tp-1d-integrated-pack-review-partial-A.md
+Plan: .codex/history/plans/028-tp-1d-integrated-pack-review-partial-A.md
 Evidence: .codex/test-artifacts/028-tp-1d-integrated-pack-review-partial-A/
 
 ## Outcome

@@ -365,7 +365,7 @@ precipitation amount/rate, and unchanged percent/direction/duration values.
 Absolute temperatures and temperature differences use distinct conversions;
 formatting is deterministic and locale-independent. No existing mapper or
 fixture output changes. Applying the preset to Home mapping remains R1.3A. Plan:
-`.codex/plans/018-unit-conversion-boundary.md`. Evidence and limitations:
+`.codex/history/plans/018-unit-conversion-boundary.md`. Evidence and limitations:
 `.codex/history/2026-09-21-018-unit-conversion-boundary.md`.
 
 ### R1.3A — Unit-aware presentation mapping — DONE
@@ -387,7 +387,7 @@ Introduce provider-neutral forecast request/result contracts and configurable pr
 
 **Exit:** Provider-neutral request/result contracts compile and deterministic tests cover success, unsupported fields, no result, and transport failure; no provider-specific DTO enters canonical or presentation packages.
 
-Plan: `.codex/plans/105-forecast-provider-interface.md`. Evidence and
+Plan: `.codex/history/plans/105-forecast-provider-interface.md`. Evidence and
 limitations: `.codex/history/2026-10-03-105-forecast-provider-interface.md` and
 `.codex/test-artifacts/105-forecast-provider-interface/verification.md`.
 
@@ -399,7 +399,7 @@ response decoding fixtures for the required current/hourly/daily fields and
 
 **Exit:** Recorded request fixtures and decoder tests cover required current/hourly/daily fields, timezone, nullable values, and the 72-hour/10-day horizon; no canonical mapping is added.
 
-Plan: `.codex/plans/107-open-meteo-primary-forecast-provider.md`. Evidence
+Plan: `.codex/history/plans/107-open-meteo-primary-forecast-provider.md`. Evidence
 and limitations: `.codex/history/2026-10-03-107-open-meteo-primary-forecast-provider.md`.
 
 ### R2.2A — Open-Meteo canonical forecast mapping — DONE
@@ -410,7 +410,7 @@ values, and partial horizons truthfully. Provider orchestration remains R2.3.
 
 **Exit:** Fixtures for complete, sparse, duplicate-time, and partial responses map to canonical records with source/timezone provenance intact; deterministic mapping tests pass.
 
-Plan: `.codex/plans/110-open-meteo-canonical-forecast-mapping.md`. Evidence
+Plan: `.codex/history/plans/110-open-meteo-canonical-forecast-mapping.md`. Evidence
 and limitations: `.codex/history/2026-10-03-110-open-meteo-canonical-forecast-mapping.md`.
 
 ### R2.3 — WeatherRepository live path — DONE
@@ -421,7 +421,7 @@ state integration.
 
 **Exit:** Repository tests prove one Open-Meteo live result path, preserved origin/provenance, and distinct success/failure outcomes; cache restoration and UI state remain absent.
 
-Plan: `.codex/plans/111-weather-repository-live-path.md`. Evidence and
+Plan: `.codex/history/plans/111-weather-repository-live-path.md`. Evidence and
 limitations: `.codex/history/2026-10-03-111-weather-repository-live-path.md`.
 
 ### R2.3A — Live forecast application-state bridge — DONE
@@ -432,7 +432,7 @@ selected-location request identity and honest loading/failure state mapping.
 
 **Exit:** State tests cover loading, live, and failure without data, reject stale selected-location and same-location refresh responses, and feed a typed presentation boundary for current-only, forecast-only, and combined results without provider logic in Compose.
 
-Plan: `.codex/plans/112-live-forecast-application-state-bridge.md`. Evidence
+Plan: `.codex/history/plans/112-live-forecast-application-state-bridge.md`. Evidence
 and limitations: `.codex/history/2026-10-04-112-live-forecast-application-state-bridge.md` and `.codex/test-artifacts/112-live-forecast-application-state-bridge/verification.md`.
 
 ### R2.4 — MET Norway fallback — DONE
@@ -441,7 +441,7 @@ Add eligible terminal-failure fallback with provider identification, attribution
 
 **Exit:** Fallback tests cover each eligible terminal failure and prove noneligible failures do not call MET Norway; source identity/attribution stays singular and provider values are never blended.
 
-Plan: `.codex/plans/113-met-norway-fallback.md`. Evidence and limitations:
+Plan: `.codex/history/plans/113-met-norway-fallback.md`. Evidence and limitations:
 `.codex/history/2026-10-04-113-met-norway-fallback.md` and
 `.codex/test-artifacts/113-met-norway-fallback/verification.md`.
 
@@ -464,7 +464,7 @@ No selection UI or persistence belongs here.
 
 **Exit:** Search contract/adapter fixtures pass for localized query, timezone-bearing results, empty result, and failure; no UI or persistence is introduced.
 
-Plan: `.codex/plans/115-manual-location-search-contracts-and-lookup-adapter.md`.
+Plan: `.codex/history/plans/115-manual-location-search-contracts-and-lookup-adapter.md`.
 Evidence: `.codex/history/2026-10-04-115-manual-location-search-contracts-and-lookup-adapter.md`.
 
 ### R3.1A — Manual location search interface — DONE
@@ -474,7 +474,7 @@ handoff UI without requesting device location or persisting saved locations.
 
 **Exit:** Installed search flow supports query, progress, results, empty/error, and selected-location handoff with 48dp controls; manual search works without location permission.
 
-Plan: `.codex/plans/116-manual-location-search-interface.md`.
+Plan: `.codex/history/plans/116-manual-location-search-interface.md`.
 Evidence and limitations: `.codex/history/2026-10-04-116-manual-location-search-interface.md` and `.codex/test-artifacts/116-manual-location-search-interface/`.
 
 ### R3.1B — Production forecast app composition — DONE
@@ -495,7 +495,7 @@ repository result. Normal startup and absent-selection behavior remain clearly
 labeled as the development fixture until R3.2 persists a selection; no fixture
 weather is attributed to a searched location.
 
-Plan: `.codex/plans/120-production-forecast-app-composition.md`.
+Plan: `.codex/history/plans/120-production-forecast-app-composition.md`.
 Evidence and limitations: `.codex/history/2026-10-04-120-production-forecast-app-composition.md` and `.codex/test-artifacts/120-production-forecast-app-composition/`.
 
 ### R3.2 — Selected/saved locations — DONE
@@ -506,7 +506,7 @@ collection and switching UI are excluded.
 
 **Exit:** Persistence tests restore one stable selected-location identity after recreation/relaunch and pass it to the repository; saved-location lists and switching UI remain absent.
 
-Plan: `.codex/plans/121-selected-location-persistence-and-forecast-handoff.md`.
+Plan: `.codex/history/plans/121-selected-location-persistence-and-forecast-handoff.md`.
 Evidence and limitations: `.codex/history/2026-10-04-121-selected-location-persistence-and-forecast-handoff.md` and `.codex/test-artifacts/121-selected-location-persistence-and-forecast-handoff/`.
 
 ### R3.2A — Saved locations and safe switching — DONE
@@ -516,7 +516,7 @@ an obsolete request cannot replace the newly selected location's forecast.
 
 **Exit:** Installed saved-location add/select/remove flow works, and a deterministic delayed-response test proves an older location result cannot overwrite the newly selected location.
 
-Plan: `.codex/plans/122-saved-locations-and-safe-switching.md`.
+Plan: `.codex/history/plans/122-saved-locations-and-safe-switching.md`.
 Evidence and limitations: `.codex/history/2026-10-05-122-saved-locations-and-safe-switching.md` and `.codex/test-artifacts/122-saved-locations-and-safe-switching/`.
 
 ### R3.3 — Optional coarse device location — DONE

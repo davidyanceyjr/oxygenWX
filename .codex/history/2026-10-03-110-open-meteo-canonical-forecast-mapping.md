@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 110-open-meteo-canonical-forecast-mapping
 Roadmap item: R2.2A
 Closed: 2026-10-03
-Plan: .codex/plans/110-open-meteo-canonical-forecast-mapping.md
+Plan: .codex/history/plans/110-open-meteo-canonical-forecast-mapping.md
 Evidence: .codex/test-artifacts/110-open-meteo-canonical-forecast-mapping/
 
 ## Outcome

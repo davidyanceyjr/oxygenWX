@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 004-gradle-wrapper-distribution-repair
 Roadmap item: R7.3
 Closed: 2026-09-20
-Plan: .codex/plans/004-gradle-wrapper-distribution-repair.md
+Plan: .codex/history/plans/004-gradle-wrapper-distribution-repair.md
 Evidence: .codex/test-artifacts/004-gradle-wrapper-distribution-repair/
 
 ## Outcome

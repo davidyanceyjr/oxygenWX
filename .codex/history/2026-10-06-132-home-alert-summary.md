@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 132-home-alert-summary
 Roadmap item: R4.3
 Closed: 2026-10-06
-Plan: .codex/plans/132-home-alert-summary.md
+Plan: .codex/history/plans/132-home-alert-summary.md
 Evidence: .codex/test-artifacts/132-home-alert-summary/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 033-tp-1d-atmospheric-variants-symbol-map
 Roadmap item: TP.1D-partial-A-partial-B-partial-A-partial-A-partial-A-partial-A
 Closed: 2026-09-24
-Plan: .codex/plans/033-tp-1d-atmospheric-variants-symbol-map.md
+Plan: .codex/history/plans/033-tp-1d-atmospheric-variants-symbol-map.md
 Evidence: .codex/test-artifacts/033-tp-1d-atmospheric-variants-symbol-map/
 
 ## Outcome

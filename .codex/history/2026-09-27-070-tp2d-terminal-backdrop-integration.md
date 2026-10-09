@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 070-tp2d-terminal-backdrop-integration
 Roadmap item: TP.2D-partial5
 Closed: 2026-09-27
-Plan: .codex/plans/070-tp2d-terminal-backdrop-integration.md
+Plan: .codex/history/plans/070-tp2d-terminal-backdrop-integration.md
 Evidence: .codex/test-artifacts/070-tp2d-terminal-backdrop-integration/
 
 ## Outcome

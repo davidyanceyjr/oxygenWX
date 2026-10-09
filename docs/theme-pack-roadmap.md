@@ -76,7 +76,7 @@ and `.codex/test-artifacts/066-tp2d-weather-marks-backdrops-partial2/`.
 
 **Most recent plan:** TP.2C-partial2 Details/source components passed in cycle
 `064-tp2c-forecast-details-components-partial2`; plan and cycle evidence are
-recorded in `.codex/plans/064-tp2c-forecast-details-components-partial2.md`,
+recorded in `.codex/history/plans/064-tp2c-forecast-details-components-partial2.md`,
 `.codex/history/2026-09-26-064-tp2c-forecast-details-components-partial2.md`,
 and `.codex/test-artifacts/064-tp2c-forecast-details-components-partial2/`.
 
@@ -175,7 +175,7 @@ deliverables.
 
 **Completed bounded slice:** TP.1D-D31-partial-A, cycle
 `050-d31-atmosphere-source-audit`, plan
-`.codex/plans/050-d31-atmosphere-source-audit.md`; history:
+`.codex/history/plans/050-d31-atmosphere-source-audit.md`; history:
 `.codex/history/2026-09-25-050-d31-atmosphere-source-audit.md`. It records the
 five-theme source inventory, measured atmosphere profiles, and deterministic
 inventory validator. Evidence is under
@@ -194,14 +194,14 @@ completion.
 
 **Completed dependent slice — Hourly mapping:** cycle
 `051-d31-page-atmosphere-mapping-partial2`, plan
-`.codex/plans/051-d31-page-atmosphere-mapping-partial2.md`, extends the
+`.codex/history/plans/051-d31-page-atmosphere-mapping-partial2.md`, extends the
 unchanged five Now records with five source-traceable proposed Hourly cells and
 validates the ten-cell artifact. The 051 slices are documentary design
 proposals, not owner approval or runtime authorization.
 
 **Completed bounded slice — Daily mapping:** cycle
 `052-d31-daily-atmosphere-mapping`, plan
-`.codex/plans/052-d31-daily-atmosphere-mapping.md`, extends the ten-cell
+`.codex/history/plans/052-d31-daily-atmosphere-mapping.md`, extends the ten-cell
 Now/Hourly proposal with five source-traceable proposed Daily cells and focused
 validation. It preserves the earlier ten cell objects and the adopted
 five-day/window/control contract. Exact evidence and verification limits are
@@ -212,7 +212,7 @@ not implied.
 
 **Completed bounded slice — Details mapping:** cycle
 `053-d31-details-atmosphere-mapping`, plan
-`.codex/plans/053-d31-details-atmosphere-mapping.md`, extends the unchanged
+`.codex/history/plans/053-d31-details-atmosphere-mapping.md`, extends the unchanged
 fifteen Now/Hourly/Daily cells with five proposed Details cells and validates
 the complete twenty-cell theme/page matrix. With no dedicated Details source,
 those five cells are explicitly proposed same-theme derivations; complete
@@ -228,7 +228,7 @@ packet revision, and TP.2 eligibility remain pending; TP.3 installed application
 comparison remains a later gate.
 
 **Prepared owner-review package:** cycle `054-d31-integrated-atmosphere-review-package`,
-plan `.codex/plans/054-d31-integrated-atmosphere-review-package.md`, produced
+plan `.codex/history/plans/054-d31-integrated-atmosphere-review-package.md`, produced
 source-traceable atmosphere panels, a twenty-cell review guide, and focused
 artifact-integrity validation. Package readiness checks passed; explicit owner review was next at cycle close.
 Cycle 055 recorded approval of all twenty proposals and the overall D31
@@ -319,7 +319,7 @@ prerequisite and packet approval are satisfied. TP.3 remains responsible for
 installed application comparison.
 
 **Completed: TP.1D pinned packet disposition attempt — PENDING.** Plan:
-`.codex/plans/036-tp-1d-pinned-owner-disposition.md`; history and evidence:
+`.codex/history/plans/036-tp-1d-pinned-owner-disposition.md`; history and evidence:
 `.codex/history/2026-09-24-036-tp-1d-pinned-owner-disposition.md` and
 `.codex/test-artifacts/036-tp-1d-pinned-owner-disposition/`. The exact revision-2
 packet integrity checks passed, including 117 manifest entries and the
@@ -570,7 +570,7 @@ own fixed capture matrix below.
 ### Most recent execution head — TP.2A resolved appearance policy PASS
 
 Cycle `062-tp2a-resolved-appearance-policy` completed its bounded plan:
-`.codex/plans/062-tp2a-resolved-appearance-policy.md`. The owner selected a
+`.codex/history/plans/062-tp2a-resolved-appearance-policy.md`. The owner selected a
 measurable 3:1 contrast requirement for opaque outlines against each actual
 adjacent component background, alongside the design-pack's 4.5:1 text floor and
 7:1 supporting-text promotion rule. Cycle 062 inventoried current production
@@ -734,7 +734,7 @@ TP.2D.
 #### TP.2D-partial1 — D29 theme-specific weather marks — PASS
 
 Cycle `065-tp2d-weather-marks-backdrops`; plan
-`.codex/plans/065-tp2d-weather-marks-backdrops.md`. Implemented the exact
+`.codex/history/plans/065-tp2d-weather-marks-backdrops.md`. Implemented the exact
 owner-approved D29 matrix across all 30 theme-condition cells, including eleven
 intentional no-mark gaps and null conditions. Focused JVM and installed Compose
 checks pass. Marks use the five resolved treatments, remain decorative, retain
@@ -752,7 +752,7 @@ Cycle `067-tp2d-effects-off-backdrop-resume` passed installed verification
 for the opaque solid canvas, no backdrop drawing, caller semantics/content, and
 foreground click delivery across all five themes. One compact, large-font, RTL
 case also passed. Cycle 066 remains a separately recorded blocked attempt. Plan,
-history, and evidence: `.codex/plans/067-tp2d-effects-off-backdrop-resume.md`,
+history, and evidence: `.codex/history/plans/067-tp2d-effects-off-backdrop-resume.md`,
 `.codex/history/2026-09-27-067-tp2d-effects-off-backdrop-resume.md`, and
 `.codex/test-artifacts/067-tp2d-effects-off-backdrop-resume/`.
 
@@ -822,7 +822,7 @@ pixel parity, TP.2E, or TP.3 acceptance. The audit is retained in cycle 070's
 `tp2d-child-audit.md`.
 
 Plan and evidence:
-`.codex/plans/070-tp2d-terminal-backdrop-integration.md` and
+`.codex/history/plans/070-tp2d-terminal-backdrop-integration.md` and
 `.codex/test-artifacts/070-tp2d-terminal-backdrop-integration/`.
 
 TP.2D closes only after partial1 through partial5 pass their scoped focused,
@@ -969,7 +969,7 @@ qualitative treatment, build/device metadata, and a disposition for each.
 Exit REVIEW COMPLETE only when all twenty are validly classified and a
 reference-supported correction handoff exists. This portion makes no
 production edit and does not claim visual acceptance. The first attempt,
-`.codex/plans/092-tp3c-baseline-installed-visual-comparison.md`, closed
+`.codex/history/plans/092-tp3c-baseline-installed-visual-comparison.md`, closed
 BLOCKED and remains historical evidence, not a plan to reactivate.
 
 ### TP.3C-partial-A — Baseline correction and installed acceptance
@@ -1032,7 +1032,7 @@ The repeated setup after interruption is documented in
 partial-B is the next dependent slice. TP.3C and TP.3 remain open, and TP.3D is
 still ineligible until the all-twenty gate passes.
 
-**Completed plan:** `.codex/plans/098-tp3c-hourly-reference-identity-and-acceptance.md`.
+**Completed plan:** `.codex/history/plans/098-tp3c-hourly-reference-identity-and-acceptance.md`.
 
 Resolve the five Hourly deviations across Atmospheric, Glass, Minimal OLED,
 Instrument, and Terminal. Scope is Hourly composition, date/window controls,

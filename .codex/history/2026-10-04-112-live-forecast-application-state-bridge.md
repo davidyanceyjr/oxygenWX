@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 112-live-forecast-application-state-bridge
 Roadmap item: R2.3A
 Closed: 2026-10-04
-Plan: .codex/plans/112-live-forecast-application-state-bridge.md
+Plan: .codex/history/plans/112-live-forecast-application-state-bridge.md
 Evidence: .codex/test-artifacts/112-live-forecast-application-state-bridge/
 
 ## Outcome

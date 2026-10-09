@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 006-theme-b-visual-system-foundation
 Roadmap item: R0.4
 Closed: 2026-09-20
-Plan: .codex/plans/006-theme-b-visual-system-foundation.md
+Plan: .codex/history/plans/006-theme-b-visual-system-foundation.md
 Evidence: .codex/test-artifacts/006-theme-b-visual-system-foundation/
 
 ## Outcome

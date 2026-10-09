@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 137-persisted-theme-preference
 Roadmap item: R5.2
 Closed: 2026-10-06
-Plan: .codex/plans/137-persisted-theme-preference.md
+Plan: .codex/history/plans/137-persisted-theme-preference.md
 Evidence: .codex/test-artifacts/137-persisted-theme-preference/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 136-unit-preset-application-regression
 Roadmap item: R5.1A
 Closed: 2026-10-06
-Plan: .codex/plans/136-unit-preset-application-regression.md
+Plan: .codex/history/plans/136-unit-preset-application-regression.md
 Evidence: .codex/test-artifacts/136-unit-preset-application-regression/
 
 ## Outcome

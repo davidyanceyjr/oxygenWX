@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 139-contrast-preference
 Roadmap item: R5.3
 Closed: 2026-10-07
-Plan: .codex/plans/139-contrast-preference.md
+Plan: .codex/history/plans/139-contrast-preference.md
 Evidence: .codex/test-artifacts/139-contrast-preference/
 
 ## Outcome

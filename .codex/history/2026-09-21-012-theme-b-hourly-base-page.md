@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 012-theme-b-hourly-base-page
 Roadmap item: R0.7
 Closed: 2026-09-21
-Plan: .codex/plans/012-theme-b-hourly-base-page.md
+Plan: .codex/history/plans/012-theme-b-hourly-base-page.md
 Evidence: .codex/test-artifacts/012-theme-b-hourly-base-page/
 
 ## Outcome

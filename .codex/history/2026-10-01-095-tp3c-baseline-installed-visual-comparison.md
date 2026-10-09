@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 095-tp3c-baseline-installed-visual-comparison
 Roadmap item: TP.3C
 Closed: 2026-10-01
-Plan: .codex/plans/095-tp3c-baseline-installed-visual-comparison.md
+Plan: .codex/history/plans/095-tp3c-baseline-installed-visual-comparison.md
 Evidence: .codex/test-artifacts/095-tp3c-baseline-installed-visual-comparison/
 
 ## Outcome

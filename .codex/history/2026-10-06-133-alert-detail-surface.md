@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 133-alert-detail-surface
 Roadmap item: R4.4
 Closed: 2026-10-06
-Plan: .codex/plans/133-alert-detail-surface.md
+Plan: .codex/history/plans/133-alert-detail-surface.md
 Evidence: .codex/test-artifacts/133-alert-detail-surface/
 
 ## Outcome

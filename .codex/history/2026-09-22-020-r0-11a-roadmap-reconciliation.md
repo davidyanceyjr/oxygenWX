@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 020-r0-11a-roadmap-reconciliation
 Roadmap item: R0.11A
 Closed: 2026-09-22
-Plan: .codex/plans/020-r0-11a-roadmap-reconciliation.md
+Plan: .codex/history/plans/020-r0-11a-roadmap-reconciliation.md
 Evidence: .codex/test-artifacts/020-r0-11a-roadmap-reconciliation/
 
 ## Outcome

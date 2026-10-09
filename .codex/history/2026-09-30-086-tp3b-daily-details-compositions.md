@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 086-tp3b-daily-details-compositions
 Roadmap item: TP.3B
 Closed: 2026-09-30
-Plan: .codex/plans/086-tp3b-daily-details-compositions.md
+Plan: .codex/history/plans/086-tp3b-daily-details-compositions.md
 Evidence: .codex/test-artifacts/086-tp3b-daily-details-compositions/
 
 ## Outcome

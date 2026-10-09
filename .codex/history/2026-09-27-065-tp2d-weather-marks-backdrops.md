@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 065-tp2d-weather-marks-backdrops
 Roadmap item: TP.2D-partial1
 Closed: 2026-09-27
-Plan: .codex/plans/065-tp2d-weather-marks-backdrops.md
+Plan: .codex/history/plans/065-tp2d-weather-marks-backdrops.md
 Evidence: .codex/test-artifacts/065-tp2d-weather-marks-backdrops/
 
 ## Outcome

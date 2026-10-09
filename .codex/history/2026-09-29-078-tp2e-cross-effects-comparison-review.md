@@ -23,4 +23,4 @@ TalkBack service traversal, large font, RTL, High contrast, Full effects, other 
 
 ## Follow-up
 
-Proceed to .codex/plans/078-tp2e-cross-effects-comparison-review-partial2.md for the remaining 15 pairs. TP.2E closure remains a separate slice after both comparison halves and any separately accepted correction.
+Proceed to .codex/history/plans/078-tp2e-cross-effects-comparison-review-partial2.md for the remaining 15 pairs. TP.2E closure remains a separate slice after both comparison halves and any separately accepted correction.

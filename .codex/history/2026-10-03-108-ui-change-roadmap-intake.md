@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 108-ui-change-roadmap-intake
 Roadmap item: UI.1
 Closed: 2026-10-03
-Plan: .codex/plans/108-ui-change-roadmap-intake.md
+Plan: .codex/history/plans/108-ui-change-roadmap-intake.md
 Evidence: .codex/test-artifacts/108-ui-change-roadmap-intake/
 
 ## Outcome

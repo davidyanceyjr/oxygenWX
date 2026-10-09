@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 099-tp3c-details-reference-acceptance
 Roadmap item: TP.3C-recovery-partial-B
 Closed: 2026-10-02
-Plan: .codex/plans/099-tp3c-details-reference-acceptance.md
+Plan: .codex/history/plans/099-tp3c-details-reference-acceptance.md
 Evidence: .codex/test-artifacts/099-tp3c-details-reference-acceptance/
 
 ## Outcome

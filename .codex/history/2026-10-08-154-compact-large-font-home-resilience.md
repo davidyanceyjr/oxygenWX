@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 154-compact-large-font-home-resilience
 Roadmap item: R6.2.1
 Closed: 2026-10-08
-Plan: .codex/plans/154-compact-large-font-home-resilience.md
+Plan: .codex/history/plans/154-compact-large-font-home-resilience.md
 Evidence: .codex/test-artifacts/154-compact-large-font-home-resilience/part-1-now-hourly/
 
 ## Outcome

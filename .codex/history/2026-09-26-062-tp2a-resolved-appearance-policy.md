@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 062-tp2a-resolved-appearance-policy
 Roadmap item: TP.2A-partial2
 Closed: 2026-09-26
-Plan: .codex/plans/062-tp2a-resolved-appearance-policy.md
+Plan: .codex/history/plans/062-tp2a-resolved-appearance-policy.md
 Evidence: .codex/test-artifacts/062-tp2a-resolved-appearance-policy/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 103-tp3d-responsive-state-regression
 Roadmap item: TP.3D
 Closed: 2026-10-02
-Plan: .codex/plans/103-tp3d-responsive-state-regression.md
+Plan: .codex/history/plans/103-tp3d-responsive-state-regression.md
 Evidence: .codex/test-artifacts/103-tp3d-responsive-state-regression/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 042-d31-page-specific-atmospheres
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/042-d31-page-specific-atmospheres.md
+Plan: .codex/history/plans/042-d31-page-specific-atmospheres.md
 Evidence: .codex/test-artifacts/042-d31-page-specific-atmospheres/
 
 ## Outcome

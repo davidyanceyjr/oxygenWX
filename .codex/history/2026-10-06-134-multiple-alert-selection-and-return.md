@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 134-multiple-alert-selection-and-return
 Roadmap item: R4.4A
 Closed: 2026-10-06
-Plan: .codex/plans/134-multiple-alert-selection-and-return.md
+Plan: .codex/history/plans/134-multiple-alert-selection-and-return.md
 Evidence: .codex/test-artifacts/134-multiple-alert-selection-and-return/
 
 ## Outcome

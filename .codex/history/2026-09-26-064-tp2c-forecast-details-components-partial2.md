@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 064-tp2c-forecast-details-components-partial2
 Roadmap item: TP.2C-partial2
 Closed: 2026-09-26
-Plan: .codex/plans/064-tp2c-forecast-details-components-partial2.md
+Plan: .codex/history/plans/064-tp2c-forecast-details-components-partial2.md
 Evidence: .codex/test-artifacts/064-tp2c-forecast-details-components-partial2/
 
 ## Outcome

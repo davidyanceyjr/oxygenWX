@@ -112,7 +112,7 @@ plus applicable RTL, theme/effects, and accessibility checks. Weather facts,
 provenance, chronology, and fetch behavior are unchanged. Record evidence under
 `.codex/test-artifacts/109-ui-remove-persistent-page-selector/`.
 
-Plan and proposal: `.codex/plans/109-ui-remove-persistent-page-selector.md`;
+Plan and proposal: `.codex/history/plans/109-ui-remove-persistent-page-selector.md`;
 before screenshot and owner-approved edited proposal are under
 `.codex/test-artifacts/109-ui-remove-persistent-page-selector/`.
 

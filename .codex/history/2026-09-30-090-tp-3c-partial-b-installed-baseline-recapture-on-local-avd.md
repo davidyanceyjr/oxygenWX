@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 090-tp-3c-partial-b-installed-baseline-recapture-on-local-avd
 Roadmap item: TP.3C
 Closed: 2026-09-30
-Plan: .codex/plans/090-tp-3c-partial-b-installed-baseline-recapture-on-local-avd.md
+Plan: .codex/history/plans/090-tp-3c-partial-b-installed-baseline-recapture-on-local-avd.md
 Evidence: .codex/test-artifacts/090-tp-3c-partial-b-installed-baseline-recapture-on-local-avd/
 
 ## Outcome

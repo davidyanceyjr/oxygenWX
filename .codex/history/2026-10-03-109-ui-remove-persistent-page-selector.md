@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 109-ui-remove-persistent-page-selector
 Roadmap item: UI.2
 Closed: 2026-10-03
-Plan: .codex/plans/109-ui-remove-persistent-page-selector.md
+Plan: .codex/history/plans/109-ui-remove-persistent-page-selector.md
 Evidence: .codex/test-artifacts/109-ui-remove-persistent-page-selector/
 
 ## Outcome

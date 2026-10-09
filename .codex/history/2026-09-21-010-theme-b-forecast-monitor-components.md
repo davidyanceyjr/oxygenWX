@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 010-theme-b-forecast-monitor-components
 Roadmap item: R0.6A
 Closed: 2026-09-21
-Plan: .codex/plans/010-theme-b-forecast-monitor-components.md
+Plan: .codex/history/plans/010-theme-b-forecast-monitor-components.md
 Evidence: .codex/test-artifacts/010-theme-b-forecast-monitor-components/
 
 ## Outcome

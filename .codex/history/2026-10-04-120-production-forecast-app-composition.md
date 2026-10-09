@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 120-production-forecast-app-composition
 Roadmap item: R3.1B
 Closed: 2026-10-04
-Plan: .codex/plans/120-production-forecast-app-composition.md
+Plan: .codex/history/plans/120-production-forecast-app-composition.md
 Evidence: .codex/test-artifacts/120-production-forecast-app-composition/
 
 ## Outcome

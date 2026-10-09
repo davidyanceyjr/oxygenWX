@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 135-persisted-unit-presets
 Roadmap item: R5.1
 Closed: 2026-10-06
-Plan: .codex/plans/135-persisted-unit-presets.md
+Plan: .codex/history/plans/135-persisted-unit-presets.md
 Evidence: .codex/test-artifacts/135-persisted-unit-presets/
 
 ## Outcome

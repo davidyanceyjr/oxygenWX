@@ -21,7 +21,7 @@ Documentation-only paths:
 - `docs/UI_CONTEXT_ROADMAP.md` — new owner-directed UI refinement sequence and
   slice requirements.
 - `docs/ROADMAP.md` — link the focused UI sequence from the general roadmap.
-- `.codex/plans/108-ui-change-roadmap-intake.md` and its cycle history/evidence.
+- `.codex/history/plans/108-ui-change-roadmap-intake.md` and its cycle history/evidence.
 
 No Android source, tests, resources, or runtime configuration changes.
 

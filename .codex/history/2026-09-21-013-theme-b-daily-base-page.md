@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 013-theme-b-daily-base-page
 Roadmap item: R0.8
 Closed: 2026-09-21
-Plan: .codex/plans/013-theme-b-daily-base-page.md
+Plan: .codex/history/plans/013-theme-b-daily-base-page.md
 Evidence: .codex/test-artifacts/013-theme-b-daily-base-page/
 
 ## Outcome

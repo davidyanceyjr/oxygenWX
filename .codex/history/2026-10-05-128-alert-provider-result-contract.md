@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 128-alert-provider-result-contract
 Roadmap item: R4.1
 Closed: 2026-10-05
-Plan: .codex/plans/128-alert-provider-result-contract.md
+Plan: .codex/history/plans/128-alert-provider-result-contract.md
 Evidence: .codex/test-artifacts/128-alert-provider-result-contract/
 
 ## Outcome

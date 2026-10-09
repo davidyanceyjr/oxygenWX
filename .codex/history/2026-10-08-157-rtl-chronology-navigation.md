@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 157-rtl-chronology-navigation
 Roadmap item: R6.3
 Closed: 2026-10-08
-Plan: .codex/plans/157-rtl-chronology-navigation.md
+Plan: .codex/history/plans/157-rtl-chronology-navigation.md
 Evidence: .codex/test-artifacts/157-rtl-chronology-navigation/
 
 ## Outcome

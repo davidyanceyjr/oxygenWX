@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 049-d29-weather-mark-owner-approval
 Roadmap item: TP.1D-D29-owner-review
 Closed: 2026-09-24
-Plan: .codex/plans/049-d29-weather-mark-owner-approval.md
+Plan: .codex/history/plans/049-d29-weather-mark-owner-approval.md
 Evidence: .codex/test-artifacts/049-d29-weather-mark-owner-approval/
 
 ## Outcome

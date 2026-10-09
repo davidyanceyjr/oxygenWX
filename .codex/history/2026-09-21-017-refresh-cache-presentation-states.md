@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 017-refresh-cache-presentation-states
 Roadmap item: R1.2A
 Closed: 2026-09-21
-Plan: .codex/plans/017-refresh-cache-presentation-states.md
+Plan: .codex/history/plans/017-refresh-cache-presentation-states.md
 Evidence: .codex/test-artifacts/017-refresh-cache-presentation-states/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 026-tp-1b-now-hourly-page-designs
 Roadmap item: TP.1B
 Closed: 2026-09-23
-Plan: .codex/plans/026-tp-1b-now-hourly-page-designs.md
+Plan: .codex/history/plans/026-tp-1b-now-hourly-page-designs.md
 Evidence: .codex/test-artifacts/026-tp-1b-now-hourly-page-designs/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 105-forecast-provider-interface
 Roadmap item: R2.1
 Closed: 2026-10-03
-Plan: .codex/plans/105-forecast-provider-interface.md
+Plan: .codex/history/plans/105-forecast-provider-interface.md
 Evidence: .codex/test-artifacts/105-forecast-provider-interface/
 
 ## Outcome

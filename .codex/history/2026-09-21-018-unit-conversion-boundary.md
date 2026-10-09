@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 018-unit-conversion-boundary
 Roadmap item: R1.3
 Closed: 2026-09-21
-Plan: .codex/plans/018-unit-conversion-boundary.md
+Plan: .codex/history/plans/018-unit-conversion-boundary.md
 Evidence: .codex/test-artifacts/018-unit-conversion-boundary/
 
 ## Outcome

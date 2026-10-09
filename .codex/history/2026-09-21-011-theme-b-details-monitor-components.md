@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 011-theme-b-details-monitor-components
 Roadmap item: R0.6B
 Closed: 2026-09-21
-Plan: .codex/plans/011-theme-b-details-monitor-components.md
+Plan: .codex/history/plans/011-theme-b-details-monitor-components.md
 Evidence: .codex/test-artifacts/011-theme-b-details-monitor-components/
 
 ## Outcome

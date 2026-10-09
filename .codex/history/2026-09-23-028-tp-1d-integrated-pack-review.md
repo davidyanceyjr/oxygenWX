@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 028-tp-1d-integrated-pack-review
 Roadmap item: TP.1D
 Closed: 2026-09-23
-Plan: .codex/plans/028-tp-1d-integrated-pack-review.md
+Plan: .codex/history/plans/028-tp-1d-integrated-pack-review.md
 Evidence: .codex/test-artifacts/028-tp-1d-integrated-pack-review/
 
 ## Outcome
@@ -21,4 +21,4 @@ Static design evidence only: no installed app, interaction, Android font metrics
 
 ## Follow-up
 
-Next: review/expand and separately activate .codex/plans/028-tp-1d-integrated-pack-review-partial-A.md for Daily/Details and final cross-pack owner approval. Carry D27 geometry refinements and D28/D29 decisions from INTEGRATED_PACK.md. TP.3 owns installed comparison.
+Next: review/expand and separately activate .codex/history/plans/028-tp-1d-integrated-pack-review-partial-A.md for Daily/Details and final cross-pack owner approval. Carry D27 geometry refinements and D28/D29 decisions from INTEGRATED_PACK.md. TP.3 owns installed comparison.

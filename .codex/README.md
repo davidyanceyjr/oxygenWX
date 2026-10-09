@@ -7,8 +7,8 @@ This directory is the persistent execution record for Oxygen development. It exi
 ```text
 .codex/
   current.md       one pointer/state file for the current or next cycle
-  plans/           one bounded plan per development cycle
-  history/         closed-cycle outcome records; do not rewrite old history casually
+  plans/           current, planned, blocked, partial, or otherwise unresolved plans
+  history/         closed-cycle outcome records and archived completed plans; do not rewrite old history casually
   test-artifacts/  local installed screenshots/logs/results (often untracked when large)
 ```
 
@@ -53,3 +53,23 @@ A closed history record must state:
 - commit/PR identifiers when known.
 
 Do not claim an installed, accessibility, provider, or release boundary was verified unless the relevant evidence actually ran.
+
+## Routine context and history lookup
+
+For a new task, load the governing specification and roadmap, `.codex/current.md`,
+and only the plan named by the current pointer (if any). The active `.codex/plans/`
+directory may contain unresolved plans; check status and dependencies before selecting
+one. Completed plans are archived under `.codex/history/plans/` beside their closed
+cycle records. Open a specific history record, archived plan, or evidence directory
+when a dependency, audit, regression investigation, or reconstruction requires it; do
+not load the full history or evidence tree as routine context.
+
+## Routine context and history lookup
+
+For a new task, load the governing specification and roadmap, `.codex/current.md`,
+and only the plan named by the current pointer (if any). The active `.codex/plans/`
+directory may contain unresolved plans; check status and dependencies before selecting
+one. Completed plans are archived under `.codex/history/plans/` beside their closed
+cycle records. Open a specific history record, archived plan, or evidence directory
+when a dependency, audit, regression investigation, or reconstruction requires it; do
+not load the full history or evidence tree as routine context.

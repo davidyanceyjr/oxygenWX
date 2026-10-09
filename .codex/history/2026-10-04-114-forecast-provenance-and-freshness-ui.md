@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 114-forecast-provenance-and-freshness-ui
 Roadmap item: R2.5
 Closed: 2026-10-04
-Plan: .codex/plans/114-forecast-provenance-and-freshness-ui.md
+Plan: .codex/history/plans/114-forecast-provenance-and-freshness-ui.md
 Evidence: .codex/test-artifacts/114-forecast-provenance-and-freshness-ui/
 
 ## Outcome

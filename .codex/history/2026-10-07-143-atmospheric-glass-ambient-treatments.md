@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 143-atmospheric-glass-ambient-treatments
 Roadmap item: R5.4C
 Closed: 2026-10-07
-Plan: .codex/plans/143-atmospheric-glass-ambient-treatments.md
+Plan: .codex/history/plans/143-atmospheric-glass-ambient-treatments.md
 Evidence: .codex/test-artifacts/143-atmospheric-glass-ambient-treatments/
 
 ## Outcome

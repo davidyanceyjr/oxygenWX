@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 056-tp1d-packet-revision
 Roadmap item: TP.1D-packet-revision
 Closed: 2026-09-25
-Plan: .codex/plans/056-tp1d-packet-revision.md
+Plan: .codex/history/plans/056-tp1d-packet-revision.md
 Evidence: .codex/test-artifacts/056-tp1d-packet-revision/
 
 ## Outcome

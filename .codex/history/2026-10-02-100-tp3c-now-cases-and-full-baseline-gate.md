@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 100-tp3c-now-cases-and-full-baseline-gate
 Roadmap item: TP.3C-recovery-partial-C
 Closed: 2026-10-02
-Plan: .codex/plans/100-tp3c-now-cases-and-full-baseline-gate.md
+Plan: .codex/history/plans/100-tp3c-now-cases-and-full-baseline-gate.md
 Evidence: .codex/test-artifacts/100-tp3c-now-cases-and-full-baseline-gate/
 
 ## Outcome

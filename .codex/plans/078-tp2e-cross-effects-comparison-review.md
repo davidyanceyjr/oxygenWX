@@ -23,7 +23,7 @@ five themes. This is exactly 15 matched pairs / 30 source captures. Record a
 contract-based disposition for each pair and identify any reproducible
 production-contract defect for a separate correction plan. This cycle does not
 make corrections or close TP.2E. The dependent second half is
-`.codex/plans/078-tp2e-cross-effects-comparison-review-partial2.md` and covers
+`.codex/history/plans/078-tp2e-cross-effects-comparison-review-partial2.md` and covers
 Source and inspection, Weather mark, and Backdrop.
 
 ## Production boundary

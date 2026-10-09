@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 052-d31-daily-atmosphere-mapping
 Roadmap item: TP.1D-D31-partial-B
 Closed: 2026-09-25
-Plan: .codex/plans/052-d31-daily-atmosphere-mapping.md
+Plan: .codex/history/plans/052-d31-daily-atmosphere-mapping.md
 Evidence: .codex/test-artifacts/052-d31-daily-atmosphere-mapping/
 
 ## Outcome

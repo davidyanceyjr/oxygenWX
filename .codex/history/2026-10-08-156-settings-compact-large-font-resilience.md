@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 156-settings-compact-large-font-resilience
 Roadmap item: R6.2A
 Closed: 2026-10-08
-Plan: .codex/plans/156-settings-compact-large-font-resilience.md
+Plan: .codex/history/plans/156-settings-compact-large-font-resilience.md
 Evidence: .codex/test-artifacts/156-settings-compact-large-font-resilience/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 094-tp3c-r-metric-reference-reconciliation
 Roadmap item: TP.3C-R
 Closed: 2026-10-01
-Plan: .codex/plans/094-tp3c-r-metric-reference-reconciliation.md
+Plan: .codex/history/plans/094-tp3c-r-metric-reference-reconciliation.md
 Evidence: .codex/test-artifacts/094-tp3c-r-metric-reference-reconciliation/
 
 ## Outcome

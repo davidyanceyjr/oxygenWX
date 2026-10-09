@@ -54,7 +54,7 @@ interactions do not branch on raw theme IDs.
 - `scripts/dev.py` — add a cross-platform `android-test` command for
   `:app:connectedDebugAndroidTest`, reusing the existing Gradle launcher and
   JDK/SDK selection logic.
-- `.codex/plans/063-tp2b-shared-shell-current-components.md`,
+- `.codex/history/plans/063-tp2b-shared-shell-current-components.md`,
   `.codex/current.md`, and
   `.codex/test-artifacts/063-tp2b-shared-shell-current-components/` — lifecycle
   state and exact verification evidence.

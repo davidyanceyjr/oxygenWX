@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 023-production-themed-details-source-components
 Roadmap item: R0.11CA
 Closed: 2026-09-22
-Plan: .codex/plans/023-production-themed-details-source-components.md
+Plan: .codex/history/plans/023-production-themed-details-source-components.md
 Evidence: .codex/test-artifacts/023-production-themed-details-source-components/
 
 ## Outcome

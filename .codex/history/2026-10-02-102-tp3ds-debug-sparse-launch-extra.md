@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 102-tp3ds-debug-sparse-launch-extra
 Roadmap item: TP.3D-S
 Closed: 2026-10-02
-Plan: .codex/plans/102-tp3ds-debug-sparse-launch-extra.md
+Plan: .codex/history/plans/102-tp3ds-debug-sparse-launch-extra.md
 Evidence: .codex/test-artifacts/102-tp3ds-debug-sparse-launch-extra/
 
 ## Outcome

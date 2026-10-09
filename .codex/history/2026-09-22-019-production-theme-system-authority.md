@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 019-production-theme-system-authority
 Roadmap item: R0.11A
 Closed: 2026-09-22
-Plan: .codex/plans/019-production-theme-system-authority.md
+Plan: .codex/history/plans/019-production-theme-system-authority.md
 Evidence: .codex/test-artifacts/019-production-theme-system-authority/
 
 ## Outcome

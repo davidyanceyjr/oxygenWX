@@ -14,7 +14,7 @@ accurate source set and an explicit gap question.
 
 ## Production boundary
 
-Documentation only: `.codex/plans/040-d31-per-theme-source-set.md`,
+Documentation only: `.codex/history/plans/040-d31-per-theme-source-set.md`,
 `docs/theme-pack-roadmap.md`, and cycle evidence/history. No art assets, design
 references, Android code, or pinned packet contents change.
 

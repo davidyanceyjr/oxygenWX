@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 037-d29-d31-design-followup
 Roadmap item: TP.1D
 Closed: 2026-09-24
-Plan: .codex/plans/037-d29-d31-design-followup.md
+Plan: .codex/history/plans/037-d29-d31-design-followup.md
 Evidence: .codex/test-artifacts/037-d29-d31-design-followup/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 035-roadmap-bounded-exits
 Roadmap item: Roadmap bounded-exit audit
 Closed: 2026-09-24
-Plan: .codex/plans/035-roadmap-bounded-exits.md
+Plan: .codex/history/plans/035-roadmap-bounded-exits.md
 Evidence: .codex/test-artifacts/035-roadmap-bounded-exits/
 
 ## Outcome

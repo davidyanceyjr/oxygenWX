@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 088-tp3c-partial-a-deterministic-baseline-recapture
 Roadmap item: TP.3C
 Closed: 2026-09-30
-Plan: .codex/plans/088-tp3c-partial-a-deterministic-baseline-recapture.md
+Plan: .codex/history/plans/088-tp3c-partial-a-deterministic-baseline-recapture.md
 Evidence: .codex/test-artifacts/088-tp3c-partial-a-deterministic-baseline-recapture/
 
 ## Outcome

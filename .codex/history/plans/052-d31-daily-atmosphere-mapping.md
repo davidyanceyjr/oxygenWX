@@ -37,7 +37,7 @@ Only these paths may change in this cycle:
   to describe fifteen proposed Now/Hourly/Daily cells and pending work;
 - `docs/theme-pack-roadmap.md`: update only the D31 execution progress/head to
   identify cycle 052 as active and, on completion, its fifteen-cell outcome;
-- `.codex/plans/052-d31-daily-atmosphere-mapping.md`, `.codex/current.md`,
+- `.codex/history/plans/052-d31-daily-atmosphere-mapping.md`, `.codex/current.md`,
   cycle evidence, and its eventual history record for this lifecycle.
 
 Do not modify the source audit, asset index/manifest, page composition files,

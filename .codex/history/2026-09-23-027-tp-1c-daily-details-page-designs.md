@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 027-tp-1c-daily-details-page-designs
 Roadmap item: TP.1C
 Closed: 2026-09-23
-Plan: .codex/plans/027-tp-1c-daily-details-page-designs.md
+Plan: .codex/history/plans/027-tp-1c-daily-details-page-designs.md
 Evidence: .codex/test-artifacts/027-tp-1c-daily-details-page-designs/
 
 ## Outcome
