@@ -857,12 +857,14 @@ then is the aggregate R6.2 exit met.
 
 Evidence and limitations: `.codex/history/2026-10-08-155-daily-details-resilience-r62-closure.md` and `.codex/test-artifacts/155-daily-details-resilience-r62-closure/`. The full 60-cell installed matrix and Daily window/page navigation actions passed; no correction was needed. RTL, Simple layout, High contrast, other effects levels, live-provider request counters, and TalkBack remain outside these portions.
 
-### R6.2A — Settings compact and large-font resilience — PLANNED
+### R6.2A — Settings compact and large-font resilience — DONE
 
 After R6.2, verify compact and large-font conditions for Settings destinations
 and each persisted appearance/layout control.
 
 **Exit:** Capture all seven Settings destinations at compact viewport and font scale 1.3 (14 screenshots) and record hierarchy for each; all controls/content remain reachable with no overlap.
+
+Evidence and limitations: `.codex/history/2026-10-08-156-settings-compact-large-font-resilience.md` and `.codex/test-artifacts/156-settings-compact-large-font-resilience/`. The installed 14-cell matrix, scroll/return evidence, and Appearance control actions passed; no production correction was warranted. TalkBack, RTL, alternate configurations, and the Appearance operation-counter invariant remain unverified as recorded in the cycle closeout.
 
 ### R6.3 — RTL chronology/navigation — PLANNED
 
