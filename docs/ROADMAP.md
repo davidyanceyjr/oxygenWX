@@ -897,7 +897,7 @@ visual acceptance.
 **Portion exit:** The typed snapshot contract, 30-case deterministic result,
 and exact test evidence are recorded for the production-flow handoff.
 
-### R6.4-partial-A — Production appearance flow and request counters — PLANNED
+### R6.4-partial-A — Production appearance flow and request counters — DONE
 
 After the first R6.4 portion, diagnose and repair the Cycle 156 fixture-text
 gate, run actual appearance controls through the production Activity, and
@@ -909,6 +909,13 @@ equality and exact zero forecast and alert transport deltas after a settled
 baseline; independent positive controls prove both counters can increment.
 Cache operations are recorded separately. Any untrustworthy counter or
 fixture restoration is a blocked result, not a no-refetch claim.
+
+Evidence and limits: `.codex/history/2026-10-09-159-reduced-motion-appearance-flow.md`
+and `.codex/test-artifacts/159-reduced-motion-appearance-flow/`. The API 37
+production Activity flow passed all five theme, two contrast, and three effects
+actions after both transport positive controls; transport and cache counts
+remained unchanged from the restored fixture baseline. The installed 20-cell
+visual review remains R6.4-partial-B.
 
 ### R6.4-partial-B — Installed Effects Off/reduced-motion review — PLANNED
 

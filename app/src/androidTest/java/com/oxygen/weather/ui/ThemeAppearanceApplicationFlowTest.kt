@@ -448,52 +448,234 @@ class ThemeAppearanceApplicationFlowTest {
 
     @Test
     fun appearanceUsesActivityOwnerAndRestoresEveryThemeAcrossActivityRecreation() {
-        compose.waitForIdle()
-        val startupBaseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
-        assertEquals(listOf(0, 0, 0, 0), startupBaseline)
-        compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
-        org.junit.Assert.assertNotNull(canonicalSnapshot)
-        assertWeatherFactsUnchanged()
-
-        var currentTheme = WeatherThemeId.ATMOSPHERIC
-        WeatherThemeId.entries.forEach { id ->
-            val name = ThemeCatalog.definition(id).displayName
-            openAppearanceFromHome()
-            compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performScrollTo()
-                .assertIsDisplayed().performClick()
-            compose.waitForIdle()
-
-            assertEquals(id, store.value)
-            compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").assertIsSelected()
-            WeatherThemeId.entries.forEach { optionId ->
-                val option = compose.onNodeWithTag("appearance-theme-${optionId.name.lowercase()}").performScrollTo()
-                if (optionId == id) option.assertIsSelected() else option.assertIsNotSelected()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val evidence = File(context.getExternalFilesDir(null), "159-reduced-motion-appearance-flow")
+            .apply { check(mkdirs() || isDirectory) }
+        val observations = mutableListOf<String>()
+        try {
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+        val alertTransportRequests = AtomicInteger()
+        val forecastTerminal = AtomicReference<com.oxygen.weather.presentation.SelectedForecastPresentationState?>()
+        val alertTerminal = AtomicReference<com.oxygen.weather.application.OfficialAlertState?>()
+        val selectedRead = AtomicReference<com.oxygen.weather.application.SelectedLocationReadResult?>()
+        val presetRead = AtomicReference<UnitPresetReadResult?>()
+        LocationSearchTestHooks.selectedStoreFactory = { appContext ->
+            val delegate = SharedPreferencesSelectedLocationStore(appContext)
+            object : com.oxygen.weather.application.SelectedLocationStore by delegate {
+                override fun read(): com.oxygen.weather.application.SelectedLocationReadResult = delegate.read().also(selectedRead::set)
             }
-            compose.onNodeWithContentDescription("$name, selected").assertIsDisplayed()
-            assertEquals(id, ThemeCatalog.definition(id).id)
-            assertEquals(id, resolveTheme(id).definition.id)
-            compose.activityRule.scenario.onActivity {
-                assertEquals(canonicalSnapshot, it.canonicalWeatherFixtureForTests())
-            }
-            assertEquals(startupBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
-
-            returnFromAppearanceToHome()
-            compose.waitForIdle()
-            assertWeatherFactsUnchanged()
-            assertHomeSettingsVisible(name)
-            compose.activityRule.scenario.recreate()
-            compose.waitForIdle()
-            assertHomeSettingsVisible(name)
-            compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
-            compose.activityRule.scenario.onActivity {
-                assertEquals(canonicalSnapshot, it.canonicalWeatherFixtureForTests())
-            }
-            assertWeatherFactsUnchanged()
-            assertEquals(id, store.value)
-            assertEquals(startupBaseline, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
-            currentTheme = id
         }
-        assertEquals(WeatherThemeId.entries.map { it to ThemePreferenceWriteResult.SUCCESS }, synchronized(applied) { applied.toList() })
+        UnitPresetTestHooks.onRead = presetRead::set
+        ProductionForecastTestHooks.onPresentationChanged = { state ->
+            if (state.status.visibleText.startsWith("Live weather data from ")) forecastTerminal.set(state)
+        }
+        ProductionOfficialAlertTestHooks.onStateChanged = { state ->
+            if (state is com.oxygen.weather.application.OfficialAlertState.Supported) alertTerminal.set(state)
+        }
+        ProductionForecastTestHooks.transportOverride = com.oxygen.weather.data.provider.openmeteo.OpenMeteoTransport {
+            forecastRequests.incrementAndGet()
+            com.oxygen.weather.data.provider.openmeteo.OpenMeteoHttpResponse(
+                200,
+                """{"timezone":"America/Chicago","current":{"time":"2026-10-04T10:00","temperature_2m":12,"weather_code":3},"current_units":{"temperature_2m":"°C","weather_code":"wmo code"}}""",
+            )
+        }
+        ProductionOfficialAlertTestHooks.transportOverride = com.oxygen.weather.data.alerts.nws.NwsTransport {
+            alertTransportRequests.incrementAndGet()
+            com.oxygen.weather.data.alerts.nws.NwsHttpResponse(200, """{"type":"FeatureCollection","features":[]}""")
+        }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        observations += "startup forecast=${forecastRequests.get()} alert=${alertTransportRequests.get()} cacheRead=${cacheReads.get()} cacheWrite=${cacheWrites.get()} selected=${selectedRead.get()}"
+        assertEquals(com.oxygen.weather.application.SelectedLocationReadResult.Empty, selectedRead.get())
+        assertEquals(0, forecastRequests.get())
+        assertEquals(0, alertTransportRequests.get())
+
+        // Exercise both production transports before measuring appearance actions.
+        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("location-search-query").performTextInput("Motion")
+        compose.onNodeWithTag("location-search-submit").performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithTag("location-search-result-0").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("location-search-result-0").performClick()
+        compose.waitUntil(20_000) {
+            forecastRequests.get() > 0 && alertTransportRequests.get() > 0 &&
+                forecastTerminal.get() != null && alertTerminal.get() != null
+        }
+        compose.waitForIdle()
+        val positivePreset = when (val read = requireNotNull(presetRead.get())) {
+            is UnitPresetReadResult.Found -> read.preset
+            is UnitPresetReadResult.Defaulted -> read.preset
+            UnitPresetReadResult.Failure -> UnitPreset.METRIC
+        }
+        val expectedSelectedTemperature = if (positivePreset == UnitPreset.US) "54 °F" else "12 °C"
+        assertEquals("selected forecast must show injected Open-Meteo temperature",
+            expectedSelectedTemperature, forecastTerminal.get()!!.home.current.temperature)
+        assertTrue(alertTerminal.get() is com.oxygen.weather.application.OfficialAlertState.Supported)
+        observations += "positive forecast=${forecastRequests.get()} alert=${alertTransportRequests.get()} cacheRead=${cacheReads.get()} cacheWrite=${cacheWrites.get()} forecast=${forecastTerminal.get()!!.home.current.temperature} alertState=${alertTerminal.get()!!::class.simpleName}"
+
+        assertEquals(com.oxygen.weather.application.SelectedLocationWriteResult.SUCCESS,
+            SharedPreferencesSelectedLocationStore(context).clear())
+        selectedRead.set(null)
+        compose.activityRule.scenario.recreate()
+        compose.waitUntil(10_000) {
+            selectedRead.get() == com.oxygen.weather.application.SelectedLocationReadResult.Empty &&
+                compose.onAllNodesWithText("Demo Station").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.waitForIdle()
+        fun activityBundle(): WeatherBundle {
+            val found = AtomicReference<WeatherBundle?>()
+            compose.activityRule.scenario.onActivity { found.set(it.canonicalWeatherFixtureForTests()) }
+            return requireNotNull(found.get())
+        }
+        val bundle = activityBundle()
+        val preset = when (val read = requireNotNull(presetRead.get())) {
+            is UnitPresetReadResult.Found -> read.preset
+            is UnitPresetReadResult.Defaulted -> read.preset
+            UnitPresetReadResult.Failure -> UnitPreset.METRIC
+        }
+        val input = com.oxygen.weather.presentation.AppearanceSemanticProjection.inputFor(bundle, preset)
+        val expected = com.oxygen.weather.presentation.AppearanceSemanticProjection.snapshot(
+            input, com.oxygen.weather.presentation.HomePageId.NOW, 0, 0,
+        )
+        fun counts() = listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())
+        val baseline = counts()
+        observations += "restored baseline=$baseline selected=${selectedRead.get()} preset=$preset fixture=${bundle.current} typed=$expected"
+        fun verify(label: String) {
+            compose.waitForIdle()
+            val actualBundle = activityBundle()
+            assertEquals("$label fixture", bundle, actualBundle)
+            val actualInput = com.oxygen.weather.presentation.AppearanceSemanticProjection.inputFor(actualBundle, preset)
+            assertEquals("$label typed projection", expected,
+                com.oxygen.weather.presentation.AppearanceSemanticProjection.snapshot(actualInput,
+                    com.oxygen.weather.presentation.HomePageId.NOW, 0, 0))
+            val current = input.presentation.current
+            listOf(current.temperature, current.condition, input.presentation.sourceLine, input.presentation.updatedLine).forEach { fact ->
+                try {
+                    compose.waitUntil(5_000) { compose.onAllNodesWithText(fact, substring = true).fetchSemanticsNodes().isNotEmpty() }
+                } catch (failure: androidx.compose.ui.test.ComposeTimeoutException) {
+                    throw AssertionError("$label missing mapper fact '$fact'; observed=${visibleTextSnapshot()}", failure)
+                }
+            }
+            compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
+            assertEquals("$label operations", baseline, counts())
+            val pageControl = compose.onNodeWithContentDescription("Choose Home page, current: Now").fetchSemanticsNode()
+            assertTrue("$label page control must be enabled", !pageControl.config.contains(SemanticsProperties.Disabled))
+            compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
+            listOf("Now", "Hourly", "Daily", "Details").forEachIndexed { index, page ->
+                val active = index == 0
+                val option = compose.onNodeWithContentDescription(
+                    "$page page, ${index + 1} of 4, ${if (active) "selected" else "not selected"}",
+                ).fetchSemanticsNode()
+                assertTrue("$label $page enabled", !option.config.contains(SemanticsProperties.Disabled))
+                assertEquals("$label $page selected", active, option.config[SemanticsProperties.Selected])
+            }
+            compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
+            compose.onNodeWithText(input.presentation.hourlyWindows.first().rangeLabel).performScrollTo().assertIsDisplayed()
+            fun currentPageControl(description: String): androidx.compose.ui.semantics.SemanticsNode {
+                val width = compose.onRoot().fetchSemanticsNode().boundsInRoot.width
+                return compose.onAllNodesWithContentDescription(description).fetchSemanticsNodes()
+                    .filter { it.boundsInRoot.left in 0f..width }
+                    .minBy { it.boundsInRoot.left }
+            }
+            val hourlyEarlier = currentPageControl("Earlier unavailable")
+            val hourlyLater = currentPageControl("Later")
+            assertTrue("$label hourly earlier disabled", hourlyEarlier.config.contains(SemanticsProperties.Disabled))
+            assertTrue("$label hourly later enabled", !hourlyLater.config.contains(SemanticsProperties.Disabled))
+            compose.onNodeWithContentDescription("Choose Home page, current: Hourly").performClick()
+            compose.onNodeWithContentDescription("Daily page, 3 of 4, not selected").performClick()
+            compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertIsDisplayed()
+            compose.onNodeWithText(input.presentation.dailyWindows.first().rangeLabel).performScrollTo().assertIsDisplayed()
+            val dailyEarlier = currentPageControl("Earlier unavailable")
+            val dailyLater = currentPageControl("Later")
+            assertTrue("$label daily earlier disabled", dailyEarlier.config.contains(SemanticsProperties.Disabled))
+            assertTrue("$label daily later enabled", !dailyLater.config.contains(SemanticsProperties.Disabled))
+            compose.onNodeWithContentDescription("Choose Home page, current: Daily").performClick()
+            compose.onNodeWithContentDescription("Now page, 1 of 4, not selected").performClick()
+            compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
+            assertEquals("$label nav operations", baseline, counts())
+            observations += "$label counts=${counts()} selectedPage=Now nav=4-options hourlyIndex=0 earlierDisabled=true laterEnabled=true dailyIndex=0 earlierDisabled=true laterEnabled=true controlBounds=${pageControl.boundsInRoot} typedHash=${expected.hashCode()}"
+        }
+        verify("restored fixture")
+        openAppearanceFromHome()
+        val themeChoices = WeatherThemeId.entries
+        val contrastChoices = ContrastLevel.entries
+        val effectsChoices = ThemeEffectsLevel.entries
+        fun observeAppearance(label: String) {
+            val actualBundle = activityBundle()
+            assertEquals("$label fixture", bundle, actualBundle)
+            val actualInput = com.oxygen.weather.presentation.AppearanceSemanticProjection.inputFor(actualBundle, preset)
+            assertEquals("$label typed", expected,
+                com.oxygen.weather.presentation.AppearanceSemanticProjection.snapshot(actualInput,
+                    com.oxygen.weather.presentation.HomePageId.NOW, 0, 0))
+            compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
+            val selectedTags = listOf(
+                "appearance-theme-${(store.value ?: WeatherThemeId.ATMOSPHERIC).name.lowercase()}",
+                "appearance-contrast-${(contrastStore.value ?: ContrastLevel.STANDARD).name.lowercase()}",
+                "appearance-effects-${(effectsStore.value ?: ThemeEffectsLevel.SUBTLE).name.lowercase()}",
+            )
+            selectedTags.forEach { choice ->
+                val node = compose.onNodeWithTag(choice).performScrollTo().assertIsSelected().fetchSemanticsNode()
+                assertTrue("$label $choice enabled", !node.config.contains(SemanticsProperties.Disabled))
+            }
+            observations += "$label selected=$selectedTags typedHash=${expected.hashCode()}"
+        }
+        fun select(tag: String, label: String) {
+            val before = counts()
+            observeAppearance("$label before")
+            compose.onNodeWithTag(tag).performScrollTo().performClick().assertIsSelected()
+            compose.waitForIdle()
+            observeAppearance("$label after")
+            assertEquals("$label interval", before, counts())
+            compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+            compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+            compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+            compose.waitUntil(10_000) {
+                compose.onAllNodesWithContentDescription("Choose Home page, current: Now").fetchSemanticsNodes().isNotEmpty()
+            }
+            verify("$label return")
+            openAppearanceFromHome()
+            compose.onNodeWithTag(tag).performScrollTo().assertIsSelected()
+            assertEquals("$label reopened counts", before, counts())
+            observations += "$label counts=${counts()} selected=$tag"
+        }
+        themeChoices.forEach { id ->
+            val tag = "appearance-theme-${id.name.lowercase()}"
+            select(tag, "theme:$id")
+            assertEquals(id, store.value)
+        }
+        contrastChoices.forEach { level ->
+            val tag = "appearance-contrast-${level.name.lowercase()}"
+            select(tag, "contrast:$level")
+            assertEquals(level, contrastStore.value)
+        }
+        effectsChoices.forEach { level ->
+            val tag = "appearance-effects-${level.name.lowercase()}"
+            select(tag, "effects:$level")
+            assertEquals(level, effectsStore.value)
+        }
+        returnFromAppearanceToHome()
+        verify("route return")
+        compose.activityRule.scenario.recreate()
+        verify("final recreation")
+        openAppearanceFromHome()
+        compose.onNodeWithTag("appearance-theme-${themeChoices.last().name.lowercase()}").performScrollTo().assertIsSelected()
+        compose.onNodeWithTag("appearance-contrast-${contrastChoices.last().name.lowercase()}").performScrollTo().assertIsSelected()
+        compose.onNodeWithTag("appearance-effects-${effectsChoices.last().name.lowercase()}").performScrollTo().assertIsSelected()
+        assertEquals(baseline, counts())
+        observations += "final counts=${counts()} themes=${themeChoices.size} contrasts=${contrastChoices.size} effects=${effectsChoices.size}"
+        } finally {
+            val log = observations.joinToString("\n", postfix = "\n")
+            File(evidence, "flow-counts.txt").writeText(log)
+            val values = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, "159-flow-counts.txt")
+                put(MediaStore.Downloads.MIME_TYPE, "text/plain")
+                put(MediaStore.Downloads.RELATIVE_PATH, "Download/OxygenWX/159-reduced-motion-appearance-flow")
+            }
+            context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)?.let { uri ->
+                context.contentResolver.openOutputStream(uri)?.use { it.write(log.toByteArray()) }
+            }
+        }
     }
 
     @Test
@@ -958,6 +1140,11 @@ class ThemeAppearanceApplicationFlowTest {
         ProductionForecastTestHooks.transportOverride = null
         ProductionForecastTestHooks.cacheStoreFactory = null
         ProductionOfficialAlertTestHooks.onRequestFetched = null
+        SharedPreferencesSelectedLocationStore(InstrumentationRegistry.getInstrumentation().targetContext).clear()
+        ProductionOfficialAlertTestHooks.transportOverride = null
+        ProductionOfficialAlertTestHooks.onStateChanged = null
+        ProductionForecastTestHooks.onPresentationChanged = null
+        LocationSearchTestHooks.selectedStoreFactory = null
         LocationSearchTestHooks.effectsOverrideForTests = null
         LocationSearchTestHooks.layoutDirectionOverrideForTests = null
         UnitPresetTestHooks.storeFactory = null

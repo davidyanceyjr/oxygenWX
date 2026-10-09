@@ -36,6 +36,11 @@ android {
     }
 }
 
+// Keep the typed appearance projection in test code while compiling the same source in both test targets.
+tasks.matching { it.name == "compileDebugUnitTestKotlin" || it.name == "compileDebugAndroidTestKotlin" }.configureEach {
+    (this as org.jetbrains.kotlin.gradle.tasks.KotlinCompile).source("src/sharedTest/java")
+}
+
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2026.09.00")
     implementation(composeBom)
