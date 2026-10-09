@@ -866,11 +866,13 @@ and each persisted appearance/layout control.
 
 Evidence and limitations: `.codex/history/2026-10-08-156-settings-compact-large-font-resilience.md` and `.codex/test-artifacts/156-settings-compact-large-font-resilience/`. The installed 14-cell matrix, scroll/return evidence, and Appearance control actions passed; no production correction was warranted. TalkBack, RTL, alternate configurations, and the Appearance operation-counter invariant remain unverified as recorded in the cycle closeout.
 
-### R6.3 — RTL chronology/navigation — PLANNED
+### R6.3 — RTL chronology/navigation — DONE
 
 Preserve earliest-to-latest data order while mirroring physical layout/directional controls appropriately.
 
 **Exit:** Capture 20 Hourly/Daily screenshots (five themes × two pages × LTR/RTL) and run matching semantics checks; chronological order remains earliest-to-latest and directional controls/navigation behave correctly.
+
+Evidence and limitations: `.codex/history/2026-10-08-157-rtl-chronology-navigation.md` and `.codex/test-artifacts/157-rtl-chronology-navigation/`. All 20 installed cells and RTL chronology/navigation evidence passed. Existing Home/Daily instrumentation helpers did not finish their later theme-switch iterations, and the final LTR title-menu result was not retained; see the closeout for exact boundaries.
 
 ### R6.4 — Reduced-motion and appearance invariance — PLANNED
 
@@ -878,6 +880,47 @@ Verify production-theme, contrast, and effects combinations on Home preserve wea
 semantics, controls, source/freshness, and no-refetch behavior.
 
 **Exit:** All 30 resolver combinations (five themes × two contrast modes × three effects levels) pass deterministic invariance checks; 20 installed page captures cover Effects Off/reduced-motion, and request counters remain unchanged across appearance changes.
+
+Deliver R6.4 through the following three ordered portions. The first retains
+R6.4 and Cycle 158; later portions use the same base ID with partial suffixes.
+R6.4 is complete only after all three portions close with their stated
+evidence. A failed prerequisite blocks dependent portions rather than
+silently narrowing the aggregate exit.
+
+**First portion — typed semantic contract and resolver matrix (Cycle 158).**
+Define an appearance-independent typed snapshot from the canonical fixture
+and typed state. Prove semantic equality across all 30 theme × contrast ×
+effects combinations and reduced motion; assert Effects Off resolver policy
+separately. This portion does not claim production no-refetch or installed
+visual acceptance.
+
+**Portion exit:** The typed snapshot contract, 30-case deterministic result,
+and exact test evidence are recorded for the production-flow handoff.
+
+### R6.4-partial-A — Production appearance flow and request counters — PLANNED
+
+After the first R6.4 portion, diagnose and repair the Cycle 156 fixture-text
+gate, run actual appearance controls through the production Activity, and
+prove forecast and official-alert transport counters are sensitive to known
+requests. Restore the fixture before measuring appearance actions.
+
+**Exit:** The corrected appearance flow passes typed semantic/navigation
+equality and exact zero forecast and alert transport deltas after a settled
+baseline; independent positive controls prove both counters can increment.
+Cache operations are recorded separately. Any untrustworthy counter or
+fixture restoration is a blocked result, not a no-refetch claim.
+
+### R6.4-partial-B — Installed Effects Off/reduced-motion review — PLANNED
+
+After R6.4-partial-A, capture and review Now, Hourly, Daily, and Details in
+each of the five production themes on the installed Standard Home path with
+Effects Off and system reduced motion at the specified compact profile.
+
+**Exit:** Twenty valid screenshot/hierarchy pairs, profile and appearance
+readbacks, hashes, manifest, and per-cell dispositions show all required
+facts, provenance, controls, page names, and semantics present and usable
+with opaque/static Effects Off. Cite the first portion and partial-A results
+before closing the aggregate R6.4 exit.
 
 ### R6.4A — Cross-theme and layout appearance invariance — PLANNED
 
