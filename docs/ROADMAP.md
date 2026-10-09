@@ -957,11 +957,13 @@ passed; forecast, official-alert, and cache read/write deltas were zero across
 appearance and Settings actions. Large-font, RTL, alternate contrast/effects,
 TalkBack, other devices/APIs, and provider/network behavior remain unverified.
 
-### R6.5 — Accessibility evidence closure — PLANNED
+### R6.5 — Accessibility evidence closure — DONE
 
 Record the exact service-level/manual accessibility checks actually performed; do not upgrade unverified boundaries into claims.
 
-**Exit:** One report records TalkBack/manual results for all four Home pages, one alert path, and all seven Settings destinations; any unrun or failed path is explicitly a release blocker, never an inferred pass.
+**Exit:** One report records TalkBack/manual results for all four Home pages, one alert path, and all seven Settings destinations. Failed or unrun paths are recorded as findings with evidence and limitations, never inferred as passes or labeled release blockers by this slice. Identify remediation candidates for any findings; implement solutions only through separately planned roadmap slices.
+
+Evidence and limits: `.codex/history/2026-10-09-162-accessibility-evidence-closure.md` and `.codex/test-artifacts/162-accessibility-evidence-closure/`. The installed API 37 report includes status and notes for all 12 required targets. TalkBack 17 was enabled/bound, but spoken utterances and traversal were not observable through the available audio channel; 11 targets remain NOT RUN for accessibility acceptance. Settings Units records a visible US-selected/Celsius mismatch. No authoritative alert was available in the offline Demo Station fixture. Large-font, RTL, alternate appearance, provider/network, and other device/API coverage remain unverified.
 
 ## R7 — Release hardening
 
