@@ -874,7 +874,7 @@ Preserve earliest-to-latest data order while mirroring physical layout/direction
 
 Evidence and limitations: `.codex/history/2026-10-08-157-rtl-chronology-navigation.md` and `.codex/test-artifacts/157-rtl-chronology-navigation/`. All 20 installed cells and RTL chronology/navigation evidence passed. Existing Home/Daily instrumentation helpers did not finish their later theme-switch iterations, and the final LTR title-menu result was not retained; see the closeout for exact boundaries.
 
-### R6.4 — Reduced-motion and appearance invariance — PLANNED
+### R6.4 — Reduced-motion and appearance invariance — DONE
 
 Verify production-theme, contrast, and effects combinations on Home preserve weather
 semantics, controls, source/freshness, and no-refetch behavior.
@@ -886,6 +886,11 @@ R6.4 and Cycle 158; later portions use the same base ID with partial suffixes.
 R6.4 is complete only after all three portions close with their stated
 evidence. A failed prerequisite blocks dependent portions rather than
 silently narrowing the aggregate exit.
+
+R6.4 completed with Cycle 158's 30-case typed resolver matrix, Cycle 159's
+production appearance/no-refetch counter flow, and Cycle 160's installed
+Effects Off/reduced-motion review. Their exact verification, limitations, and
+evidence paths are recorded in the three cycle history entries below.
 
 **First portion — typed semantic contract and resolver matrix (Cycle 158).**
 Define an appearance-independent typed snapshot from the canonical fixture
@@ -914,10 +919,10 @@ Evidence and limits: `.codex/history/2026-10-09-159-reduced-motion-appearance-fl
 and `.codex/test-artifacts/159-reduced-motion-appearance-flow/`. The API 37
 production Activity flow passed all five theme, two contrast, and three effects
 actions after both transport positive controls; transport and cache counts
-remained unchanged from the restored fixture baseline. The installed 20-cell
-visual review remains R6.4-partial-B.
+remained unchanged from the restored fixture baseline. Cycle 160 completes the
+installed visual portion.
 
-### R6.4-partial-B — Installed Effects Off/reduced-motion review — PLANNED
+### R6.4-partial-B — Installed Effects Off/reduced-motion review — DONE
 
 After R6.4-partial-A, capture and review Now, Hourly, Daily, and Details in
 each of the five production themes on the installed Standard Home path with
@@ -928,6 +933,14 @@ readbacks, hashes, manifest, and per-cell dispositions show all required
 facts, provenance, controls, page names, and semantics present and usable
 with opaque/static Effects Off. Cite the first portion and partial-A results
 before closing the aggregate R6.4 exit.
+
+Evidence and limits: `.codex/history/2026-10-09-160-installed-effects-off-reduced-motion-review.md`
+and `.codex/test-artifacts/160-installed-effects-off-reduced-motion-review/`.
+All 20 installed theme/page cells and 20 stable scroll-end pairs passed at
+360 × 640 dp, font scale 1.0, Standard/LTR, Metric, Effects Off, and system
+animator scale 0. The 40 screenshots were fully opaque; paired idle app frames
+were pixel-identical. Cycle 158/159 limitations remain; large-font, RTL, Simple
+layout, Settings, other effects, and TalkBack were not part of this portion.
 
 ### R6.4A — Cross-theme and layout appearance invariance — PLANNED
 
