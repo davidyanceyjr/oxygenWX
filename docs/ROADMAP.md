@@ -968,17 +968,31 @@ Evidence and limits: `.codex/history/2026-10-09-162-accessibility-evidence-closu
 ## R7 — Release hardening
 
 
-### R7.1 — Privacy/manifest audit — PLANNED
+### R7.1 — Privacy/manifest audit — DONE
 
 Audit permissions, exported components, cleartext policy, backups, and retained dependencies against implemented behavior.
 
 **Exit:** A checked manifest/permission/exported-component/backup/dependency report matches implemented behavior; each unexpected permission or component is removed or explicitly justified.
 
-### R7.2 — Data-source/license/notice audit — PLANNED
+Evidence and limitations: `.codex/history/2026-10-09-163-privacy-manifest-audit.md`
+and `.codex/test-artifacts/163-privacy-manifest-audit/`. The Release manifest
+and unsigned APK were inspected after the final configuration changes. Cloud
+and device-transfer backup behavior was verified from packaged rules, not
+through Android backup services; clean-host, legal/notice, and release-readiness
+work remains for later slices.
+
+### R7.2 — Data-source/license/notice audit — AUDIT COMPLETE / EXIT UNMET
 
 Confirm current provider terms, attribution, source links, dependency notices, and replacement-repository license decision.
 
 **Exit:** A source/notice/license table links every shipped provider and dependency to current terms/attribution and records the repository license decision; unresolved legal items block release.
+
+Cycle 164 completed the audit evidence and attribution/notice corrections, but
+the owner kept the replacement repository license decision pending. R7.2 is
+not passed and release remains blocked until that decision and the related
+provider/dependency notice follow-ups are resolved. See
+`.codex/history/2026-10-09-164-data-source-license-notice-audit.md` and
+`.codex/test-artifacts/164-data-source-license-notice-audit/`.
 
 ### R7.3 — Clean-host build matrix — PLANNED
 

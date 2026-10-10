@@ -125,6 +125,9 @@ class SavedLocationFlowTest {
         compose.activityRule.scenario.recreate()
         compose.onNodeWithText("Santa Fe", substring = false).assertExists()
         compose.onNodeWithText("Saved places", substring = false).assertIsDisplayed()
+        compose.onNodeWithTag("geonames-attribution").assertIsDisplayed()
+        compose.onNodeWithTag("geonames-source-link").assertIsDisplayed()
+        compose.onNodeWithTag("geonames-license-link").assertIsDisplayed()
         compose.onNodeWithTag("saved-location-row-0").performScrollTo()
         val rowBounds = compose.onNodeWithTag("saved-location-row-0").fetchSemanticsNode().boundsInRoot
         assertTrue("saved row should have visible width", rowBounds.width > 0f)
@@ -133,6 +136,9 @@ class SavedLocationFlowTest {
 
     @Test fun test03_saveSelectRemoveAndRecreationPreserveStableIdentityAndNeverFetchOnBookmarkActions() {
         openSearchAndFindResult()
+        compose.onNodeWithTag("geonames-attribution").assertIsDisplayed()
+        compose.onNodeWithTag("geonames-source-link").assertIsDisplayed()
+        compose.onNodeWithTag("geonames-license-link").assertIsDisplayed()
         compose.onNodeWithTag("location-search-save-0").performScrollTo()
         compose.onNodeWithTag("location-search-save-0").assertIsDisplayed()
         assertTarget("location-search-save-0")

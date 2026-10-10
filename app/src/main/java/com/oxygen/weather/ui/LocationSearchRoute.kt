@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -148,6 +149,7 @@ internal fun LocationSearchRoute(
             is LocationSearchPresentation.Loading -> SearchLoading(theme, visible.query)
             is LocationSearchPresentation.Results -> {
                 Text("Results for ${visible.query}", style = theme.typography.titleMedium, color = theme.palette.content)
+                GeoNamesAttribution(theme)
                 visible.candidates.forEachIndexed { index, candidate ->
                     CandidateResult(theme, candidate, index, visible.candidates.size, onSave = {
                         coordinator.saveCandidate(index)
@@ -200,6 +202,25 @@ internal fun LocationSearchRoute(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun GeoNamesAttribution(theme: ResolvedTheme) {
+    val uriHandler = LocalUriHandler.current
+    Row(
+        Modifier.fillMaxWidth().testTag("geonames-attribution"),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        TextButton(
+            onClick = { uriHandler.openUri("https://www.geonames.org/") },
+            modifier = Modifier.weight(1f).heightIn(min = 48.dp).testTag("geonames-source-link"),
+        ) { Text("Place data from GeoNames", style = theme.typography.labelMedium) }
+        TextButton(
+            onClick = { uriHandler.openUri("https://creativecommons.org/licenses/by/4.0/") },
+            modifier = Modifier.heightIn(min = 48.dp).testTag("geonames-license-link"),
+        ) { Text("CC BY 4.0", style = theme.typography.labelMedium) }
     }
 }
 

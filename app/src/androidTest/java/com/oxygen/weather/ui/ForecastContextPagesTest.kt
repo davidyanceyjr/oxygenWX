@@ -2,6 +2,7 @@ package com.oxygen.weather.ui
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performClick
@@ -33,6 +34,33 @@ class ForecastContextPagesTest {
     private val currentHome = mutableStateOf<com.oxygen.weather.presentation.HomePresentation?>(null)
     private val currentContext = mutableStateOf<com.oxygen.weather.presentation.ForecastContextPresentation?>(null)
     private val currentStatus = mutableStateOf(StatusPresentation.of(""))
+
+    @Test
+    fun openMeteoSourceAndLicenseLinksAppearOnEveryLiveForecastPageOnly() {
+        val bundle = DemoWeatherRepository.load()
+        val content = HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle))
+        currentHome.value = content.copy(sourceLine = "Forecast · Open-Meteo")
+        currentContext.value = null
+        compose.setContent {
+            OxygenWeatherApp(
+                presentation = currentHome.value!!,
+                status = currentStatus.value,
+                effects = ThemeEffectsLevel.OFF,
+            )
+        }
+
+        val pages = listOf("Now", "Hourly", "Daily", "Details")
+        pages.forEachIndexed { index, page ->
+            compose.onNodeWithTag("open-meteo-attribution").assertExists()
+            compose.onNodeWithTag("open-meteo-source-link").assertExists()
+            compose.onNodeWithTag("open-meteo-license-link").assertExists()
+            if (index < pages.lastIndex) navigateToPage(pages[index + 1], index + 1)
+        }
+
+        currentHome.value = content
+        compose.waitForIdle()
+        compose.onNodeWithTag("open-meteo-attribution").assertDoesNotExist()
+    }
 
     @Test
     fun nowAndDetailsExposeMatchingLiveCachedRefreshFailureAndNoDataContext() {
@@ -118,6 +146,13 @@ class ForecastContextPagesTest {
     private fun navigateToNow() {
         compose.onNodeWithContentDescription("Choose Home page, current: Details").performClick()
         compose.onNodeWithContentDescription("Now page, 1 of 4, not selected").performClick()
+        compose.waitForIdle()
+    }
+
+    private fun navigateToPage(page: String, index: Int) {
+        val current = listOf("Now", "Hourly", "Daily", "Details")[index - 1]
+        compose.onNodeWithContentDescription("Choose Home page, current: $current").performClick()
+        compose.onNodeWithContentDescription("$page page, ${index + 1} of 4, not selected").performClick()
         compose.waitForIdle()
     }
 

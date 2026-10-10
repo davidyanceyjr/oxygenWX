@@ -64,6 +64,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
@@ -344,6 +345,7 @@ fun OxygenWeatherApp(
                             assetPath = when (selectedFontLicense) {
                                 "Fira Sans" -> "licenses/fira_sans_OFL.txt"
                                 "Noto Sans" -> "licenses/noto_fonts_LICENSE.txt"
+                                "Third-party software notices" -> "licenses/third_party_notices.txt"
                                 else -> ""
                             },
                             onReturn = { settingsRoute = SettingsRoute.OPEN_SOURCE_LICENSES },
@@ -429,6 +431,7 @@ fun OxygenWeatherApp(
                             },
                         )
                     }
+                    OpenMeteoAttribution(theme, displayPresentation.sourceLine)
                     if (!searchOpen && locationAction?.showOnHome == true) {
                         Text(
                             locationAction.message,
@@ -623,7 +626,7 @@ private fun SettingsSurface(
         SettingsDestination(theme, "Locations", "View and manage saved places", "settings-locations", onClick = onLocations)
         SettingsDestination(theme, "Data Sources", "Inspect forecast and alert source details", "settings-data-sources", onClick = onDataSources)
         SettingsDestination(theme, "Privacy", "Privacy policy availability", "settings-privacy", onClick = onPrivacy)
-        SettingsDestination(theme, "Open Source Licenses", "View bundled font license files", "settings-open-source-licenses", onClick = onOpenSourceLicenses)
+        SettingsDestination(theme, "Open Source Licenses", "View bundled software and font license notices", "settings-open-source-licenses", onClick = onOpenSourceLicenses)
         SettingsDestination(theme, "About", "App name and installed version", "settings-about", onClick = onAbout)
         TextButton(onClick = onReturn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings-return")) {
             Text("Return to Home", style = theme.typography.labelLarge, color = theme.palette.action)
@@ -660,8 +663,9 @@ private fun OpenSourceLicensesSurface(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text("Open Source Licenses", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
-        Text("License files bundled with font assets", style = theme.typography.bodyLarge.copy(textDirection = TextDirection.Ltr), color = theme.palette.content)
-        Text("This is not a complete dependency notice catalog.", Modifier.testTag("license-scope-notice"), style = theme.typography.bodyMedium.copy(textDirection = TextDirection.Ltr), color = theme.palette.secondaryData)
+        Text("Third-party software and font notices", style = theme.typography.bodyLarge.copy(textDirection = TextDirection.Ltr), color = theme.palette.content)
+        Text("Review bundled dependency licenses and font license files.", Modifier.testTag("license-scope-notice"), style = theme.typography.bodyMedium.copy(textDirection = TextDirection.Ltr), color = theme.palette.secondaryData)
+        LicenseEntry(theme, "Third-party software notices", true, "third-party-notices-entry", onOpenLicense)
         LicenseEntry(theme, "Fira Sans", hasFiraSans, "fira-sans-license-entry", onOpenLicense)
         LicenseEntry(theme, "Noto Sans", hasNotoSans, "noto-sans-license-entry", onOpenLicense)
         TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("licenses-return")) {
@@ -695,7 +699,7 @@ private fun FontLicenseSurface(theme: ResolvedTheme, fontName: String, assetPath
             .padding(horizontal = theme.geometry.pageGutter, vertical = 16.dp).testTag("font-license-surface"),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("$fontName License", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
+        Text(if (fontName == "Third-party software notices") fontName else "$fontName License", style = theme.typography.headlineMedium, color = theme.palette.primaryData)
         if (licenseText == null) {
             Text("License content unavailable.", Modifier.testTag("font-license-unavailable"), style = theme.typography.bodyLarge, color = theme.palette.warning)
         } else {
@@ -704,6 +708,32 @@ private fun FontLicenseSurface(theme: ResolvedTheme, fontName: String, assetPath
         TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("font-license-return")) {
             Text("Back to Open Source Licenses", style = theme.typography.labelLarge, color = theme.palette.action)
         }
+    }
+}
+
+@Composable
+private fun OpenMeteoAttribution(theme: ResolvedTheme, sourceLine: String) {
+    if (!sourceLine.contains("Open-Meteo", ignoreCase = true)) return
+    val uriHandler = LocalUriHandler.current
+    Column(
+        Modifier.fillMaxWidth().testTag("open-meteo-attribution"),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            TextButton(
+                onClick = { uriHandler.openUri("https://open-meteo.com/") },
+                modifier = Modifier.weight(1f).heightIn(min = 48.dp).testTag("open-meteo-source-link"),
+            ) { Text("Weather data by Open-Meteo.com", style = theme.typography.labelMedium) }
+            TextButton(
+                onClick = { uriHandler.openUri("https://creativecommons.org/licenses/by/4.0/") },
+                modifier = Modifier.heightIn(min = 48.dp).testTag("open-meteo-license-link"),
+            ) { Text("CC BY 4.0", style = theme.typography.labelMedium) }
+        }
+        Text(
+            "Values are converted and formatted for display.",
+            style = theme.typography.labelSmall,
+            color = theme.palette.secondaryData,
+        )
     }
 }
 

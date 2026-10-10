@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -138,8 +139,16 @@ class SettingsLegalProductDestinationsFlowTest {
 
         compose.onNodeWithTag("settings-open-source-licenses").performScrollTo().performClick()
         compose.onNodeWithTag("open-source-licenses-surface").assertIsDisplayed()
-        compose.onNodeWithTag("license-scope-notice").assertTextEquals("This is not a complete dependency notice catalog.")
+        compose.onNodeWithTag("license-scope-notice").assertTextEquals("Review bundled dependency licenses and font license files.")
         saveCapture("open-source-licenses")
+
+        compose.onNodeWithTag("third-party-notices-entry").performScrollTo().performClick()
+        compose.onNodeWithTag("font-license-surface").assertIsDisplayed()
+        val thirdPartyNotices = context.assets.open("licenses/third_party_notices.txt").bufferedReader(Charsets.UTF_8).use { it.readText() }
+        compose.onNodeWithTag("font-license-text").assertTextEquals(thirdPartyNotices)
+        compose.onNodeWithText("androidx.compose.ui:ui-android:1.12.1", substring = true).assertExists()
+        saveCapture("third-party-notices")
+        compose.onNodeWithTag("font-license-return").performScrollTo().performClick()
 
         compose.onNodeWithTag("fira-sans-license-entry").performScrollTo().performClick()
         compose.onNodeWithTag("font-license-surface").assertIsDisplayed()
@@ -316,7 +325,7 @@ class SettingsLegalProductDestinationsFlowTest {
             "settings-locations" to "Locations. View and manage saved places",
             "settings-data-sources" to "Data Sources. Inspect forecast and alert source details",
             "settings-privacy" to "Privacy. Privacy policy availability",
-            "settings-open-source-licenses" to "Open Source Licenses. View bundled font license files",
+            "settings-open-source-licenses" to "Open Source Licenses. View bundled software and font license notices",
             "settings-about" to "About. App name and installed version",
         )
         destinations.forEach { (tag, spokenLabel) ->

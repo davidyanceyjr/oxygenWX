@@ -11,9 +11,16 @@ restored after relaunch; selected-location persistence is a later roadmap item.
 Open-Meteo forecast requests use
 `https://api.open-meteo.com/v1/forecast`. The free service is limited to
 non-commercial use, requires CC BY 4.0 attribution, and publishes request
-limits. Recheck current terms before release use. Authoritative references
-(verified 2026-10-04): [Forecast API documentation](https://open-meteo.com/en/docs),
-[Terms of Use](https://open-meteo.com/en/terms), and
+limits. Open-Meteo's licence page asks for a link next to each location where
+its weather data is displayed, a link to CC BY 4.0, and an indication when the
+data has been changed. Oxygen formats and converts selected fields for display;
+the current Home attribution identifies those adjustments. The forecast API
+uses a blended/default model choice whose upstream source may vary. The
+Open-Meteo API-wide CC BY statement and any source-specific upstream terms
+should be reviewed for the actual release use. Authoritative references
+(verified 2026-10-09): [Forecast API documentation](https://open-meteo.com/en/docs),
+[Terms of Use](https://open-meteo.com/en/terms),
+[Open-Meteo licence and upstream data sources](https://open-meteo.com/en/licence), and
 [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/).
 
 `DemoWeatherRepository` provides a deterministic development fixture with:
@@ -46,7 +53,7 @@ The R4.2 provider queries `https://api.weather.gov/alerts/active?point={latitude
 
 Point queries resolve both county and zone alerts. A successful GeoJSON FeatureCollection with an empty `features` list means supported with no active alerts. The API has no separate documented unsupported-region result schema; observed out-of-bounds point requests return HTTP 400 with problem type `https://api.weather.gov/problems/InvalidParameter` and detail `Parameter "point" is invalid: out of bounds`. Only this precise response is treated as unsupported; other failures remain failures. This rule is verified against a covered empty point and an out-of-bounds point, and must be revisited if NWS changes its response contract.
 
-Official references (reviewed 2026-10-05): [NWS Alerts Web Service](https://www.weather.gov/documentation/services-web-alerts), [NWS API Web Service](https://www.weather.gov/documentation/services-web-api), and [NWS Alerts Geolocation Guide](https://www.weather.gov/media/documentation/docs/NWS_Geolocation.pdf). Detailed request, response, mapping, limitations, and observed behavior are recorded in `.codex/test-artifacts/129-noaa-nws-us-alert-provider/provider-documentation.md`.
+Official references (reviewed 2026-10-09): [NWS Alerts Web Service](https://www.weather.gov/documentation/services-web-alerts), [NWS API Web Service](https://www.weather.gov/documentation/services-web-api), and [NWS Alerts Geolocation Guide](https://www.weather.gov/media/documentation/docs/NWS_Geolocation.pdf). NWS recommends no more than one alert request every 30 seconds; the app's controller/cache policy should continue to be checked against that guidance. NWS open-data guidance permits redistribution of alert products and requires an identifying User-Agent; this app sends its name, version, and project URL. Do not use NWS CAP data to activate the Emergency Alert System. Detailed request, response, mapping, limitations, and observed behavior are recorded in `.codex/test-artifacts/129-noaa-nws-us-alert-provider/provider-documentation.md`.
 
 ### Open-Meteo geocoding lookup
 
@@ -64,7 +71,21 @@ the free service to non-commercial purposes. Open-Meteo states the API data is
 under CC BY 4.0; preserve appropriate attribution and indicate modifications as
 required by that license. Recheck these terms before production integration.
 
-Authoritative references (verified 2026-10-04): [Geocoding API documentation](https://open-meteo.com/en/docs/geocoding-api), [Terms of Use](https://open-meteo.com/en/terms), and [CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/). The verification details are recorded in `.codex/test-artifacts/115-manual-location-search-contracts-and-lookup-adapter/provider-documentation.md`.
+Geocoding results are based on GeoNames. GeoNames asks users of its data or
+web services to credit GeoNames with a link or other reference; GeoNames
+identifies its database as CC BY 4.0. Search results identify GeoNames and link
+CC BY 4.0 alongside the returned place records. The API documentation does not
+specify an exact credit phrase or placement. Open-Meteo's terms also
+describe the free service as non-commercial and document a commercial API key
+path. The owner's distribution/business model must be assessed separately
+before release. Authoritative references (verified 2026-10-09):
+[Geocoding API documentation](https://open-meteo.com/en/docs/geocoding-api),
+[Terms of Use](https://open-meteo.com/en/terms),
+[Open-Meteo licence](https://open-meteo.com/en/licence),
+[GeoNames](https://www.geonames.org/), and
+[CC BY 4.0 licence](https://creativecommons.org/licenses/by/4.0/). The
+verification details are recorded in
+`.codex/test-artifacts/115-manual-location-search-contracts-and-lookup-adapter/provider-documentation.md`.
 
 ## MET Norway Locationforecast fallback
 
