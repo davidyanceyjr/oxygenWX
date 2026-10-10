@@ -12,6 +12,9 @@ This roadmap converts the specification into bounded, verifiable slices. It is o
 - **NEXT** — next recommended bounded plan.
 - **ACTIVE** — current bounded plan; do not begin another production slice.
 - **PLANNED** — ordered but not active.
+- **BLOCKED** — the bounded exit cannot currently be reached; its recorded
+  host, dependency, or external decision blocker must be resolved or explicitly
+  replanned before claiming completion.
 - **PIVOTED** — superseded by an explicitly adopted roadmap track; retain its
   plan, worktree changes, and evidence without claiming completion.
 - **DEFERRED** — explicitly outside the 1.0 critical path.
@@ -1005,19 +1008,29 @@ that prerequisite evidence does not satisfy this clean-clone matrix. See
 
 **Exit:** A fresh Linux clone runs documented `scripts/dev.py` workflow, contract, test, build, and check commands successfully, with toolchain versions and outputs archived.
 
-### R7.3A — Windows clean-host build — PLANNED
+### R7.3A — Windows clean-host build — BLOCKED (HOST)
 
 After R7.3, verify the equivalent clean-clone Windows flow using `gradlew.bat`
 through `scripts/dev.py` and record any platform-specific limitation.
 
 **Exit:** A fresh Windows clone runs the equivalent supported workflow through `scripts/dev.py`/`gradlew.bat`; exact results and any reproducible platform blocker are archived.
 
-### R7.3B — macOS clean-host build — PLANNED
+Cycle 167 is closed BLOCKED on the available Arch Linux host. No Windows
+runtime or VM is available to produce the required clean-host evidence. See
+`.codex/history/2026-10-10-167-windows-clean-host-build-matrix.md` and
+`.codex/test-artifacts/167-windows-clean-host-build-matrix/blocker.md`.
+
+### R7.3B — macOS clean-host build — BLOCKED (HOST)
 
 After R7.3A, verify the equivalent clean-clone macOS flow using the repository
 Gradle wrapper and `scripts/dev.py` and record any platform-specific limitation.
 
 **Exit:** A fresh macOS clone runs the equivalent supported workflow through `scripts/dev.py`; exact results and any reproducible platform blocker are archived.
+
+Environment assessment finds no macOS host available here; the clean-host
+matrix cannot be produced on the current Arch Linux machine. This remains
+downstream of R7.3A. See
+`.codex/test-artifacts/167-windows-clean-host-build-matrix/remaining-roadmap-environment-assessment.md`.
 
 ### R7.4 — Release build/signing preparation — PLANNED
 
@@ -1025,13 +1038,19 @@ Prepare intentional release versioning/signing/publication configuration without
 
 **Exit:** A release variant builds with intentional version/package/signing configuration, no secrets in source/control history, and a documented reproducible local signing procedure.
 
-### R7.5 — Oxygen 1.0 release gate — PLANNED
+### R7.5 — Oxygen 1.0 release gate — BLOCKED (PREREQUISITES)
 
 Run the release-candidate acceptance matrix from a clean state, triage any
 blocking failure, and assemble evidence for all specified product, safety,
 appearance, and build boundaries. Do not yet promote the candidate.
 
 **Exit:** One clean release-candidate run completes every specified product/safety/appearance/build check; a single triage pass ends PASS or BLOCKED with each failure assigned and evidence linked.
+
+The current environment assessment finds the all-checks-pass exit unavailable:
+Windows and macOS clean-host evidence is missing, and R7.2 remains unresolved.
+A bounded triage could record a BLOCKED release-gate result, but cannot pass the
+gate until those prerequisites are resolved. See
+`.codex/test-artifacts/167-windows-clean-host-build-matrix/remaining-roadmap-environment-assessment.md`.
 
 ### R7.5A — Oxygen 1.0 release decision — PLANNED
 
