@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="theme_preference_v1.xml" />
+    <include domain="sharedpref" path="contrast_preference_v1.xml" />
+    <include domain="sharedpref" path="effects_preference_v1.xml" />
+    <include domain="sharedpref" path="unit_preset_v1.xml" />
+</full-backup-content>
