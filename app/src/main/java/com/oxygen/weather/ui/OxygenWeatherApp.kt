@@ -1307,17 +1307,19 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
                         color = theme.palette.content,
                     )
                 }
-                current.conditionIdentity?.let {
-                    ProductionWeatherMark(
-                        theme,
-                        it,
-                        Modifier.size(64.dp),
-                        accentAllStrokes = theme.definition.id in setOf(
-                            WeatherThemeId.GLASS,
-                            WeatherThemeId.INSTRUMENT,
-                            WeatherThemeId.MINIMAL_OLED,
-                        ),
-                    )
+                current.conditionIdentity?.takeIf { theme.effects != ThemeEffectsLevel.OFF }?.let {
+                    Box(Modifier.testTag("now-condition-mark"), contentAlignment = Alignment.Center) {
+                        ProductionWeatherMark(
+                            theme,
+                            it,
+                            Modifier.size(64.dp),
+                            accentAllStrokes = theme.definition.id in setOf(
+                                WeatherThemeId.GLASS,
+                                WeatherThemeId.INSTRUMENT,
+                                WeatherThemeId.MINIMAL_OLED,
+                            ),
+                        )
+                    }
                 }
             }
             Text(

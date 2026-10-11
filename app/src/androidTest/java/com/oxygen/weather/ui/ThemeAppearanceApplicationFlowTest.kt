@@ -322,6 +322,117 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     @Test
+    fun atmosphericNowSubtleAndOffPreserveFactsAndRequests() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val originalFontScale = shell("settings get system font_scale").trim().toFloat()
+        val originalAnimatorScale = shell("settings get global animator_duration_scale").trim().toFloat()
+        val originalDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests
+        val evidence = File(context.getExternalFilesDir(null), "171-ui6a-atmospheric-now-static-level/final")
+            .apply { check(mkdirs() || isDirectory) }
+        val index = mutableListOf<String>()
+        try {
+            LocationSearchTestHooks.effectsOverrideForTests = null
+            ThemePreferenceTestHooks.storeFactory = { store }
+            EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+            ContrastPreferenceTestHooks.storeFactory = { contrastStore }
+            compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
+            val fixture = requireNotNull(canonicalSnapshot) { "The deterministic weather fixture must be loaded" }
+            val operations = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+            assertEquals("Zero-operation fixture baseline", listOf(0, 0, 0, 0), operations)
+
+            fun capture(
+                name: String,
+                effects: ThemeEffectsLevel,
+                contrast: ContrastLevel,
+                fontScale: Float,
+                direction: LayoutDirection,
+                animatorScale: Float,
+            ) {
+                setFontScale(fontScale)
+                shell("settings put global animator_duration_scale ${animatorScale.toInt()}")
+                LocationSearchTestHooks.layoutDirectionOverrideForTests = direction
+                compose.activityRule.scenario.recreate()
+                compose.waitForIdle()
+                compose.activityRule.scenario.onActivity { activity ->
+                    assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.ATMOSPHERIC))
+                    assertEquals(ContrastPreferenceWriteResult.SUCCESS, activity.selectContrastForTests(contrast))
+                    assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(effects))
+                }
+                val expectedMotion = if (animatorScale == 0f) MotionStyle.OFF else resolveTheme(
+                    WeatherThemeId.ATMOSPHERIC,
+                    contrast = contrast,
+                    effects = effects,
+                ).motionStyle
+                compose.waitUntil(5_000) {
+                    observedBackdropTheme.get()?.let {
+                        it.definition.id == WeatherThemeId.ATMOSPHERIC && it.contrast == contrast &&
+                            it.effects == effects && it.motionStyle == expectedMotion
+                    } == true
+                }
+                compose.waitForIdle()
+                compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
+                compose.onNodeWithText("Demo Station").assertIsDisplayed()
+                assertEquals("saved effects", effects, effectsStore.value)
+                assertEquals("saved contrast", contrast, contrastStore.value)
+                assertEquals(expectedMotion, observedMotionStyle.get())
+                val markNodes = compose.onAllNodesWithTag("now-condition-mark", useUnmergedTree = true).fetchSemanticsNodes()
+                if (effects == ThemeEffectsLevel.OFF) {
+                    assertTrue("Effects None must omit the Now condition mark", markNodes.isEmpty())
+                } else {
+                    assertEquals("Subtle mark is composed once", 1, markNodes.size)
+                    val markConfig = markNodes.single().config
+                    assertTrue("Weather mark must not expose text semantics", !markConfig.contains(SemanticsProperties.Text))
+                    assertTrue("Weather mark must not expose condition semantics", !markConfig.contains(SemanticsProperties.ContentDescription))
+                }
+                val condition = compose.onNodeWithText("Partly cloudy", useUnmergedTree = true).fetchSemanticsNode()
+                val temperature = compose.onNodeWithText("28 °C", useUnmergedTree = true).fetchSemanticsNode()
+                assertTrue("Condition text remains semantically represented", condition.config.contains(SemanticsProperties.Text))
+                assertTrue("Temperature retains spoken weather meaning", temperature.config.contains(SemanticsProperties.ContentDescription))
+                assertEquals("Effective layout direction", direction, condition.layoutInfo.layoutDirection)
+                compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
+                assertEquals("Fixture identity remains unchanged", fixture, canonicalSnapshot)
+                assertEquals(operations, listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+                compose.onNodeWithText("28 °C").performScrollTo().assertIsDisplayed()
+                val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+                save171Capture(context, evidence, name, bitmap)
+                assertFullNowWeatherFacts()
+                index += "$name theme=ATMOSPHERIC contrast=$contrast effects=$effects savedEffects=${effectsStore.value} motion=$expectedMotion animatorScale=$animatorScale fontScale=$fontScale direction=$direction"
+            }
+
+            listOf(1f, 1.3f).forEach { font ->
+                listOf(ThemeEffectsLevel.OFF, ThemeEffectsLevel.SUBTLE).forEach { effects ->
+                    capture("now-atmospheric-${effects.name.lowercase()}-font${font}-ltr.png", effects,
+                        ContrastLevel.STANDARD, font, LayoutDirection.Ltr, 1f)
+                }
+            }
+            listOf(ThemeEffectsLevel.OFF, ThemeEffectsLevel.SUBTLE).forEach { effects ->
+                capture("now-atmospheric-${effects.name.lowercase()}-font1.0-rtl.png", effects,
+                    ContrastLevel.STANDARD, 1f, LayoutDirection.Rtl, 1f)
+            }
+            capture("now-atmospheric-subtle-high-contrast-font1.0-ltr.png", ThemeEffectsLevel.SUBTLE,
+                ContrastLevel.HIGH, 1f, LayoutDirection.Ltr, 1f)
+            capture("now-atmospheric-subtle-reduced-motion-font1.0-ltr.png", ThemeEffectsLevel.SUBTLE,
+                ContrastLevel.STANDARD, 1f, LayoutDirection.Ltr, 0f)
+            assertEquals("Reduced motion retains saved Subtle", ThemeEffectsLevel.SUBTLE, effectsStore.value)
+            assertEquals("Reduced motion retains static field", AmbientBackgroundStrength.SUBTLE,
+                observedBackdropTheme.get()?.ambientBackground?.overlayStrength)
+            val captureIndex =
+                "Installed MainActivity -> OxygenWeatherApp -> ProductionBackdrop; device=${android.os.Build.MODEL}; " +
+                    "API=${android.os.Build.VERSION.SDK_INT}; avd=${shell("getprop ro.boot.qemu.avd_name").trim()}; " +
+                    "viewport=${compose.activity.resources.configuration.screenWidthDp}x${compose.activity.resources.configuration.screenHeightDp}dp; " +
+                    "display=${shell("wm size").trim()}; density=${shell("wm density").trim()}; fixture=Demo Station; " +
+                    "contrast standard unless named high-contrast; locale=${compose.activity.resources.configuration.locales[0]}; " +
+                    "request/cache-read/cache-write/alert counts=$operations\n" + index.joinToString("\n", postfix = "\n")
+            File(evidence, "capture-index.txt").writeText(captureIndex)
+            save171Metadata(context, captureIndex)
+        } finally {
+            setFontScale(originalFontScale)
+            shell("settings put global animator_duration_scale ${originalAnimatorScale.toInt()}")
+            LocationSearchTestHooks.layoutDirectionOverrideForTests = originalDirectionOverride
+        }
+    }
+
+    @Test
     fun cycle145InstalledFallbackAndReducedMotionMatrix() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val evidence = File(context.getExternalFilesDir(null), "145-ambient-background-performance-fallback-hardening")
@@ -1460,6 +1571,34 @@ class ThemeAppearanceApplicationFlowTest {
         } ?: error("Unable to write persisted ambient capture for $name")
     }
 
+    private fun save171Capture(context: android.content.Context, directory: File, name: String, bitmap: android.graphics.Bitmap) {
+        FileOutputStream(File(directory, name)).use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        }
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "171-final-$name")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/171-ui6a-atmospheric-now-static-level/final")
+        }
+        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            ?: error("Unable to create installed cycle 171 capture $name")
+        context.contentResolver.openOutputStream(uri)?.use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        } ?: error("Unable to persist installed cycle 171 capture $name")
+    }
+
+    private fun save171Metadata(context: android.content.Context, content: String) {
+        val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "171-final-capture-index.txt")
+            put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/OxygenWX/171-ui6a-atmospheric-now-static-level")
+        }
+        val uri = context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+            ?: error("Unable to create cycle 171 capture metadata")
+        context.contentResolver.openOutputStream(uri)?.bufferedWriter()?.use { it.write(content) }
+            ?: error("Unable to persist cycle 171 capture metadata")
+    }
+
     private fun savePublicEffectsEvidence(context: android.content.Context, name: String) {
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "140-effects-$name.png")
@@ -1475,6 +1614,18 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     private fun assertWeatherFactsUnchanged() = visibleWeatherFactSnapshot()
+
+    private fun assertFullNowWeatherFacts() {
+        listOf(
+            "28 °C", "Partly cloudy", "Feels 29 °C", "Humidity", "56%", "Dew point", "18 °C",
+            "Precipitation", "No precipitation indicated", "Next 6h · 0.0 mm", "Wind", "13 km/h",
+            "Gusts 23 km/h · SW", "Model estimate", "Updated 9:00 AM", "Freshness: unknown",
+        ).forEach { fact ->
+            val matches = compose.onAllNodesWithText(fact, substring = true).fetchSemanticsNodes()
+            assertTrue("Missing visible Now fact '$fact'", matches.isNotEmpty())
+            compose.onAllNodesWithText(fact, substring = true)[0].performScrollTo().assertIsDisplayed()
+        }
+    }
 
     private fun visibleTextSnapshot(): List<String> {
         val root = compose.onRoot().fetchSemanticsNode()

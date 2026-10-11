@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-11T19:41:31" hostname="localhost">
+  <testsuite name="com.oxygen.weather.ui.themeengine.components.ProductionBackdropEffectsOffTest" tests="1" failures="0" errors="0" skipped="0" time="8.768" timestamp="2026-10-11T19:41:31" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="allThemesEffectsOffAreOpaqueStaticAndPreserveCallerContent" classname="com.oxygen.weather.ui.themeengine.components.ProductionBackdropEffectsOffTest" time="8.768" />
+  </testsuite>
+</testsuites>

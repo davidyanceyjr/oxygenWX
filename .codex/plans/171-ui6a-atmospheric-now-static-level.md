@@ -1,6 +1,6 @@
 # Plan 171 — Atmospheric Now static effects vertical slice
 
-Status: Planned
+Status: Completed
 Cycle ID: 171-ui6a-atmospheric-now-static-level
 Roadmap item: UI.6A / FX.41
 Created: 2026-10-11
@@ -16,12 +16,14 @@ treatment. The observable outcome is the focused implementation and UI checks,
 plus paired installed captures and an evidence-backed decision on whether the
 vertical slice meets its visual objective.
 
-**Owner decision recorded (2026-10-11):** after reviewing the installed Now
-preview, the owner approved evaluating the existing Atmospheric Subtle field
-and glow as the complete first treatment for this slice. Do not add a
-page-local horizon, new artwork, new source, or new geometry. D31's
-page-atmosphere proposal, cycle 169's HTML preview, and renderer constants do
-not authorize those additions.
+**Owner decision recorded (2026-10-11):** the owner selected the existing
+Atmospheric Subtle tonal field and role-based soft glow as the treatment to
+evaluate, and confirmed the Now-only boundary. This cycle decides from installed
+evidence whether that existing treatment is visually effective; it does not
+reopen the treatment choice or request more design work. Do not add a page-local
+horizon, new artwork, new source, or new geometry. D31's page-atmosphere
+proposal, cycle 169's HTML preview, and renderer constants do not authorize
+those additions.
 
 **Owner visual reference:** `feh_045613_000001_Atmospheric-Weather-Pages.png`
 shows the intended four-page UI direction (Now, Hourly, Daily, Details),
@@ -65,10 +67,10 @@ production boundary before making that change.
 
 ## Implementation steps
 
-1. **Prepare and capture the baseline.** Reconfirm UI.5 completion and the
-   recorded owner decision. Record the source revision/build identity and
-   inspect the current Now composition, shared backdrop/resolver path, and
-   focused test hooks. On the installed API 37 `oxygen_starter` AVD, use the
+1. **Prepare and capture the baseline.** Verify UI.5 completion from Cycle 170
+   and this plan's recorded owner decision. Record the source revision/build
+   identity and inspect the current Now composition, shared backdrop/resolver
+   path, and focused test hooks. On the installed API 37 `oxygen_starter` AVD, use the
    same deterministic Demo Station fixture and capture pre-change Effects
    OFF and Subtle at 360x640dp, font scale 1.0. Also capture the two states at
    font scale 1.3 before changing the None mark. Record selected theme,
@@ -78,23 +80,26 @@ production boundary before making that change.
    `NowHero` using the resolved effects state. Do not change condition text,
    temperature, layout hierarchy beyond the removed mark, or mark behavior at
    Subtle. Do not modify `ProductionBackdrop` or global effect resolution.
-3. **Add a focused regression.** In the actual `MainActivity`/Compose path,
-   verify for Atmospheric Now at OFF that the condition text and temperature
-   remain visible and represented in semantics and the decorative mark is
-   absent. Verify the mark remains present but decorative at Subtle. Keep
-   visible page identity and fixture values unchanged. Assert forecast,
-   alert, and cache operation counters do not change when switching OFF and
-   Subtle. A test tag or equivalent test-only observation may identify the
-   call-site mark; do not give decoration user-facing semantics.
+3. **Add a focused regression and final capture flow.** In the actual
+   `MainActivity`/Compose path, verify for Atmospheric Now at OFF that the
+   condition text and temperature remain visible and represented in the
+   semantics tree while the decorative mark is absent. Verify the mark remains
+   present but decorative at Subtle. Keep visible page identity and fixture
+   values unchanged. Assert forecast, alert, and cache operation counters do
+   not change when switching OFF and Subtle. A test tag or equivalent test-only
+   observation may identify the call-site mark; do not give decoration
+   user-facing semantics. The focused test will capture the eight post-change
+   states in step 5 as the final matrix, so the same states are not captured a
+   second time in a separate run.
 4. **Run focused and regression checks.** Run the new focused Android UI test
    and the existing installed Now appearance-flow test covering the real
    `MainActivity -> OxygenWeatherApp -> ProductionBackdrop` path, weather
    invariance, and request/cache/alert counters. Run relevant existing
    Effects OFF backdrop coverage. Then run `python scripts/dev.py check` when
    the Android SDK/dependencies are available.
-5. **Capture the final installed matrix.** Use the same API 37 AVD, real app
-   path, and deterministic fixture. Set 360x640dp (945x1680 physical pixels
-   at 420 dpi) and capture the following Now states:
+5. **Capture the final installed matrix in the focused test.** Use the same API
+   37 AVD, real app path, and deterministic fixture. Set 360x640dp (945x1680
+   physical pixels at 420 dpi) and capture the following Now states:
    - Standard contrast, LTR, font scales 1.0 and 1.3: OFF and Subtle at each
      scale (four captures).
    - Standard contrast, RTL, font scale 1.0: OFF and Subtle (two captures),
@@ -105,9 +110,13 @@ production boundary before making that change.
      reduced motion disables motion without rewriting the saved Subtle level
      or removing the static field.
    Confirm Now is selected and record persisted/effective theme, contrast,
-   effect, layout, font, locale/direction, animator scale, fixture identity,
-   build, AVD, API, display size, and density for each state. Restore AVD
-   display/font/animation settings after capture.
+   effect, layout, font scale, device locale and effective layout direction,
+   animator scale, fixture identity, build, AVD, API, display size, and density
+   for each state. Use the effective RTL layout state and record how it was
+   established. Set animator scale to zero for the reduced-motion cell and
+   verify the saved Subtle preference remains Subtle while motion is disabled.
+   Restore AVD display, font, locale/direction, and animation settings in a
+   `finally` path and record their before/after readbacks.
 6. **Inspect and record evidence.** Compare each OFF/Subtle pair at both font
    scales. Review the temperature/condition hierarchy; supplied condition,
    apparent temperature, supporting measurements, source/update/freshness;
@@ -123,10 +132,11 @@ production boundary before making that change.
 - The production diff is limited to the Now condition-mark OFF behavior and
   the focused regression needed to prove it. No shared backdrop, resolver,
   palette, preference, or unrelated page changes.
-- The focused installed UI regression proves that OFF omits the Now
-  decorative mark while preserving visible/semantic condition text and all
-  supplied facts; Subtle retains the mark as decoration. Request/cache/alert
-  counters and fixture identity remain unchanged across the comparison.
+- The focused installed UI regression proves that OFF omits only the Now
+  decorative condition mark while preserving visible/semantic condition text,
+  temperature, and all supplied facts; Subtle retains the mark as decoration.
+  Request/cache/alert counters and fixture identity remain unchanged across
+  the comparison.
 - The final installed matrix has all eight captures specified in step 5,
   with paired OFF/Subtle captures using the same fixture at both font scales.
   Unsupported states are recorded as unmet, never inferred as passes.
@@ -136,10 +146,13 @@ production boundary before making that change.
   direction. High contrast preserves text/group readability. Reduced motion
   leaves the saved Subtle level intact and retains the static field.
 - Installed comparison demonstrates that the existing Subtle field is a
-  meaningful, acceptable static treatment on Now, with None opaque, static,
-  and complete. If the objective is not demonstrated, record the exact gap,
-  do not claim UI.6A passed, and stop before UI.7 or other dependent work
-  pending an explicit roadmap update.
+  perceptible, restrained static treatment on Now compared with None; the field
+  and glow do not reduce text/group readability, obscure facts, or move critical
+  text. None remains opaque, static, and complete. Record the explicit
+  effective/not-effective judgment with screenshot references and observations.
+  If the objective is not demonstrated, record the exact gap, do not claim UI.6A
+  passed, and stop before UI.7 or other dependent work pending an explicit
+  roadmap update.
 - Evidence and exact verification results are retained under
   `.codex/test-artifacts/171-ui6a-atmospheric-now-static-level/`. The closed
   history record states actual verification and all unverified boundaries.
@@ -152,9 +165,11 @@ Add a focused test to
 `app/src/androidTest/java/com/oxygen/weather/ui/ThemeAppearanceApplicationFlowTest.kt`
 (or a narrowly scoped companion test) for the Now OFF/Subtle mark behavior,
 fixture/fact preservation, and no forecast/cache/alert work. The test should
-capture the eight states in step 5 through the actual `MainActivity` path into
-the test app's external-files directory; pull only those named PNGs and test
-metadata into this cycle's evidence folder. Suggested focused command:
+capture and assert the eight final states in step 5 through the actual
+`MainActivity` path into the test app's external-files directory; pull only
+those named PNGs and test metadata into this cycle's evidence folder. Keep the
+pre-change baseline captures separate from these final captures. Suggested
+focused command:
 
 ```sh
 ANDROID_HOME="$PWD/.android-sdk" ANDROID_SDK_ROOT="$PWD/.android-sdk" \

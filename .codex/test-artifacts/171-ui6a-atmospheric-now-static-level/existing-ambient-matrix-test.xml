@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-11T19:40:47" hostname="localhost">
+  <testsuite name="com.oxygen.weather.ui.ThemeAppearanceApplicationFlowTest" tests="1" failures="0" errors="0" skipped="0" time="26.970" timestamp="2026-10-11T19:40:47" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="installedNowAmbientMatrixPreservesForecastAndCapturesActualApplicationPath" classname="com.oxygen.weather.ui.ThemeAppearanceApplicationFlowTest" time="26.970" />
+  </testsuite>
+</testsuites>
