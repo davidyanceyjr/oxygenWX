@@ -26,10 +26,18 @@ belongs in runtime Android resources.
 - The outer Home pager remains the single global horizontal-swipe owner. Hourly and Daily retain explicit window controls, with six chronological hourly entries and five chronological daily entries per window, including Hourly date jumps.
 - Theme, contrast, density, effects, and motion may alter presentation only. They do not alter forecast values, membership, chronology, units, meteorological interpretation, alert meaning, provenance/freshness, missing-data behavior, page identity, navigation semantics, or accessibility meaning.
 - Important weather information remains visible text with meaningful semantics. Decoration is never required to understand the forecast. Color is not the sole carrier of state.
-- Effects Off resolves to an opaque, static, complete interface.
+- Effects None (the UI label for internal `ThemeEffectsLevel.OFF`) resolves to a pleasing, simple, opaque, static, complete interface with no decorative artwork, weather marks, texture, gradient, glow, or animation. Keep necessary control icons, functional groups, readable facts, and semantics.
+- Subtle uses clearly visible but restrained static effects. Full may add richer art, lighting, depth, and controlled motion through composition, whitespace, focal hierarchy, and directional ornament. It does not add enclosing data panels for richness; functional controls may retain solid readable surfaces, and critical text stays sharp and stationary.
+- Effect recipes define geometry, opacity, intensity, layering, texture, and motion. All chromatic effect colors bind to semantic roles in the active theme palette; shared rendering code contains no fixed-hue effect colors. Preserve theme-specific recipes.
 - Theme changes do not refetch weather. Presentation/domain/provider boundaries and canonical values remain unchanged.
 - Missing inputs remain unavailable. Gauges/charts require properly defined presentation inputs; art composition never justifies fabricated values.
 - Existing historical Theme B boards may remain as records, but the Theme B sketch is not a production visual acceptance target. Local Glass references are distinct from deprecated upstream dark-glass/gold compositions.
+
+The complete owner-approved level definitions, preference/fallback rules, and
+acceptance boundary are in [EFFECTS_CONTRACT.md](EFFECTS_CONTRACT.md). Earlier
+theme-pack effects prescriptions are candidate or historical guidance where
+they conflict with that contract; this does not alter past owner decisions or
+completed evidence.
 
 ## Future appearance boundary
 

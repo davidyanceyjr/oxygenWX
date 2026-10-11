@@ -49,7 +49,32 @@ Examples: establish hierarchy, make current temperature dominant, reduce tertiar
 
 ### Layout/environment constraints
 
-Examples: compact phone width, font scale 1.3/2.0, long location text, RTL, Effects Off, no overlap/clipping, and no unintended nested horizontal scrolling.
+Examples: compact phone width, font scale 1.3/2.0, long location text, RTL, Effects None, no overlap/clipping, and no unintended nested horizontal scrolling.
+
+## Effects-track additions
+
+Use the UI labels **None**, **Subtle**, and **Full**. None is the existing
+internal effects identity `OFF`; do not require enum or preference migration.
+Effects recipes provide geometry, opacity, intensity, layering, texture, and
+motion, while chromatic values come from semantic roles in the selected theme.
+High contrast and reduced motion remain independent overlays; a fallback must
+not rewrite saved preference. The None state removes decorative marks and art
+as well as backgrounds while preserving readable text, functional groups,
+controls, and accessibility semantics. Full cannot gain richness by adding
+enclosing data panels.
+
+For each theme acceptance slice, begin with the 12 Standard Home cells (four
+pages × three effects levels). Add only focused compact, large-font, RTL, High
+contrast, reduced-motion, accessibility, loading/partial/unavailable-state
+cases that the changed owners affect. Do not automatically create the full
+Cartesian product. Split a matrix before estimated use exceeds 55% context;
+target 35–45%, and retain 65% as the hard maximum.
+
+Full performance acceptance declares device/API configurations, measurement
+procedure, and numeric thresholds before claiming a pass. Retain frame/render
+cost and lifecycle observations. Any unavailable device, attribution path, or
+state is named exactly and remains unverified. Static previews and HTML/SVG
+boards can support design review; they do not replace installed app evidence.
 
 ## Evidence expectations
 
@@ -59,7 +84,7 @@ For UI changes, retain evidence from the installed app whenever an Android envir
 - 360x640dp at font scale 1.3;
 - a large-font case when the slice can be stressed by text growth;
 - RTL when ordering/navigation is affected;
-- Effects Off once the preference is implemented.
+- Effects None once the preference is implemented (internally `OFF`).
 
 Screenshots are presentation evidence, not functional proof. Pair them with focused automated checks for the presentation/domain boundary that changed.
 

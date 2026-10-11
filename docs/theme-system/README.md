@@ -1,8 +1,8 @@
 # Production theme system
 
-The approved built-in production theme family is **Atmospheric, Glass, Minimal OLED, Instrument, and Terminal**. This is the design and architecture authority for the replacement track; it does not mean the production resolver, components, or renderer are already implemented.
+The five built-in production themes are **Atmospheric, Glass, Terminal, Instrument, and Minimal OLED**. The normal app now uses the production theme renderer. The theme resolver, shared components, page integration, and TP.3 installed acceptance have completed; see the [theme-pack roadmap](../theme-pack-roadmap.md) and the linked cycle histories for exact evidence and limitations. The owner-approved effects extension is separately sequenced in [UI_CONTEXT_ROADMAP.md](../UI_CONTEXT_ROADMAP.md) and governed by [EFFECTS_CONTRACT.md](EFFECTS_CONTRACT.md).
 
-The current Theme B UI is an implementation sketch/baseline being replaced. Its existing repository images remain historical references. The production reference boards are indexed at [`docs/assets/design-references/production-themes/`](../assets/design-references/production-themes/) and enumerated with checksums in [ASSET_MANIFEST.md](ASSET_MANIFEST.md). The product owner requires exact visual matching. Existing boards are the baseline for a design review, but are not yet a complete codifiable specification for every page/theme. Full art boards and crops remain documentation references, not Android runtime resources.
+The earlier Theme B UI is a historical implementation sketch, not the active renderer. Production reference boards are indexed at [`docs/assets/design-references/production-themes/`](../assets/design-references/production-themes/) and enumerated with checksums in [ASSET_MANIFEST.md](ASSET_MANIFEST.md). Boards and crops remain documentation references, not Android runtime resources or proof of installed acceptance. Theme recipes still have explicit source-measurement gaps for the new effects levels; FX.03–FX.07 record that work rather than inventing approved references.
 
 ## Contents
 

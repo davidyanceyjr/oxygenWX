@@ -73,7 +73,7 @@ Before declaring repository-level work complete:
 - Global page identity stays visible by name.
 - Important weather facts must be visible text and meaningful accessibility semantics.
 - Decorative weather marks/scenes cannot be required to understand the forecast.
-- Effects Off must remain opaque, static, and complete when implemented as a user setting.
+- Effects **None** (existing internal `OFF` identity) must remain opaque, static, and complete; no enum rename or preference migration is required.
 - Themes/effects/layout may change presentation but never weather meaning, navigation semantics, provenance, or accessibility meaning.
 - Controls should meet 48dp target guidance where applicable.
 - Visual-only changes must not refetch weather or rewrite meteorological meaning to make a screenshot look better.

@@ -1,8 +1,8 @@
 # Oxygen Weather 1.0 — Product and Technical Specification
 
-**Specification version:** 1.0-draft.2
+**Specification version:** 1.0-draft.3
 **Status:** implementation authority for the replacement-track prototype  
-**Date:** 2026-09-20  
+**Date:** 2026-10-11
 **Platform:** Android  
 **Primary implementation:** Kotlin + Jetpack Compose
 
@@ -111,14 +111,24 @@ Appearance targets:
 - Atmospheric, Glass, Minimal OLED, Instrument, and Terminal built-in themes;
 - Standard and High contrast, independent of theme;
 - Standard and Simple layout presets;
-- Off, Subtle, and Full effects levels, with Off required to remain opaque, static, and complete.
+- None, Subtle, and Full effects levels. None is the user-facing label for the existing internal `OFF` identity; no enum rename or saved-preference migration is required. None is opaque, static, and complete.
 
 The five built-in themes are alternate presentations of the same weather and navigation
-semantics. They may vary palette, typography, density, surface treatment, weather-mark and
-procedural-background treatment, and presentation motion. They must not change forecast values,
-chronology, provenance, missing-data behavior, official-alert meaning, page semantics, or
-accessibility meaning. Theme selection resolves to semantic appearance before reusable Compose
-components render it. Changing appearance must not refetch weather or reinterpret weather values.
+semantics: Atmospheric, Glass, Terminal, Instrument, and Minimal OLED. Themes and effect levels
+may vary geometry, opacity, intensity, layering, texture, and motion. Chromatic effect colors come
+from semantic roles in the active theme palette; shared effects primitives do not bake in fixed
+hues. Each theme retains its own effects recipe. None removes decorative art, weather marks,
+texture, gradients, glow, and animation while retaining readable facts, functional grouping,
+controls, and semantics. Subtle adds restrained static decoration. Full targets richer art, light,
+depth, and controlled motion through composition and whitespace; it does not add enclosing boxes
+around weather data. Menus and controls may retain solid readable surfaces, and critical text stays
+sharp and stationary. Full visual acceptance requires installed evidence and measured performance.
+High contrast and reduced motion are independent overlays; effective fallback never rewrites the
+saved preference. Effects must not change forecast values/chronology, provenance, missing-data
+behavior, alert meaning, page semantics, accessibility meaning, or forecast/alert request and cache
+behavior. Changing appearance must not refetch weather or reinterpret weather values. See the
+[effects contract](theme-system/EFFECTS_CONTRACT.md) for the complete levels, palette, and
+acceptance rules.
 
 ### 3.6 Accessibility
 

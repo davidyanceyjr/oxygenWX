@@ -1,7 +1,7 @@
 # Oxygen Weather 1.0 — Execution Roadmap
 
-**Roadmap version:** 1.0-draft.2
-**Date:** 2026-09-20  
+**Roadmap version:** 1.0-draft.3
+**Date:** 2026-10-11
 **Authority:** `docs/SPECIFICATION.md`
 
 This roadmap converts the specification into bounded, verifiable slices. It is ordered by dependency, not by visual novelty. A slice is complete only when its defined acceptance evidence is recorded in `.codex/history/`.
@@ -53,14 +53,22 @@ Owner-directed visual refinements to the application after TP.3 are tracked in
 `docs/UI_CONTEXT_ROADMAP.md`. That document defines how each concrete request
 becomes a bounded implementation slice; product and detailed presentation
 authority remain with `docs/SPECIFICATION.md` and
-`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`.
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The owner-approved effects track is
+sequenced there as FX.01–FX.40 with explicit one-to-one UI.3–UI.42 identifiers;
+the governing design and acceptance contract is
+`docs/theme-system/EFFECTS_CONTRACT.md`. FX.01 and FX.02 are documentation
+outcomes recorded in cycle 169; no implementation slice is activated.
 
 ## Context-budget slicing rule
 
-An implementation slice whose stated boundary is expected to consume more than
-65% of an agent context window must be split before activation. This is a hard
-maximum, not a target; prefer materially smaller slices when clean boundaries
-exist, and reserve headroom for execution uncertainty.
+Target approximately 35–45% context use per implementation slice, counting
+required reads, tool output, implementation, verification, failure
+investigation, and closeout. If estimated use exceeds 55%, split the work into
+dependent slices before activation to reserve headroom. An implementation
+slice expected to exceed 65% must never be activated; 65% remains the hard
+maximum, not a target. Estimates are planning judgments, not guarantees. If
+execution finds an oversized boundary, record the finding and explicitly
+replan; do not silently expand the slice.
 The first bounded portion retains its existing identifier; each later dependent
 portion uses `-partial-A`, `-partial-B`, and so on (for example,
 `TP.1D-partial-A`). Earlier suffixes such as `R0.6A` remain historical IDs.

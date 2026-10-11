@@ -8,6 +8,22 @@
 
 **Status:** proposed review material, not an approved or complete design pack. TP.1A records shared decisions; TP.1B designs Now and Hourly, TP.1C designs Daily and Details, and TP.1D integrates the 20 theme/page cells and records explicit design-owner approval. TP.2 remains gated on TP.1D closure.
 
+**Effects reconciliation:** the owner-approved [effects contract](../EFFECTS_CONTRACT.md)
+now governs future None/Subtle/Full work. Earlier candidate opacity, blur,
+backdrop, weather-mark, and `supportsFull` prescriptions in the foundation and
+page packs are historical design inputs, not binding future effects recipes
+where they conflict. In particular, do not add enclosing data panels merely
+for Full richness; keep functional grouping and readable control surfaces.
+FX.03–FX.07 must record theme-specific recipes and missing source measurements
+or states. Existing reference renders (including HTML/SVG) are design artifacts,
+not installed-app evidence. Completed D29/D31 owner approvals and TP evidence
+remain historical records and are not revoked by this reconciliation.
+
+**Current shell note:** the named persistent page-selector rows in TP.1
+reference designs were superseded by UI.2; the selected page title now opens
+direct page selection. Historical design measurements may still inform the
+page title treatment but do not restore the removed row.
+
 Authority order: [product specification](../../SPECIFICATION.md), [adopted UI specification](../../OXYGEN_UI_SPECIFICATION_ADOPTED.md), [theme design contract](../THEME_DESIGN_CONTRACT.md), then this foundation. Reference art and candidate JSON are inputs, not overrides. `accepted by authority` below means the cited written contract already settles the rule; it does **not** mean the design owner approved this pack.
 
 - [FOUNDATION.md](FOUNDATION.md): shared canvas, shell, responsive constraints, and five-theme role/value matrix.

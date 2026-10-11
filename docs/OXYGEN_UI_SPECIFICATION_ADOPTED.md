@@ -14,6 +14,13 @@ historical; it is no longer the normal app
 visual target. The production component showcase remains a debug-only focused
 fixture, while installed review covers the real app path.
 
+The owner-approved effects treatment is defined in the
+[effects contract](theme-system/EFFECTS_CONTRACT.md). The five existing themes
+remain authoritative. Older theme-pack effects wording and candidate panel,
+opacity, backdrop, and `supportsFull` prescriptions remain historical design
+inputs; where they conflict with this contract, they are superseded for future
+effects work. Completed approvals and their recorded evidence remain intact.
+
 ## Exact visual acceptance status
 
 The production theme appearance must match the approved codifiable design pack.
@@ -42,6 +49,17 @@ presentations:
 - **Minimal OLED** — black-first, low-decoration, typography- and data-dominant presentation.
 - **Instrument** — technical monitor treatment with bounded, source-supported data indicators.
 - **Terminal** — flat, console-like presentation with monospace typography.
+
+Effects recipes define geometry, opacity, intensity, layering, texture, and
+motion. Chromatic effect colors bind to semantic roles in the selected theme;
+shared effects primitives do not use fixed hues. Preserve each theme's
+identity through its own recipe. None removes optional decorative weather
+marks along with other decoration while retaining functional control icons
+where needed, functional grouping, visible meaning, and accessible semantics.
+Full richness comes from art, lighting, depth, whitespace, and composition; it
+does not require new enclosing data panels. Existing functional groups remain
+distinct even when decorative containers are removed. Menus and controls may
+keep solid readable surfaces. See the [effects contract](theme-system/EFFECTS_CONTRACT.md).
 
 Atmospheric is the initial theme selection. The selected theme is persisted in
 application-private storage, with Atmospheric used when no recognized choice is
@@ -125,6 +143,16 @@ Effects Off draws only the opaque canvas color: no gradient, grid, overlay, or
 motion. Subtle/Full use static procedural backdrops in this slice. The normal
 Home path and the focused debug showcase share these primitives.
 
+The preceding renderer description records completed behavior at that time;
+the owner-approved Effects None level additionally suppresses optional
+decorative condition marks and any other decorative artwork. The approved UI
+label is None; the current appearance screen still displays “Effects off” and
+FX.09 owns aligning that label while code and persisted preferences retain
+`OFF`/`off`. Static
+HTML/SVG and design-pack previews are not installed-app evidence for the new
+Subtle/Full visual targets. Missing theme measurements and recipes are work for
+FX.03–FX.07 in the [effects roadmap](UI_CONTEXT_ROADMAP.md).
+
 The following roles are semantic appearance inputs, not a prescribed legacy
 palette. Their concrete values are selected by the active theme:
 
@@ -151,7 +179,12 @@ Theme selection + contrast + effects + system motion policy
     -> existing typed presentation models
 ```
 
-Effects Off must resolve to an opaque, static, complete interface. High contrast is an overlay on a selected theme rather than a separate weather interpretation.
+Effects None must resolve to an opaque, static, complete interface. High
+contrast and reduced motion are independent overlays on the selected theme and
+effects preference; effective fallback does not rewrite saved intent. Keep
+functional groups and semantic distinctions even if decorative containers are
+removed. Full does not add enclosing data panels for visual richness. See the
+[complete effects contract](theme-system/EFFECTS_CONTRACT.md).
 The Standard/High contrast choice is persisted separately from theme selection
 in application-private storage and is available alongside theme selection in
 the focused Appearance destination. Standard preserves the theme's normal
@@ -232,7 +265,8 @@ Still separate future slices:
 - unit preferences;
 - persisted selection among Atmospheric, Glass, Minimal OLED, Instrument, and Terminal (implemented in R5.2);
 - persisted Standard/High contrast choice (implemented in R5.3);
-- persisted Off/Subtle/Full effects preference;
+- persisted None/Subtle/Full effects preference (the existing internal
+  identity for None is `OFF`; storage migration is not required);
 - Simple layout;
 - installed screenshot/accessibility evidence matrix;
 - release signing/publication.
