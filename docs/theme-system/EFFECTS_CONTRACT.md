@@ -92,19 +92,21 @@ removed. Decoration never replaces a readable label or accessible description.
 
 ## Track and evidence
 
-The bounded sequence is tracked in [`UI_CONTEXT_ROADMAP.md`](../UI_CONTEXT_ROADMAP.md)
-as FX.01–FX.40 mapped one-to-one to UI.3–UI.42. FX.03–FX.07 must audit
-available source art and record missing measurements or theme recipes. The
-cycle 169 input archive contains exploratory HTML previews for Atmospheric and
-Terminal; they can inform recipe discussion but do not establish approved
-reference states, measured geometry, or installed-app results. Its Daybreak
-concept is excluded. These previews also cannot supply weather values or
-product requirements. Theme-specific installed acceptance starts only after
-page integration.
-Palette substitution, semantic/request/cache invariance, device/API performance,
-reduced-motion, lifecycle, fallback, and exact limitations have dedicated
-bounded outcomes.
+The bounded sequence is tracked in
+[UI_CONTEXT_ROADMAP.md](../UI_CONTEXT_ROADMAP.md). Cycle 169 completed the
+effects contract and ownership audit. At the owner's direction, the provisional
+FX.03–FX.40 sequence was replaced with an evidence-gated plan: one consolidated
+five-theme source/decision packet, an installed one-level Atmospheric Now
+vertical slice, and a review that scopes only the next evidence-supported work.
+A second static level is conditional on that review. Motion lifecycle and one
+theme's motion treatment are separate candidate outcomes. The working forecast
+is 13–17 total cycles, including UI.3 and UI.4; this is a scope target,
+not a quota. Other theme recipes, page integrations, motion, palette coverage,
+request/cache verification, and performance work remain candidates until that
+review establishes their need and scope. Cycle 169 HTML previews remain
+exploratory inputs, not approved references or installed evidence. Daybreak is
+excluded, and preview weather values never become product requirements.
 
 The owner-approved bottom-corner navigation, page chooser, and Search/Settings/
 About menu are separate approved intent awaiting their own bounded planning.
-They are not effects requirements and are not part of FX.01–FX.40.
+They are not effects requirements and remain separately planned.

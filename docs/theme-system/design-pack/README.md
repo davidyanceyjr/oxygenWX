@@ -1,12 +1,21 @@
 # Theme design pack: TP.1D cross-pack review
 
+**Current status:** the TP.1D pack and TP.2/TP.3 implementation and acceptance
+gates later closed; cycle 104 records TP.3 PASS. The pending-gate statements
+below describe the state at the time of those reviews and are retained as
+historical context. They are not current workflow instructions. See the
+[main roadmap](../../ROADMAP.md) and
+[cycle 104 history](../../../.codex/history/2026-10-03-104-tp3-theme-pack-exit-gate.md)
+for the later disposition. This pack remains useful as source/design history;
+the current effects contract governs new None/Subtle/Full work.
+
 > **D29 weather art has a complete, owner-approved 30-cell matrix.**
 > [WEATHER_ART.md](WEATHER_ART.md) records the design owner's as-presented
 > approval, including Terminal's proposed tokens and explicit no-mark omissions.
 > This approves D29's matrix only; TP.1D packet approval, TP.1D closure, and
 > TP.2 eligibility remain pending their separate gates.
 
-**Status:** proposed review material, not an approved or complete design pack. TP.1A records shared decisions; TP.1B designs Now and Hourly, TP.1C designs Daily and Details, and TP.1D integrates the 20 theme/page cells and records explicit design-owner approval. TP.2 remains gated on TP.1D closure.
+**Status at the time of review:** proposed review material, not yet a complete design pack. TP.1A recorded shared decisions; TP.1B designed Now and Hourly, TP.1C designed Daily and Details, and TP.1D integrated the 20 theme/page cells and recorded explicit design-owner approval. The remaining implementation and acceptance gates later closed; cycle 104 records TP.3 PASS. The current status and governing sequence are linked above.
 
 **Effects reconciliation:** the owner-approved [effects contract](../EFFECTS_CONTRACT.md)
 now governs future None/Subtle/Full work. Earlier candidate opacity, blur,
@@ -14,8 +23,8 @@ backdrop, weather-mark, and `supportsFull` prescriptions in the foundation and
 page packs are historical design inputs, not binding future effects recipes
 where they conflict. In particular, do not add enclosing data panels merely
 for Full richness; keep functional grouping and readable control surfaces.
-FX.03–FX.07 must record theme-specific recipes and missing source measurements
-or states. Existing reference renders (including HTML/SVG) are design artifacts,
+The revised UI roadmap records theme source coverage in one consolidated
+decision packet before implementation or states. Existing reference renders (including HTML/SVG) are design artifacts,
 not installed-app evidence. Completed D29/D31 owner approvals and TP evidence
 remain historical records and are not revoked by this reconciliation.
 

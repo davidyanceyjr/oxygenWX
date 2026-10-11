@@ -28,14 +28,28 @@ the roadmap item complete, and stop dependent work. Do not create an automatic
 retry or prerequisite chain; continuing requires an explicit roadmap update
 with a new bounded outcome.
 
+## Roadmap branching
+
+### Detailed roadmap branches
+
+Large or specialized implementation work may pivot from the main roadmap to a
+focused roadmap that defines its own bounded sequence. The main roadmap must
+identify the branch scope, governing detailed roadmap, applicable authority, and
+the exact point where main-roadmap work resumes. The detailed roadmap governs
+ordering within its scope; it does not replace product or presentation
+authority. Do not interleave the branch with deferred main-roadmap work. When
+the branch is complete, resume at the recorded point and retain the main
+roadmap's remaining statuses and dependencies.
+
 ## Focused theme-pack roadmap
 
 `docs/theme-pack-roadmap.md` is the governing implementation sequence for the
 five-theme design pack, resolver, and renderer until TP.3 is complete. It
 supersedes the theme-specific implementation sequence below. Product semantics
 remain governed by `docs/SPECIFICATION.md` and
-`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The general roadmap remains active
-for non-theme work and resumes as the implementation sequence after TP.3.
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. After TP.3, execution branched to
+the owner-directed UI context roadmap; the main sequence is deferred at R7.3
+until that detailed branch closes, as recorded below.
 The focused theme-pack sequence is complete through TP.3. Cycle 104 audited the
 retained baseline, authorized recovery, TP.3D-S, and TP.3D evidence and recorded
 TP.3 PASS; its criterion matrix and limitations are in
@@ -54,10 +68,26 @@ Owner-directed visual refinements to the application after TP.3 are tracked in
 becomes a bounded implementation slice; product and detailed presentation
 authority remain with `docs/SPECIFICATION.md` and
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The owner-approved effects track is
-sequenced there as FX.01–FX.40 with explicit one-to-one UI.3–UI.42 identifiers;
-the governing design and acceptance contract is
+revised there as an evidence-gated sequence: UI.5 source audit/decision
+packet, UI.6A installed Atmospheric Now vertical slice, UI.7 evidence-based
+review, and conditional UI.7A for a second static level. The upper forecast is
+17 total cycles (including the two closed cycles), within the owner's 13–17
+target; UI.7 may combine or drop later slots.
+The former FX.03–FX.40 decomposition is superseded; the governing
+design and acceptance contract is
 `docs/theme-system/EFFECTS_CONTRACT.md`. FX.01 and FX.02 are documentation
-outcomes recorded in cycle 169; no implementation slice is activated.
+outcomes recorded in cycle 169. UI.5 is PLANNED; later work is gated on its
+source decisions and the installed evidence from UI.6A.
+
+**Roadmap branch:** the owner-approved UI context roadmap takes execution
+priority over the main roadmap from the point where the project branched after
+TP.3. Defer the remaining main-roadmap work while the approved UI roadmap is
+incomplete; do not interleave R7 work with that branch. When all currently
+approved UI roadmap entries are closed—including any dependent partial entries
+added through its documented split rule—resume the main roadmap at R7.3, the
+first item left pending at the branch point. Existing R7.3-and-later statuses
+and dependencies remain in force; this branch rule does not mark them complete
+or alter their acceptance criteria.
 
 ## Context-budget slicing rule
 

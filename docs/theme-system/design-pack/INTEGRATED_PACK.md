@@ -1,5 +1,10 @@
 # Integrated design pack — 20-cell cross-pack review
 
+**Historical status:** the statements below describe the cycle 029 review
+revision. TP.1D approval and closure, TP.2, and TP.3 later completed; cycle 104
+records TP.3 PASS. See the [current roadmap](../../ROADMAP.md) and
+[cycle 104 history](../../../.codex/history/2026-10-03-104-tp3-theme-pack-exit-gate.md).
+
 Status: twenty cells populated and cross-reviewed in cycle 029 after the upstream
 Now/Hourly and partial-A Daily/Details individual reviews. Proposed design
 references, **not owner-approved**.

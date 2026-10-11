@@ -47,7 +47,15 @@ The skills are stored in `.agents/skills/`. `/skills` applies the chosen skill
 to the next request; it does not itself start or execute a cycle. Provide any
 slice-specific preferences in the same request after selecting the skill.
 
-If it is `IDLE`, create one bounded cycle from a roadmap item:
+If it is `IDLE`, create one bounded cycle from the active roadmap branch. The
+main roadmap records when work is deferred to an owner-directed UI branch and
+where the main sequence resumes after that branch is complete. Follow that
+branching rule instead of selecting an unrelated `PLANNED` item from the
+deferred sequence. For the current UI branch, select the next eligible entry
+from `docs/UI_CONTEXT_ROADMAP.md`; after that branch closes, resume at R7.3 in
+`docs/ROADMAP.md`.
+
+Create one bounded cycle from the selected roadmap item:
 
 ```sh
 python scripts/codex_cycle.py start \
@@ -109,6 +117,23 @@ python scripts/codex_cycle.py close \
 ```
 
 The close operation marks the plan completed, writes `.codex/history/<date>-<cycle-id>.md`, and returns `.codex/current.md` to `IDLE`.
+
+## Local Android visual environment
+
+This checkout has a repository-local Android environment available:
+
+- SDK root: `.android-sdk/` (includes the emulator, platform tools, command-line
+  tools, and installed platform).
+- AVD home: `.android/avd/`; the `oxygen_starter` AVD is configured for Android
+  API 37.
+- X Window display: `:0`, available for visible emulator windows and image
+  inspection tools such as `feh`.
+
+For commands that need explicit paths, set `ANDROID_SDK_ROOT` and
+`ANDROID_HOME` to `$PWD/.android-sdk` and `ANDROID_AVD_HOME` to
+`$PWD/.android/avd`. For GUI tools in this environment, use `DISPLAY=:0`.
+These are local developer-environment paths; keep the generated SDK and AVD
+contents out of source control.
 
 ## Review discipline
 

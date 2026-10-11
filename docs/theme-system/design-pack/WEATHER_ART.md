@@ -2,6 +2,11 @@
 
 **Coverage:** complete 30-cell D29 matrix for six existing conditions × five built-in themes. The design owner approved the matrix as presented on 2026-09-24, including its same-theme proposals and explicit no-mark omissions. This approval is limited to the D29 weather-mark design; it does not approve the TP.1D packet or authorize runtime work.
 
+The final sentence records the gate status when D29 was approved. TP.1D/TP.1,
+TP.2, and TP.3 later closed; cycle 104 records TP.3 PASS. The D29 approval
+remains scoped to the weather-mark matrix and does not establish installed
+evidence for the new effects levels.
+
 ## Shared mark contract
 
 The mark supplements supplied condition text; it never carries weather meaning by itself. It is decorative and noninteractive. It may be hidden from accessibility only when equivalent visible condition text and semantics are present. A null `WeatherMarkCondition` produces no mark. The supported identities are the six enum values in `app/src/main/java/com/oxygen/weather/presentation/HomePresentation.kt#WeatherMarkCondition`. Theme identity is the `WeatherThemeId` catalog in `app/src/main/java/com/oxygen/weather/ui/themeengine/ThemeCatalog.kt`: `atmospheric`, `glass`, `minimal_oled`, `instrument`, and `terminal`.

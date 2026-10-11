@@ -338,4 +338,10 @@ The overview phone crops combine Now with forecast previews; none supplies dedic
 
 ## Limitations and handoff
 
+The status and handoff below record the audit-time disposition. D31 was later
+owner-approved, and TP.1D/TP.1, TP.2, and TP.3 subsequently closed; cycle 104
+records TP.3 PASS. This historical source audit remains useful for its evidence
+gaps, while its old gate status and handoff are superseded by the current
+effects roadmap.
+
 Later D31 work must specify the five-theme × four-page mapping, preserve direct-source versus proposed same-theme derivation, identify any review-proven source gaps before requesting supplementary sheets, and include all proposals in integrated review with explicit owner decisions. The owner-directed overview atmosphere is a reproduction target only where it appears; its composite layout is not a page target. This audit does not select palettes, resolve source gaps, approve a treatment, establish owner approval, or claim runtime reproduction. D31, TP.1D, and TP.1 remain open; TP.2 remains gated.

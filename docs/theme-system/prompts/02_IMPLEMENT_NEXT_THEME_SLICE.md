@@ -1,7 +1,9 @@
 # Codex Prompt 02 — Implement the Next Approved Theme-Pack Slice
 
-This prompt is deliberately reusable. Run it once per approved theme-pack roadmap slice.
-Never implement the whole production theme replacement in one cycle.
+This prompt is a historical theme-pack workflow template. The TP.1–TP.3
+sequence is complete; do not use it to select current work. Current effects
+work follows `docs/UI_CONTEXT_ROADMAP.md` and `docs/CODEX.md`. Never implement a
+whole multi-slice feature in one cycle.
 
 ## Startup
 
@@ -28,8 +30,10 @@ If there are unrelated working-tree changes, preserve them and keep this cycle's
 
 ## Cycle selection
 
-- If `.codex/current.md` is IDLE, select the earliest approved theme-pack roadmap slice whose
-  dependencies are DONE and start it with `python scripts/codex_cycle.py start --roadmap ...`.
+- If `.codex/current.md` is IDLE, select from the active roadmap branch named
+  in `.codex/current.md` and `docs/CODEX.md`. For historical theme-pack cycle
+  reconstruction only, use `docs/theme-pack-roadmap.md` and its recorded
+  dependencies.
 - Inspect the generated plan and tighten it to one production boundary, explicit invariants,
   acceptance evidence, risks, and out-of-scope work.
 - Activate it using `python scripts/codex_cycle.py activate` before production edits.

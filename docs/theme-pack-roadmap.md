@@ -1,5 +1,17 @@
 # Oxygen Weather Theme Pack Roadmap
 
+## Current disposition — historical roadmap
+
+The TP.1–TP.3 theme-pack sequence is complete. Cycle 104 recorded TP.3 PASS;
+see the current disposition and evidence links in [`docs/ROADMAP.md`](ROADMAP.md)
+and [cycle 104 history](../.codex/history/2026-10-03-104-tp3-theme-pack-exit-gate.md).
+This file is retained as the detailed historical plan and decision record. Its
+older `ACTIVE`, `PLANNED`, pending-gate, and activation instructions describe
+their original planning dates and are superseded by the later completion
+evidence. The current owner-directed UI branch is in
+[`docs/UI_CONTEXT_ROADMAP.md`](UI_CONTEXT_ROADMAP.md); after it is complete,
+main-roadmap work resumes at R7.3.
+
 ## TP.3C baseline recovery split (2026-09-30)
 
 Cycle 087 found the existing TP.3A/TP.3B installed captures incomparable and

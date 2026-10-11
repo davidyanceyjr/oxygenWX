@@ -63,11 +63,13 @@ as well as backgrounds while preserving readable text, functional groups,
 controls, and accessibility semantics. Full cannot gain richness by adding
 enclosing data panels.
 
-For each theme acceptance slice, begin with the 12 Standard Home cells (four
-pages × three effects levels). Add only focused compact, large-font, RTL, High
-contrast, reduced-motion, accessibility, loading/partial/unavailable-state
-cases that the changed owners affect. Do not automatically create the full
-Cartesian product. Split a matrix before estimated use exceeds 55% context;
+For a bounded vertical slice, verify only its selected page, theme, and effect
+levels, then add focused compact, large-font, RTL, High contrast, reduced-motion,
+accessibility, or partial/unavailable cases affected by the changed owners.
+A later full-theme acceptance outcome may use the 12 Standard Home cells (four
+pages × three effects levels) once the integrated scope and evidence justify it.
+Do not automatically create the full Cartesian product. Split a matrix before
+estimated use exceeds 55% context;
 target 35–45%, and retain 65% as the hard maximum.
 
 Full performance acceptance declares device/API configurations, measurement

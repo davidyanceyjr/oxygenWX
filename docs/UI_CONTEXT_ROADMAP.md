@@ -54,6 +54,12 @@ identifier. Effects recipes and code remain separate from page integration and
 acceptance. A documentation or audit outcome can close only when its cycle
 history records its inspected inputs and limitations.
 
+This roadmap is the current execution branch after TP.3 and takes priority over
+remaining entries in `docs/ROADMAP.md`. Complete all owner-approved entries
+here, including any dependent partial entries added under the context-budget
+rule, before returning to the main roadmap at R7.3. Do not interleave the two
+roadmaps.
+
 ## Delivery rules
 
 - Start each production change from a PLANNED cycle with a reviewed bounded
@@ -127,407 +133,169 @@ cycle history: `.codex/history/2026-10-03-109-ui-remove-persistent-page-selector
 
 ## Owner-approved effects track
 
-**Authority:** [`EFFECTS_CONTRACT.md`](theme-system/EFFECTS_CONTRACT.md),
-[`SPECIFICATION.md`](SPECIFICATION.md), and
-[`OXYGEN_UI_SPECIFICATION_ADOPTED.md`](OXYGEN_UI_SPECIFICATION_ADOPTED.md).
-The sequence extends completed theme resolver, preference, reduced-motion,
-ambient-rendering, and installed Effects None foundations; it does not repeat
-those outcomes. FX.01 and FX.02 were completed as documentation outcomes in
-cycle 169 and are the only completed outcomes in this track at roadmap creation.
-All later entries are PLANNED. No effects implementation slice is active.
-
-### Identifier map
-
-| FX reference | Actual UI entry | FX reference | Actual UI entry | FX reference | Actual UI entry | FX reference | Actual UI entry |
-|---|---|---|---|---|---|---|---|
-| FX.01 | UI.3 | FX.11 | UI.13 | FX.21 | UI.23 | FX.31 | UI.33 |
-| FX.02 | UI.4 | FX.12 | UI.14 | FX.22 | UI.24 | FX.32 | UI.34 |
-| FX.03 | UI.5 | FX.13 | UI.15 | FX.23 | UI.25 | FX.33 | UI.35 |
-| FX.04 | UI.6 | FX.14 | UI.16 | FX.24 | UI.26 | FX.34 | UI.36 |
-| FX.05 | UI.7 | FX.15 | UI.17 | FX.25 | UI.27 | FX.35 | UI.37 |
-| FX.06 | UI.8 | FX.16 | UI.18 | FX.26 | UI.28 | FX.36 | UI.38 |
-| FX.07 | UI.9 | FX.17 | UI.19 | FX.27 | UI.29 | FX.37 | UI.39 |
-| FX.08 | UI.10 | FX.18 | UI.20 | FX.28 | UI.30 | FX.38 | UI.40 |
-| FX.09 | UI.11 | FX.19 | UI.21 | FX.29 | UI.31 | FX.39 | UI.41 |
-| FX.10 | UI.12 | FX.20 | UI.22 | FX.30 | UI.32 | FX.40 | UI.42 |
-
-The ordering above is by FX identifier; dependencies below define execution
-order. A dependent slice starts only after every named prerequisite passed. A
-failed exit is recorded as a blocker or receives an explicit remediation entry
-before dependent work begins.
-
-### Shared planning fields
-
-The following contract applies to **each** FX entry; its entry below adds the
-specific outcome, dependency, owners/inputs, and observable exit.
-
-- **Invariants:** no change to weather values/units/condition/meaning, source,
-  provenance, freshness, valid/update time, forecast membership/chronology/real
-  horizon, measurement/derived/history distinctions, navigation/accessibility
-  meaning, forecast/alert request counts, or cache contents/operations. No
-  invented values, entries, measurements, warnings, or unsupported treatments.
-- **Conditions:** use real installed app evidence for visual exits; check the
-  relevant one of the 12 Standard Home page/effects cells (four pages × three
-  levels) and add only focused compact, large-font, RTL, High contrast,
-  reduced-motion, loading/partial/unavailable, or accessibility cases affected
-  by the owners. Keep controls usable and text sharp. Do not infer installed
-  success from HTML, SVG, board, or Compose preview renders.
-- **Evidence/checks:** cycle-specific `.codex/test-artifacts/<cycle-id>/`,
-  focused deterministic tests/hierarchy/interaction evidence, actual installed
-  screenshots for visual outcomes, and named device/API conditions for runtime
-  claims. If evidence is unavailable, state the exact device/API/state/check
-  missing and mark that exit unmet; do not claim acceptance.
-- **Context:** target 35–45% context use including required reads, tool output,
-  implementation, verification, failure investigation, and closeout. Estimate
-  is a planning judgment. At >55%, split before activation using dependent
-  `-partial-A`, `-partial-B` names; never activate above the hard 65% maximum.
-  If execution finds the boundary oversized, record it and replan without
-  silent expansion. FX.01–FX.40 is the initial decomposition, not a cap;
-  condition-specific artwork, profiling, or acceptance matrices may require
-  further dependent partial entries. Retain the parent FX reference with its
-  partial suffix and allocate each new entry the next actual UI identifier.
-- **Separate work:** shared engine, theme recipes, theme drawing, page
-  integration, and evidence gathering stay bounded separately. Visual slices
-  include a source-owner review and the focused regression needed for their
-  changed contract.
-
-### Bounded outcomes
-
-#### UI.3 — FX.01 Record the effects contract and update specification authority — DONE
-
-- **Outcome/objective:** publish the None/Subtle/Full contract, palette independence, theme identity, invariants, fallback, and installed acceptance target; make specification authority unambiguous.
-- **Dependencies:** none.
-- **Boundary/owners/inputs:** documentation only; product specification, adopted UI specification, theme contract, existing preference/resolver/policy sources. Excludes renderer changes and future recipe approval.
-- **Conditions/checks:** shared contract above; review product terminology and accessibility/data statements. Check roadmap links and workflow/contract checks.
-- **Exit/estimate/limits:** contract is linked by product and presentation authorities with no internal `OFF` migration requirement; 20% ±10%, low uncertainty, split unlikely. Exact limitation: recipes and visual acceptance are deferred to later entries.
-- **Evidence:** cycle 169 plan/history and `.codex/test-artifacts/169-effects-track-roadmap-and-docs/`.
-
-#### UI.4 — FX.02 Audit renderer ownership, reusable functionality, and conflicting rules — DONE
-
-- **Outcome/objective:** inventory current renderer, preference, resolver, ambient, motion/lifecycle, contrast, and page owners; identify reuse, gaps, and superseded guidance.
-- **Dependencies:** FX.01.
-- **Boundary/owners/inputs:** read-only source/history/documentation audit; `ui/themeengine`, appearance preference and app flow, design-pack/renderer contracts, cycles 141, 145, 159–161, 168. Excludes implementation and re-running installed acceptance.
-- **Conditions/checks:** shared invariants; distinguish installed evidence from static proposals and name known API 37 software-renderer performance limitation. Validate every cited file/history record.
-- **Exit/estimate/limits:** ownership/dependency inventory and conflict disposition recorded; 30% ±10%, medium uncertainty, split if audit spills into source tests or acceptance. Exact limitation: no new device measurement is produced by this audit.
-- **Evidence:** cycle 169 plan/history and `.codex/test-artifacts/169-effects-track-roadmap-and-docs/`.
-
-The supplied `weather-design-previews.zip` is preserved as cycle input at
-`.codex/test-artifacts/169-effects-track-roadmap-and-docs/inputs/weather-design-previews.zip`.
-It contains exploratory HTML previews for Atmospheric and Terminal, each showing
-None/Subtle/Full across Now, Hourly, Daily, and Details, plus a Daybreak concept
-that is excluded by the adopted five-theme contract. It contains no separate
-raster reference images or measured/approved reference states. Treat the two
-existing-theme previews only as visual discussion inputs to FX.03 and FX.05;
-their sample values, fixed palette literals, page composition, and interaction
-mockups are not product requirements. The archive README identifies the pages
-as previews, notes that icons may be absent, and disclaims installed-app evidence
-and complete five-theme acceptance coverage. Inventory and hashes are recorded
-in the cycle 169 evidence. Do not use Daybreak or infer missing theme recipes,
-reference measurements, or approval from this archive.
-
-#### UI.5 — FX.03 Codify Atmospheric’s three levels, measurements, and reference states — PLANNED
-
-- **Outcome/objective:** define distinct None, Subtle, Full Atmospheric recipes and measured/reference-state coverage for sky fields, clouds, light, and depth.
-- **Dependencies:** FX.01, FX.02.
-- **Boundary/owners/inputs:** documentation/design recipe only; Atmospheric source boards, D31 atmosphere audit, theme catalog, existing renderer, and the exploratory `atmospheric-effects-refined.html` preview preserved in cycle 169 inputs. Excludes code and unapproved palette choices; preview colors/content/layout are not approved requirements.
-- **Conditions/checks:** shared contract; cover four pages, effect level, source gaps, palette roles, contrast and reduced-motion behavior. Audit reference dimensions and provenance; record missing cells rather than infer approval.
-- **Exit/estimate/limits:** recipe table and reference-state/measurement inventory reviewed; 40% ±10%, medium-high uncertainty; split per page/asset if >55%. Exact limitation: any absent approved crop/state remains an explicit unresolved recipe input.
-
-#### UI.6 — FX.04 Codify Glass’s three levels — PLANNED
-
-- **Outcome/objective:** define Glass None/Subtle/Full reflection and layered-illumination treatments with no readability loss.
-- **Dependencies:** FX.01, FX.02.
-- **Boundary/owners/inputs:** recipe docs, Glass boards/crops/catalog and current surface renderer; excludes code and treating opacity candidate values as approved.
-- **Conditions/checks:** shared contract; include all pages and readable solid menu/control fallback; inspect source bounds, contrast and palette roles.
-- **Exit/estimate/limits:** three-level recipe and missing reference list; 35% ±10%, medium uncertainty; split if page anatomy becomes a separate measurement task. Exact limitation: unavailable source lighting states remain unapproved inputs.
-
-#### UI.7 — FX.05 Codify Terminal’s three levels — PLANNED
-
-- **Outcome/objective:** define None/Subtle/Full phosphor texture, glyph art, and directional lighting without fake console facts.
-- **Dependencies:** FX.01, FX.02.
-- **Boundary/owners/inputs:** recipe docs, Terminal boards/catalog, glyph renderer, and the exploratory `terminal-art-direction.html` preview preserved in cycle 169 inputs; excludes code and unsupported console fields. Preview glyphs/colors/content are not approved requirements.
-- **Conditions/checks:** shared contract; verify text remains exact, crisp, and palette-bound; include contrast/reduced-motion behavior.
-- **Exit/estimate/limits:** three-level recipe with allowed glyph sources and omissions; 35% ±10%, medium uncertainty; split if glyph source audit exceeds budget. Exact limitation: no unsourced glyph art is approved by this entry.
-
-#### UI.8 — FX.06 Codify Instrument’s three levels — PLANNED
-
-- **Outcome/objective:** define None/Subtle/Full technical ornament and illuminated hierarchy without invented readings or panels around data for richness.
-- **Dependencies:** FX.01, FX.02.
-- **Boundary/owners/inputs:** recipe docs, Instrument boards/catalog and component contract; excludes gauges, measurements, and code.
-- **Conditions/checks:** shared contract; inspect ornament for quantitative implication, preserve text grouping and High contrast.
-- **Exit/estimate/limits:** recipe separates decorative technical forms from supported values; 35% ±10%, medium uncertainty; split per reference family if >55%. Exact limitation: unsupported graph/gauge references remain excluded absent typed inputs.
-
-#### UI.9 — FX.07 Codify Minimal OLED’s three levels — PLANNED
-
-- **Outcome/objective:** define None/Subtle/Full selective accents/light while retaining predominantly black fields and no motion in this track.
-- **Dependencies:** FX.01, FX.02.
-- **Boundary/owners/inputs:** recipe docs, OLED references/catalog, current renderer; excludes colored full-field atmosphere and code.
-- **Conditions/checks:** shared contract; verify black-field identity, palette roles, static motion policy, and text contrast.
-- **Exit/estimate/limits:** three-level recipe with black-area/light constraints; 30% ±10%, medium uncertainty; split if measured region inventory exceeds budget. Exact limitation: any missing per-page OLED reference stays marked missing.
-
-#### UI.10 — FX.08 Define palette-independent effect parameters and semantic bindings — PLANNED
-
-- **Outcome/objective:** specify typed neutral parameters for geometry, opacity, intensity, layering, texture, and motion plus semantic theme-role bindings.
-- **Dependencies:** FX.03, FX.04, FX.05, FX.06, FX.07.
-- **Boundary/owners/inputs:** model/appearance contract docs; five recipes, ThemePalette, renderer contract. Excludes runtime types and selecting fixed hues.
-- **Conditions/checks:** shared contract; include light/dark and alternate-accent substitution cases, neutral lighting operations, None semantics, High contrast interaction.
-- **Exit/estimate/limits:** parameter schema and role-binding table has no shared hard-coded chromatic literals; 35% ±10%, medium uncertainty; split schema from binding table if >55%. Exact limitation: unrepresented palette role remains a recipe gap, not a new fixed color.
-
-#### UI.11 — FX.09 Extend the pure resolver; preserve preference persistence — PLANNED
-
-- **Outcome/objective:** resolve new typed effect recipe parameters with preference fallback while keeping resolver pure and saved choices intact; display the approved label None while retaining the internal `OFF` and stored `off` identity.
-- **Dependencies:** FX.02, FX.08.
-- **Boundary/owners/inputs:** theme resolver/model and deterministic tests; existing preference store/selection and reduced-motion policy. Excludes preference migration/storage rewrite and drawing primitives.
-- **Conditions/checks:** shared invariants; all five themes × three levels × contrast/reduced-motion relevant states; assert effective fallback does not mutate stored value and the label-only change preserves existing preferences.
-- **Exit/estimate/limits:** pure resolver contract/tests prove typed output, None completeness and fallback preservation; UI says None while enum/storage remain `OFF`/`off`; 40% ±10%, medium uncertainty; split model from resolver if >55%. Exact limitation: device integration is left to later lifecycle/integration evidence.
-
-#### UI.12 — FX.10 Implement shared static drawing primitives and decorative-layer boundaries — PLANNED
-
-- **Outcome/objective:** draw shared parameterized static layers behind readable content, with explicit decoration/data boundary.
-- **Dependencies:** FX.08, FX.09.
-- **Boundary/owners/inputs:** Compose ambient renderer, Canvas primitives, isolated showcase; excludes theme recipes and Home page cutover.
-- **Conditions/checks:** shared invariants; None/Subtle/Full static snapshots, palette roles, clipping/alpha, zero interaction semantics; deterministic rendering checks plus installed showcase.
-- **Exit/estimate/limits:** reusable primitives consume resolved parameters only and cannot alter content semantics; 45% ±10%, medium-high uncertainty; split primitives by texture/layer family above 55%. Exact limitation: unavailable GPU/device validation is named and the installed visual exit remains unmet.
-
-#### UI.13 — FX.11 Establish motion lifecycle — PLANNED
-
-- **Outcome/objective:** ensure inactive pages and backgrounded apps stop decorative drawing and resume within policy.
-- **Dependencies:** FX.02, FX.09.
-- **Boundary/owners/inputs:** lifecycle-aware ambient renderer, Home pager visibility, app lifecycle, reduced-motion policy; excludes new theme motion art.
-- **Conditions/checks:** shared invariants; foreground/background, active/inactive page, animator scale and saved preference; lifecycle tests plus installed frame/draw evidence.
-- **Exit/estimate/limits:** named states stop/resume drawing as specified without effect/request/cache mutation; 40% ±10%, high uncertainty; split page visibility and app lifecycle above 55%. Exact limitation: if emulator frame telemetry cannot distinguish drawing, document the exact probe gap as unmet.
-
-#### UI.14 — FX.12 Enforce None — PLANNED
-
-- **Outcome/objective:** remove decoration and retain readable complete content, controls, and functional grouping across all themes.
-- **Dependencies:** FX.09, FX.10.
-- **Boundary/owners/inputs:** shared background/mark/surface renderer and None showcases; excludes page-specific re-composition.
-- **Conditions/checks:** shared contract; five themes, 12 page/effect cells as baseline for later acceptance, compact/large-font/contrast/failure states affected; pixel and semantics checks.
-- **Exit/estimate/limits:** no decorative layer/mark/texture/gradient/glow/motion in None, while all supplied facts, distinctions, and functional groups remain; 40% ±10%, medium uncertainty; split by renderer owner if >55%. Exact limitation: unavailable theme/page capture is listed and blocks its visual acceptance.
-
-#### UI.15 — FX.13 Implement Atmospheric Subtle — PLANNED
-
-- **Outcome/objective:** add sky fields, cloud forms, light, and restrained static atmospheric depth.
-- **Dependencies:** FX.03, FX.09, FX.10, FX.12.
-- **Boundary/owners/inputs:** Atmospheric isolated fixture/showcase and renderer; excludes Full art and Home integration.
-- **Conditions/checks:** shared contract; palette substitution, text contrast, reduced-motion, compact and partial data.
-- **Exit/estimate/limits:** installed isolated Subtle states show restrained recipe across affected owners; 40% ±10%, medium-high uncertainty; split layer groups over 55%. Exact limitation: missing reference states remain named and cannot be visually approved.
-
-#### UI.16 — FX.14 Implement Atmospheric Full static artwork and lighting — PLANNED
-
-- **Outcome/objective:** add static rich sky/cloud artwork and lighting using composition, whitespace, focus and depth without data panels.
-- **Dependencies:** FX.03, FX.09, FX.10, FX.12, FX.13.
-- **Boundary/owners/inputs:** Atmospheric isolated showcase and static drawing; excludes motion and page integration.
-- **Conditions/checks:** shared contract; critical text stationary, static visual, palette-bound art, contrast and partial states.
-- **Exit/estimate/limits:** installed static Full visual accepted on named fixtures with text/facts intact; 45% ±10%, high uncertainty; split artwork from lighting above 55%. Exact limitation: without installed capture or measured contrast, exit is unmet.
-
-#### UI.17 — FX.15 Implement Glass Subtle — PLANNED
-
-- **Outcome/objective:** add readable reflections and restrained static layered illumination.
-- **Dependencies:** FX.04, FX.09, FX.10, FX.12.
-- **Boundary/owners/inputs:** Glass isolated fixture/showcase; excludes Full and page integration.
-- **Conditions/checks:** shared contract; actual palette bindings, text contrast, solid control/menu surfaces, reduced-motion.
-- **Exit/estimate/limits:** installed Subtle fixture demonstrates restrained illumination with readable content; 40% ±10%, medium uncertainty; split reflections/layers above 55%. Exact limitation: unavailable light/dark fixture is recorded and blocks paired appearance claim.
-
-#### UI.18 — FX.16 Implement Glass Full static artwork and lighting — PLANNED
-
-- **Outcome/objective:** add richer static glass reflection, depth, and illumination without enclosing weather facts.
-- **Dependencies:** FX.04, FX.09, FX.10, FX.12, FX.15.
-- **Boundary/owners/inputs:** Glass isolated showcase; excludes motion and page integration.
-- **Conditions/checks:** shared contract; static text, contrast under reflections, palette substitution, surfaces limited to controls.
-- **Exit/estimate/limits:** installed static Full treatment passes visual/contrast review; 45% ±10%, high uncertainty; split reflection and illumination if >55%. Exact limitation: missing device contrast/screenshot evidence leaves acceptance open.
-
-#### UI.19 — FX.17 Implement Terminal Subtle — PLANNED
-
-- **Outcome/objective:** add restrained phosphor texture and theme-native decorative glyph art.
-- **Dependencies:** FX.05, FX.09, FX.10, FX.12.
-- **Boundary/owners/inputs:** Terminal isolated fixture, glyph renderer and palette; excludes animation and integration.
-- **Conditions/checks:** shared contract; glyphs cannot imply data, exact text remains crisp; alternate palette and contrast fixtures.
-- **Exit/estimate/limits:** installed Subtle fixture has traceable decorative glyph sources and readable text; 40% ±10%, medium-high uncertainty; split texture/glyph audit over 55%. Exact limitation: untraceable glyph source is omitted and documented.
-
-#### UI.20 — FX.18 Implement Terminal Full static artwork and directional lighting — PLANNED
-
-- **Outcome/objective:** add static phosphor/glyph artwork and directional light while preserving console readability and no fake content.
-- **Dependencies:** FX.05, FX.09, FX.10, FX.12, FX.17.
-- **Boundary/owners/inputs:** Terminal isolated showcase; excludes motion and page integration.
-- **Conditions/checks:** shared contract; theme palette, crisp stationary text, contrast and no new readings.
-- **Exit/estimate/limits:** installed static Full fixture accepted with no unsupported console fields; 45% ±10%, high uncertainty; split art and lighting if >55%. Exact limitation: absent installed or text-contrast evidence leaves exit unmet.
-
-#### UI.21 — FX.19 Implement Instrument Subtle — PLANNED
-
-- **Outcome/objective:** add restrained technical ornament and hierarchy cues, without extra panels or data implication.
-- **Dependencies:** FX.06, FX.09, FX.10, FX.12.
-- **Boundary/owners/inputs:** Instrument isolated fixture and ornament renderer; excludes Full and page integration.
-- **Conditions/checks:** shared contract; inspect every line/shape for quantitative implication; compact/contrast states.
-- **Exit/estimate/limits:** installed Subtle fixture distinguishes ornament from readings and keeps existing semantic groups; 40% ±10%, medium-high uncertainty; split ornament families over 55%. Exact limitation: ambiguous forms are removed and the unresolved reference is recorded.
-
-#### UI.22 — FX.20 Implement Instrument Full static artwork and illuminated hierarchy — PLANNED
-
-- **Outcome/objective:** add static technical artwork/light and focal order without invented readings or enclosing boxes.
-- **Dependencies:** FX.06, FX.09, FX.10, FX.12, FX.19.
-- **Boundary/owners/inputs:** Instrument isolated showcase; excludes motion and page integration.
-- **Conditions/checks:** shared contract; static geometry audit, semantic grouping, contrast and palette substitutions.
-- **Exit/estimate/limits:** installed Full treatment accepted with zero new quantitative indicators; 45% ±10%, high uncertainty; split if >55%. Exact limitation: absent indicator/source audit or installed state fails acceptance.
-
-#### UI.23 — FX.21 Implement Minimal OLED Subtle — PLANNED
-
-- **Outcome/objective:** add selective static accents/light while retaining predominantly black fields.
-- **Dependencies:** FX.07, FX.09, FX.10, FX.12.
-- **Boundary/owners/inputs:** OLED isolated fixture and renderer; excludes motion and page integration.
-- **Conditions/checks:** shared contract; black-field area/identity, palette substitution, text contrast.
-- **Exit/estimate/limits:** installed Subtle fixtures preserve black-first identity and complete content; 35% ±10%, medium uncertainty; split if measured theme/pages exceed 55%. Exact limitation: any unmeasured page remains outside acceptance claim.
-
-#### UI.24 — FX.22 Implement Minimal OLED Full static accents and lighting — PLANNED
-
-- **Outcome/objective:** add richer selective static accents/light without broad bright fields; this theme remains static in this track.
-- **Dependencies:** FX.07, FX.09, FX.10, FX.12, FX.21.
-- **Boundary/owners/inputs:** OLED isolated showcase; excludes all motion and page integration.
-- **Conditions/checks:** shared contract; black identity, contrast, stationary text, no motion even under Full.
-- **Exit/estimate/limits:** installed static Full fixtures preserve predominantly black fields; 40% ±10%, medium-high uncertainty; split lighting cases above 55%. Exact limitation: missing black-area/contrast measurement is recorded and leaves exit unmet.
-
-#### UI.25 — FX.23 Implement Atmospheric motion only — PLANNED
-
-- **Outcome/objective:** add controlled Atmospheric motion after static Full acceptance.
-- **Dependencies:** FX.11, FX.14.
-- **Boundary/owners/inputs:** Atmospheric motion layer/lifecycle owners; excludes other themes, static art changes, and page integration.
-- **Conditions/checks:** shared contract; lifecycle, reduced-motion, background/inactive stop, critical text stationary, measured device/API performance.
-- **Exit/estimate/limits:** motion is bounded, controllable and accepted on named configurations; 45% ±10%, high uncertainty; split effects or device matrix above 55%. Exact limitation: missing named-device telemetry is a failed/unmet exit.
-
-#### UI.26 — FX.24 Implement Glass motion only — PLANNED
-
-- **Outcome/objective:** add controlled Glass reflection/illumination motion after static Full acceptance.
-- **Dependencies:** FX.11, FX.16.
-- **Boundary/owners/inputs:** Glass motion layer; excludes other themes and changes to static artwork.
-- **Conditions/checks:** shared contract; reduced motion/lifecycle, stationary readable text, profile named device/API.
-- **Exit/estimate/limits:** motion passes theme-specific installed evidence and measured budgets; 45% ±10%, high uncertainty; split if >55%. Exact limitation: any unprofiled API/device is not claimed.
-
-#### UI.27 — FX.25 Implement Terminal motion only — PLANNED
-
-- **Outcome/objective:** add controlled Terminal texture/glyph/lighting motion after static Full acceptance.
-- **Dependencies:** FX.11, FX.18.
-- **Boundary/owners/inputs:** Terminal motion layer and glyph renderer; excludes changing text or status.
-- **Conditions/checks:** shared contract; no flashing critical text, reduced-motion, lifecycle and performance capture.
-- **Exit/estimate/limits:** installed motion stays decorative and meets named budgets; 45% ±10%, high uncertainty; split per motion family/device if >55%. Exact limitation: absent flicker/frame evidence means unmet exit.
-
-#### UI.28 — FX.26 Implement Instrument motion only — PLANNED
-
-- **Outcome/objective:** add controlled Instrument ornament/light motion after static Full acceptance; Minimal OLED stays static.
-- **Dependencies:** FX.11, FX.20.
-- **Boundary/owners/inputs:** Instrument motion renderer only; excludes OLED motion and data indicators.
-- **Conditions/checks:** shared contract; no measurement implication, lifecycle/reduced-motion and named-device profile.
-- **Exit/estimate/limits:** installed motion is decorative and within measured budget; 45% ±10%, high uncertainty; split ornament/device cases above 55%. Exact limitation: no unmeasured device/API claim.
-
-#### UI.29 — FX.27 Integrate new effects into Now — PLANNED
-
-- **Outcome/objective:** connect accepted theme effects to Now and preserve current-condition focal hierarchy.
-- **Dependencies:** FX.12–FX.26.
-- **Boundary/owners/inputs:** Now page and existing typed presentation; excludes other page integration and new data.
-- **Conditions/checks:** shared contract; all five themes × three levels, current/partial/unavailable states, contrast and reduced motion where affected; installed Now hierarchy and semantics.
-- **Exit/estimate/limits:** integrated Now uses accepted fixtures with invariant facts and no clipping; 45% ±10%, high uncertainty; split theme groups if >55%. Exact limitation: missing one theme/effect/page-state capture is listed and blocks its acceptance claim.
-
-#### UI.30 — FX.28 Integrate Hourly — PLANNED
-
-- **Outcome/objective:** integrate accepted treatments while retaining six-entry windows, date jumps, and visible Earlier/Later controls.
-- **Dependencies:** FX.27 and applicable static/motion rendering prerequisites FX.12–FX.26.
-- **Boundary/owners/inputs:** Hourly page/window controls and typed entries; excludes chronology or data changes.
-- **Conditions/checks:** shared contract; 12 relevant theme/effect cells, short horizons, long text/RTL and controls; hierarchy and interaction evidence installed.
-- **Exit/estimate/limits:** exactly supplied entries/windows and controls remain, visuals accepted; 45% ±10%, high uncertainty; split theme families above 55%. Exact limitation: unavailable partial-horizon state is documented and not inferred.
-
-#### UI.31 — FX.29 Integrate Daily — PLANNED
-
-- **Outcome/objective:** integrate accepted treatments while retaining five-day windows and precipitation meaning.
-- **Dependencies:** FX.28 and applicable static/motion rendering prerequisites FX.12–FX.26.
-- **Boundary/owners/inputs:** Daily page/window and typed entries; excludes forecast values or grouping semantics.
-- **Conditions/checks:** shared contract; 12 relevant cells, sparse/partial horizon, compact/large-font/RTL as affected; installed hierarchy evidence.
-- **Exit/estimate/limits:** five actual entries max, precipitation labels and controls remain exact and accepted; 45% ±10%, high uncertainty; split if >55%. Exact limitation: unrenderable sparse states remain explicit unmet cases.
-
-#### UI.32 — FX.30 Integrate Details — PLANNED
-
-- **Outcome/objective:** integrate effects while preserving measurement, derived, and historical distinctions.
-- **Dependencies:** FX.29 and applicable static/motion rendering prerequisites FX.12–FX.26.
-- **Boundary/owners/inputs:** Details groups and source/freshness components; excludes adding metrics or provenance.
-- **Conditions/checks:** shared contract; 12 relevant cells, long text, missing/sparse groups, contrast and large-font scrolling; hierarchy inspection.
-- **Exit/estimate/limits:** supplied groups/order and distinction labels remain visible/semantic in installed states; 45% ±10%, high uncertainty; split theme groups above 55%. Exact limitation: missing state capture blocks that state claim.
-
-#### UI.33 — FX.31 Atmospheric installed visual/layout acceptance — PLANNED
-
-- **Outcome/objective:** accept Atmospheric across integrated pages and all three levels.
-- **Dependencies:** FX.12, FX.13, FX.14, FX.23, FX.27–FX.30.
-- **Boundary/owners/inputs:** evidence only; integrated Atmospheric renderer and fixtures; excludes open-ended corrections (new remediation slice required).
-- **Conditions/checks:** 12 Standard Home page/effects cells first; add affected compact, large font, RTL, High contrast, partial/unavailable, reduced-motion and accessibility cases.
-- **Exit/estimate/limits:** signed visual/layout findings with screenshots and hierarchy evidence; 40% ±10%, medium-high uncertainty; split evidence matrix before >55%. Exact limitation: each missing cell/config is enumerated and not accepted.
-
-#### UI.34 — FX.32 Glass installed visual/layout acceptance — PLANNED
-
-- **Outcome/objective:** accept Glass integrated pages/effect levels, reflections and readable controls.
-- **Dependencies:** FX.12, FX.15, FX.16, FX.24, FX.27–FX.30.
-- **Boundary/owners/inputs:** Glass evidence only; no corrective implementation.
-- **Conditions/checks:** 12 baseline cells plus affected compact/large-font/RTL/contrast/partial/motion cases.
-- **Exit/estimate/limits:** installed captures, hierarchy/interaction review and focused checks recorded; 40% ±10%, medium-high uncertainty; split before >55%. Exact limitation: unavailable device/API/layout cell explicitly remains unverified.
-
-#### UI.35 — FX.33 Terminal installed visual/layout acceptance — PLANNED
-
-- **Outcome/objective:** accept Terminal integrated pages, glyph treatment, and text readability.
-- **Dependencies:** FX.12, FX.17, FX.18, FX.25, FX.27–FX.30.
-- **Boundary/owners/inputs:** Terminal evidence only; no new glyph/render changes.
-- **Conditions/checks:** 12 baseline cells plus affected compact, large-font, RTL, contrast, unavailable and motion cases; inspect semantics and legibility.
-- **Exit/estimate/limits:** installed screenshots and hierarchy/interaction evidence meet recipe; 40% ±10%, medium-high uncertainty; split before >55%. Exact limitation: list each unreadable or missing condition as unmet.
-
-#### UI.36 — FX.34 Instrument installed visual/layout acceptance — PLANNED
-
-- **Outcome/objective:** accept Instrument hierarchy and confirm ornament is not mistaken for a reading.
-- **Dependencies:** FX.12, FX.19, FX.20, FX.26, FX.27–FX.30.
-- **Boundary/owners/inputs:** Instrument evidence only; excludes unbounded design changes.
-- **Conditions/checks:** 12 baseline cells plus affected accessibility, contrast, compact/large-font/RTL and sparse states; inspect no invented readings.
-- **Exit/estimate/limits:** installed evidence and ornament/data distinction review pass; 40% ±10%, medium-high uncertainty; split before >55%. Exact limitation: ambiguous ornament or unavailable evidence remains failed/open.
-
-#### UI.37 — FX.35 Minimal OLED installed visual/layout acceptance — PLANNED
-
-- **Outcome/objective:** accept black-field identity, selective effects, and static Full behavior.
-- **Dependencies:** FX.12, FX.21, FX.22, FX.27–FX.30.
-- **Boundary/owners/inputs:** OLED evidence only; excludes adding motion.
-- **Conditions/checks:** 12 baseline cells plus affected contrast, compact/large-font/RTL, unavailable states; verify Full remains static.
-- **Exit/estimate/limits:** installed screenshots/hierarchy evidence demonstrate predominantly black field and complete content; 40% ±10%, medium uncertainty; split before >55%. Exact limitation: unmeasured/unavailable conditions are named, not generalized.
-
-#### UI.38 — FX.36 Verify semantic equality and zero request/cache side effects — PLANNED
-
-- **Outcome/objective:** prove appearance actions preserve typed weather meaning and cause zero forecast/alert/cache side effects.
-- **Dependencies:** FX.27–FX.30.
-- **Boundary/owners/inputs:** presentation projections, app appearance flow, request/cache counters and deterministic tests; excludes visual judgment.
-- **Conditions/checks:** shared invariants directly; compare selected/resolved effect states across themes/levels, page semantics, fetch counts, cache reads/writes.
-- **Exit/estimate/limits:** structural equality plus zero counter deltas from a settled baseline, with positive controls; 35% ±10%, medium uncertainty; split semantic and transport/cache probes above 55%. Exact limitation: any missing counter owner prevents zero-side-effect claim.
-
-#### UI.39 — FX.37 Verify palette substitution and High contrast behavior — PLANNED
-
-- **Outcome/objective:** show shared effects code is invariant under semantic palette substitutions and readable under High contrast.
-- **Dependencies:** FX.08–FX.10, FX.12–FX.24, FX.27–FX.30, FX.36.
-- **Boundary/owners/inputs:** shared renderer parameter probes and alternate semantic fixtures; excludes changing approved role meanings.
-- **Conditions/checks:** representative light/dark and alternate-accent fixtures, None, High contrast; focused contrast/hierarchy checks.
-- **Exit/estimate/limits:** same shared drawing logic receives substituted semantic colors, no hidden fixed chromatic effect, None unchanged and High contrast readable; 40% ±10%, medium-high uncertainty; split palettes from theme art above 55%. Exact limitation: any unsupported palette pairing is named and unaccepted.
-
-#### UI.40 — FX.38 Profile rendering and motion on named device/API configurations — PLANNED
-
-- **Outcome/objective:** define thresholds and measure frame/rendering cost, idle cost and lifecycle behavior on named configurations.
-- **Dependencies:** FX.23–FX.30, FX.31–FX.35.
-- **Boundary/owners/inputs:** profile only; integrated renderers, profiler/trace tooling, named Android devices/APIs. No thresholds or results may be invented.
-- **Conditions/checks:** choose device/API set, exact measurement procedure, warmup/duration/sample count and numeric acceptance budgets before measuring; cover None/Subtle/Full and motion/lifecycle.
-- **Exit/estimate/limits:** predeclared thresholds plus raw measurements and pass/fail per configuration; 45% ±10%, high uncertainty; split device/API classes above 55%. Exact limitation: absent named hardware or reliable frame attribution is listed and leaves performance unverified.
-
-#### UI.41 — FX.39 Verify reduced motion, lifecycle, and performance fallback — PLANNED
-
-- **Outcome/objective:** verify independent reduced-motion/lifecycle/fallback overlays and preservation of saved intent.
-- **Dependencies:** FX.11, FX.23–FX.26, FX.38.
-- **Boundary/owners/inputs:** policy/resolver, persisted selection, app lifecycle and performance gate; excludes preference migration.
-- **Conditions/checks:** shared contract; animator scale/reduced motion, background/inactive, fallback and resume under all relevant themes; installed plus deterministic checks.
-- **Exit/estimate/limits:** static readable effective fallback, stopped inactive/background work, unchanged saved level and measured performance; 40% ±10%, high uncertainty; split policy and lifecycle evidence above 55%. Exact limitation: unmeasured fallback configuration remains explicitly unmet.
-
-#### UI.42 — FX.40 Consolidate evidence, resolve acceptance status, and close track — PLANNED
-
-- **Outcome/objective:** reconcile all required visual, semantic, palette, performance and fallback evidence and state a bounded final disposition.
-- **Dependencies:** FX.31–FX.39.
-- **Boundary/owners/inputs:** documentation/evidence closeout only; cycle histories and artifacts. Any failed criterion requires a blocker or a separately planned remediation; no corrective implementation inside closure.
-- **Conditions/checks:** audit links, device/API thresholds/results, all 12-cell theme starts and applicable added cases, request/cache invariance and limitations.
-- **Exit/estimate/limits:** every required criterion is PASS, explicit unmet/blocked, or approved remediation reference; evidence index is complete and history makes no unsupported claim; 35% ±10%, medium uncertainty; split by evidence category above 55%. Exact limitation: absent prerequisite evidence prevents track acceptance and is recorded as such.
+**Authority:** [EFFECTS_CONTRACT.md](theme-system/EFFECTS_CONTRACT.md),
+[SPECIFICATION.md](SPECIFICATION.md), and
+[OXYGEN_UI_SPECIFICATION_ADOPTED.md](OXYGEN_UI_SPECIFICATION_ADOPTED.md).
+Cycle 169 completed the effects contract and renderer ownership audit (UI.3 and
+UI.4). At the owner's direction on 2026-10-11, the provisional FX.03–FX.40
+decomposition is superseded before implementation. Cycle 169 remains an
+accurate record of the sequence proposed at its close; this section is the
+current execution authority.
+
+The revised sequence proves one small installed vertical slice before
+committing to a shared effects architecture or a five-theme implementation
+matrix. It consolidates theme source and recipe work into one evidence-backed
+decision packet, implements Atmospheric Now through the real app path, then
+uses that installed result to decide what work is actually needed next. Do not
+start the superseded FX.04–FX.40 sequence or create replacement theme cycles
+before UI.7 closes.
+
+### Completed
+
+- **UI.3 / FX.01 — Effects contract and specification authority — DONE.**
+  Recorded in cycle 169.
+- **UI.4 / FX.02 — Renderer ownership and conflict audit — DONE.**
+  Recorded in cycle 169.
+
+The cycle 169 archive contains exploratory HTML previews for Atmospheric and
+Terminal, plus an excluded Daybreak concept. The two adopted-theme previews
+are discussion inputs only: their colors, sample weather, layout, and scripted
+interactions are not approved requirements or installed evidence. D31 records
+approved page-atmosphere direction, but does not approve effects-level recipes
+or measurements.
+
+### Revised sequence
+
+#### UI.5 / FX.03 — Audit sources and prepare one effects decision packet — PLANNED
+
+- **Outcome:** one consolidated evidence matrix for Atmospheric, Glass,
+  Terminal, Instrument, and Minimal OLED, plus a decision packet for the first
+  implementation slice. Do not create five standalone recipe documents.
+- **Dependencies:** UI.3 and UI.4.
+- **Boundary:** documentation and cycle evidence only. Inspect indexed source
+  boards/crops, D31 decisions, theme tokens, existing effects code and tests,
+  and cycle 169 inputs. Separate adopted decisions, direct source observations,
+  existing runtime behavior, exploratory material, and unsupported assumptions.
+- **Decision packet:** recommend the smallest Atmospheric Now change that can
+  be implemented and judged in the installed app. Name the supported source
+  evidence, the level(s) in scope, required palette roles, focused visual and
+  functional checks, and any owner decision needed. Offer concrete options
+  where repository authority does not settle a visual choice; do not silently
+  select or present a proposal as approved.
+- **Exit:** the five-theme matrix identifies available references and exact
+  gaps; the proposed vertical slice has one bounded production owner and
+  installed acceptance conditions; unresolved owner choices are explicit.
+  One consolidated document is linked from the theme-system documentation.
+  No production code or new normative theme recipe is added by this cycle.
+
+#### UI.6A / FX.41 — Implement and install one Atmospheric Now static level — PLANNED
+
+- **Outcome:** implement one UI.5-approved non-None static Atmospheric
+  treatment on Now through the real application path and capture installed
+  evidence. Keep the work to this one page and the minimum existing-renderer
+  support required.
+- **Dependencies:** UI.5 exit and any required explicit owner decisions.
+- **Boundary:** one selected static effect level, its necessary code/tests, and
+  the existing None state as comparison. Start from the current preference,
+  resolver, and renderer. No new shared framework, motion, other theme, or page
+  integration unless the decision packet proves it is necessary.
+- **Known None prerequisite:** the current Now hero can still render its
+  decorative condition mark at `OFF`. Before using None as the comparison,
+  suppress that decorative mark on Now while retaining condition text and
+  semantics, with a focused regression check. This repairs the adopted None
+  contract at the one page in this slice; it does not expand mark suppression
+  to other pages.
+- **Functional invariants:** preserve current weather facts, condition,
+  provenance, freshness, semantics, Home page identity/navigation, saved effect
+  preference, and request/cache behavior. None remains opaque, static, and
+  complete; text remains readable; critical text does not move.
+- **Installed acceptance:** capture the same real Now fixture at None and the
+  selected level on a 360×640dp viewport at font scales 1.0 and 1.3. Include
+  RTL, High contrast, and reduced-motion cases only where the treatment affects
+  them. Record device/API and build identity. Pair screenshots with focused
+  tests and interaction/semantics evidence.
+- **Exit:** the installed comparison demonstrates the stated visual objective,
+  focused checks pass, and any unsupported device/state is named as unmet. A
+  preview or successful build alone cannot pass the visual exit.
+
+#### UI.7 / FX.42 — Review UI.6A evidence and choose the next boundary — PLANNED
+
+- **Outcome:** compare the installed result and implementation against the
+  source decision packet. Record which abstractions proved useful, which were
+  unnecessary, remaining visual/source gaps, and whether another static level
+  is warranted.
+- **Dependencies:** UI.6A.
+- **Boundary:** evidence and roadmap review only; no corrective implementation.
+- **Exit:** document whether to proceed with conditional UI.7A, combine or drop
+  candidate UI.8–UI.17 work, and define the next evidence-supported scope.
+  Decide whether other themes/pages, shared infrastructure, or motion are
+  justified. Do not restore the old FX.04–FX.40 decomposition by default.
+
+#### UI.7A / FX.43 — Add a second Atmospheric Now static level — CONDITIONAL
+
+- **Outcome:** only if UI.7 finds a meaningful gap, implement the next
+  source-backed static effects level on the same Atmospheric Now path and
+  verify it in the installed app.
+- **Dependencies:** UI.7 decision and any required explicit owner approval;
+  otherwise omit this slice.
+- **Boundary:** one additional static level and focused tests/captures on Now.
+  Reuse or revise UI.6A code based on observed evidence. No motion, other
+  theme, or other page.
+- **Exit:** installed captures show a meaningful, readable distinction from
+  None and UI.6A's level, with functional invariants preserved. If UI.7 finds
+  no justified second treatment, record that decision and do not implement
+  this slice.
+
+### Evidence-gated cycle budget
+
+The working target is **13–17 total cycles for this effects track**, including
+the two completed cycles UI.3 and UI.4. The current upper forecast is 17 total,
+including conditional UI.7A and the split motion work; from UI.5 this is at most
+15 remaining cycles. If UI.7 drops UI.7A or later motion work, the total falls
+accordingly. This is a budget for bounded outcomes, not a requirement to fill
+every slot.
+Keep the final sequence within the owner's 13–17 range unless the UI.7 review
+records concrete evidence for changing that target.
+
+The following are planning slots, not PLANNED cycles. Give them exact
+boundaries, dependencies, and acceptance criteria only after UI.7:
+
+- **UI.8:** add shared rendering/model support only where the vertical slice
+  demonstrates a reusable need.
+- **UI.9–UI.10:** implement static treatments for remaining themes, grouped by
+  source and renderer ownership rather than one cycle per theme or effect.
+- **UI.11:** integrate accepted treatments into Now for remaining themes.
+- **UI.12–UI.14:** integrate Hourly, Daily, and Details, one page boundary per
+  cycle to protect each page's weather and navigation semantics.
+- **UI.15A–UI.15B:** split the motion lifecycle gate from one theme's motion
+  treatment as detailed below; both remain conditional on static acceptance.
+- **UI.16:** complete focused cross-theme appearance, palette/contrast, reduced
+  motion, and request/cache invariance checks that remain after the earlier
+  installed slices.
+- **UI.17:** measure performance on named device/API configurations and
+  reconcile the full effects evidence, recording any unverified boundary.
+
+### Motion split boundaries
+
+- **UI.15A — Motion lifecycle and fallback:** establish active/inactive-page
+  and foreground/background gating, reduced-motion/animator-scale behavior, and
+  preference-preserving fallback. Use focused lifecycle/policy tests and an
+  installed probe showing decorative drawing stops and resumes in the named
+  states. Add no theme-specific motion artwork.
+- **UI.15B — One theme motion treatment:** only after UI.15A and that theme's
+  static treatment pass, add motion for one theme. Verify the installed result
+  and stationary readable text on a named configuration. Leave other themes'
+  motion for a later evidence-based decision; reserve the cross-configuration
+  performance matrix for UI.17.
+
+These slots may be combined, dropped, or split at UI.7 to fit observed
+implementation coupling and the 13–17 total target. Do not create detailed
+plans or additional documentation-only cycles for UI.8–UI.17 before that
+evidence review. UI.7A is the only predeclared conditional follow-up.
+
+The former FX.03–FX.40 sequence is superseded. Cycle 169 history preserves
+that proposal for auditability. FX.41, FX.42, and FX.43 identify UI.6A, UI.7, and conditional UI.7A;
+do not reuse retired FX.04–FX.40 identifiers.
 
 ### Separate approved interaction intent
 
@@ -539,6 +307,5 @@ accessibility evidence before implementation.
 
 ### Future owner-directed UI changes
 
-Add the next numbered slice after UI.42 when another outcome is supplied.
-Preserve the FX/UI mapping above; do not reuse an FX identifier or fold a
-separate approved interaction track into effects work.
+After UI.7, add only the next evidence-supported effects slice. Keep the
+approved interaction intent separate and do not reuse retired FX identifiers.

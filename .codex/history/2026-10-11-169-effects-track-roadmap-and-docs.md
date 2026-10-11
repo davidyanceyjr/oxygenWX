@@ -33,3 +33,15 @@ mocked pages, plus an excluded Daybreak concept. It contains no image files,
 approved measurements, or installed-app evidence. FX.03 and FX.05 now name the
 relevant previews as discussion inputs with those limits; no recipe or approval
 was inferred, and no future FX outcome was marked complete.
+
+### Post-close roadmap routing and status audit — 2026-10-11
+
+The owner directed that the UI context roadmap take priority over the main
+roadmap until all approved UI entries, including any dependent partial entries,
+are closed, after which main-roadmap work resumes at R7.3. The main roadmap,
+UI roadmap, Codex workflow guidance, and IDLE objective now record this branch
+rule as a reusable pattern for large or specialized work to pivot to a detailed
+roadmap with an explicit scope and resume point. The older theme-pack roadmap
+and design-pack status notes are explicitly identified as historical where they
+predate cycle 104's TP.3 PASS. Historical approvals and cycle outcomes were
+retained.

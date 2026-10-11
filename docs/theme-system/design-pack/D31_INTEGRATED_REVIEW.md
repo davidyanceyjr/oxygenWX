@@ -7,6 +7,10 @@ This does not approve a TP.1D packet, claim installed visual acceptance, close
 TP.1D/TP.1, or unblock TP.2. Product meaning and accessibility are governed by
 [`SPECIFICATION.md`](../../SPECIFICATION.md) and
 [`OXYGEN_UI_SPECIFICATION_ADOPTED.md`](../../OXYGEN_UI_SPECIFICATION_ADOPTED.md).
+Those gate statements describe D31's status at review time; TP.1D/TP.1, TP.2,
+and TP.3 later closed, with TP.3 PASS recorded in cycle 104. This review remains
+the historical design approval record, not installed-app evidence for the new
+effects levels.
 
 ## Review protocol
 

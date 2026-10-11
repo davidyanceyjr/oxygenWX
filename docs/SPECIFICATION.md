@@ -15,9 +15,12 @@ When documents disagree, use this order:
 1. `docs/SPECIFICATION.md` — product, data, architecture, safety, release scope.
 2. `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md` — detailed Home/UI presentation contract.
 3. `docs/ARCHITECTURE.md`, `docs/METEOROLOGY.md`, and `DATA_SOURCES.md` — subsystem rules.
-4. `docs/ROADMAP.md` — general ordered implementation sequence and gates;
-   `docs/theme-pack-roadmap.md` governs the five-theme design-pack, resolver,
-   and renderer track until TP.3 is complete.
+4. `docs/ROADMAP.md` — general ordered implementation sequence and gates. When
+   it declares a focused roadmap branch, that roadmap governs ordering within
+   its scope until closure, then work returns to the recorded main-roadmap
+   resume point. The theme-pack sequence is complete through TP.3 (cycle 104);
+   the owner-directed UI effects branch is currently tracked in
+   `docs/UI_CONTEXT_ROADMAP.md` and resumes the main roadmap at R7.3.
 5. `.codex/current.md` and its referenced plan — the currently bounded implementation slice.
 6. `AGENTS.md` — repository operating rules for coding agents.
 

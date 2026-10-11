@@ -146,12 +146,13 @@ Home path and the focused debug showcase share these primitives.
 The preceding renderer description records completed behavior at that time;
 the owner-approved Effects None level additionally suppresses optional
 decorative condition marks and any other decorative artwork. The approved UI
-label is None; the current appearance screen still displays “Effects off” and
-FX.09 owns aligning that label while code and persisted preferences retain
-`OFF`/`off`. Static
+label is None; the current appearance screen still displays “Effects off”. A future effects UI
+slice must align the user-facing label with None while code and persisted
+preferences retain `OFF`/`off`. Static
 HTML/SVG and design-pack previews are not installed-app evidence for the new
-Subtle/Full visual targets. Missing theme measurements and recipes are work for
-FX.03–FX.07 in the [effects roadmap](UI_CONTEXT_ROADMAP.md).
+Subtle/Full visual targets. Missing theme measurements and recipe decisions are tracked through the
+evidence-gated sequence in the [effects roadmap](UI_CONTEXT_ROADMAP.md); its
+first source audit consolidates all five themes before implementation.
 
 The following roles are semantic appearance inputs, not a prescribed legacy
 palette. Their concrete values are selected by the active theme:
