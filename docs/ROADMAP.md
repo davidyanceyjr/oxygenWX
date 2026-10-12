@@ -70,14 +70,18 @@ authority remain with `docs/SPECIFICATION.md` and
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. The owner-approved effects track is
 revised there as an evidence-gated sequence: UI.5 source audit/decision
 packet, UI.6A installed Atmospheric Now vertical slice, UI.7 evidence-based
-review, and conditional UI.7A for a second static level. The upper forecast is
-17 total cycles (including the two closed cycles), within the owner's 13–17
-target; UI.7 may combine or drop later slots.
+review, and conditional UI.7A for a second static level. Cycles 170/171
+completed UI.5/UI.6A; cycle 172 found UI.6A effective. On 2026-10-11, the
+owner dropped UI.7A, so no second Atmospheric Now static level is planned.
+Navigation implementation is separately scoped as NAV.2 in
+`docs/UI_CONTEXT_ROADMAP.md`. Dropping UI.7A reduces the current upper effects
+track forecast to 16 total cycles (including the two completed cycles), within
+the owner's 13–17 target.
 The former FX.03–FX.40 decomposition is superseded; the governing
 design and acceptance contract is
 `docs/theme-system/EFFECTS_CONTRACT.md`. FX.01 and FX.02 are documentation
-outcomes recorded in cycle 169. UI.5 is PLANNED; later work is gated on its
-source decisions and the installed evidence from UI.6A.
+outcomes recorded in cycle 169. Later implementation remains gated on the
+UI.7 source/owner decision and appropriate installed evidence.
 
 **Roadmap branch:** the owner-approved UI context roadmap takes execution
 priority over the main roadmap from the point where the project branched after

@@ -1,12 +1,14 @@
 package com.oxygen.weather.ui
 
 import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -15,6 +17,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
@@ -123,40 +126,43 @@ class ProductionHomeCompositionTest {
     }
 
     @Test
-    fun titleMenuNavigatesEverySourceToEveryDestinationAndPreservesPagerBehavior() {
+    fun headerTitleMenuSelectsEveryDestinationAndPreservesPagerBehavior() {
         assertPageIdentity("Now")
-        assertOldSelectorAbsent()
+        assertQuickNavigationClosed()
 
         PAGE_LABELS.forEach { source ->
             selectPage(source)
             PAGE_LABELS.forEach { destination ->
                 selectPage(source)
-                val title = titleControl(source)
-                title.assertIsDisplayed()
-                assertMinimumTarget(title.fetchSemanticsNode().boundsInRoot.width, title.fetchSemanticsNode().boundsInRoot.height)
-                title.performClick()
+                val identity = pageIdentity(source)
+                identity.assertIsDisplayed()
+                val identityNode = identity.fetchSemanticsNode()
+                assertTrue("page title must open quick navigation", identityNode.config.contains(SemanticsActions.OnClick))
+                assertMinimumTarget(identityNode.boundsInRoot.width, identityNode.boundsInRoot.height)
+                identity.performClick()
                 assertPageIdentity(source)
-                PAGE_LABELS.forEachIndexed { index, label ->
-                    val item = compose.onNodeWithContentDescription(menuItemDescription(label, index, label == source))
+                val menuItems = PAGE_LABELS.map { label ->
+                    val item = compose.onNodeWithContentDescription(menuItemDescription(label, label == source))
                     item.assertIsDisplayed()
                     if (label == source) item.assertIsSelected() else item.assertIsNotSelected()
                     val bounds = item.fetchSemanticsNode().boundsInRoot
                     assertMinimumTarget(bounds.width, bounds.height)
+                    label to bounds.top
                 }
-                compose.onNodeWithContentDescription(
-                    menuItemDescription(destination, PAGE_LABELS.indexOf(destination), destination == source),
-                ).performClick()
+                assertEquals("quick navigation menu follows canonical Now → Hourly → Daily → Details order",
+                    PAGE_LABELS, menuItems.sortedBy { it.second }.map { it.first })
+                compose.onNodeWithContentDescription(menuItemDescription(destination, destination == source)).performClick()
                 compose.waitForIdle()
                 assertPageIdentity(destination)
-                assertOldSelectorAbsent()
+                assertQuickNavigationClosed()
             }
         }
 
         selectPage("Daily")
-        titleControl("Daily").performClick()
+        pageIdentity("Daily").performClick()
         Espresso.pressBack()
         assertPageIdentity("Daily")
-        assertOldSelectorAbsent()
+        assertQuickNavigationClosed()
         selectPage("Daily") // Selecting the current destination closes the menu without moving.
         assertPageIdentity("Daily")
 
@@ -204,28 +210,32 @@ class ProductionHomeCompositionTest {
         val current = PAGE_LABELS.first {
             compose.onAllNodesWithContentDescription("Choose Home page, current: $it").fetchSemanticsNodes().isNotEmpty()
         }
-        titleControl(current).performClick()
-        compose.onNodeWithContentDescription(menuItemDescription(label, PAGE_LABELS.indexOf(label), label == current))
-            .performClick()
+        if (current == label) return
+        pageIdentity(current).performClick()
+        compose.onNodeWithContentDescription(menuItemDescription(label, label == current)).performClick()
         compose.waitForIdle()
         assertPageIdentity(label)
     }
 
-    private fun titleControl(label: String) =
-        compose.onNodeWithContentDescription("Choose Home page, current: $label")
+    private fun pageIdentity(label: String) = compose.onNodeWithTag("home-page-identity")
+        .assertTextEquals("$label  ▾")
 
-    private fun menuItemDescription(label: String, index: Int, selected: Boolean) =
-        "$label page, ${index + 1} of 4, ${if (selected) "selected" else "not selected"}"
-
-    private fun assertPageIdentity(label: String) {
-        titleControl(label).assertIsDisplayed()
-        compose.onNodeWithText("$label ⌄", substring = false, useUnmergedTree = true).assertIsDisplayed()
+    private fun menuItemDescription(label: String, selected: Boolean): String {
+        val index = PAGE_LABELS.indexOf(label)
+        require(index >= 0) { "Unknown Home page '$label'" }
+        return "$label page, ${index + 1} of 4, ${if (selected) "selected" else "not selected"}"
     }
 
-    private fun assertOldSelectorAbsent() {
-        PAGE_LABELS.forEachIndexed { index, label ->
-            compose.onNodeWithContentDescription(menuItemDescription(label, index, selected = true)).assertDoesNotExist()
-            compose.onNodeWithContentDescription(menuItemDescription(label, index, selected = false)).assertDoesNotExist()
+    private fun assertPageIdentity(label: String) {
+        pageIdentity(label).assertIsDisplayed()
+        compose.onNodeWithContentDescription("Choose Home page, current: $label")
+            .assertExists()
+    }
+
+    private fun assertQuickNavigationClosed() {
+        PAGE_LABELS.forEach { label ->
+            compose.onNodeWithContentDescription(menuItemDescription(label, selected = true)).assertDoesNotExist()
+            compose.onNodeWithContentDescription(menuItemDescription(label, selected = false)).assertDoesNotExist()
         }
     }
 
@@ -262,11 +272,10 @@ class ProductionHomeCompositionTest {
     }
 
     private fun selectTheme(themeId: WeatherThemeId) {
-        compose.onNodeWithTag("settings-entry").performClick()
-        compose.onNodeWithTag("settings-appearance").performClick()
-        compose.onNodeWithTag("appearance-theme-${themeId.name.lowercase()}").performClick()
-        compose.onNodeWithTag("appearance-return").performClick()
-        compose.onNodeWithTag("settings-return").performClick()
+        val outcome = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ThemePreferenceWriteResult>()
+        compose.activityRule.scenario.onActivity { outcome.set(it.selectThemeForTests(themeId)) }
+        assertEquals(com.oxygen.weather.application.ThemePreferenceWriteResult.SUCCESS, outcome.get())
+        compose.waitForIdle()
         selectedThemeName = themeId.displayName
     }
 
@@ -281,7 +290,7 @@ class ProductionHomeCompositionTest {
             it.boundsInRoot.center.x >= viewport.left && it.boundsInRoot.center.x < viewport.right
         }
         require(index >= 0) { "No '$text' on the selected page" }
-        nodes[index].assertIsDisplayed()
+        nodes[index].performScrollTo().assertIsDisplayed()
     }
 
     private fun currentPageControl(label: String) =
@@ -291,7 +300,7 @@ class ProductionHomeCompositionTest {
                 it.boundsInRoot.center.x >= viewport.left && it.boundsInRoot.center.x < viewport.right
             }
             require(index >= 0) { "No control '$label' on the selected page" }
-            nodes[index]
+            nodes[index].performScrollTo()
         }
 
     private fun assertThemeContentPreserved(home: com.oxygen.weather.presentation.HomePresentation, page: String) {

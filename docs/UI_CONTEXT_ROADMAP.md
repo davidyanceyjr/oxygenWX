@@ -166,7 +166,7 @@ or measurements.
 
 ### Revised sequence
 
-#### UI.5 / FX.03 — Audit sources and prepare one effects decision packet — PLANNED
+#### UI.5 / FX.03 — Audit sources and prepare one effects decision packet — DONE
 
 - **Outcome:** one consolidated evidence matrix for Atmospheric, Glass,
   Terminal, Instrument, and Minimal OLED, plus a decision packet for the first
@@ -188,7 +188,10 @@ or measurements.
   One consolidated document is linked from the theme-system documentation.
   No production code or new normative theme recipe is added by this cycle.
 
-#### UI.6A / FX.41 — Implement and install one Atmospheric Now static level — PLANNED
+Evidence: `.codex/history/2026-10-11-170-atmospheric-effects-recipe.md` and
+`.codex/test-artifacts/170-atmospheric-effects-recipe/`.
+
+#### UI.6A / FX.41 — Implement and install one Atmospheric Now static level — DONE
 
 - **Outcome:** implement one UI.5-approved non-None static Atmospheric
   treatment on Now through the real application path and capture installed
@@ -218,7 +221,10 @@ or measurements.
   focused checks pass, and any unsupported device/state is named as unmet. A
   preview or successful build alone cannot pass the visual exit.
 
-#### UI.7 / FX.42 — Review UI.6A evidence and choose the next boundary — PLANNED
+Evidence: `.codex/history/2026-10-11-171-ui6a-atmospheric-now-static-level.md`
+and `.codex/test-artifacts/171-ui6a-atmospheric-now-static-level/`.
+
+#### UI.7 / FX.42 — Review UI.6A evidence and choose the next boundary — DONE
 
 - **Outcome:** compare the installed result and implementation against the
   source decision packet. Record which abstractions proved useful, which were
@@ -231,7 +237,13 @@ or measurements.
   Decide whether other themes/pages, shared infrastructure, or motion are
   justified. Do not restore the old FX.04–FX.40 decomposition by default.
 
-#### UI.7A / FX.43 — Add a second Atmospheric Now static level — CONDITIONAL
+Cycle 172 found the UI.6A objective effective. On 2026-10-11, the owner decided
+that no second Atmospheric Now static treatment is needed; UI.7A is dropped.
+Shared infrastructure, other themes/pages, and motion remain deferred. See
+`.codex/history/2026-10-11-172-review-ui-6a-evidence-and-choose-the-next-boundary.md`
+and `.codex/test-artifacts/172-review-ui-6a-evidence-and-choose-the-next-boundary/`.
+
+#### UI.7A / FX.43 — Add a second Atmospheric Now static level — DROPPED BY OWNER
 
 - **Outcome:** only if UI.7 finds a meaningful gap, implement the next
   source-backed static effects level on the same Atmospheric Now path and
@@ -246,14 +258,138 @@ or measurements.
   no justified second treatment, record that decision and do not implement
   this slice.
 
+UI.7 found that the contract supports a distinct richer static Full level, but
+the source packet did not authorize Atmospheric Now landscape geometry,
+artwork, or measurements. On 2026-10-11, the owner decided no second static
+treatment is needed. UI.7A is dropped; do not implement or reopen it without a
+new owner request and roadmap entry.
+
+### NAV.1 — Scope the separate approved navigation/menu intent — DONE
+
+- **Requested outcome:** prepare bounded, reviewable implementation scope for
+  the separately owner-approved bottom-corner navigation, Home page chooser,
+  and Search/Settings/About menu intent. This scope remains separate from
+  effects work.
+- **Dependencies:** UI.7 review is complete. UI.7A is a separate effects item
+  and is not a prerequisite for this interaction-intent review.
+- **Boundary:** documentation and evidence review only. Inventory current
+  navigation/menu behavior and relevant product/UI contracts; map each stated
+  intent to existing behavior, identify dependencies and material unanswered
+  interaction choices, then recommend an ordered, independently verifiable
+  implementation slice or record the exact owner input needed. Do not infer
+  placement, gestures, destinations, or menu contents beyond the approved
+  intent and existing contracts.
+- **Functional invariants:** preserve `Now -> Hourly -> Daily -> Details`, the
+  outer Home pager as the sole global horizontal-swipe owner, visible page
+  identity, Android Back behavior, weather/data meaning, provenance,
+  accessibility semantics, and request/cache behavior. Preserve 48dp target
+  guidance and RTL behavior where applicable.
+- **Exit:** a linked scope report records inspected contracts/current behavior,
+  an intent-to-surface/dependency map, unresolved owner decisions, and exactly
+  one next implementation boundary if supportable. If the available intent is
+  insufficient to define that boundary, record the precise decision needed and
+  do not create an implementation plan. No production code or runtime behavior
+  changes.
+- **Evidence:** `.codex/test-artifacts/173-scope-approved-navigation-menu-intent/`.
+
+Cycle 173 found that the existing Home page chooser is implemented under UI.2 /
+Cycle 109, while the new bottom-corner and Search/Settings/About intents
+needed owner clarification. On 2026-10-11, the owner directed a tap-only popup
+quick-nav menu at the lower right with Now, Hourly, Daily, and Details; it
+replaces the current title chooser. The owner also confirmed that the existing
+chooser satisfied the earlier chooser request. Search, Settings, and About
+remain unchanged and outside NAV.2. See
+`.codex/history/2026-10-11-173-scope-approved-navigation-menu-intent.md` and
+the owner decision recorded with NAV.2.
+
+### NAV.2 — Replace the title chooser with lower-right quick navigation — DONE
+
+- **Requested outcome:** replace the current Home page-title dropdown chooser
+  with a tap-only popup quick-nav menu anchored at the lower-right of Home. It
+  offers Now, Hourly, Daily, and Details for direct navigation.
+- **Dependencies:** NAV.1 scope review is complete. UI.2 / Cycle 109 is the
+  current title-chooser implementation; NAV.2 supersedes that chooser
+  presentation while preserving its direct page-selection outcome.
+- **Production boundary:** lower-right quick-nav affordance, popup, and
+  selection wiring across the four Home pages and both layout presets, plus
+  focused tests and installed evidence. Do not redesign or regroup Search,
+  Settings, or About.
+- **Functional invariants:** preserve canonical order
+  `Now -> Hourly -> Daily -> Details`, the outer pager as the only global
+  horizontal-swipe owner, Android Back behavior, visible page identity, page
+  semantics, forecast values/chronology/provenance, and request/cache behavior.
+  Retain 48dp target guidance and support RTL placement and semantics.
+- **Visual objective:** provide direct, tap-only access to all four named Home
+  pages from a persistent lower-right quick-nav control in Standard and Simple
+  layouts without restoring a repeated page-selector row.
+- **Installed acceptance:** verify the real Home path at the compact
+  baseline and large font, including menu opening, each destination, dismissal,
+  selected page identity, RTL placement, and accessibility semantics. Capture
+  before/after evidence with device/API/build identity. Verify forecast, alert,
+  and cache behavior does not change.
+- **Exit:** the title chooser is removed; the lower-right popup exposes the
+  four pages and selects each correctly by tap; pager/Back behavior and all
+  functional invariants pass; installed evidence records applicable compact,
+  large-font, RTL, and accessibility results and any unverified boundaries.
+- **Evidence:** `.codex/test-artifacts/174-lower-right-quick-navigation/`.
+  Completed in Cycle 174. Installed evidence covers all four pages in Standard
+  and Simple layouts, popup themes/effects, and large-font RTL placement. The
+  compact Now page stays vertically scrollable, with some lower content below
+  the initial viewport; live TalkBack traversal was not run. See the cycle
+  history for focused and repository check results.
+
+### NAV.3 — Make the Home page title the quick-navigation control — DONE
+
+- **Requested outcome:** use the current Home page name as the prominent header
+  title and as the tap-only menu trigger for direct jumps to Now, Hourly, Daily,
+  or Details. Swiping remains the normal way to move between adjacent pages.
+- **Surface and states:** shared Home shell in Standard and Simple layouts;
+  all four pages, five themes, Effects None, compact viewport, large font, and
+  RTL. Show location as supporting header text. Search, Settings, About, and
+  page content remain outside the change.
+- **Visual objective:** make the current page name larger and heavier, add a
+  clear menu affordance, and anchor the existing theme-aware four-page menu to
+  the title. Remove the lower-corner trigger and its reserved footer space.
+  Effects None remains opaque, static, and complete.
+- **Functional invariants:** preserve `Now -> Hourly -> Daily -> Details`,
+  direct selection through the outer Home pager, one global horizontal-swipe
+  owner, Android Back behavior, visible named page identity, 48dp target
+  guidance, RTL semantics, weather facts/provenance, and no-refetch/cache
+  behavior.
+- **Installed acceptance:** verify all four selections, swipe/Back, selected
+  semantics, and compact/large-font/RTL behavior on the real app. Capture all
+  pages in both layout presets and the menu across all themes with Effects
+  None; record any TalkBack boundary honestly.
+- **Exit:** the prominent header title opens the unchanged menu and correctly
+  selects all pages; swiping remains intact; the title/menu preserves facts and
+  controls and meets the functional and evidence conditions above.
+- **Evidence:** `.codex/test-artifacts/175-thumb-reachable-quick-navigation/`.
+
+Cycle 175 began from the earlier lower-corner direction after NAV.2. During
+implementation on 2026-10-11, the owner superseded that direction and selected
+the page-title menu instead. The active plan and this entry record the current
+decision; NAV.2 and Cycle 174 remain historical evidence for the prior
+lower-corner implementation.
+
+The owner visually confirmed on 2026-10-11 that the requested title-menu
+change is applied. Cycle 175 closed after the three `ProductionHomeCompositionTest`
+cases passed, two corrected Settings-return appearance tests passed targeted
+reruns, and `python scripts/dev.py check` and `git diff --check` passed. The
+broader 85-test connected suite reported 20 failures and was not rerun after
+the two test corrections; the system-RTL-only test could not pass its precondition
+on the available LTR AVD. App-level RTL override evidence is retained. See
+`.codex/history/2026-10-11-175-thumb-reachable-quick-navigation.md`,
+`.codex/test-artifacts/175-thumb-reachable-quick-navigation/verification.txt`,
+and the cycle evidence directory. TalkBack traversal was not run.
+
 ### Evidence-gated cycle budget
 
 The working target is **13–17 total cycles for this effects track**, including
-the two completed cycles UI.3 and UI.4. The current upper forecast is 17 total,
-including conditional UI.7A and the split motion work; from UI.5 this is at most
-15 remaining cycles. If UI.7 drops UI.7A or later motion work, the total falls
-accordingly. This is a budget for bounded outcomes, not a requirement to fill
-every slot.
+the two completed cycles UI.3 and UI.4. With UI.7A dropped, the current upper
+forecast is 16 total, including the split motion work; from UI.5 this is at
+most 14 remaining effects cycles. If later motion work is also dropped, the
+total falls accordingly. This is a budget for bounded outcomes, not a
+requirement to fill every slot.
 Keep the final sequence within the owner's 13–17 range unless the UI.7 review
 records concrete evidence for changing that target.
 
@@ -291,7 +427,7 @@ boundaries, dependencies, and acceptance criteria only after UI.7:
 These slots may be combined, dropped, or split at UI.7 to fit observed
 implementation coupling and the 13–17 total target. Do not create detailed
 plans or additional documentation-only cycles for UI.8–UI.17 before that
-evidence review. UI.7A is the only predeclared conditional follow-up.
+evidence review. UI.7A has been dropped.
 
 The former FX.03–FX.40 sequence is superseded. Cycle 169 history preserves
 that proposal for auditability. FX.41, FX.42, and FX.43 identify UI.6A, UI.7, and conditional UI.7A;
@@ -299,11 +435,10 @@ do not reuse retired FX.04–FX.40 identifiers.
 
 ### Separate approved interaction intent
 
-Bottom-corner navigation, a page chooser, and a Search/Settings/About menu are
-separately owner-approved intent awaiting their own bounded planning. They are
-not silently included in FX slices. Their planning must establish its own
-dependencies, interaction owners, functional invariants, and installed
-accessibility evidence before implementation.
+NAV.2 is the separately approved quick-navigation implementation slice. It is
+not included in FX effects work. Search/Settings/About grouping remains
+unchanged and outside NAV.2; any future changes require a separate owner request
+and bounded plan.
 
 ### Future owner-directed UI changes
 

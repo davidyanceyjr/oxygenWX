@@ -367,23 +367,22 @@ fun OxygenWeatherApp(
                     val selectedPage = HomePage.entries[pagerState.currentPage]
                     Box(Modifier.fillMaxWidth().heightIn(min = theme.headerToTabHeight())) {
                         Column(Modifier.fillMaxWidth().padding(horizontal = theme.geometry.pageGutter)) {
-                            Text(
-                                selectedForecast?.locationName ?: displayPresentation.current.location,
-                                style = theme.typography.headlineMedium,
-                                color = theme.palette.primaryData,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(end = 56.dp),
-                            )
                             Box {
                                 TextButton(
                                     onClick = { pageMenuExpanded = true },
-                                    modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
-                                        .semantics { contentDescription = "Choose Home page, current: ${selectedPage.label}" },
-                                    contentPadding = PaddingValues(0.dp),
-                                    colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.secondaryData),
+                                    modifier = Modifier.heightIn(min = 48.dp).widthIn(min = 48.dp)
+                                        .semantics { contentDescription = "Choose Home page, current: ${selectedPage.label}" }
+                                        .testTag("home-page-identity"),
+                                    contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
+                                    colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.primaryData),
                                 ) {
-                                    Text("${selectedPage.label} ⌄", style = theme.typography.labelMedium)
+                                    Text(
+                                        "${selectedPage.label}  ▾",
+                                        style = theme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                                        color = theme.palette.primaryData,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
                                 }
                                 DropdownMenu(
                                     expanded = pageMenuExpanded,
@@ -411,6 +410,14 @@ fun OxygenWeatherApp(
                                     }
                                 }
                             }
+                            Text(
+                                selectedForecast?.locationName ?: displayPresentation.current.location,
+                                style = theme.typography.labelMedium,
+                                color = theme.palette.secondaryData,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(end = 56.dp),
+                            )
                         }
                         ThemePicker(
                             theme,

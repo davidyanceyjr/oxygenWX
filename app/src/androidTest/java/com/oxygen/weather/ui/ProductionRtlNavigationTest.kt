@@ -83,7 +83,7 @@ class ProductionRtlNavigationTest {
 
     private fun assertPage(page: String) {
         compose.onNodeWithContentDescription("Choose Home page, current: $page").assertExists()
-        compose.onNodeWithText("$page ⌄", substring = false, useUnmergedTree = true).assertExists()
+        compose.onNodeWithText("$page  ▾", substring = false, useUnmergedTree = true).assertExists()
     }
 
     private fun assertVisibleDescriptionOrder(expected: List<String>) {
