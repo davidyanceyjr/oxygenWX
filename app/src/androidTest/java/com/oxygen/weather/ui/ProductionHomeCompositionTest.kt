@@ -21,13 +21,20 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import android.os.SystemClock
+import android.view.MotionEvent
+import android.graphics.Bitmap
+import android.content.ContentValues
+import android.provider.MediaStore
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.MainActivity
+import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -122,6 +129,114 @@ class ProductionHomeCompositionTest {
             assertTextPresent("Update time")
             assertTextPresent("Status")
             assertTextPresent(STATUS)
+        }
+    }
+
+    @Test
+    fun homeActionsAreOrderedReachableAndDismissWithoutMovingPages() {
+        PAGE_LABELS.forEach { page ->
+            selectPage(page)
+            val trigger = compose.onNodeWithTag("home-actions-trigger")
+            val triggerNode = trigger.fetchSemanticsNode()
+            assertTrue("Home actions trigger must be clickable", triggerNode.config.contains(SemanticsActions.OnClick))
+            assertMinimumTarget(triggerNode.boundsInRoot.width, triggerNode.boundsInRoot.height)
+            trigger.performClick()
+            val ordered = listOf("Search", "Settings", "About").map { label ->
+                val row = compose.onNodeWithTag("home-action-${label.lowercase()}")
+                row.assertIsDisplayed()
+                val bounds = row.fetchSemanticsNode().boundsInRoot
+                assertMinimumTarget(bounds.width, bounds.height)
+                label to bounds.top
+            }.sortedBy { it.second }.map { it.first }
+            assertEquals(listOf("Search", "Settings", "About"), ordered)
+            Espresso.pressBack()
+            compose.onNodeWithTag("home-action-search").assertDoesNotExist()
+            assertPageIdentity(page)
+
+            trigger.performClick()
+            val root = compose.onAllNodes(isRoot())[0].fetchSemanticsNode().boundsInRoot
+            val x = root.center.x
+            val y = root.bottom * 0.75f
+            val time = SystemClock.uptimeMillis()
+            val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+            automation.injectInputEvent(MotionEvent.obtain(time, time, MotionEvent.ACTION_DOWN, x, y, 0), true)
+            automation.injectInputEvent(MotionEvent.obtain(time, time + 30, MotionEvent.ACTION_UP, x, y, 0), true)
+            compose.onNodeWithTag("home-action-search").assertDoesNotExist()
+            assertPageIdentity(page)
+        }
+    }
+
+    @Test
+    fun directAboutReturnsToEveryOpeningPageByVisibleReturnAndSystemBack() {
+        PAGE_LABELS.forEach { page ->
+            selectPage(page)
+            repeat(2) { exit ->
+                compose.onNodeWithTag("home-actions-trigger").performClick()
+                compose.onNodeWithTag("home-action-about").performClick()
+                compose.onNodeWithTag("about-app-label").assertIsDisplayed()
+                compose.onNodeWithTag("about-version").assertIsDisplayed()
+                if (exit == 0) compose.onNodeWithTag("about-return").performClick()
+                else Espresso.pressBack()
+                assertPageIdentity(page)
+                compose.onNodeWithTag("settings-surface").assertDoesNotExist()
+            }
+        }
+    }
+
+    @Test
+    fun searchAndSettingsReturnToEachOpeningPage() {
+        PAGE_LABELS.forEach { page ->
+            selectPage(page)
+            repeat(2) { exit ->
+                compose.onNodeWithTag("home-actions-trigger").performClick()
+                compose.onNodeWithTag("home-action-search").performClick()
+                compose.onNodeWithText("Search places").assertIsDisplayed()
+                if (exit == 0) compose.onNodeWithContentDescription("Cancel place search").performClick()
+                else Espresso.pressBack()
+                assertPageIdentity(page)
+            }
+            repeat(2) { exit ->
+                compose.onNodeWithTag("home-actions-trigger").performClick()
+                compose.onNodeWithTag("home-action-settings").performClick()
+                compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+                if (exit == 0) compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+                else Espresso.pressBack()
+                assertPageIdentity(page)
+            }
+        }
+    }
+
+    @Test
+    fun installedHomeActionsMenuRemainsReachableInRtl() {
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
+        try {
+            compose.activityRule.scenario.recreate()
+            selectPage("Details")
+            val root = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+            val trigger = compose.onNodeWithTag("home-actions-trigger").assertIsDisplayed()
+            val triggerBounds = trigger.fetchSemanticsNode().boundsInRoot
+            assertTrue("RTL should mirror the Home action trigger to the physical left", triggerBounds.center.x < root.center.x)
+            trigger.performClick()
+            val rows = listOf("Search", "Settings", "About").map { label ->
+                val row = compose.onNodeWithTag("home-action-${label.lowercase()}").assertIsDisplayed()
+                label to row.fetchSemanticsNode().boundsInRoot
+            }
+            assertEquals(listOf("Search", "Settings", "About"), rows.sortedBy { it.second.top }.map { it.first })
+            rows.forEach { (_, bounds) -> assertMinimumTarget(bounds.width, bounds.height) }
+            val screenshot = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
+            val context = InstrumentationRegistry.getInstrumentation().targetContext
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "nav5-rtl-menu.png")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/177-unified-home-action-menu")
+            }
+            val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                ?: error("Unable to create installed RTL screenshot record")
+            context.contentResolver.openOutputStream(uri)?.use { check(screenshot.compress(Bitmap.CompressFormat.PNG, 100, it)) }
+                ?: error("Unable to save installed RTL screenshot")
+        } finally {
+            LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+            compose.activityRule.scenario.recreate()
         }
     }
 

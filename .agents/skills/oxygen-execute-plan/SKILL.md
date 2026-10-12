@@ -29,9 +29,12 @@ authority.
    there is no useful independent task, handle the small slice directly and
    state why delegation would not help.
 4. Preserve applicable evidence under the cycle-specific
-   `.codex/test-artifacts/` path. Run the plan's focused checks and relevant
-   broader checks, including `python scripts/dev.py check` when Android tools
-   are available. For visual work, use the installed app and actual required
+   `.codex/test-artifacts/` path. Run checks for the changed behavior. Run the
+   full relevant unit and connected-test suites, including
+   `python scripts/dev.py check` when Android tools are available, on every
+   fifth implementation slice as tracked in `.codex/testing-cadence.md`. On
+   interim slices, expand beyond focused checks only to investigate a concrete
+   regression risk. For visual work, use the installed app and actual required
    viewport/font/RTL/effects conditions. Do not claim unrun acceptance items.
 5. Inspect `git diff --check` and the final diff. Close completed work with
    `python scripts/codex_cycle.py close`, recording what passed, what could not

@@ -277,7 +277,8 @@ class ProductionForecastCompositionFlowTest {
     }
 
     private fun selectSpringfield() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Springfield")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) {

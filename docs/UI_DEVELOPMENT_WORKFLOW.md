@@ -35,6 +35,13 @@ run focused tests/checks
 -> commit
 ```
 
+Run focused checks for the changed UI behavior on every implementation slice.
+Run the full relevant unit and connected-test suites every fifth implementation
+slice, using `.codex/testing-cadence.md`; expand interim checks only when a
+focused result exposes a concrete regression risk. Installed visual review
+remains required for UI changes because automated tests do not establish visual
+acceptance.
+
 ## Slice acceptance template
 
 Every visual task should identify three categories.

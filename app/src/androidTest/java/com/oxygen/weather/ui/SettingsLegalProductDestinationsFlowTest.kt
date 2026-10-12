@@ -117,7 +117,8 @@ class SettingsLegalProductDestinationsFlowTest {
         compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertIsDisplayed()
         compose.onNodeWithContentDescription("Earlier").assertIsDisplayed()
 
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         assertSettingsDestinations()
         val countsBefore = operationCounts()
@@ -201,6 +202,37 @@ class SettingsLegalProductDestinationsFlowTest {
     }
 
     @Test
+    fun homeMenuAndDirectAboutDoNotStartWeatherOperations() {
+        val before = operationCounts()
+        assertEquals(listOf(0, 0, 0, 0), before)
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-about").assertIsDisplayed()
+        androidx.test.espresso.Espresso.pressBack()
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
+        assertEquals(before, operationCounts())
+
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-about").performClick()
+        compose.onNodeWithTag("about-surface").assertIsDisplayed()
+        compose.onNodeWithTag("about-return").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
+        assertEquals(before, operationCounts())
+    }
+
+    @Test
+    fun nestedAboutSystemBackReturnsToSettingsAndKeepsOpeningPage() {
+        chooseHomePage("Details")
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
+        compose.onNodeWithTag("settings-about").performScrollTo().performClick()
+        compose.onNodeWithTag("about-app-label").assertIsDisplayed()
+        compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        compose.onNodeWithTag("settings-surface").assertIsDisplayed()
+        compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: Details").assertIsDisplayed()
+    }
+
+    @Test
     fun selectedLocationReadFailureIsSpokenAsUnavailable() {
         LocationSearchTestHooks.selectedStoreFactory = { context ->
             object : SelectedLocationStore by SharedPreferencesSelectedLocationStore(context) {
@@ -210,7 +242,8 @@ class SettingsLegalProductDestinationsFlowTest {
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
 
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-locations").performScrollTo().performClick()
         compose.onNodeWithTag("selected-location-unavailable")
             .assertTextEquals("Selected location is unavailable.")
@@ -235,7 +268,8 @@ class SettingsLegalProductDestinationsFlowTest {
         try {
             compose.activityRule.scenario.recreate()
             assertEquals("controlled production saved-store read started", true, readStarted.await(5, TimeUnit.SECONDS))
-            compose.onNodeWithTag("settings-entry").performClick()
+            compose.onNodeWithTag("home-actions-trigger").performClick()
+            compose.onNodeWithTag("home-action-settings").performClick()
             compose.onNodeWithTag("settings-locations").performScrollTo().performClick()
             compose.onNodeWithTag("saved-locations-loading").assertTextEquals("Loading saved places…")
             compose.onAllNodesWithTag("locations-saved-place-0").assertCountEquals(0)
@@ -255,7 +289,8 @@ class SettingsLegalProductDestinationsFlowTest {
 
     @Test
     fun aboutMissingLabelAndVersionMetadataAreSpokenAsUnavailable() {
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         SettingsLegalContentTestHooks.aboutMetadataReader = { null to "4.2-test" }
         compose.onNodeWithTag("settings-about").performScrollTo().performClick()
         compose.onNodeWithTag("about-app-label").assertTextEquals("App name: Unavailable")
@@ -276,7 +311,8 @@ class SettingsLegalProductDestinationsFlowTest {
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
         chooseHomePage("Daily")
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         saveCapture("settings-font1.3-rtl-effects-off")
         compose.onNodeWithTag("settings-privacy").performScrollTo().performClick()

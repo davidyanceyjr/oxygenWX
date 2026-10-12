@@ -389,7 +389,8 @@ class ProductionOfficialAlertSummaryFlowTest {
     }
 
     private fun selectTestLocation() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Alert Test Point")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) {
@@ -399,7 +400,8 @@ class ProductionOfficialAlertSummaryFlowTest {
     }
 
     private fun searchAndSaveTestLocation() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Alert Test Point")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) {
@@ -413,7 +415,8 @@ class ProductionOfficialAlertSummaryFlowTest {
 
     private fun selectSavedTestLocation() {
         if (runCatching { compose.onNodeWithTag("saved-location-select-0").fetchSemanticsNode() }.isFailure) {
-            compose.onNodeWithContentDescription("Search for a place").performClick()
+            compose.onNodeWithTag("home-actions-trigger").performClick()
+            compose.onNodeWithTag("home-action-search").performClick()
             compose.waitUntil(5_000) {
                 runCatching { compose.onNodeWithTag("saved-location-select-0").fetchSemanticsNode() }.isSuccess
             }

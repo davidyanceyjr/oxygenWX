@@ -48,10 +48,17 @@ python scripts/dev.py contract
 python scripts/dev.py check
 ```
 
+Testing cadence:
+
+- Run tests that directly cover the changed behavior on each implementation slice.
+- Run the full relevant unit and connected-test suites on every fifth implementation slice, tracked in `.codex/testing-cadence.md`. Planning, documentation-only, and evidence-only cycles do not increment the counter.
+- Do not run broad suites on interim slices unless a focused result exposes a concrete regression risk that needs broader diagnosis.
+- Continue required non-test checks for the changed boundary, such as compilation, lint when sources require it, visual installed evidence for UI changes, and `git diff --check`.
+
 Before declaring repository-level work complete:
 
 1. Run the smallest relevant test while iterating.
-2. Run `python scripts/dev.py check` when the Android SDK/dependencies are available.
+2. Follow the testing cadence above. Run `python scripts/dev.py check` on every fifth implementation slice; on other slices, run the focused checks required by the plan.
 3. For visual work, install/render the actual app and capture evidence at the required viewport/font/effects conditions.
 4. Run `git diff --check` and inspect the final diff.
 5. Report verification that could not run and why.
@@ -86,6 +93,6 @@ Every visual slice should identify:
 - the visual objective;
 - compact/large-font/RTL/effects constraints that apply;
 - the actual installed state used for verification;
-- focused automated checks and broader regression checks.
+- focused automated checks and the next full-suite cadence point.
 
 Do not treat compilation or a Compose preview as evidence that a visual objective succeeded.

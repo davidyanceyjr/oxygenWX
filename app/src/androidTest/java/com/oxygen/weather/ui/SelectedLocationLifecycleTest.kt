@@ -117,7 +117,8 @@ class SelectedLocationLifecycleTest {
 
     @Test
     fun selectedLocationSurvivesActivityRecreationAndReentersProductionForecastController() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Springfield")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) {
@@ -215,7 +216,8 @@ class SelectedLocationLifecycleTest {
     }
 
     private fun selectCandidate() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Springfield")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) {

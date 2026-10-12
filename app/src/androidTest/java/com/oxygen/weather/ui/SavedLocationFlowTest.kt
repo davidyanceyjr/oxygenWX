@@ -180,7 +180,8 @@ class SavedLocationFlowTest {
         compose.waitUntil(5_000) { restoredRequests.isNotEmpty() }
         assertEquals(stableId, restoredRequests.single().location.id)
         compose.onNodeWithText("Santa Fe", substring = false).assertIsDisplayed()
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithText("Saved places", substring = false).assertIsDisplayed()
         compose.onNodeWithTag("saved-location-remove-0").performScrollTo()
         compose.onNodeWithTag("saved-location-remove-0").assertIsDisplayed()
@@ -219,7 +220,8 @@ class SavedLocationFlowTest {
     }
 
     private fun openSearchAndFindResult() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Santa Fe")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) { compose.onAllNodesWithText("Results for Santa Fe", substring = false).fetchSemanticsNodes().isNotEmpty() }

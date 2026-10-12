@@ -207,7 +207,8 @@ class ThemeAppearanceApplicationFlowTest {
         assertEquals(false, pagerMotionChoices.poll())
 
         // Search selection returns to its opening page through the same effective policy.
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("motion")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(5_000) {
@@ -604,7 +605,8 @@ class ThemeAppearanceApplicationFlowTest {
         assertEquals(0, alertTransportRequests.get())
 
         // Exercise both production transports before measuring appearance actions.
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Motion")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(10_000) { compose.onAllNodesWithTag("location-search-result-0").fetchSemanticsNodes().isNotEmpty() }
@@ -843,7 +845,8 @@ class ThemeAppearanceApplicationFlowTest {
         performCurrentPageTextAction("Later", preferredIndex = 1)
         compose.waitForIdle()
         scrollToCurrentPageText("Earlier", preferredIndex = 1)
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         assertTagTargetHeight("settings-appearance")
         assertTagTargetHeight("settings-units")
@@ -908,7 +911,8 @@ class ThemeAppearanceApplicationFlowTest {
             "Daily",
             openingPageAfterRecreate,
         )
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         saveSettingsEvidence(evidenceDirectory, "settings-360dp-font1.3-rtl-off")
         compose.onNodeWithTag("settings-appearance").performClick()
@@ -1120,7 +1124,8 @@ class ThemeAppearanceApplicationFlowTest {
         compose.waitForIdle()
 
         // Prove each sensitive transport counter can observe a request before the no-work interval.
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-query").performTextInput("Motion")
         compose.onNodeWithTag("location-search-submit").performClick()
         compose.waitUntil(10_000) { compose.onAllNodesWithTag("location-search-result-0").fetchSemanticsNodes().isNotEmpty() }
@@ -1213,7 +1218,8 @@ class ThemeAppearanceApplicationFlowTest {
             observations += "theme=${theme.name.lowercase()} selected and read back after Home return; retained=$openingState; forecast/alert/cache=${listOf(forecastRequests.get(), alertTransportRequests.get(), cacheReads.get(), cacheWrites.get())}"
         }
 
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         compose.onNodeWithTag("settings-appearance").performScrollTo().performClick()
         compose.onNodeWithTag("theme-appearance-surface").assertIsDisplayed()
@@ -1627,7 +1633,8 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     private fun openAppearanceFromHome() {
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-appearance").performScrollTo().performClick()
         compose.waitForIdle()
     }

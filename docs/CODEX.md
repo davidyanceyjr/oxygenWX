@@ -96,13 +96,28 @@ Update the active plan when a material assumption changes. Record evidence under
 
 Prefer the smallest relevant checks while iterating. For material UI work, the installed app through the real presentation path remains the authoritative rendering check; Compose previews may help development but do not close the visual acceptance boundary.
 
+### Testing cadence
+
+Run checks that cover the changed behavior on each implementation slice. Run
+the full relevant unit and connected-test suites on every fifth implementation
+slice, using `.codex/testing-cadence.md` to track the count. Planning,
+documentation-only, and evidence-only cycles do not increment it. Do not run
+broad suites on interim slices unless a focused result exposes a concrete
+regression risk that needs broader diagnosis. Continue boundary-specific
+checks such as compilation, applicable lint, installed visual evidence, and
+`git diff --check`.
+
 ## Closing work
 
 Before closing a cycle:
 
 1. Run the plan's focused verification.
-2. Run the broader checks appropriate to the changed boundary.
-3. For repository-level completion, run `python scripts/dev.py check` when the Android environment is available.
+2. Follow the testing cadence above; on every fifth implementation slice, run
+   the full relevant unit and connected-test suites. Otherwise, run broader
+   checks only to investigate a concrete focused-check risk.
+3. Run `python scripts/dev.py check` on every fifth implementation slice when
+   the Android environment is available; on other slices, run the boundary-
+   specific build, lint, and visual checks required by the plan.
 4. Inspect `git diff --check` and the final diff.
 5. Record verification that could not run and why.
 

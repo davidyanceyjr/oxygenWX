@@ -45,6 +45,12 @@ Do not return exploratory transcripts or unnecessary code excerpts.
 
 The coordinator owns the canonical plan context, delegation, reuse of prior findings, cross-agent decisions, integration, inspection of resulting changes, and final verification of all acceptance criteria.
 
+Run checks for the changed behavior on each implementation slice. Run the full
+relevant unit and connected-test suites every fifth implementation slice,
+tracked in `.codex/testing-cadence.md`. Planning, documentation-only, and
+evidence-only cycles do not increment the count. Broader checks on interim
+slices require a concrete risk from focused results.
+
 Prefer reusing existing agent context or targeted follow-up work over spawning agents that must repeat discovery.
 
 Minimize redundant or speculative context, not necessary context. Spend additional tokens when required for correctness.

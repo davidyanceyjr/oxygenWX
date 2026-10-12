@@ -126,6 +126,7 @@ private enum class HomePage(val label: String) {
 
 private enum class OfficialAlertRoute { HOME, SELECTION, MULTIPLE_DETAIL, SINGLE_DETAIL }
 private enum class SettingsRoute { HOME, SETTINGS, APPEARANCE, UNITS, LOCATIONS, DATA_SOURCES, PRIVACY, OPEN_SOURCE_LICENSES, FONT_LICENSE, ABOUT }
+private enum class AboutReturnTarget { SETTINGS, HOME }
 
 internal object SettingsLegalContentTestHooks {
     var licenseAssetReader: ((String) -> String?)? = null
@@ -184,10 +185,13 @@ fun OxygenWeatherApp(
     var hourlyWindowIndex by rememberSaveable { mutableIntStateOf(0) }
     var dailyWindowIndex by rememberSaveable { mutableIntStateOf(0) }
     var pageMenuExpanded by remember { mutableStateOf(false) }
+    var homeActionsExpanded by remember { mutableStateOf(false) }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     var searchOpeningPage by rememberSaveable { mutableIntStateOf(0) }
     var settingsRoute by rememberSaveable { mutableStateOf(SettingsRoute.HOME) }
     var settingsOpeningPage by rememberSaveable { mutableIntStateOf(0) }
+    var aboutReturnTarget by rememberSaveable { mutableStateOf(AboutReturnTarget.SETTINGS) }
+    var aboutOpeningPage by rememberSaveable { mutableIntStateOf(0) }
     var selectedFontLicense by rememberSaveable { mutableStateOf("") }
     val settingsScrollState = rememberScrollState()
     var alertRoute by remember { mutableStateOf(OfficialAlertRoute.HOME) }
@@ -227,7 +231,13 @@ fun OxygenWeatherApp(
             SettingsRoute.APPEARANCE, SettingsRoute.UNITS, SettingsRoute.LOCATIONS, SettingsRoute.DATA_SOURCES,
             SettingsRoute.PRIVACY, SettingsRoute.OPEN_SOURCE_LICENSES -> SettingsRoute.SETTINGS
             SettingsRoute.FONT_LICENSE -> SettingsRoute.OPEN_SOURCE_LICENSES
-            SettingsRoute.ABOUT -> SettingsRoute.SETTINGS
+            SettingsRoute.ABOUT -> if (aboutReturnTarget == AboutReturnTarget.SETTINGS) {
+                SettingsRoute.SETTINGS
+            } else {
+                SettingsRoute.HOME.also {
+                    scope.launch { pagerState.moveToPage(aboutOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
+                }
+            }
             SettingsRoute.SETTINGS -> SettingsRoute.HOME.also { leaveSettings() }
             SettingsRoute.HOME -> SettingsRoute.HOME
         }
@@ -269,7 +279,10 @@ fun OxygenWeatherApp(
                             onDataSources = { settingsRoute = SettingsRoute.DATA_SOURCES },
                             onPrivacy = { settingsRoute = SettingsRoute.PRIVACY },
                             onOpenSourceLicenses = { settingsRoute = SettingsRoute.OPEN_SOURCE_LICENSES },
-                            onAbout = { settingsRoute = SettingsRoute.ABOUT },
+                            onAbout = {
+                                aboutReturnTarget = AboutReturnTarget.SETTINGS
+                                settingsRoute = SettingsRoute.ABOUT
+                            },
                             onReturn = leaveSettings,
                         )
                         return@ProductionBackdrop
@@ -353,7 +366,17 @@ fun OxygenWeatherApp(
                         return@ProductionBackdrop
                     }
                     SettingsRoute.ABOUT -> {
-                        AboutSurface(theme, onReturn = { settingsRoute = SettingsRoute.SETTINGS })
+                        val returnToSettings = aboutReturnTarget == AboutReturnTarget.SETTINGS
+                        AboutSurface(
+                            theme,
+                            returnLabel = if (returnToSettings) "Back to Settings" else "Return to ${HomePage.entries[aboutOpeningPage.coerceIn(HomePage.entries.indices)].label}",
+                            onReturn = {
+                                if (returnToSettings) settingsRoute = SettingsRoute.SETTINGS else {
+                                    settingsRoute = SettingsRoute.HOME
+                                    scope.launch { pagerState.moveToPage(aboutOpeningPage, theme.motionStyle, onPagerMotionChoiceForTests) }
+                                }
+                            },
+                        )
                         return@ProductionBackdrop
                     }
                     SettingsRoute.HOME -> Unit
@@ -419,14 +442,20 @@ fun OxygenWeatherApp(
                                 modifier = Modifier.padding(end = 56.dp),
                             )
                         }
-                        ThemePicker(
-                            theme,
-                            themeId,
+                        HomeActionMenu(
+                            theme = theme,
+                            expanded = homeActionsExpanded,
+                            onExpandedChange = { homeActionsExpanded = it },
                             onOpenSettings = {
                                 if (!searchOpen && alertRoute == OfficialAlertRoute.HOME) {
                                     settingsOpeningPage = pagerState.currentPage
                                     settingsRoute = SettingsRoute.SETTINGS
                                 }
+                            },
+                            onOpenAbout = {
+                                aboutOpeningPage = pagerState.currentPage
+                                aboutReturnTarget = AboutReturnTarget.HOME
+                                settingsRoute = SettingsRoute.ABOUT
                             },
                             onSearch = locationSearchCoordinator?.let {
                                 {
@@ -585,10 +614,12 @@ private suspend fun PagerState.moveToPage(
 }
 
 @Composable
-private fun ThemePicker(
+private fun HomeActionMenu(
     theme: ResolvedTheme,
-    selected: WeatherThemeId,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenAbout: () -> Unit,
     onSearch: (() -> Unit)? = null,
 ) {
     Row(
@@ -596,16 +627,53 @@ private fun ThemePicker(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
     ) {
-        if (onSearch != null) SearchEntry(theme, onSearch)
-        TextButton(
-            onClick = onOpenSettings,
-            modifier = Modifier.heightIn(min = 48.dp).testTag("settings-entry")
-                .semantics { contentDescription = "Settings, current theme: ${ThemeCatalog.definition(selected).displayName}" },
-            colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
-        ) {
-            Text("Settings", style = theme.typography.labelLarge)
+        Box {
+            TextButton(
+                onClick = { onExpandedChange(true) },
+                modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                    .semantics { contentDescription = "Home actions" }
+                    .testTag("home-actions-trigger"),
+                colors = ButtonDefaults.textButtonColors(contentColor = theme.palette.action),
+            ) {
+                Text("☰", style = theme.typography.headlineMedium, color = theme.palette.action)
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { onExpandedChange(false) },
+                shape = RoundedCornerShape(theme.geometry.panelCornerRadius),
+                containerColor = theme.palette.surface,
+                tonalElevation = 0.dp,
+                border = BorderStroke(theme.geometry.panelBorderWidth, theme.palette.outline),
+            ) {
+                if (onSearch != null) {
+                    HomeActionMenuItem(theme, "Search", "home-action-search") {
+                        onExpandedChange(false)
+                        onSearch()
+                    }
+                }
+                HomeActionMenuItem(theme, "Settings", "home-action-settings") {
+                    onExpandedChange(false)
+                    onOpenSettings()
+                }
+                HomeActionMenuItem(theme, "About", "home-action-about") {
+                    onExpandedChange(false)
+                    onOpenAbout()
+                }
+            }
         }
     }
+}
+
+@Composable
+private fun HomeActionMenuItem(theme: ResolvedTheme, label: String, tag: String, onClick: () -> Unit) {
+    DropdownMenuItem(
+        text = { Text(label, style = theme.typography.bodyMedium) },
+        onClick = onClick,
+        modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+            .semantics { contentDescription = label }
+            .testTag(tag),
+        colors = MenuDefaults.itemColors(textColor = theme.palette.content),
+    )
 }
 
 @Composable
@@ -745,7 +813,7 @@ private fun OpenMeteoAttribution(theme: ResolvedTheme, sourceLine: String) {
 }
 
 @Composable
-private fun AboutSurface(theme: ResolvedTheme, onReturn: () -> Unit) {
+private fun AboutSurface(theme: ResolvedTheme, returnLabel: String, onReturn: () -> Unit) {
     val context = LocalContext.current
     val metadata = remember(context) {
         SettingsLegalContentTestHooks.aboutMetadataReader?.invoke(context) ?: (
@@ -764,7 +832,7 @@ private fun AboutSurface(theme: ResolvedTheme, onReturn: () -> Unit) {
         Text("App name: ${appLabel ?: "Unavailable"}", Modifier.testTag("about-app-label"), style = theme.typography.bodyLarge, color = theme.palette.content)
         Text("Version: ${versionName ?: "Unavailable"}", Modifier.testTag("about-version"), style = theme.typography.bodyLarge, color = theme.palette.content)
         TextButton(onClick = onReturn, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("about-return")) {
-            Text("Back to Settings", style = theme.typography.labelLarge, color = theme.palette.action)
+            Text(returnLabel, style = theme.typography.labelLarge, color = theme.palette.action)
         }
     }
 }

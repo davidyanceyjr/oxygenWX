@@ -382,6 +382,81 @@ on the available LTR AVD. App-level RTL override evidence is retained. See
 `.codex/test-artifacts/175-thumb-reachable-quick-navigation/verification.txt`,
 and the cycle evidence directory. TalkBack traversal was not run.
 
+### NAV.4 — Specify a unified Home action menu — DONE
+
+- **Requested outcome:** prepare a reviewable implementation plan to replace
+  the separate Search and Settings header controls with one menu button that
+  offers Search, Settings, and About. The entry point and menu must work from
+  Now, Hourly, Daily, and Details and adapt to all five themes.
+- **Dependencies:** NAV.3 / Cycle 175 establishes the current shared Home
+  header, title-based page chooser, and Search/Settings routes. This request
+  supersedes the earlier decision to leave Search, Settings, and About outside
+  navigation work; it does not reopen or replace the completed page chooser.
+- **Boundary:** inspect the current shared header, search flow, Settings and
+  About routes, theme-aware menu primitives, and installed evidence. Resolve
+  the button's visual form (including the owner's suggested overflow or
+  three-line menu icon family), accessible name and target, menu presentation,
+  item order, dismissal/back behavior, and route/return semantics. Produce a
+  bounded production plan with changed owners, invariants, focused checks, and
+  installed evidence conditions. Documentation and plan only; no production
+  code or runtime behavior changes.
+- **Functional invariants:** preserve the page title and
+  `Now -> Hourly -> Daily -> Details` navigation, the outer pager as the only
+  horizontal-swipe owner, current Search behavior and page restoration,
+  Settings state/return behavior, existing About content, theme/effects
+  meaning, and all weather facts, provenance, and accessibility semantics.
+- **Acceptance:** the reviewed plan makes the single shared entry point and
+  its three destinations unambiguous across all four pages and five themes;
+  specifies compact, large-font, RTL, Effects None, high-contrast, and reduced-
+  motion behavior where affected; and defines focused automated and installed
+  verification. Do not activate implementation in this slice.
+- **Exit:** either an implementation-ready `.codex/plans/` draft and its
+  acceptance matrix are reviewed, or exact unresolved owner decisions are
+  recorded and implementation planning stops at that boundary. Cycle 176
+  reached the decision-gate outcome: the shared entry, destinations, pages,
+  and themes were settled, while icon form and direct About return were open.
+  After Cycle 176 closed, the owner selected the three-line icon and directed
+  About to return directly to its opening Home page via both visible Return
+  and Android Back. NAV.5's reviewable draft is now
+  `.codex/plans/177-unified-home-action-menu.md`; normal review and activation
+  remain required before production changes.
+- **Evidence:** `.codex/test-artifacts/176-specify-unified-home-action-menu/`
+  (`source-inventory.md`, `decision-packet.md`, `acceptance-matrix.md`,
+  `owner-decision.md`, `owner-resolution.md`, `nav5-implementation-plan.md`,
+  and `verification.md`); cycle history:
+  `.codex/history/2026-10-12-176-specify-unified-home-action-menu.md`.
+
+### NAV.5 — Use one Home menu button for Search, Settings, and About — DONE
+
+- **Requested outcome:** implement NAV.4's approved shared header menu button
+  and its Search, Settings, and About destinations.
+- **Dependencies:** NAV.4 is complete; the draft
+  `.codex/plans/177-unified-home-action-menu.md` must be reviewed and activated
+  through the required cycle workflow before production edits.
+- **Production boundary:** replace the separate Search and Settings header
+  controls with the approved single menu button and theme-aware menu across
+  Now, Hourly, Daily, and Details in all five themes. Keep existing destination
+  surfaces and behaviors except for the approved direct access and return
+  behavior recorded by NAV.4.
+- **Functional invariants:** preserve page identity, pager and Back behavior,
+  Search query/selection/cancel behavior, Settings state, About content,
+  provenance, accessibility meaning, and no-refetch behavior from appearance-
+  only interaction changes.
+- **Installed acceptance:** verify opening/dismissal and all three actions on
+  each page/theme combination, plus affected compact, large-font, RTL, Effects
+  None, contrast, and reduced-motion states. Capture the real app and report
+  any unavailable TalkBack/device boundary.
+- **Exit:** the shared menu is discoverable, accessible, theme-correct, and
+  reaches the three existing destinations from all four pages without
+  changing weather or page-navigation behavior. Focused checks and installed
+  evidence are recorded; broad connected checks remain deferred to the fifth
+  implementation slice under the approved testing cadence.
+- **Evidence:** `.codex/test-artifacts/177-unified-home-action-menu/` and
+  `.codex/history/2026-10-12-177-unified-home-action-menu.md`. Four focused
+  connected-test failures matched their pre-change methods and signatures;
+  full-suite verification is not claimed. Live TalkBack and system RTL remain
+  unverified (app-level RTL override was exercised).
+
 ### Evidence-gated cycle budget
 
 The working target is **13–17 total cycles for this effects track**, including
@@ -435,10 +510,11 @@ do not reuse retired FX.04–FX.40 identifiers.
 
 ### Separate approved interaction intent
 
-NAV.2 is the separately approved quick-navigation implementation slice. It is
-not included in FX effects work. Search/Settings/About grouping remains
-unchanged and outside NAV.2; any future changes require a separate owner request
-and bounded plan.
+The NAV sequence is separate from FX effects work. NAV.1–NAV.3 record the
+completed quick-navigation scope and implementation. The owner-approved
+Search/Settings/About consolidation is now scoped by NAV.4 (planning) and NAV.5
+(implementation after plan review); it does not reopen the completed page
+chooser.
 
 ### Future owner-directed UI changes
 

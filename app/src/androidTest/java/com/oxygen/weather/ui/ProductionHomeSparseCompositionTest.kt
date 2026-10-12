@@ -28,6 +28,24 @@ class ProductionHomeSparseCompositionTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun noSearchCoordinatorOmitsOnlySearchFromHomeActions() {
+        val fixture = DemoWeatherRepository.load()
+        compose.setContent {
+            OxygenWeatherApp(
+                presentation = HomePresentationMapper.map(fixture, HistoricalSynthesis.derive(fixture)),
+                status = StatusPresentation.of("Sparse development fixture status."),
+            )
+        }
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").assertDoesNotExist()
+        compose.onNodeWithTag("home-action-settings").assertExists()
+        compose.onNodeWithTag("home-action-about").performClick()
+        compose.onNodeWithTag("about-surface").assertExists()
+        compose.onNodeWithTag("about-return").performClick()
+        compose.onNodeWithContentDescription("Choose Home page, current: Now").assertExists()
+    }
+
+    @Test
     fun unavailableHeroValueFitsGlassAndMinimalOledWithoutChangingSemantics() {
         val fixture = DemoWeatherRepository.load()
         val sparse = fixture.copy(
@@ -62,7 +80,8 @@ class ProductionHomeSparseCompositionTest {
 
     private fun selectTheme(theme: String, currentTheme: String) {
         val id = WeatherThemeId.entries.first { ThemeCatalog.definition(it).displayName == theme }
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-appearance").performClick()
         compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performClick()
         compose.onNodeWithTag("appearance-return").performClick()

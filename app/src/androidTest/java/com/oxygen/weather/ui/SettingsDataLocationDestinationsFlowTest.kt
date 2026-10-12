@@ -170,7 +170,8 @@ class SettingsDataLocationDestinationsFlowTest {
         compose.onNodeWithContentDescription("Earlier").assertIsDisplayed()
         compose.onAllNodesWithContentDescription("Later unavailable").assertCountEquals(2)
 
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         compose.onNodeWithText("Locations", substring = false).assertIsDisplayed()
         compose.onNodeWithText("Data Sources", substring = false).assertIsDisplayed()
@@ -228,7 +229,8 @@ class SettingsDataLocationDestinationsFlowTest {
 
         val beforeSelection = operationCounts()
         val beforeLivePresentation = livePresentationUpdates.get()
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-locations").performClick()
         compose.onNodeWithTag("locations-select-1").performClick()
         compose.waitUntil(10_000) {
@@ -261,7 +263,8 @@ class SettingsDataLocationDestinationsFlowTest {
             forecastCalls.get() > 0 && cacheReads.get() > 0 && alertRequests.get() > 0 && livePresentationUpdates.get() > 0
         }
         chooseHomePage("Hourly")
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-surface").assertIsDisplayed()
         saveCapture("settings-font1.3-rtl-effects-off")
 

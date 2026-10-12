@@ -136,7 +136,8 @@ class ProductionDailyDetailsCompositionTest {
     }
 
     private fun selectTheme(currentThemeName: String, nextTheme: WeatherThemeId) {
-        compose.onNodeWithTag("settings-entry").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
         compose.onNodeWithTag("settings-appearance").performClick()
         compose.onNodeWithTag("appearance-theme-${nextTheme.name.lowercase()}").performClick()
         compose.onNodeWithTag("appearance-return").performClick()

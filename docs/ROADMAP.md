@@ -73,10 +73,11 @@ packet, UI.6A installed Atmospheric Now vertical slice, UI.7 evidence-based
 review, and conditional UI.7A for a second static level. Cycles 170/171
 completed UI.5/UI.6A; cycle 172 found UI.6A effective. On 2026-10-11, the
 owner dropped UI.7A, so no second Atmospheric Now static level is planned.
-Navigation implementation is separately scoped as NAV.2 in
-`docs/UI_CONTEXT_ROADMAP.md`. Dropping UI.7A reduces the current upper effects
-track forecast to 16 total cycles (including the two completed cycles), within
-the owner's 13–17 target.
+Navigation work is separately scoped in `docs/UI_CONTEXT_ROADMAP.md`: NAV.1–NAV.5
+are complete, including the owner-directed consolidation of Search, Settings,
+and About into one shared Home menu. Dropping UI.7A reduces the current upper
+effects track forecast to 16 total cycles (including the two completed cycles),
+within the owner's 13–17 target.
 The former FX.03–FX.40 decomposition is superseded; the governing
 design and acceptance contract is
 `docs/theme-system/EFFECTS_CONTRACT.md`. FX.01 and FX.02 are documentation

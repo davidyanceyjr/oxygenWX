@@ -120,9 +120,11 @@ class ManualLocationSearchFlowTest {
     @Test
     fun actualActivityRouteShowsLoadingOrderedDisambiguatedResultsAndSelectsOnlyExplicitly() {
         selectHomePage("Daily")
-        compose.onNodeWithContentDescription("Search for a place").assertIsDisplayed()
-        assertTarget("location-search-entry")
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").assertIsDisplayed()
+        assertTarget("home-actions-trigger")
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        assertTarget("home-action-search")
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithText("Search places").assertIsDisplayed()
         assertEquals(0, calls.get())
 
@@ -188,7 +190,8 @@ class ManualLocationSearchFlowTest {
 
     @Test
     fun emptyFailureSystemBackAndBlankSubmissionAreVisibleAndSafe() {
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         compose.onNodeWithTag("location-search-submit").assertIsDisplayed()
         assertEquals(0, calls.get())
         compose.onNodeWithTag("location-search-query").performClick()
@@ -214,7 +217,8 @@ class ManualLocationSearchFlowTest {
 
         compose.onNodeWithContentDescription("Cancel place search").performClick()
         compose.onNodeWithContentDescription("Choose Home page, current: Now").assertIsDisplayed()
-        compose.onNodeWithContentDescription("Search for a place").performClick()
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-search").performClick()
         androidx.test.espresso.Espresso.pressBack()
         compose.waitForIdle()
         compose.onNodeWithText("Search places").assertDoesNotExist()
