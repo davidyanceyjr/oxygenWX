@@ -500,7 +500,7 @@ relevant suites for SQ.V.
 
 #### Proposed Smoked Quartz slices
 
-**SQ.1 — Reconcile authority and baseline — BLOCKED (OWNER DECISION)**
+**SQ.1 — Reconcile authority and baseline — DONE (GATE B ADOPTED)**
 
 - **Boundary:** confirm the already amended Glass identity and None exception
   against the specification, effects contract, candidate assets, and installed
@@ -514,44 +514,47 @@ relevant suites for SQ.V.
   decision record in the SQ.1 cycle artifact directory.
 
 Cycle 179 reconciled written authority and captured the existing Glass None
-and Subtle Now baseline. The repository has no supportable numeric static Full
-or conditional-motion performance limits; the API 37 software-rendered
-emulator's prior whole-app jank results cannot isolate the theme renderer.
-Owner selection of the exact performance caps and whether a physical device is
-required remains open. SQ.2 is blocked until that input is recorded. See
-`.codex/test-artifacts/179-smoked-quartz-authority-baseline/authority-matrix.md`
-and `.codex/history/2026-10-13-179-smoked-quartz-authority-baseline.md`.
+and Subtle Now baseline. In cycle 183, the owner adopted Gate B and named the
+Pixel Fold as the required physical performance-evidence device; API 37
+emulator evidence is supplemental. The thresholds are recorded in cycle 183
+and are not a measured pass. SQ.1 is complete and SQ.2 may proceed to bounded
+design-source review. See
+`.codex/test-artifacts/179-smoked-quartz-authority-baseline/authority-matrix.md`,
+`.codex/history/2026-10-13-179-smoked-quartz-authority-baseline.md`, and
+`.codex/history/2026-10-13-183-owner-approved-pixel5a-waiver.md`.
 
-**SQ.1A — Enroll physical-device baseline — BLOCKED (DEVICE ACCESS)**
+**SQ.1A — Enroll physical-device baseline — DONE (OWNER-APPROVED MATRIX)**
 
-- **Boundary:** enroll the available Pixel 3 XL, Pixel 5a, and 2023 Pixel Fold
+- **Boundary:** enroll the Pixel 3 XL, owner-accepted Pixel 5 (`redfin`) as a
+  replacement for the waived Pixel 5a requirement, and 2023 Pixel Fold
   as named physical test devices. Record exact Android/API and display
   configuration, verify ADB authorization, install and launch the existing
   app, and confirm the baseline capture/profiling commands work. Documentation
   and test-environment evidence only; no app or device configuration changes
   beyond enabling the ordinary developer connection needed for testing.
-- **Dependencies:** cycle 179 authority/baseline record; at least one device
-  connected and listed by `adb devices` in the authorized `device` state before
-  activation. Enroll the three devices sequentially; simultaneous connection
-  is not required.
+- **Dependencies:** cycle 179 authority/baseline record and cycle 183's
+  owner-approved matrix scope. Devices were enrolled sequentially;
+  simultaneous connection is not required.
 - **Exit:** a device matrix records model/build/API, display resolution/density
   and refresh mode, app/build identity, and repeatable baseline capture/tool
-  results for each device. Any unavailable device/tool is recorded with its
-  exact limitation. This characterizes test readiness; it does not establish a
-  Smoked Quartz performance pass or choose numeric budgets.
+  results for each accepted matrix member. Any unavailable device/tool is
+  recorded with its exact limitation. This characterizes test readiness; it
+  does not establish a Smoked Quartz performance pass.
 - **Evidence:** per-device configuration and baseline captures/tool output in
   the SQ.1A cycle artifact directory.
 
-Cycle 180 enrolled the Pixel 3 XL only. The Pixel 5a and 2023 Pixel Fold were
-not attached to ADB during the 2026-10-13 session, so the three-device exit is
-unmet and the cycle records a device-access blocker. Continuing requires an
-explicit roadmap update with a new bounded outcome after the two remaining
-devices can be accessed; do not treat this partial matrix as complete.
+Cycle 180 initially enrolled Pixel 3 XL and correctly recorded the then-
+missing devices. Cycles 181–182 added Pixel 5 and Pixel Fold. In cycle 183, the
+owner waived Pixel 5a as a required matrix member and accepted Pixel 5
+(`redfin`) as its substitute; Pixel 3 XL remains in scope. The resulting
+three-device matrix has installed four-page baseline and diagnostic smoke
+evidence. The owner decision and reconciliation are at
+`.codex/test-artifacts/183-owner-approved-pixel5a-waiver/` and
+`.codex/history/2026-10-13-183-owner-approved-pixel5a-waiver.md`.
 
-SQ.1A can inform the physical-device scope decision, but does not unblock SQ.2
-by itself. The owner must still select numeric static and conditional-motion
-limits. Keep the three devices in one enrollment cycle because the outcome is
-one verified matrix with a shared capture protocol.
+The device matrix alone did not select performance policy. Cycle 183 separately
+records Gate B and the Pixel Fold as the required named physical performance-
+evidence device, with API 37 emulator evidence supplemental.
 
 **SQ.1A.1 — Enroll ADB-recognized Pixel 5 as supplemental device — DONE**
 
@@ -566,8 +569,9 @@ one verified matrix with a shared capture protocol.
 - **Exit:** the Pixel 5 identity and configuration are read back, the shared APK
   hash and installed package/version are confirmed, Glass/Effects None fixture
   state and named page identity are captured, and available probe output is
-  retained. Pixel 5a and 2023 Pixel Fold remain explicitly unavailable; this
-  entry does not complete SQ.1A or unblock SQ.2.
+  retained. Pixel 5a and 2023 Pixel Fold remained unavailable at this entry's
+  close; under the then-current matrix this supplemental record did not complete
+  SQ.1A or unblock SQ.2.
 - **Evidence:** cycle-specific device matrix, screenshot/hierarchy manifest,
   and raw diagnostic output.
 
@@ -576,7 +580,8 @@ using the shared APK and fixture, with four installed page captures and a
 frame/memory tooling smoke run. See
 `.codex/test-artifacts/181-enroll-adb-recognized-pixel-5-as-supplemental-device/`
 and `.codex/history/2026-10-13-181-enroll-adb-recognized-pixel-5-as-supplemental-device.md`.
-This does not substitute for the Pixel 5a or 2023 Pixel Fold required by SQ.1A.
+At the time of cycle 181 the Pixel 5a requirement remained; cycle 183 records
+the owner's later waiver and accepts `redfin` in its place.
 
 **SQ.1A.2 — Enroll 2023 Pixel Fold posture baseline — DONE (SUPPLEMENTAL)**
 
@@ -591,30 +596,43 @@ This does not substitute for the Pixel 5a or 2023 Pixel Fold required by SQ.1A.
 - **Exit:** Pixel Fold identity/build/API and app configuration are read back;
   shared APK/install identity and Glass/Effects None fixture state are verified;
   folded and unfolded captures are retained when each posture is physically
-  usable, with exact unavailable posture limitations recorded. This entry does
-  not complete SQ.1A while the Pixel 5a is missing and does not unblock SQ.2.
+  usable, with exact unavailable posture limitations recorded. These physical
+  Fold captures do not by themselves select performance policy or establish a
+  performance pass.
 - **Evidence:** cycle-specific device matrix, posture/capture manifest, paired
   screenshots and hierarchies, and raw diagnostic output.
   See `.codex/test-artifacts/182-enroll-2023-pixel-fold-posture-baseline/` and
   `.codex/history/2026-10-13-182-enroll-2023-pixel-fold-posture-baseline.md`.
 - **Boundary:** closed outer and unfolded inner Now/Hourly/Daily/Details pairs
-  were captured at their respective physical postures. This supplemental
-  baseline does not complete SQ.1A, which still requires the Pixel 5a, and SQ.2
-  remains blocked on the owner decision.
+  were captured at their respective physical postures.
+- **Outcome:** cycle 183 incorporates this completed supplemental device record
+  into the owner-approved SQ.1A matrix and records the separate Gate B decision.
 
-**SQ.2 — Approve the four-page static Full design source — BLOCKED (SQ.1 OWNER DECISION)**
+**SQ.2 — Approve the four-page static Full design source — NEXT (GATE B ADOPTED)**
 
 - **Boundary:** review Now, Hourly, Daily, and Details compositions, page
   backgrounds, semantic palette and contrast pairs, typography, surfaces,
   mark coverage and fallbacks, functional icon inventory, and artwork inventory.
   Define compact, large-font, RTL, high-contrast, and missing-data treatments.
   Design assets and decisions only; no runtime integration or motion.
-- **Dependencies:** SQ.1 and the candidate Smoked Quartz asset inventory.
+- **Dependencies:** SQ.1 is complete with Gate B selected. Review the
+  candidate Smoked Quartz asset inventory and preserve decisions and fallbacks
+  as an owner-reviewable source. Candidate assets remain unapproved; this is
+  work within SQ.2, not a prerequisite to beginning its review.
 - **Exit:** an owner-reviewed four-page source and updated candidate manifest
   specify each implementation input and fallback; unresolved decisions stop
   implementation.
 - **Evidence:** design source, installed-baseline comparison, and decision and
   coverage matrix; artwork is labeled design evidence.
+- **Gate:** use the owner-selected Gate B thresholds and require physical
+  Pixel Fold evidence for later performance acceptance. API 37 emulator results
+  are supplemental. Static thresholds are ≥90% frames within 16.67 ms, p95
+  frame duration ≤25 ms, added settled/peak PSS ≤16 MiB, and scripted
+  interaction p95 ≤500 ms. Motion deltas are an increase in deadline-miss
+  fraction of ≤5 percentage points, added peak PSS ≤4 MiB, and interaction p95
+  increase ≤100 ms; one pass must return to static within the later approved
+  motion window. Selection is not a performance pass. Motion-study timing remains subject to later design/lifecycle approval;
+  see `.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`.
 
 **SQ.3 — Implement Glass palette and typography — PLANNED**
 

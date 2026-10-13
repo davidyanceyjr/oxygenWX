@@ -57,14 +57,18 @@ identity and the five-theme obligation. Design static Full across all four
 pages first, derive Subtle and the Smoked Quartz-specific None treatment, and
 consider seam-glint motion only after static installed acceptance, a static
 performance gate, and a separate motion lifecycle gate. Measure motion
-performance separately. The detailed roadmap now defines ordered SQ.1–SQ.18
+performance separately. The detailed roadmap defines ordered SQ.1–SQ.18
 boundaries, including SQ.17A/SQ.17B and the separate SQ.V full-suite session.
-SQ.1 was attempted in cycle 179 and remains BLOCKED (OWNER DECISION); SQ.2 is
-also BLOCKED pending the same decision. The remaining SQ entries are ordered
-roadmap slots, not active cycle plans. SQ.1A may establish the physical-device
-matrix and profiling-tool readiness; it does not resolve the required numeric
-static/motion limits. SQ.2 remains blocked until the owner records those limits
-and the device scope, informed by SQ.1A.
+Cycle 179 recorded the authority/baseline and owner decisions that were open at
+that time. In cycle 183, the owner selected Gate B, named the Pixel Fold as the
+required physical performance-evidence device, and made API 37 emulator
+evidence supplemental; the owner also waived Pixel 5a as a required
+readiness-matrix member and accepted Pixel 5 (`redfin`) in its place. SQ.1 and
+SQ.1A are complete under these decisions. SQ.2 is now the next eligible
+bounded plan. The remaining SQ entries are ordered roadmap slots, not active
+cycle plans. Gate selection is not a performance pass; measure only at SQ.10
+and later gates. Exact thresholds and scope are recorded in
+`.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`.
 Completed R5.4 Glass work is historical evidence, not acceptance of the
 replacement.
 
