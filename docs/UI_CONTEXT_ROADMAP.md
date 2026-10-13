@@ -500,7 +500,7 @@ relevant suites for SQ.V.
 
 #### Proposed Smoked Quartz slices
 
-**SQ.1 — Reconcile authority and baseline — NEXT**
+**SQ.1 — Reconcile authority and baseline — BLOCKED (OWNER DECISION)**
 
 - **Boundary:** confirm the already amended Glass identity and None exception
   against the specification, effects contract, candidate assets, and installed
@@ -513,7 +513,16 @@ relevant suites for SQ.V.
 - **Evidence:** authority matrix, installed baseline/settings captures, and
   decision record in the SQ.1 cycle artifact directory.
 
-**SQ.2 — Approve the four-page static Full design source — PLANNED**
+Cycle 179 reconciled written authority and captured the existing Glass None
+and Subtle Now baseline. The repository has no supportable numeric static Full
+or conditional-motion performance limits; the API 37 software-rendered
+emulator's prior whole-app jank results cannot isolate the theme renderer.
+Owner selection of the exact performance caps and whether a physical device is
+required remains open. SQ.2 is blocked until that input is recorded. See
+`.codex/test-artifacts/179-smoked-quartz-authority-baseline/authority-matrix.md`
+and `.codex/history/2026-10-13-179-smoked-quartz-authority-baseline.md`.
+
+**SQ.2 — Approve the four-page static Full design source — BLOCKED (SQ.1 OWNER DECISION)**
 
 - **Boundary:** review Now, Hourly, Daily, and Details compositions, page
   backgrounds, semantic palette and contrast pairs, typography, surfaces,
