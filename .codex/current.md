@@ -1,12 +1,12 @@
 # Current Development Cycle
 
-State: IDLE
-Cycle ID: none
-Roadmap item: none
-Plan: none
-Evidence: none
+State: ACTIVE
+Cycle ID: 182-enroll-2023-pixel-fold-posture-baseline
+Roadmap item: SQ.1A.2
+Plan: .codex/plans/182-enroll-2023-pixel-fold-posture-baseline.md
+Evidence: .codex/test-artifacts/182-enroll-2023-pixel-fold-posture-baseline/
 Last updated: 2026-10-13
 
 ## Current objective
 
-No active cycle. Select the next item from `docs/ROADMAP.md`.
+# Plan 182 — Enroll 2023 Pixel Fold posture baseline

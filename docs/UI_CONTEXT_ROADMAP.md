@@ -578,6 +578,24 @@ frame/memory tooling smoke run. See
 and `.codex/history/2026-10-13-181-enroll-adb-recognized-pixel-5-as-supplemental-device.md`.
 This does not substitute for the Pixel 5a or 2023 Pixel Fold required by SQ.1A.
 
+**SQ.1A.2 — Enroll 2023 Pixel Fold posture baseline — PLANNED**
+
+- **Boundary:** enroll the ADB-identified Pixel Fold (`felix`) on the shared
+  debug APK and offline fixture. Record actual outer/folded and inner/unfolded
+  posture evidence when physically usable, along with display configuration,
+  paired UI captures, and existing diagnostic-tool output. Do not use Android's
+  emulated device-state override to claim a physical posture.
+- **Dependencies:** cycles 180–181's partial matrix; the Fold must remain ADB
+  authorized. Folded and unfolded captures are performed only at postures
+  physically presented by the device.
+- **Exit:** Pixel Fold identity/build/API and app configuration are read back;
+  shared APK/install identity and Glass/Effects None fixture state are verified;
+  folded and unfolded captures are retained when each posture is physically
+  usable, with exact unavailable posture limitations recorded. This entry does
+  not complete SQ.1A while the Pixel 5a is missing and does not unblock SQ.2.
+- **Evidence:** cycle-specific device matrix, posture/capture manifest, paired
+  screenshots and hierarchies, and raw diagnostic output.
+
 **SQ.2 — Approve the four-page static Full design source — BLOCKED (SQ.1 OWNER DECISION)**
 
 - **Boundary:** review Now, Hourly, Daily, and Details compositions, page
