@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+ <linearGradient id="canvas" x2=".5" y2="1"><stop stop-color="#101817"/><stop offset="1" stop-color="#080c0c"/></linearGradient>
+ <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#c9ddcb" stop-opacity=".24"/><stop offset=".12" stop-color="#bbd2bf" stop-opacity=".15"/><stop offset="1" stop-color="#7d9d84" stop-opacity=".09"/></linearGradient>
+ <clipPath id="raw"><rect x="332" y="139" width="442" height="846" rx="29"/></clipPath>
+ <clipPath id="ui"><rect x="1146" y="139" width="442" height="846" rx="29"/></clipPath>
+</defs>
+<rect width="1920" height="1080" fill="url(#canvas)"/>
+<text x="960" y="51" fill="#f0f5ef" text-anchor="middle" font-family="Fira Sans" font-weight="700" font-size="27" letter-spacing="2">MINERAL STRATA / REAL STONE TEXTURE</text>
+<text x="960" y="80" fill="#acbeae" text-anchor="middle" font-family="Noto Sans" font-size="14">A bitmap background asset beside its proposed use under the existing Now information</text>
+<text x="553" y="122" fill="#d7e7d8" text-anchor="middle" font-family="Fira Sans" font-size="17" font-weight="700" letter-spacing="1">SOURCE TEXTURE</text>
+<text x="1367" y="122" fill="#d7e7d8" text-anchor="middle" font-family="Fira Sans" font-size="17" font-weight="700" letter-spacing="1">IN THE NOW COMPOSITION</text>
+<rect x="326" y="133" width="454" height="858" rx="34" fill="#050908" stroke="#9fb8a3" stroke-opacity=".66" stroke-width="1.5"/>
+<g clip-path="url(#raw)"><image x="332" y="139" width="442" height="846" preserveAspectRatio="xMidYMid slice" xlink:href="mineral-strata-real-stone-texture-v1.png"/></g>
+<rect x="1140" y="133" width="454" height="858" rx="34" fill="#050908" stroke="#b8d1b8" stroke-opacity=".72" stroke-width="1.5"/>
+<g clip-path="url(#ui)">
+ <image x="1146" y="139" width="442" height="846" preserveAspectRatio="xMidYMid slice" xlink:href="mineral-strata-real-stone-texture-v1.png"/>
+ <rect x="1146" y="139" width="442" height="846" fill="#07100e" opacity=".40"/>
+ <path d="M1146 422Q1360 352 1588 413" fill="none" stroke="#cbe0cb" stroke-opacity=".24" stroke-width="1.5"/>
+ <text x="1170" y="166" fill="#ecf2e9" font-family="Noto Sans" font-size="11">7:04   ◇</text>
+ <text x="1564" y="166" fill="#ecf2e9" text-anchor="end" font-family="Noto Sans" font-size="11">●●  ▰</text>
+ <text x="1172" y="220" fill="#f4f8f3" font-family="Fira Sans" font-size="35" font-weight="700">Now⌄</text>
+ <text x="1563" y="219" fill="#d6e9d6" text-anchor="end" font-family="Fira Sans" font-size="34">≡</text>
+ <text x="1173" y="255" fill="#d6e4d7" font-family="Noto Sans" font-size="18">Demo Station</text>
+ <rect x="1171" y="284" width="392" height="242" rx="28" fill="#14231d" fill-opacity=".70" stroke="#c2d7c2" stroke-opacity=".82" stroke-width="1.5"/>
+ <path d="M1192 286h350" stroke="#eff8ec" stroke-opacity=".22"/>
+ <text x="1196" y="391" fill="#f8fbf6" font-family="Fira Sans" font-size="84" font-weight="500">28°</text>
+ <text x="1196" y="442" fill="#f1f7ef" font-family="Noto Sans" font-size="26">Partly cloudy</text>
+ <text x="1196" y="478" fill="#d5e2d4" font-family="Noto Sans" font-size="20">Feels 29°</text>
+ <circle cx="1499" cy="351" r="17" fill="none" stroke="#d7e9d5" stroke-width="2.5"/>
+ <path d="M1499 326v6 M1499 370v6 M1474 351h6 M1518 351h6 M1470 396q0-15 15-15 6-15 21-12 12 3 13 16 14-1 17 11z" fill="#172921" stroke="#d7e9d5" stroke-width="2.5"/>
+ <rect x="1171" y="542" width="189" height="104" rx="21" fill="#14231d" fill-opacity=".73" stroke="#c2d7c2" stroke-opacity=".72" stroke-width="1.3"/>
+ <rect x="1374" y="542" width="189" height="104" rx="21" fill="#14231d" fill-opacity=".73" stroke="#c2d7c2" stroke-opacity=".72" stroke-width="1.3"/>
+ <rect x="1171" y="660" width="189" height="104" rx="21" fill="#14231d" fill-opacity=".73" stroke="#c2d7c2" stroke-opacity=".72" stroke-width="1.3"/>
+ <rect x="1374" y="660" width="189" height="104" rx="21" fill="#14231d" fill-opacity=".73" stroke="#c2d7c2" stroke-opacity=".72" stroke-width="1.3"/>
+ <text x="1190" y="575" fill="#bfd1bf" font-family="Noto Sans" font-size="17">Humidity</text>
+ <text x="1190" y="618" fill="#f4f8f2" font-family="Fira Sans" font-size="29">56%</text>
+ <text x="1393" y="575" fill="#bfd1bf" font-family="Noto Sans" font-size="17">Dew point</text>
+ <text x="1393" y="618" fill="#f4f8f2" font-family="Fira Sans" font-size="29">18°</text>
+ <text x="1190" y="693" fill="#bfd1bf" font-family="Noto Sans" font-size="17">Precipitation</text>
+ <text x="1190" y="732" fill="#f4f8f2" font-family="Fira Sans" font-size="18">None indicated</text>
+ <text x="1393" y="693" fill="#bfd1bf" font-family="Noto Sans" font-size="17">Wind</text>
+ <text x="1393" y="732" fill="#f4f8f2" font-family="Fira Sans" font-size="25">13 km/h</text>
+ <rect x="1171" y="780" width="392" height="108" rx="22" fill="#0c1712" fill-opacity=".86" stroke="#c2d7c2" stroke-opacity=".39"/>
+ <text x="1190" y="816" fill="#d4e1d2" font-family="Noto Sans" font-size="15">Model estimate · offline fixture</text>
+ <text x="1190" y="846" fill="#b9cbb9" font-family="Noto Sans" font-size="15">Updated 6:00 PM</text>
+ <text x="1190" y="875" fill="#b9cbb9" font-family="Noto Sans" font-size="14">Freshness: unknown</text>
+ <rect x="1332" y="965" width="72" height="4" rx="2" fill="#edf3ec" opacity=".8"/>
+</g>
+<text x="553" y="1022" fill="#9fb4a2" text-anchor="middle" font-family="Noto Sans" font-size="14">Photographic strata and quartz veins</text>
+<text x="1367" y="1022" fill="#9fb4a2" text-anchor="middle" font-family="Noto Sans" font-size="14">Dark reading layer and solid fact surfaces</text>
+</svg>
