@@ -1,13 +1,13 @@
 # Plan 182 — Enroll 2023 Pixel Fold posture baseline
 
-Status: Active
+Status: Completed
 Cycle ID: 182-enroll-2023-pixel-fold-posture-baseline
 Roadmap item: SQ.1A.2
 Created: 2026-10-13
 
 ## Objective and outcome
 
-Enroll the ADB-identified 2023 Pixel Fold (`felix`, Android 17/API 37) as a physical test device on the shared APK and deterministic offline fixture. Record a repeatable installed UI baseline in the physically closed/folded outer display and in the physically open/unfolded inner display when each posture is available. This is supplemental evidence and does not substitute for the missing Pixel 5a or complete SQ.1A.
+Enrolled the ADB-identified 2023 Pixel Fold (`felix`, Android 17/API 37) as a physical test device on the shared APK and deterministic offline fixture. Captured all four pages in both the physically closed/folded outer display and physically open/unfolded inner display. This is supplemental evidence and does not substitute for the missing Pixel 5a or complete SQ.1A.
 
 ## Roadmap fit and dependencies
 
@@ -49,6 +49,14 @@ Do not change network, battery, animation, refresh-rate, display, or thermal set
 - Raw diagnostic output and device configuration are preserved when available; no performance threshold or pass is asserted.
 - The record explicitly states Pixel 5 is supplemental, Pixel 5a remains missing, SQ.1A is unmet, and SQ.2 remains blocked.
 - Workflow, `python scripts/codex_cycle.py validate`, and `git diff --check` pass; no production paths changed.
+
+## Completed verification
+
+- Same APK hash verified and package version read back after install; offline “Demo Station” fixture and Glass/Effects off state verified.
+- Closed Now, Hourly, Daily, and Details screenshot/hierarchy pairs captured from the physically closed outer display and their page identities read back.
+- Physically open inner-display Now, Hourly, Daily, and Details screenshot/hierarchy pairs captured after the owner opened the Fold. Every page identity verified at physical state OPENED. No posture override was used.
+- Closed-posture page-selector workload returned to Now. Raw `gfxinfo`, `meminfo`, power and thermal outputs plus exact commands are retained. The output is a smoke record, not a performance conclusion.
+- `python scripts/dev.py workflow`, `python scripts/codex_cycle.py validate`, and `git diff --check` passed. No production paths changed.
 
 ## Verification and evidence
 
