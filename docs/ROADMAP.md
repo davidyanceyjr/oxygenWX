@@ -59,7 +59,12 @@ consider seam-glint motion only after static installed acceptance, a static
 performance gate, and a separate motion lifecycle gate. Measure motion
 performance separately. The detailed roadmap now defines ordered SQ.1–SQ.18
 boundaries, including SQ.17A/SQ.17B and the separate SQ.V full-suite session.
-SQ.1 is NEXT; the others are PLANNED roadmap slots, not active cycle plans.
+SQ.1 was attempted in cycle 179 and remains BLOCKED (OWNER DECISION); SQ.2 is
+also BLOCKED pending the same decision. The remaining SQ entries are ordered
+roadmap slots, not active cycle plans. SQ.1A may establish the physical-device
+matrix and profiling-tool readiness; it does not resolve the required numeric
+static/motion limits. SQ.2 remains blocked until the owner records those limits
+and the device scope, informed by SQ.1A.
 Completed R5.4 Glass work is historical evidence, not acceptance of the
 replacement.
 

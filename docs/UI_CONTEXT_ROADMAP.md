@@ -522,6 +522,37 @@ required remains open. SQ.2 is blocked until that input is recorded. See
 `.codex/test-artifacts/179-smoked-quartz-authority-baseline/authority-matrix.md`
 and `.codex/history/2026-10-13-179-smoked-quartz-authority-baseline.md`.
 
+**SQ.1A — Enroll physical-device baseline — BLOCKED (DEVICE ACCESS)**
+
+- **Boundary:** enroll the available Pixel 3 XL, Pixel 5a, and 2023 Pixel Fold
+  as named physical test devices. Record exact Android/API and display
+  configuration, verify ADB authorization, install and launch the existing
+  app, and confirm the baseline capture/profiling commands work. Documentation
+  and test-environment evidence only; no app or device configuration changes
+  beyond enabling the ordinary developer connection needed for testing.
+- **Dependencies:** cycle 179 authority/baseline record; at least one device
+  connected and listed by `adb devices` in the authorized `device` state before
+  activation. Enroll the three devices sequentially; simultaneous connection
+  is not required.
+- **Exit:** a device matrix records model/build/API, display resolution/density
+  and refresh mode, app/build identity, and repeatable baseline capture/tool
+  results for each device. Any unavailable device/tool is recorded with its
+  exact limitation. This characterizes test readiness; it does not establish a
+  Smoked Quartz performance pass or choose numeric budgets.
+- **Evidence:** per-device configuration and baseline captures/tool output in
+  the SQ.1A cycle artifact directory.
+
+Cycle 180 enrolled the Pixel 3 XL only. The Pixel 5a and 2023 Pixel Fold were
+not attached to ADB during the 2026-10-13 session, so the three-device exit is
+unmet and the cycle records a device-access blocker. Continuing requires an
+explicit roadmap update with a new bounded outcome after the two remaining
+devices can be accessed; do not treat this partial matrix as complete.
+
+SQ.1A can inform the physical-device scope decision, but does not unblock SQ.2
+by itself. The owner must still select numeric static and conditional-motion
+limits. Keep the three devices in one enrollment cycle because the outcome is
+one verified matrix with a shared capture protocol.
+
 **SQ.2 — Approve the four-page static Full design source — BLOCKED (SQ.1 OWNER DECISION)**
 
 - **Boundary:** review Now, Hourly, Daily, and Details compositions, page
