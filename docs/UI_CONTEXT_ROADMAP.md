@@ -553,6 +553,31 @@ by itself. The owner must still select numeric static and conditional-motion
 limits. Keep the three devices in one enrollment cycle because the outcome is
 one verified matrix with a shared capture protocol.
 
+**SQ.1A.1 — Enroll ADB-recognized Pixel 5 as supplemental device — DONE**
+
+- **Boundary:** record the attached device using its observed identity (Pixel 5,
+  codename `redfin`) as supplemental physical-device evidence. Reuse the pinned
+  debug APK and offline fixture; capture the installed four-page baseline and
+  smoke-check the existing frame/memory tools. Documentation and local test
+  evidence only.
+- **Dependencies:** cycle 180's partial matrix; the attached device must remain
+  authorized by ADB. The Pixel 5 is supplemental and does not replace the
+  planned Pixel 5a.
+- **Exit:** the Pixel 5 identity and configuration are read back, the shared APK
+  hash and installed package/version are confirmed, Glass/Effects None fixture
+  state and named page identity are captured, and available probe output is
+  retained. Pixel 5a and 2023 Pixel Fold remain explicitly unavailable; this
+  entry does not complete SQ.1A or unblock SQ.2.
+- **Evidence:** cycle-specific device matrix, screenshot/hierarchy manifest,
+  and raw diagnostic output.
+
+Cycle 181 recorded the attached Pixel 5 (`redfin`) as a supplemental device
+using the shared APK and fixture, with four installed page captures and a
+frame/memory tooling smoke run. See
+`.codex/test-artifacts/181-enroll-adb-recognized-pixel-5-as-supplemental-device/`
+and `.codex/history/2026-10-13-181-enroll-adb-recognized-pixel-5-as-supplemental-device.md`.
+This does not substitute for the Pixel 5a or 2023 Pixel Fold required by SQ.1A.
+
 **SQ.2 — Approve the four-page static Full design source — BLOCKED (SQ.1 OWNER DECISION)**
 
 - **Boundary:** review Now, Hourly, Daily, and Details compositions, page
