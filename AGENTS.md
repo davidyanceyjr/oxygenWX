@@ -48,17 +48,17 @@ python scripts/dev.py contract
 python scripts/dev.py check
 ```
 
-Testing cadence:
+Testing policy:
 
 - Run tests that directly cover the changed behavior on each implementation slice.
-- Run the full relevant unit and connected-test suites on every fifth implementation slice, tracked in `.codex/testing-cadence.md`. Planning, documentation-only, and evidence-only cycles do not increment the counter.
-- Do not run broad suites on interim slices unless a focused result exposes a concrete regression risk that needs broader diagnosis.
+- Plan and run full relevant unit and connected-test suites in their own verification sessions, separate from implementation slices. Record their scope and evidence in their own cycle history.
+- Broaden a focused check only when its result exposes a concrete regression risk that needs diagnosis; this does not turn an implementation slice into a full-suite session.
 - Continue required non-test checks for the changed boundary, such as compilation, lint when sources require it, visual installed evidence for UI changes, and `git diff --check`.
 
 Before declaring repository-level work complete:
 
 1. Run the smallest relevant test while iterating.
-2. Follow the testing cadence above. Run `python scripts/dev.py check` on every fifth implementation slice; on other slices, run the focused checks required by the plan.
+2. Run the focused checks required by the implementation plan. Run `python scripts/dev.py check` only in a separately planned full-suite verification session.
 3. For visual work, install/render the actual app and capture evidence at the required viewport/font/effects conditions.
 4. Run `git diff --check` and inspect the final diff.
 5. Report verification that could not run and why.
@@ -93,6 +93,6 @@ Every visual slice should identify:
 - the visual objective;
 - compact/large-font/RTL/effects constraints that apply;
 - the actual installed state used for verification;
-- focused automated checks and the next full-suite cadence point.
+- focused automated checks and any separately planned full-suite verification session.
 
 Do not treat compilation or a Compose preview as evidence that a visual objective succeeded.

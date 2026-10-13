@@ -1,24 +1,18 @@
-# Testing cadence
+# Testing policy
 
-The owner approved a focused testing cadence on 2026-10-12.
+The owner clarified on 2026-10-12 that full suites have their own sessions.
 
 - Run tests that directly cover the changed behavior on each implementation
   slice.
-- Run the full relevant unit and connected-test suites on every fifth
-  implementation slice.
-- Track completed implementation slices below. Planning, documentation-only,
-  and evidence-only cycles do not increment the count.
-- On an interim slice, broaden testing only when a focused result exposes a
-  concrete regression risk that needs broader diagnosis.
+- Plan full relevant unit and connected-test suites as separate verification
+  cycles with their own scope, evidence, and history.
+- Broaden a focused check only when its result exposes a concrete regression
+  risk that needs diagnosis; do not claim a full-suite result from that check.
 - Continue boundary-specific checks such as compilation, applicable lint,
   installed visual evidence for UI changes, and `git diff --check`.
 
-## Counter
+## Historical record
 
-Cycle 177 is the first implementation slice under this cadence. Its focused
-checks are recorded in `.codex/test-artifacts/177-unified-home-action-menu/`.
-
-Completed slices since the most recent full relevant suite: **1 of 5**
-(Cycle 177, NAV.5). When the fifth slice closes, run the full relevant unit
-and connected-test suites, then reset this counter to 0 and record the suite
-result here.
+Cycle 177 (NAV.5) recorded focused checks in
+`.codex/test-artifacts/177-unified-home-action-menu/`. The former fifth-slice
+counter is retired; it does not schedule future full-suite runs.

@@ -69,6 +69,9 @@ roadmaps.
 - Preserve screenshots, hierarchy/interaction evidence, and verification
   results under `.codex/test-artifacts/<cycle-id>/`, then close the cycle into
   `.codex/history/`.
+- Run tests focused on the behavior changed in each implementation session.
+  Plan full unit and connected suites as separate verification sessions with
+  their own evidence and closeout.
 - If the visual objective or acceptance criterion fails, record the observed
   gap and stop dependent work. A follow-up requires an explicit roadmap update
   and a new bounded plan.
@@ -449,15 +452,282 @@ and the cycle evidence directory. TalkBack traversal was not run.
 - **Exit:** the shared menu is discoverable, accessible, theme-correct, and
   reaches the three existing destinations from all four pages without
   changing weather or page-navigation behavior. Focused checks and installed
-  evidence are recorded; broad connected checks remain deferred to the fifth
-  implementation slice under the approved testing cadence.
+  evidence are recorded. At close, broad connected checks were deferred under
+  the former fifth-slice cadence; future full-suite verification follows the
+  separate-session policy above.
 - **Evidence:** `.codex/test-artifacts/177-unified-home-action-menu/` and
   `.codex/history/2026-10-12-177-unified-home-action-menu.md`. Four focused
   connected-test failures matched their pre-change methods and signatures;
   full-suite verification is not claimed. Live TalkBack and system RTL remain
   unverified (app-level RTL override was exercised).
 
-### Evidence-gated cycle budget
+### Smoked Quartz Glass replacement branch — proposed
+
+The owner-authorized Smoked Quartz branch replaces the Glass visual direction
+while retaining its persisted theme identity. SQ.1–SQ.18 and a separate SQ.V
+full-suite verification session are ordered roadmap slots, not activated
+cycles. Complete and review the four-page static Full design source
+first; implement and accept static Full, including its own performance gate;
+derive static Subtle by reducing decoration and None by removing separate
+decorative marks, icons, overlays, glyphs, and motion while retaining the
+finished opaque, static Smoked Quartz mineral background specified in the
+effects contract. Keep weather facts and usable text controls at every level.
+SQ.17A covers layout/localization acceptance and SQ.17B covers
+appearance/behavior acceptance. Seam-glint motion is conditional on static
+Full acceptance and a separate lifecycle gate; its incremental performance
+check has a separate boundary from static performance. Each implementation
+session uses focused tests for its changed behavior; SQ.V is a separately
+planned full-suite verification session. Bound each implementation plan below
+55% of the context window, targeting 35–45%.
+
+This branch does not fulfill the broader UI.8–UI.17 slots below. Those slots
+are deferred during Smoked Quartz work, retain their remaining-theme,
+cross-theme, page-integration, motion, request/cache, and performance
+obligations, and resume at UI.8 through an evidence-based roadmap review after
+the Smoked Quartz branch closes. Their earlier 13–17-cycle forecast applies
+only to that original effects scope; it is not a cap or completion claim for
+SQ work. The completed R5.4 Glass implementation remains historical evidence.
+The ordered boundaries below are roadmap planning slots, not cycle plans or
+activation. Before production edits, create and activate a bounded plan under
+the repository workflow. SQ.1 records gate configurations; SQ.2 reviews the
+complete design source. Do not advance after a failed exit without an explicit
+roadmap update. Every implementation slice preserves weather meaning,
+provenance, navigation, accessibility, and request/cache behavior. Record the
+actual installed fixture, device/API, viewport, font, effects, contrast,
+motion, and RTL state for visual evidence. Run focused tests for changed
+behavior, applicable compilation/lint, and `git diff --check`; reserve full
+relevant suites for SQ.V.
+
+#### Proposed Smoked Quartz slices
+
+**SQ.1 — Reconcile authority and baseline — NEXT**
+
+- **Boundary:** confirm the already amended Glass identity and None exception
+  against the specification, effects contract, candidate assets, and installed
+  baseline. Define static Full acceptance, named device/API and viewport
+  matrix, and quantitative static and motion performance budgets. Documentation
+  and baseline evidence only; no runtime change.
+- **Dependencies:** current contracts and cycle 178's historical design study.
+- **Exit:** a decision record resolves conflicts and names gate configurations,
+  budgets, and open asset decisions. An unresolved decision blocks SQ.2.
+- **Evidence:** authority matrix, installed baseline/settings captures, and
+  decision record in the SQ.1 cycle artifact directory.
+
+**SQ.2 — Approve the four-page static Full design source — PLANNED**
+
+- **Boundary:** review Now, Hourly, Daily, and Details compositions, page
+  backgrounds, semantic palette and contrast pairs, typography, surfaces,
+  mark coverage and fallbacks, functional icon inventory, and artwork inventory.
+  Define compact, large-font, RTL, high-contrast, and missing-data treatments.
+  Design assets and decisions only; no runtime integration or motion.
+- **Dependencies:** SQ.1 and the candidate Smoked Quartz asset inventory.
+- **Exit:** an owner-reviewed four-page source and updated candidate manifest
+  specify each implementation input and fallback; unresolved decisions stop
+  implementation.
+- **Evidence:** design source, installed-baseline comparison, and decision and
+  coverage matrix; artwork is labeled design evidence.
+
+**SQ.3 — Implement Glass palette and typography — PLANNED**
+
+- **Boundary:** implement SQ.2's semantic Glass colors and type roles in the
+  resolver and directly affected styling. Preserve stored Glass selection and
+  the other four themes.
+- **Dependencies:** SQ.2 approval.
+- **Exit:** focused token/contrast checks pass; installed text and controls on
+  all four pages are readable at standard, large-font, and high-contrast
+  settings. Record any cross-theme style effect.
+- **Evidence:** focused results and same-fixture installed captures.
+
+**SQ.4 — Build the static mineral background foundation — PLANNED**
+
+- **Boundary:** draw approved opaque base fields, page-specific strata, and
+  fine grain with native Compose primitives. Add no marks, separate overlays,
+  or motion; protect text reading zones.
+- **Dependencies:** SQ.3.
+- **Exit:** all four installed pages show distinct approved backgrounds;
+  focused renderer/resolver checks pass without a pager or data-flow change.
+- **Evidence:** four-page same-fixture captures, including a compact viewport.
+
+**SQ.5 — Finish static Full Now — PLANNED**
+
+- **Boundary:** apply approved Full composition, restrained glass surfaces,
+  depth, spacing, and lighting to Now. Preserve facts, condition text,
+  source/freshness, actions, and semantics.
+- **Dependencies:** SQ.4.
+- **Exit:** focused Now checks and installed standard, compact, large-font, and
+  high-contrast review pass SQ.2's Now criteria. This is page review, not
+  four-page static Full acceptance.
+- **Evidence:** focused results and installed Now captures.
+
+**SQ.6 — Finish static Full Hourly — PLANNED**
+
+- **Boundary:** apply approved Hourly composition and fine strata. Keep
+  chronology, actual horizon, visible window controls, and the outer pager as
+  the sole horizontal-swipe owner.
+- **Dependencies:** SQ.5.
+- **Exit:** focused window/semantics checks and installed first/changed-window,
+  compact, and large-font review pass SQ.2's Hourly criteria.
+- **Evidence:** focused results and installed Hourly captures.
+
+**SQ.7 — Finish static Full Daily — PLANNED**
+
+- **Boundary:** apply approved Daily composition and terraced mineral depth
+  without encoding values in decoration. Keep day membership, chronology,
+  values, and visible window controls.
+- **Dependencies:** SQ.6.
+- **Exit:** focused day/window checks and installed first/changed-window,
+  compact, and large-font review pass SQ.2's Daily criteria.
+- **Evidence:** focused results and installed Daily captures.
+
+**SQ.8 — Finish static Full Details — PLANNED**
+
+- **Boundary:** apply approved quiet Details composition and micro-etch.
+  Preserve source, valid/update times, freshness, unavailable states, and
+  distinctions among data types.
+- **Dependencies:** SQ.7.
+- **Exit:** focused presentation/semantics checks and installed available and
+  missing-field, compact, and large-font review pass SQ.2's Details criteria.
+- **Evidence:** focused results and installed Details captures.
+
+**SQ.9 — Complete and accept four-page static Full — PLANNED**
+
+- **Boundary:** add approved decorative condition marks, quartz inclusions,
+  and static seam highlights only where SQ.2 permits. Keep control icons
+  functional and condition identity visible as text; use an honest unsupported
+  condition fallback. Add no animation.
+- **Dependencies:** SQ.8 and SQ.2's coverage decisions.
+- **Exit:** focused condition/visibility checks pass and an installed four-page
+  review accepts static Full, including supported/unsupported conditions.
+  Failed acceptance stops SQ.10–SQ.16.
+- **Evidence:** acceptance matrix and same-fixture four-page captures.
+
+**SQ.10 — Measure static Full performance — PLANNED**
+
+- **Boundary:** measure static draw cost, memory, and interaction on SQ.1's
+  named devices/APIs against its budgets. Only tightly scoped,
+  appearance-preserving corrections belong here; no motion.
+- **Dependencies:** SQ.9 static acceptance.
+- **Exit:** measurements meet each named static budget, or record the exact
+  failed gate and stop dependent level/motion work pending replanning.
+- **Evidence:** repeatable method, raw measurements, configuration, and
+  installed captures before/after any correction.
+
+**SQ.11 — Derive static Subtle — PLANNED**
+
+- **Boundary:** reduce approved Full lighting, texture, marks, and ornament
+  through Glass Subtle policy. Keep the finished background, facts, controls,
+  semantics, and static behavior on all four pages.
+- **Dependencies:** SQ.10 pass.
+- **Exit:** focused level/mark checks pass; paired installed Full/Subtle
+  captures show a distinct, readable reduction on every page.
+- **Evidence:** checks and paired same-fixture four-page captures.
+
+**SQ.12 — Derive Smoked Quartz None — PLANNED**
+
+- **Boundary:** retain only the specified opaque static stone gradient,
+  integrated strata/Details micro-etch, and embedded grain. Suppress separate
+  weather marks/icons, inclusions, seam-glint, overlays, glyphs, glow, and
+  motion. Preserve text controls and stored `OFF`/`off` identity.
+- **Dependencies:** SQ.11 and the adopted None exception.
+- **Exit:** focused suppression/preference/semantics checks pass; installed
+  four-page None remains complete at compact, large-font, and high-contrast
+  settings.
+- **Evidence:** focused checks and installed four-page/state captures.
+
+**SQ.13 — Reconcile appearance switching — PLANNED**
+
+- **Boundary:** address Glass-specific resolver and Settings issues found when
+  switching Full/Subtle/None, contrast, and reduced motion. Do not rewrite
+  saved choices or trigger a weather refetch.
+- **Dependencies:** SQ.12.
+- **Exit:** focused resolver, persistence, and no-refetch checks pass; installed
+  switching, Settings return, and restart preserve effective and saved states.
+- **Evidence:** state-transition matrix, checks, and installed recordings.
+
+**SQ.14 — Verify static cross-page interactions — PLANNED**
+
+- **Boundary:** exercise the defined four-page matrix of pager, Hourly/Daily
+  window controls, title/action menus, routes, and Back at all three levels.
+  Fix only defects evidenced within this matrix; substantial new work requires
+  a new bounded plan.
+- **Dependencies:** SQ.13.
+- **Exit:** focused checks cover any correction and the interaction matrix
+  passes, or exact failing cases stop dependent acceptance work.
+- **Evidence:** matrix, installed interaction recordings, and focused results.
+
+**SQ.15 — Establish the motion lifecycle gate — PLANNED**
+
+- **Boundary:** establish active-page, foreground/background, reduced-motion,
+  animator-scale, and fallback policy with an installed probe. Add no
+  seam-glint artwork; None and Subtle remain static.
+- **Dependencies:** SQ.9 static acceptance, SQ.10 pass, and SQ.14.
+- **Exit:** focused lifecycle/policy checks and installed probe show decorative
+  drawing stops on inactive pages/background and respects motion settings.
+  Failure stops SQ.16.
+- **Evidence:** probe configuration, recordings, and focused results.
+
+**SQ.16 — Add conditional Full seam glint — PLANNED**
+
+- **Boundary:** after SQ.15 passes, implement only the reviewed one-pass
+  decorative seam glint in Full. Text stays stationary; None, Subtle, and
+  reduced-motion Full keep their static appearance. Omit motion if the
+  design/lifecycle gate does not support it.
+- **Dependencies:** SQ.15 pass and SQ.2's reviewed motion study.
+- **Exit:** if adopted, focused trigger/stop checks and installed active,
+  inactive, background/return, and reduced-motion review pass; otherwise a
+  recorded omission closes this conditional slot without a motion claim.
+- **Evidence:** motion decision, checks, and recordings when implemented.
+
+**SQ.17A — Accept layout and localization — PLANNED**
+
+- **Boundary:** review all four pages and three levels against SQ.1's compact,
+  font-scale, and RTL matrix, using representative paired states for overlays
+  and motion. Fix only evidenced Glass layout defects.
+- **Dependencies:** SQ.14 and SQ.16's pass or recorded omission.
+- **Exit:** required facts and controls remain visible, reachable, ordered,
+  and meaningful with no clipping or direction-dependent decoration; record
+  any unavailable system RTL or assistive-technology boundary.
+- **Evidence:** named installed configuration matrix, captures, and focused
+  checks for corrections.
+
+**SQ.17B — Accept appearance and behavior — PLANNED**
+
+- **Boundary:** review contrast, reduced motion, accessibility meaning,
+  navigation, and request/cache invariance across three Glass levels and
+  SQ.1's representative condition/missing-data fixtures. Fix only evidenced
+  Glass defects; defer a full suite to SQ.V.
+- **Dependencies:** SQ.17A.
+- **Exit:** three readable levels preserve functional invariants; every
+  matrix cell is pass, failed, or explicitly unverified with a reason. A
+  failed required cell stops closeout.
+- **Evidence:** installed matrix, accessibility/behavior observations, and
+  focused results for corrections.
+
+**SQ.18 — Measure motion increment and reconcile branch — PLANNED**
+
+- **Boundary:** if SQ.16 adopted motion, compare static and motion cost on
+  SQ.1's named configurations and motion budget. Reconcile accepted design,
+  implementation, and evidence; substantial fixes need a new plan.
+- **Dependencies:** SQ.17B; SQ.16 pass or recorded omission.
+- **Exit:** adopted motion meets its separate incremental budget, or omission
+  is recorded; the branch report lists exact passed and unverified boundaries.
+  A failed motion budget cannot receive a pass by citing static results.
+- **Evidence:** raw comparative measurements when applicable, final installed
+  captures, and evidence index.
+
+**SQ.V — Separate full-suite verification — PLANNED**
+
+- **Boundary:** run full relevant unit and connected-test suites in their own
+  planned verification cycle; diagnose failures without folding material fixes
+  into the verification session.
+- **Dependencies:** SQ.18 closeout.
+- **Exit:** history states suites, host/device configuration, results, and
+  unverified boundaries. A failure or unavailable suite cannot be described
+  as a pass.
+- **Evidence:** raw suite logs, configuration, and final installed smoke
+  capture under the SQ.V cycle artifact directory.
+
+### Evidence-gated cycle budget for the original UI effects scope
 
 The working target is **13–17 total cycles for this effects track**, including
 the two completed cycles UI.3 and UI.4. With UI.7A dropped, the current upper

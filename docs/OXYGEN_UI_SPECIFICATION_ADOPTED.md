@@ -45,7 +45,8 @@ The production visual system is a shared component family with five built-in
 presentations:
 
 - **Atmospheric** — immersive procedural weather field with restrained container emphasis.
-- **Glass** — layered, restrained translucent surfaces over a procedural atmosphere.
+- **Glass** — Smoked Quartz mineral strata with page-specific stone backgrounds,
+  restrained glass surfaces, and layered mineral illumination.
 - **Minimal OLED** — black-first, low-decoration, typography- and data-dominant presentation.
 - **Instrument** — technical monitor treatment with bounded, source-supported data indicators.
 - **Terminal** — flat, console-like presentation with monospace typography.
@@ -66,7 +67,7 @@ application-private storage, with Atmospheric used when no recognized choice is
 available. The personalities and
 shared component references are indexed in
 [`docs/assets/design-references/production-themes/`](assets/design-references/production-themes/).
-Use the [One App. Many Personalities board](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png), [Glass asset sheet](assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png), and [Instrument asset sheet](assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png) as the visual baseline for the design review; the full reference set is listed in the theme-system asset manifest. These references are not yet a complete exact specification for the production app.
+Use the [One App. Many Personalities board](assets/design-references/production-themes/one-app-many-personalities/boards/one_app_many_personalities.png) and [Instrument asset sheet](assets/design-references/production-themes/instrument/boards/instrument_theme_asset_sheet.png) as visual inputs for their applicable design reviews. The former [Glass asset sheet](assets/design-references/production-themes/glass/boards/glass_theme_asset_sheet.png) and Glass token candidates in the theme-system asset manifest are historical references, not Smoked Quartz acceptance targets. The Smoked Quartz [asset inventory](../resources/themes/smoked-quartz/ASSET_INVENTORY.md) and [candidate manifest](../resources/themes/smoked-quartz/ASSET_MANIFEST.md) identify its current design sources; update the permanent asset manifest only after the full pack is reviewed. Design references are not an exact specification for the production app.
 
 Use semantic Compose components, procedural drawing, and vectors where practical. Do
 not paste full art-board screenshots into runtime UI, add large concept boards to Android
@@ -139,8 +140,9 @@ have distinct decorative marks; a missing condition emits no mark. Mark
 semantics are cleared so adjacent condition text remains the sole accessible
 weather meaning. `ProductionBackdrop` consumes the resolved ambient base,
 overlay family, and strength behind caller content without pointer handling.
-Effects Off draws only the opaque canvas color: no gradient, grid, overlay, or
-motion. Subtle/Full use static procedural backdrops in this slice. The normal
+The completed renderer's Effects Off path draws only the opaque canvas color:
+no gradient, grid, overlay, or motion. Subtle/Full use static procedural
+backdrops in that completed slice. The normal
 Home path and the focused debug showcase share these primitives.
 
 The preceding renderer description records completed behavior at that time;
@@ -153,6 +155,15 @@ HTML/SVG and design-pack previews are not installed-app evidence for the new
 Subtle/Full visual targets. Missing theme measurements and recipe decisions are tracked through the
 evidence-gated sequence in the [effects roadmap](UI_CONTEXT_ROADMAP.md); its
 first source audit consolidates all five themes before implementation.
+Smoked Quartz Glass is the specific exception to the solid-only None backdrop:
+its finished opaque, static page-specific mineral background retains the base
+stone tonal gradient, integrated sediment strata (Details micro-etch), and fine
+embedded grain at None. Separate decorative weather marks and icons, quartz
+inclusions, seam-glint and other overlays or glyphs, added glow, and motion are
+removed. Weather facts, provenance, and usable text controls remain visible.
+Other themes keep the general None rule. Static Full installed acceptance and
+static performance precede a separate motion lifecycle gate; adopted motion
+then receives its own incremental performance check.
 
 The following roles are semantic appearance inputs, not a prescribed legacy
 palette. Their concrete values are selected by the active theme:

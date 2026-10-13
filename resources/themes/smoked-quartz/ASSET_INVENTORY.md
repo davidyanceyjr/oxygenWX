@@ -44,7 +44,7 @@ motion cue. It is a design mockup, not a screenshot of the installed app.
 
 | Level | Smoked Quartz design target |
 | --- | --- |
-| None | Opaque and static; no gradients, texture, decorative weather marks, glow, or animation. Preserve readable grouping and all required facts. |
+| None | Opaque and static; retain the finished page-specific mineral background's base stone tonal gradient, integrated sediment strata (Details micro-etch), and fine embedded grain. Remove separate decorative marks and icons, inclusions, seam-glint and other overlays or glyphs, added glow, and all motion. Preserve readable grouping, required facts, and usable text controls. This is a Smoked Quartz Glass exception to the general solid-background None rule. |
 | Subtle | Restrained static smoked gradients, sediment texture, and optional decorative marks. Keep decoration behind the information. |
 | Full | Richer native lighting, layered strata, surface depth, and controlled motion after the static design is accepted. Keep data sharp and stationary. |
 

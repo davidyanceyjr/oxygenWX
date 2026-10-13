@@ -20,6 +20,14 @@ for FX.09, with the stored `off` identifier preserved.
   readable grouping of facts establish hierarchy. Required weather meaning
   remains visible as text and accessible semantics. Functional control icons
   remain when needed to identify or operate a control.
+  **Smoked Quartz Glass exception:** retain its finished, opaque, static
+  page-specific mineral background at None: the base stone tonal gradient,
+  integrated sediment strata (the Details micro-etch), and fine embedded grain.
+  These background layers remain behind readable content on all four pages;
+  remove separate decorative weather marks and icons, quartz inclusions,
+  seam-glint and other overlays or glyphs, added glow, and all motion. Keep
+  weather facts and usable text controls visible. This exception changes no
+  other theme's None treatment.
 - **Subtle:** clearly visible but restrained gradients, decorative weather
   marks, background elements, textures, and static artwork. It adds visual
   character without competing with weather information. This level is static;
@@ -49,7 +57,10 @@ Palette independence does not require identical artwork between themes. Theme
 recipes preserve their own visual identity:
 
 - Atmospheric: sky fields, cloud forms, light, and atmospheric depth.
-- Glass: reflections and layered illumination.
+- Glass: Smoked Quartz mineral strata, with page-specific stone backgrounds,
+  restrained glass surfaces, and layered mineral illumination. Earlier Glass
+  reflection/procedural-atmosphere boards and tokens are historical references,
+  not acceptance targets for this replacement.
 - Terminal: phosphor texture, glyph art, and directional lighting.
 - Instrument: technical ornament and illuminated hierarchy.
 - Minimal OLED: selective accents and light over predominantly black fields.
@@ -73,6 +84,10 @@ Full motion is considered only after that theme's static Full treatment passes
 installed acceptance and lifecycle controls establish that inactive pages and
 backgrounded apps stop drawing. Reduced motion disables motion while retaining
 the selected static appearance level when readable and performant.
+For Smoked Quartz, static Full also passes a separately measured performance
+gate before seam-glint motion is considered. Motion has its own lifecycle gate
+and incremental performance check; neither substitutes for static acceptance
+or static performance evidence.
 
 ## Functional invariants
 

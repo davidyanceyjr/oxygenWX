@@ -30,15 +30,14 @@ run focused tests/checks
 -> render the authoritative state
 -> capture final screenshot evidence
 -> verify layout/accessibility constraints
--> run broader checks appropriate to the slice
 -> retain evidence
 -> commit
 ```
 
 Run focused checks for the changed UI behavior on every implementation slice.
-Run the full relevant unit and connected-test suites every fifth implementation
-slice, using `.codex/testing-cadence.md`; expand interim checks only when a
-focused result exposes a concrete regression risk. Installed visual review
+Run full relevant unit and connected-test suites in separately planned
+verification sessions. Expand a focused check only when its result exposes a
+concrete regression risk that needs diagnosis. Installed visual review
 remains required for UI changes because automated tests do not establish visual
 acceptance.
 

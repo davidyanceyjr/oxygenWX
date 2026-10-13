@@ -293,6 +293,12 @@ Version/dependency changes are deliberate maintenance slices, not incidental edi
 
 Evidence must match the changed boundary.
 
+Implementation slices run tests focused on behavior changed in that session.
+Full relevant unit and connected-test suites run in separately planned
+verification sessions with their own evidence and closeout. A focused slice
+does not claim full-suite coverage; the release gate records the latest full
+suite result and any later unverified changes.
+
 - Pure derivation/model work: deterministic unit tests.
 - Provider mapping: fixture/transport/repository tests.
 - Persistence: storage and restoration tests.

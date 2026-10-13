@@ -96,28 +96,25 @@ Update the active plan when a material assumption changes. Record evidence under
 
 Prefer the smallest relevant checks while iterating. For material UI work, the installed app through the real presentation path remains the authoritative rendering check; Compose previews may help development but do not close the visual acceptance boundary.
 
-### Testing cadence
+### Testing policy
 
 Run checks that cover the changed behavior on each implementation slice. Run
-the full relevant unit and connected-test suites on every fifth implementation
-slice, using `.codex/testing-cadence.md` to track the count. Planning,
-documentation-only, and evidence-only cycles do not increment it. Do not run
-broad suites on interim slices unless a focused result exposes a concrete
-regression risk that needs broader diagnosis. Continue boundary-specific
-checks such as compilation, applicable lint, installed visual evidence, and
-`git diff --check`.
+full relevant unit and connected-test suites in separately planned verification
+sessions with their own evidence and closeout. Broaden a focused check only
+when its result exposes a concrete regression risk that needs diagnosis.
+Continue boundary-specific checks such as compilation, applicable lint,
+installed visual evidence, and `git diff --check`.
 
 ## Closing work
 
 Before closing a cycle:
 
 1. Run the plan's focused verification.
-2. Follow the testing cadence above; on every fifth implementation slice, run
-   the full relevant unit and connected-test suites. Otherwise, run broader
-   checks only to investigate a concrete focused-check risk.
-3. Run `python scripts/dev.py check` on every fifth implementation slice when
-   the Android environment is available; on other slices, run the boundary-
-   specific build, lint, and visual checks required by the plan.
+2. Run broader checks only to investigate a concrete focused-check risk. Plan
+   full relevant unit and connected-test suites as separate verification cycles.
+3. Run the boundary-specific build, lint, and visual checks required by the
+   plan. Reserve `python scripts/dev.py check` for a full-suite verification
+   cycle when the Android environment is available.
 4. Inspect `git diff --check` and the final diff.
 5. Record verification that could not run and why.
 

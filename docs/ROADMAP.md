@@ -6,6 +6,12 @@
 
 This roadmap converts the specification into bounded, verifiable slices. It is ordered by dependency, not by visual novelty. A slice is complete only when its defined acceptance evidence is recorded in `.codex/history/`.
 
+Implementation slices use tests focused on their session changes, alongside
+the non-test checks required by their boundary. Full relevant unit and
+connected-test suites are separate verification sessions with their own plan,
+evidence, and history. Schedule those sessions as explicit roadmap entries;
+do not attach a full-suite run to an implementation slice by count.
+
 ## Status legend
 
 - **DONE** — implemented and evidence recorded.
@@ -40,6 +46,29 @@ ordering within its scope; it does not replace product or presentation
 authority. Do not interleave the branch with deferred main-roadmap work. When
 the branch is complete, resume at the recorded point and retain the main
 roadmap's remaining statuses and dependencies.
+
+## Smoked Quartz Glass replacement branch — PROPOSED
+
+The owner-authorized Smoked Quartz Glass replacement is a focused visual
+branch governed by `docs/UI_CONTEXT_ROADMAP.md` and the amended
+`docs/theme-system/EFFECTS_CONTRACT.md` and
+`docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. It retains the persisted Glass theme
+identity and the five-theme obligation. Design static Full across all four
+pages first, derive Subtle and the Smoked Quartz-specific None treatment, and
+consider seam-glint motion only after static installed acceptance, a static
+performance gate, and a separate motion lifecycle gate. Measure motion
+performance separately. The detailed roadmap now defines ordered SQ.1–SQ.18
+boundaries, including SQ.17A/SQ.17B and the separate SQ.V full-suite session.
+SQ.1 is NEXT; the others are PLANNED roadmap slots, not active cycle plans.
+Completed R5.4 Glass work is historical evidence, not acceptance of the
+replacement.
+
+While this branch is pursued, the broader UI.8–UI.17 effects planning slots
+remain deferred with their cross-theme obligations intact. After the Smoked
+Quartz branch closes, resume those slots at UI.8 through an evidence-based
+roadmap review, then return to this main roadmap at R7.3 after the UI context
+branch closes. Do not count SQ cycles against the earlier UI.8–UI.17 cycle
+forecast or treat SQ verification as cross-theme acceptance.
 
 ## Focused theme-pack roadmap
 
