@@ -2,10 +2,64 @@ package com.oxygen.weather.ui.themeengine
 
 import com.oxygen.weather.presentation.WeatherMarkCondition
 import com.oxygen.weather.ui.themeengine.components.markStyleSignature
+import com.oxygen.weather.ui.themeengine.components.GlassHomePage
+import com.oxygen.weather.ui.themeengine.components.MineralGeometry
+import com.oxygen.weather.ui.themeengine.components.MineralPaletteRole
+import com.oxygen.weather.ui.themeengine.components.mineralRecipe
+import androidx.compose.ui.unit.LayoutDirection
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ProductionWeatherVisualsTest {
+    @Test
+    fun glassPagesSelectOnlyTheirStaticGeometry() {
+        val theme = resolveTheme(WeatherThemeId.GLASS)
+        assertEquals(MineralGeometry.DIAGONAL_SEAM, mineralRecipe(GlassHomePage.NOW, theme).geometry)
+        assertEquals(MineralGeometry.HORIZONTAL_STRATA, mineralRecipe(GlassHomePage.HOURLY, theme).geometry)
+        assertEquals(MineralGeometry.TERRACES, mineralRecipe(GlassHomePage.DAILY, theme).geometry)
+        assertEquals(MineralGeometry.MICRO_ETCH, mineralRecipe(GlassHomePage.DETAILS, theme).geometry)
+    }
+
+    @Test
+    fun mineralLevelsRetainBaseAndGrainWithOrderedStrength() {
+        val recipes = listOf(ThemeEffectsLevel.OFF, ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL)
+            .map { mineralRecipe(GlassHomePage.NOW, resolveTheme(WeatherThemeId.GLASS, effects = it)) }
+        assertTrue(recipes.all { it.strength > 0f && it.grainAlpha > 0f && !it.flatOpaque })
+        assertTrue(recipes[0].strength < recipes[1].strength)
+        assertTrue(recipes[1].strength < recipes[2].strength)
+        assertEquals(
+            setOf(MineralPaletteRole.CANVAS, MineralPaletteRole.ATMOSPHERE_TOP,
+                MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE),
+            recipes[0].roles,
+        )
+    }
+
+    @Test
+    fun rtlMirrorsOnlyDirectionalNowGeometry() {
+        val theme = resolveTheme(WeatherThemeId.GLASS)
+        GlassHomePage.entries.forEach { page ->
+            val recipe = mineralRecipe(page, theme)
+            val ltr = recipe.horizontalFraction(0.2f, LayoutDirection.Ltr)
+            val rtl = recipe.horizontalFraction(0.2f, LayoutDirection.Rtl)
+            if (page == GlassHomePage.NOW) assertEquals(0.8f, rtl, 0.0001f)
+            else assertEquals(ltr, rtl, 0.0001f)
+        }
+    }
+
+    @Test
+    fun highContrastIsFlatOpaqueForEveryPageAndLevel() {
+        GlassHomePage.entries.forEach { page ->
+            ThemeEffectsLevel.entries.forEach { effects ->
+                val recipe = mineralRecipe(page, resolveTheme(WeatherThemeId.GLASS, ContrastLevel.HIGH, effects))
+                assertTrue(recipe.flatOpaque)
+                assertEquals(0f, recipe.strength, 0f)
+                assertEquals(0f, recipe.grainAlpha, 0f)
+                assertEquals(setOf(MineralPaletteRole.CANVAS), recipe.roles)
+            }
+        }
+    }
+
     @Test
     fun approvedD29ThirtyCellMatrixAndNullMapExactly() {
         val expected = mapOf(
@@ -39,10 +93,13 @@ class ProductionWeatherVisualsTest {
     }
 
     @Test
-    fun effectsOffAlwaysResolvesOpaqueCanvasOnlyBackgroundAndStaticPolicy() {
+    fun effectsOffResolvesApprovedOpaqueBackgroundAndStaticPolicy() {
         WeatherThemeId.entries.forEach { id ->
             val theme = resolveTheme(id, effects = ThemeEffectsLevel.OFF)
-            assertEquals(AmbientBackgroundBase.SOLID, theme.ambientBackground.base)
+            assertEquals(
+                if (id == WeatherThemeId.GLASS) AmbientBackgroundBase.TONAL_FIELD else AmbientBackgroundBase.SOLID,
+                theme.ambientBackground.base,
+            )
             assertEquals(AmbientBackgroundOverlay.NONE, theme.ambientBackground.overlay)
             assertEquals(AmbientBackgroundStrength.NONE, theme.ambientBackground.overlayStrength)
             assertEquals(MotionStyle.OFF, theme.motionStyle)

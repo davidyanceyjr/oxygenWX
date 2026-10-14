@@ -27,12 +27,13 @@ class ThemeResolverTest {
     }
 
     @Test
-    fun effectsOffIsSolidStaticOpaqueAndCompleteForEveryTheme() {
+    fun effectsOffRetainsGlassMineralBaseAndOtherThemesSolidStaticOpaque() {
         WeatherThemeId.values().forEach { id ->
             ContrastLevel.values().forEach { contrast ->
                 LayoutPreset.values().forEach { layout ->
                     val resolved = resolveTheme(id, contrast, ThemeEffectsLevel.OFF, layout)
-                    assertEquals(AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), resolved.ambientBackground)
+                    val expectedBase = if (id == WeatherThemeId.GLASS) AmbientBackgroundBase.TONAL_FIELD else AmbientBackgroundBase.SOLID
+                    assertEquals(AmbientBackground(expectedBase, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), resolved.ambientBackground)
                     assertEquals(MotionStyle.OFF, resolved.motionStyle)
                     assertEquals(1f, resolved.panelOpacity, 0f)
                     assertEquals(1f, resolved.outlineOpacity, 0f)
@@ -66,7 +67,8 @@ class ThemeResolverTest {
                     assertEquals(effects, high.effects)
                     assertEquals(layout, high.layout)
                     if (effects == ThemeEffectsLevel.OFF) {
-                        assertEquals(AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), high.ambientBackground)
+                        val expectedBase = if (id == WeatherThemeId.GLASS) AmbientBackgroundBase.TONAL_FIELD else AmbientBackgroundBase.SOLID
+                        assertEquals(AmbientBackground(expectedBase, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), high.ambientBackground)
                         assertEquals(MotionStyle.OFF, high.motionStyle)
                     }
                 }
@@ -207,7 +209,7 @@ class ThemeResolverTest {
                         }
                         assertEquals(expectedMotion, resolved.motionStyle)
                         val expectedBackground = when (effects) {
-                            ThemeEffectsLevel.OFF -> AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE)
+                            ThemeEffectsLevel.OFF -> AmbientBackground(if (id == WeatherThemeId.GLASS) AmbientBackgroundBase.TONAL_FIELD else AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE)
                             ThemeEffectsLevel.SUBTLE -> AmbientBackground(visual.backgroundBase, visual.backgroundOverlay, if (visual.backgroundOverlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.SUBTLE)
                             ThemeEffectsLevel.FULL -> AmbientBackground(visual.backgroundBase, visual.backgroundOverlay, if (visual.backgroundOverlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.FULL)
                         }
@@ -241,7 +243,8 @@ class ThemeResolverTest {
             val full = resolveTheme(id, effects = ThemeEffectsLevel.FULL).ambientBackground
             assertEquals(AmbientBackground(base, overlay, if (overlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.SUBTLE), subtle)
             assertEquals(AmbientBackground(base, overlay, if (overlay == AmbientBackgroundOverlay.NONE) AmbientBackgroundStrength.NONE else AmbientBackgroundStrength.FULL), full)
-            assertEquals(AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), resolveTheme(id, effects = ThemeEffectsLevel.OFF).ambientBackground)
+            val expectedOffBase = if (id == WeatherThemeId.GLASS) AmbientBackgroundBase.TONAL_FIELD else AmbientBackgroundBase.SOLID
+            assertEquals(AmbientBackground(expectedOffBase, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE), resolveTheme(id, effects = ThemeEffectsLevel.OFF).ambientBackground)
         }
     }
 

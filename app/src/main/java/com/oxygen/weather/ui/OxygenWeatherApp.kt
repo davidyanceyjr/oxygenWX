@@ -104,6 +104,7 @@ import com.oxygen.weather.ui.themeengine.ThemeCatalog
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.SurfaceStyle
 import com.oxygen.weather.ui.themeengine.components.ProductionBackdrop
+import com.oxygen.weather.ui.themeengine.components.GlassHomePage
 import com.oxygen.weather.ui.themeengine.components.ProductionDailyRow
 import com.oxygen.weather.ui.themeengine.components.ProductionInspectionMetricGroup
 import com.oxygen.weather.ui.themeengine.components.ProductionMetricTile
@@ -122,6 +123,13 @@ import kotlinx.coroutines.launch
 
 private enum class HomePage(val label: String) {
     NOW("Now"), HOURLY("Hourly"), DAILY("Daily"), DETAILS("Details")
+}
+
+private fun HomePage.glassBackgroundPage(): GlassHomePage = when (this) {
+    HomePage.NOW -> GlassHomePage.NOW
+    HomePage.HOURLY -> GlassHomePage.HOURLY
+    HomePage.DAILY -> GlassHomePage.DAILY
+    HomePage.DETAILS -> GlassHomePage.DETAILS
 }
 
 private enum class OfficialAlertRoute { HOME, SELECTION, MULTIPLE_DETAIL, SINGLE_DETAIL }
@@ -245,7 +253,14 @@ fun OxygenWeatherApp(
 
     CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
         MaterialTheme(typography = theme.typography) {
-            ProductionBackdrop(theme, Modifier.fillMaxSize(), onThemeForTests = onBackdropThemeForTests) {
+            ProductionBackdrop(
+                theme,
+                Modifier.fillMaxSize(),
+                homePage = if (!searchOpen && settingsRoute == SettingsRoute.HOME && alertRoute == OfficialAlertRoute.HOME) {
+                    HomePage.entries[pagerState.currentPage].glassBackgroundPage()
+                } else null,
+                onThemeForTests = onBackdropThemeForTests,
+            ) {
                 if (searchOpen && locationSearchCoordinator != null) {
                     LocationSearchRoute(
                         coordinator = locationSearchCoordinator,

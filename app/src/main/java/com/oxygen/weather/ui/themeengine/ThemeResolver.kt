@@ -45,7 +45,11 @@ fun resolveTheme(
         )
     }
     val ambientBackground = if (effects == ThemeEffectsLevel.OFF) {
-        AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE)
+        AmbientBackground(
+            base = if (themeId == WeatherThemeId.GLASS) visual.backgroundBase else AmbientBackgroundBase.SOLID,
+            overlay = AmbientBackgroundOverlay.NONE,
+            overlayStrength = AmbientBackgroundStrength.NONE,
+        )
     } else {
         AmbientBackground(
             base = visual.backgroundBase,

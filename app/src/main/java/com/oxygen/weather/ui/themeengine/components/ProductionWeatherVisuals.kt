@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.oxygen.weather.presentation.WeatherMarkCondition
 import com.oxygen.weather.ui.themeengine.AmbientBackgroundBase
@@ -27,6 +29,8 @@ import com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay
 import com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.WeatherMarkStyle
 import kotlin.math.cos
 import kotlin.math.sin
@@ -35,6 +39,50 @@ internal const val TERMINAL_SUBTLE_SCANLINE_ALPHA = 0.06f
 internal const val TERMINAL_FULL_SCANLINE_ALPHA = 0.10f
 internal const val TERMINAL_SUBTLE_SCANLINE_SPACING_DP = 8f
 internal const val TERMINAL_FULL_SCANLINE_SPACING_DP = 5f
+
+/** Semantic Home identity; background drawing never receives forecast or status data. */
+enum class GlassHomePage { NOW, HOURLY, DAILY, DETAILS }
+
+internal enum class MineralGeometry { DIAGONAL_SEAM, HORIZONTAL_STRATA, TERRACES, MICRO_ETCH }
+internal enum class MineralPaletteRole { CANVAS, ATMOSPHERE_TOP, ATMOSPHERE_BOTTOM, SURFACE, OUTLINE }
+
+internal data class MineralRecipe(
+    val geometry: MineralGeometry,
+    val strength: Float,
+    val grainAlpha: Float,
+    val flatOpaque: Boolean,
+    val roles: Set<MineralPaletteRole>,
+    val directional: Boolean,
+) {
+    fun horizontalFraction(leftToRightFraction: Float, direction: LayoutDirection): Float =
+        if (direction == LayoutDirection.Rtl && directional) 1f - leftToRightFraction else leftToRightFraction
+}
+
+internal fun mineralRecipe(page: GlassHomePage, theme: ResolvedTheme): MineralRecipe {
+    val geometry = when (page) {
+        GlassHomePage.NOW -> MineralGeometry.DIAGONAL_SEAM
+        GlassHomePage.HOURLY -> MineralGeometry.HORIZONTAL_STRATA
+        GlassHomePage.DAILY -> MineralGeometry.TERRACES
+        GlassHomePage.DETAILS -> MineralGeometry.MICRO_ETCH
+    }
+    val flat = theme.contrast == ContrastLevel.HIGH
+    val strength = if (flat) 0f else when (theme.effects) {
+        ThemeEffectsLevel.OFF -> 0.24f
+        ThemeEffectsLevel.SUBTLE -> 0.36f
+        ThemeEffectsLevel.FULL -> 0.54f
+    }
+    return MineralRecipe(
+        geometry = geometry,
+        strength = strength,
+        grainAlpha = if (flat) 0f else strength * if (page == GlassHomePage.DETAILS) 0.24f else 0.36f,
+        flatOpaque = flat,
+        roles = if (flat) setOf(MineralPaletteRole.CANVAS) else setOf(
+            MineralPaletteRole.CANVAS, MineralPaletteRole.ATMOSPHERE_TOP,
+            MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE,
+        ),
+        directional = page == GlassHomePage.NOW,
+    )
+}
 
 /** Decorative, provider-neutral condition mark. Weather meaning remains in adjacent supplied text. */
 @Composable
@@ -191,17 +239,22 @@ fun ProductionWeatherMark(
 fun ProductionBackdrop(
     theme: ResolvedTheme,
     modifier: Modifier = Modifier,
+    homePage: GlassHomePage? = null,
     onThemeForTests: ((ResolvedTheme) -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     SideEffect { onThemeForTests?.invoke(theme) }
+    val direction = LocalLayoutDirection.current
     Box(modifier.clipToBounds()) {
         Canvas(Modifier.fillMaxSize().clearAndSetSemantics { }) {
-            when (theme.ambientBackground.base) {
-                AmbientBackgroundBase.SOLID -> drawRect(theme.palette.canvas)
-                AmbientBackgroundBase.TONAL_FIELD -> drawReferenceSky(theme)
-            }
-            when (theme.ambientBackground.overlay) {
+            if (homePage != null && theme.definition.id == WeatherThemeId.GLASS) {
+                drawMineralPage(theme, mineralRecipe(homePage, theme), direction)
+            } else {
+                when (theme.ambientBackground.base) {
+                    AmbientBackgroundBase.SOLID -> drawRect(theme.palette.canvas)
+                    AmbientBackgroundBase.TONAL_FIELD -> drawReferenceSky(theme)
+                }
+                when (theme.ambientBackground.overlay) {
                 AmbientBackgroundOverlay.NONE -> Unit
                 AmbientBackgroundOverlay.SOFT_GLOW -> {
                     drawSoftAtmosphere(theme)
@@ -220,9 +273,81 @@ fun ProductionBackdrop(
                         AmbientBackgroundStrength.FULL -> drawScanLines(theme.palette.outline.copy(alpha = TERMINAL_FULL_SCANLINE_ALPHA), TERMINAL_FULL_SCANLINE_SPACING_DP.dp.toPx())
                     }
                 }
+                }
             }
         }
         content()
+    }
+}
+
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
+    theme: ResolvedTheme,
+    recipe: MineralRecipe,
+    direction: LayoutDirection,
+) {
+    val palette = theme.palette
+    drawRect(palette.canvas) // Opaque at every effects level, including None.
+    if (recipe.flatOpaque) return
+    val strength = recipe.strength
+    // All geometry is viewport relative and sits behind caller content.
+    when (recipe.geometry) {
+        MineralGeometry.DIAGONAL_SEAM -> {
+            val upperX = recipe.horizontalFraction(0.71f, direction) * size.width
+            val lowerX = recipe.horizontalFraction(0.38f, direction) * size.width
+            val field = Path().apply {
+                moveTo(upperX, 0f)
+                lineTo(lowerX, size.height)
+                lineTo(if (direction == LayoutDirection.Rtl) 0f else size.width, size.height)
+                lineTo(if (direction == LayoutDirection.Rtl) 0f else size.width, 0f)
+                close()
+            }
+            drawPath(field, palette.atmosphereBottom.copy(alpha = strength))
+            drawRect(
+                Brush.radialGradient(
+                    listOf(palette.atmosphereTop.copy(alpha = strength * 0.8f), Color.Transparent),
+                    center = Offset(recipe.horizontalFraction(0.16f, direction) * size.width, size.height * 0.12f),
+                    radius = size.maxDimension * 0.78f,
+                ),
+            )
+        }
+        MineralGeometry.HORIZONTAL_STRATA -> {
+            listOf(0.12f to 0.28f, 0.56f to 0.69f, 0.88f to 1f).forEachIndexed { index, (top, bottom) ->
+                drawRect(
+                    color = if (index % 2 == 0) palette.atmosphereBottom else palette.surface,
+                    topLeft = Offset(0f, size.height * top),
+                    size = androidx.compose.ui.geometry.Size(size.width, size.height * (bottom - top)),
+                    alpha = strength * 0.7f,
+                )
+            }
+        }
+        MineralGeometry.TERRACES -> {
+            listOf(0.09f to 0.17f, 0.33f to 0.39f, 0.70f to 0.77f, 0.91f to 1f).forEachIndexed { index, (top, bottom) ->
+                val inset = if (index % 2 == 0) 0.06f else 0.11f
+                drawRect(
+                    color = if (index % 2 == 0) palette.atmosphereBottom else palette.surface,
+                    topLeft = Offset(size.width * inset, size.height * top),
+                    size = androidx.compose.ui.geometry.Size(size.width * (1f - inset * 2f), size.height * (bottom - top)),
+                    alpha = strength * 0.63f,
+                )
+            }
+        }
+        MineralGeometry.MICRO_ETCH -> {
+            listOf(0.13f, 0.79f, 0.93f).forEach { y ->
+                drawLine(
+                    palette.surface.copy(alpha = strength * 0.42f),
+                    Offset(size.width * 0.07f, size.height * y),
+                    Offset(size.width * 0.93f, size.height * y),
+                    strokeWidth = 1.dp.toPx(),
+                )
+            }
+        }
+    }
+    // Sparse, deterministic embedded grain. No randomized state or recomposition changes.
+    val grain = palette.outline.copy(alpha = recipe.grainAlpha)
+    repeat(if (recipe.geometry == MineralGeometry.MICRO_ETCH) 25 else 42) { index ->
+        val x = ((index * 73 + 19) % 101) / 101f
+        val y = ((index * 47 + 31) % 103) / 103f
+        drawCircle(grain, radius = 0.55.dp.toPx(), center = Offset(size.width * x, size.height * y))
     }
 }
 
