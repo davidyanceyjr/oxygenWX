@@ -2,6 +2,7 @@ package com.oxygen.weather.ui.themeengine.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oxygen.weather.presentation.MetricGroupPresentation
@@ -29,9 +31,15 @@ fun ProductionSourceFreshnessPanel(
     updated: String,
     modifier: Modifier = Modifier,
     separateFacts: Boolean = false,
+    openPresentation: Boolean = false,
 ) {
     MaterialTheme(typography = theme.typography) {
-        if (separateFacts) {
+        if (openPresentation) {
+            Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                DetailFact(theme, "Source", source, separate = true)
+                DetailFact(theme, "Update time", updated, separate = true)
+            }
+        } else if (separateFacts) {
             Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap)) {
                 ProductionSectionSurface(theme, provenanceFactModifier(theme)) {
                     DetailFact(theme, "Source", source, separate = true)
@@ -72,10 +80,11 @@ fun ProductionInspectionMetricGroup(
     theme: ResolvedTheme,
     group: MetricGroupPresentation,
     modifier: Modifier = Modifier,
+    quietPresentation: Boolean = false,
 ) {
     if (group.metrics.isEmpty()) return
     MaterialTheme(typography = theme.typography) {
-        ProductionSectionSurface(theme, modifier.fillMaxWidth()) {
+        val content: @Composable ColumnScope.() -> Unit = {
             Column(
                 modifier = Modifier.semantics(mergeDescendants = true) {
                     contentDescription = group.spokenSummary
@@ -117,6 +126,11 @@ fun ProductionInspectionMetricGroup(
                     }
                 }
             }
+        }
+        if (quietPresentation) {
+            ProductionQuietSectionSurface(theme, modifier.fillMaxWidth().testTag("glass_full_details_group"), content = content)
+        } else {
+            ProductionSectionSurface(theme, modifier.fillMaxWidth(), content = content)
         }
     }
 }

@@ -120,13 +120,60 @@ class ProductionDailyDetailsCompositionTest {
     }
 
     @Test
+    fun glassFullDetailsKeepsOpenSourceHeaderAndOneQuietSurfacePerSemanticGroup() {
+        val themeResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ThemePreferenceWriteResult>()
+        val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
+        val effectResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.EffectsPreferenceWriteResult>()
+        compose.activityRule.scenario.onActivity {
+            themeResult.set(it.selectThemeForTests(WeatherThemeId.GLASS))
+            contrastResult.set(it.selectContrastForTests(com.oxygen.weather.ui.themeengine.ContrastLevel.STANDARD))
+            effectResult.set(it.selectEffectsForTests(com.oxygen.weather.ui.themeengine.ThemeEffectsLevel.FULL))
+        }
+        assertEquals(com.oxygen.weather.application.ThemePreferenceWriteResult.SUCCESS, themeResult.get())
+        assertEquals(com.oxygen.weather.application.ContrastPreferenceWriteResult.SUCCESS, contrastResult.get())
+        assertEquals(com.oxygen.weather.application.EffectsPreferenceWriteResult.SUCCESS, effectResult.get())
+        compose.waitForIdle()
+
+        openPage("Details", 4)
+        compose.onNodeWithTag("glass_full_details_source_context", useUnmergedTree = true).assertExists()
+        compose.onAllNodesWithTag("glass_full_details_group", useUnmergedTree = true)
+            .assertCountEquals(home.detailGroups.count { it.metrics.isNotEmpty() })
+        val groups = home.detailGroups.filter { it.metrics.isNotEmpty() }
+        groups.forEach { group ->
+            val heading = compose.onNodeWithText(group.title, substring = false, useUnmergedTree = true)
+            heading.assertExists()
+            assertTrue("${group.title} must remain a heading", heading.fetchSemanticsNode().config.contains(SemanticsProperties.Heading))
+            group.metrics.forEach { metric ->
+                assertText(metric.label)
+                assertText(metric.value)
+                metric.supporting?.let(::assertText)
+            }
+        }
+        assertPageTextOrder("Details", buildList {
+            add("Source")
+            add(home.sourceLine)
+            add("Update time")
+            add(home.updatedLine)
+            add(STATUS)
+            groups.forEach { group ->
+                add(group.title)
+                group.metrics.forEach { metric ->
+                    add(metric.label)
+                    add(metric.value)
+                    metric.supporting?.let(::add)
+                }
+            }
+        })
+    }
+
+    @Test
     fun detailsKeepSuppliedGroupAndMetricOrderUnderEveryTheme() {
-        var themeName = "Atmospheric"
         openPage("Details", 4)
         WeatherThemeId.entries.forEach { themeId ->
-            val nextTheme = ThemeCatalog.definition(themeId).displayName
-            selectTheme(themeName, themeId)
-            themeName = nextTheme
+            val result = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ThemePreferenceWriteResult>()
+            compose.activityRule.scenario.onActivity { result.set(it.selectThemeForTests(themeId)) }
+            assertEquals(com.oxygen.weather.application.ThemePreferenceWriteResult.SUCCESS, result.get())
+            compose.waitForIdle()
 
             assertText(home.sourceLine)
             assertText(home.updatedLine)

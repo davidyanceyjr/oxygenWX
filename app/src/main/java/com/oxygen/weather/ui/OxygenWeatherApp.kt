@@ -1532,7 +1532,12 @@ private fun NowSupportingMeasurements(
 private data class SupportMeasurement(val label: String, val value: String, val supporting: String?)
 
 @Composable
-private fun StatusPanel(theme: ResolvedTheme, status: StatusPresentation, details: Boolean = false) {
+private fun StatusPanel(
+    theme: ResolvedTheme,
+    status: StatusPresentation,
+    details: Boolean = false,
+    openPresentation: Boolean = false,
+) {
     val modifier = Modifier.fillMaxWidth().then(
         if (details && theme.surfaceStyle == SurfaceStyle.MINIMAL) {
             Modifier.drawBehind {
@@ -1545,7 +1550,7 @@ private fun StatusPanel(theme: ResolvedTheme, status: StatusPresentation, detail
             }
         } else Modifier,
     )
-    ProductionSectionSurface(theme, modifier) {
+    val content: @Composable ColumnScope.() -> Unit = {
         if (details) {
             Text(
                 "Status",
@@ -1561,6 +1566,7 @@ private fun StatusPanel(theme: ResolvedTheme, status: StatusPresentation, detail
             color = theme.palette.content,
         )
     }
+    if (openPresentation) Column(modifier, content = content) else ProductionSectionSurface(theme, modifier, content = content)
 }
 
 @Composable
@@ -1936,18 +1942,24 @@ private fun DetailsPage(
     theme: ResolvedTheme,
     forecastContext: ForecastContextPresentation?,
 ) {
+    val glassFullDetails = theme.definition.id == WeatherThemeId.GLASS && theme.effects == ThemeEffectsLevel.FULL
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
             .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),
         verticalArrangement = Arrangement.spacedBy(theme.geometry.pageStackGap),
     ) {
         ProductionPageHeader(theme, "Details", "")
-        if (forecastContext != null) ProductionForecastContext(theme, forecastContext)
+        if (forecastContext != null) ProductionForecastContext(theme, forecastContext, openPresentation = glassFullDetails)
         else {
-            ProductionSourceFreshnessPanel(theme, home.sourceLine, home.updatedLine, separateFacts = true)
-            StatusPanel(theme, status, details = true)
+            ProductionSourceFreshnessPanel(
+                theme, home.sourceLine, home.updatedLine,
+                modifier = if (glassFullDetails) Modifier.testTag("glass_full_details_source_context") else Modifier,
+                separateFacts = true,
+                openPresentation = glassFullDetails,
+            )
+            StatusPanel(theme, status, details = true, openPresentation = glassFullDetails)
         }
         home.detailGroups.filter { it.metrics.isNotEmpty() }
-            .forEach { ProductionInspectionMetricGroup(theme, it) }
+            .forEach { ProductionInspectionMetricGroup(theme, it, quietPresentation = glassFullDetails) }
     }
 }

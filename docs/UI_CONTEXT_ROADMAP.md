@@ -732,7 +732,7 @@ contrast, and None/Subtle leakage checks. The history and evidence are
 `.codex/test-artifacts/189-finish-static-full-daily/`. Four-page Static Full
 acceptance, TalkBack traversal, and the full-suite session remain unclaimed.
 
-**SQ.8 — Finish static Full Details — PLANNED**
+**SQ.8 — Finish static Full Details — DONE (CYCLE 191)**
 
 - **Boundary:** apply approved quiet Details composition and micro-etch.
   Preserve source, valid/update times, freshness, unavailable states, and
@@ -741,6 +741,17 @@ acceptance, TalkBack traversal, and the full-suite session remain unclaimed.
 - **Exit:** focused presentation/semantics checks and installed available and
   missing-field, compact, and large-font review pass SQ.2's Details criteria.
 - **Evidence:** focused results and installed Details captures.
+
+Cycle 190 implemented the Glass Full Details composition and passed its
+focused checks. Cycle 191 resolved the remaining installed missing-field
+criterion using the existing debug-only `demo_sparse_partial_horizon_v1`
+fixture through the actual production mapping and Activity path; no fixture or
+production code was changed. Available-state compact and large-font evidence
+remains in `.codex/test-artifacts/190-finish-static-full-details/`; installed
+sparse-state captures and visual review are in
+`.codex/test-artifacts/191-capture-installed-sparse-details/`. Cycle records
+are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
+`.codex/history/2026-10-14-191-capture-installed-sparse-details.md`.
 
 **SQ.9 — Complete and accept four-page static Full — PLANNED**
 
@@ -790,12 +801,16 @@ acceptance, TalkBack traversal, and the full-suite session remain unclaimed.
 **SQ.13 — Reconcile appearance switching — PLANNED**
 
 - **Boundary:** address Glass-specific resolver and Settings issues found when
-  switching Full/Subtle/None, contrast, and reduced motion. Do not rewrite
-  saved choices or trigger a weather refetch.
+  switching Full/Subtle/None, contrast, and reduced motion. Update the
+  user-facing theme chooser label from “Glass” to “Smoked Quartz” to name the
+  replacement design; retain `WeatherThemeId.GLASS` and its saved preference
+  identity. Do not rewrite saved choices or trigger a weather refetch.
 - **Dependencies:** SQ.12.
-- **Exit:** focused resolver, persistence, and no-refetch checks pass; installed
-  switching, Settings return, and restart preserve effective and saved states.
-- **Evidence:** state-transition matrix, checks, and installed recordings.
+- **Exit:** focused resolver, persistence, display-label, and no-refetch checks
+  pass; installed switching, chooser naming, Settings return, and restart
+  preserve effective and saved states.
+- **Evidence:** state-transition matrix, display-label checks, and installed
+  recordings.
 
 **SQ.14 — Verify static cross-page interactions — PLANNED**
 

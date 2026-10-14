@@ -2,6 +2,7 @@ package com.oxygen.weather.ui.themeengine.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.oxygen.weather.presentation.ForecastContextPresentation
@@ -27,9 +29,10 @@ fun ProductionForecastContext(
     theme: ResolvedTheme,
     context: ForecastContextPresentation,
     modifier: Modifier = Modifier,
+    openPresentation: Boolean = false,
 ) {
     MaterialTheme(typography = theme.typography) {
-        ProductionSectionSurface(theme, modifier.fillMaxWidth()) {
+        val content: @Composable ColumnScope.() -> Unit = {
             Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
                 Text("Forecast context", modifier = Modifier.semantics { heading() },
                     style = theme.typography.titleMedium, color = theme.palette.primaryData)
@@ -67,6 +70,11 @@ fun ProductionForecastContext(
                 }
                 Fact(theme, "Status", context.status.visibleText, context.status.accessibilitySummary)
             }
+        }
+        if (openPresentation) {
+            Column(modifier.fillMaxWidth().testTag("glass_full_details_source_context"), content = content)
+        } else {
+            ProductionSectionSurface(theme, modifier.fillMaxWidth(), content = content)
         }
     }
 }

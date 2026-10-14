@@ -332,13 +332,49 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
             }
         }
         MineralGeometry.MICRO_ETCH -> {
-            listOf(0.13f, 0.79f, 0.93f).forEach { y ->
-                drawLine(
-                    palette.surface.copy(alpha = strength * 0.42f),
-                    Offset(size.width * 0.07f, size.height * y),
-                    Offset(size.width * 0.93f, size.height * y),
-                    strokeWidth = 1.dp.toPx(),
+            if (theme.effects == ThemeEffectsLevel.FULL) {
+                // A fine continuous etch stays at the outer margins, leaving the
+                // scrolling Details text field quiet and readable.
+                val edgeAlpha = strength * 0.24f
+                repeat(7) { index ->
+                    val inset = index * 0.004f
+                    drawLine(
+                        palette.surface.copy(alpha = edgeAlpha),
+                        Offset(size.width * (0.004f + inset), -size.height * 0.04f),
+                        Offset(size.width * (0.012f + inset), size.height * 1.04f),
+                        strokeWidth = 0.6.dp.toPx(),
+                    )
+                    drawLine(
+                        palette.surface.copy(alpha = edgeAlpha),
+                        Offset(size.width * (0.988f - inset), -size.height * 0.04f),
+                        Offset(size.width * (0.996f - inset), size.height * 1.04f),
+                        strokeWidth = 0.6.dp.toPx(),
+                    )
+                }
+                // The single quiet seam sits under the system status area, away
+                // from the Details content and its scroll range.
+                val seam = Path().apply {
+                    moveTo(size.width * 0.08f, size.height * 0.05f)
+                    cubicTo(
+                        size.width * 0.34f, size.height * 0.043f,
+                        size.width * 0.66f, size.height * 0.057f,
+                        size.width * 0.92f, size.height * 0.05f,
+                    )
+                }
+                drawPath(
+                    seam,
+                    palette.outline.copy(alpha = strength * 0.12f),
+                    style = androidx.compose.ui.graphics.drawscope.Stroke(width = 0.7.dp.toPx()),
                 )
+            } else {
+                listOf(0.13f, 0.79f, 0.93f).forEach { y ->
+                    drawLine(
+                        palette.surface.copy(alpha = strength * 0.42f),
+                        Offset(size.width * 0.07f, size.height * y),
+                        Offset(size.width * 0.93f, size.height * y),
+                        strokeWidth = 1.dp.toPx(),
+                    )
+                }
             }
         }
     }
