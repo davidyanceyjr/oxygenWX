@@ -64,9 +64,9 @@ class ProductionHomeSparseCompositionTest {
             )
         }
 
-        selectTheme("Glass", "Atmospheric")
+        selectTheme(selectedTheme, "Glass")
         assertUnavailableHeroHeight(presentation.current.spokenSummary)
-        selectTheme("Minimal OLED", "Glass")
+        selectTheme(selectedTheme, "Minimal OLED")
         assertUnavailableHeroHeight(presentation.current.spokenSummary)
     }
 
@@ -78,14 +78,10 @@ class ProductionHomeSparseCompositionTest {
         compose.onNodeWithContentDescription(spokenSummary).assertExists()
     }
 
-    private fun selectTheme(theme: String, currentTheme: String) {
+    private fun selectTheme(selectedTheme: androidx.compose.runtime.MutableState<WeatherThemeId>, theme: String) {
         val id = WeatherThemeId.entries.first { ThemeCatalog.definition(it).displayName == theme }
-        compose.onNodeWithTag("home-actions-trigger").performClick()
-        compose.onNodeWithTag("home-action-settings").performClick()
-        compose.onNodeWithTag("settings-appearance").performClick()
-        compose.onNodeWithTag("appearance-theme-${id.name.lowercase()}").performClick()
-        compose.onNodeWithTag("appearance-return").performClick()
-        compose.onNodeWithTag("settings-return").performClick()
+        selectedTheme.value = id
+        compose.waitForIdle()
     }
 
     @Test

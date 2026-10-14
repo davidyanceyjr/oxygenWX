@@ -1,6 +1,9 @@
 package com.oxygen.weather.ui
 
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.WeatherThemeId
+import com.oxygen.weather.ui.themeengine.ContrastLevel
+import com.oxygen.weather.presentation.UnitPreset
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertHasNoClickAction
@@ -130,12 +133,32 @@ class ProductionOfficialAlertSummaryFlowTest {
 
     @Test
     fun showsOneSourceSuppliedAlertWithoutChangingForecastResult() {
+        val themeResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ThemePreferenceWriteResult>()
+        val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
+        val effectsResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.EffectsPreferenceWriteResult>()
+        val unitsResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.UnitPresetWriteResult>()
+        compose.activityRule.scenario.onActivity {
+            themeResult.set(it.selectThemeForTests(WeatherThemeId.GLASS))
+            contrastResult.set(it.selectContrastForTests(ContrastLevel.STANDARD))
+            effectsResult.set(it.selectEffectsForTests(ThemeEffectsLevel.FULL))
+            unitsResult.set(it.selectUnitPreset(UnitPreset.METRIC))
+        }
+        assertEquals(com.oxygen.weather.application.ThemePreferenceWriteResult.SUCCESS, themeResult.get())
+        assertEquals(com.oxygen.weather.application.ContrastPreferenceWriteResult.SUCCESS, contrastResult.get())
+        assertEquals(com.oxygen.weather.application.EffectsPreferenceWriteResult.SUCCESS, effectsResult.get())
+        assertEquals(com.oxygen.weather.application.UnitPresetWriteResult.SUCCESS, unitsResult.get())
+        LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.FULL
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.onNodeWithTag("now-supporting-group", useUnmergedTree = true).assertExists()
+
         alertTransport = NwsTransport { oneAlert }
         selectTestLocation()
         awaitSummary("Official alert: Tornado Warning. Severity: Severe.")
         assertForecastUnaffected()
         val state = finalAlertState()
         assertTrue(state is OfficialAlertState.Supported && state.alerts.single().eventName == "Tornado Warning")
+        compose.onNodeWithTag("official-alert-summary").performScrollTo().assertIsDisplayed()
         captureSettled("one-alert")
     }
 

@@ -12,6 +12,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -36,6 +37,9 @@ import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.MainActivity
 import com.oxygen.weather.LocationSearchTestHooks
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.ContrastLevel
+import com.oxygen.weather.presentation.UnitPreset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -130,6 +134,54 @@ class ProductionHomeCompositionTest {
             assertTextPresent("Status")
             assertTextPresent(STATUS)
         }
+    }
+
+    @Test
+    fun glassFullNowKeepsOneSupportingGroupAndFactSemantics() {
+        val home = presentation
+        selectTheme(WeatherThemeId.GLASS)
+        val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
+        val unitResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.UnitPresetWriteResult>()
+        val effectResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.EffectsPreferenceWriteResult>()
+        compose.activityRule.scenario.onActivity {
+            contrastResult.set(it.selectContrastForTests(ContrastLevel.STANDARD))
+            effectResult.set(it.selectEffectsForTests(ThemeEffectsLevel.FULL))
+            unitResult.set(it.selectUnitPreset(UnitPreset.METRIC))
+        }
+        assertEquals(com.oxygen.weather.application.ContrastPreferenceWriteResult.SUCCESS, contrastResult.get())
+        assertEquals(com.oxygen.weather.application.EffectsPreferenceWriteResult.SUCCESS, effectResult.get())
+        assertEquals(com.oxygen.weather.application.UnitPresetWriteResult.SUCCESS, unitResult.get())
+        compose.waitForIdle()
+
+        assertPageIdentity("Now")
+        compose.onAllNodesWithTag("now-supporting-group", useUnmergedTree = true).assertCountEquals(1)
+        val group = compose.onNodeWithTag("now-supporting-group", useUnmergedTree = true)
+            .fetchSemanticsNode().boundsInRoot
+        listOf(
+            "Humidity" to home.current.humidity,
+            "Dew point" to home.current.dewPoint,
+            "Precipitation" to home.current.precipitationHeadline,
+            "Wind" to home.current.windHeadline,
+        ).forEach { (label, value) ->
+            assertTextPresent(label)
+            assertTextPresent(value)
+            listOf(label, value).forEach { text ->
+                val bounds = compose.onNodeWithText(text, substring = false, useUnmergedTree = true)
+                    .fetchSemanticsNode().boundsInRoot
+                assertTrue(
+                    "$text should be inside the single Now supporting group",
+                    bounds.left >= group.left && bounds.top >= group.top &&
+                        bounds.right <= group.right && bounds.bottom <= group.bottom,
+                )
+            }
+        }
+        assertTextPresent(home.current.temperature)
+        assertTextPresent(home.current.condition)
+        assertTextPresent("Feels ${home.current.apparent}")
+        compose.onNodeWithContentDescription(home.current.spokenSummary).assertExists()
+        assertTextPresent(home.sourceLine)
+        assertTextPresent(home.updatedLine)
+        assertTextPresent(STATUS)
     }
 
     @Test

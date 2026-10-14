@@ -111,6 +111,7 @@ import com.oxygen.weather.ui.themeengine.components.ProductionMetricTile
 import com.oxygen.weather.ui.themeengine.components.ProductionPageHeader
 import com.oxygen.weather.ui.themeengine.components.ProductionQuietSectionSurface
 import com.oxygen.weather.ui.themeengine.components.ProductionSectionSurface
+import com.oxygen.weather.ui.themeengine.components.ProductionNowSupportingSurface
 import com.oxygen.weather.ui.themeengine.components.ProductionSourceFreshnessPanel
 import com.oxygen.weather.ui.themeengine.components.ProductionHourlyEntry
 import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
@@ -1264,8 +1265,10 @@ private fun NowPage(
             if (theme.definition.id == WeatherThemeId.GLASS) 12.dp else layout.pageStackGap,
         ),
     ) {
-        NowHero(theme, current)
-        NowSupportingMeasurements(theme, current)
+        val staticFullGlass = theme.definition.id == WeatherThemeId.GLASS &&
+            theme.effects == ThemeEffectsLevel.FULL
+        NowHero(theme, current, openPrimaryField = staticFullGlass)
+        NowSupportingMeasurements(theme, current, grouped = staticFullGlass)
         officialAlertSummary?.let { summary ->
             ProductionQuietSectionSurface(
                 theme,
@@ -1366,7 +1369,11 @@ private fun AlertDetailField(theme: ResolvedTheme, label: String, value: String)
 }
 
 @Composable
-private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentation.CurrentPresentation) {
+private fun NowHero(
+    theme: ResolvedTheme,
+    current: com.oxygen.weather.presentation.CurrentPresentation,
+    openPrimaryField: Boolean = false,
+) {
     val heroMaxWidth = when (theme.definition.id) {
         WeatherThemeId.GLASS -> 325.dp
         WeatherThemeId.INSTRUMENT -> 338.dp
@@ -1398,11 +1405,16 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
                     )
                 }
                 current.conditionIdentity?.takeIf { theme.effects != ThemeEffectsLevel.OFF }?.let {
-                    Box(Modifier.testTag("now-condition-mark"), contentAlignment = Alignment.Center) {
+                    Box(
+                        Modifier.testTag("now-condition-mark").then(
+                            if (openPrimaryField) Modifier.clearAndSetSemantics {} else Modifier,
+                        ),
+                        contentAlignment = Alignment.Center,
+                    ) {
                         ProductionWeatherMark(
                             theme,
                             it,
-                            Modifier.size(64.dp),
+                            Modifier.size(if (openPrimaryField) 48.dp else 64.dp),
                             accentAllStrokes = theme.definition.id in setOf(
                                 WeatherThemeId.GLASS,
                                 WeatherThemeId.INSTRUMENT,
@@ -1418,20 +1430,27 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
                 color = theme.palette.secondaryData,
             )
         }
-        when (theme.definition.id) {
-            WeatherThemeId.ATMOSPHERIC -> Column(
+        when {
+            openPrimaryField -> Column(
+                Modifier.widthIn(max = heroMaxWidth).fillMaxWidth()
+                    .heightIn(min = 194.dp)
+                    .padding(start = 24.dp, end = 12.dp, top = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
+                content = heroContent,
+            )
+            theme.definition.id == WeatherThemeId.ATMOSPHERIC -> Column(
                 Modifier.widthIn(max = heroMaxWidth).fillMaxWidth()
                     .padding(start = 32.dp, end = 16.dp, top = theme.geometry.panelInset),
                 verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
                 content = heroContent,
             )
-            WeatherThemeId.MINIMAL_OLED -> Column(
+            theme.definition.id == WeatherThemeId.MINIMAL_OLED -> Column(
                 Modifier.widthIn(max = heroMaxWidth).fillMaxWidth()
                     .padding(start = 40.dp, end = 16.dp, top = theme.geometry.panelInset),
                 verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
                 content = heroContent,
             )
-            WeatherThemeId.TERMINAL -> Column(
+            theme.definition.id == WeatherThemeId.TERMINAL -> Column(
                 Modifier.widthIn(max = heroMaxWidth).fillMaxWidth()
                     .padding(start = 32.dp, end = 16.dp, top = theme.geometry.panelInset),
                 verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
@@ -1455,6 +1474,7 @@ private fun NowHero(theme: ResolvedTheme, current: com.oxygen.weather.presentati
 private fun NowSupportingMeasurements(
     theme: ResolvedTheme,
     current: com.oxygen.weather.presentation.CurrentPresentation,
+    grouped: Boolean = false,
 ) {
     val measurements = listOf(
         SupportMeasurement("Humidity", current.humidity, null),
@@ -1465,25 +1485,46 @@ private fun NowSupportingMeasurements(
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         val twoColumns = (maxWidth - theme.geometry.gridGap) / 2 >= 144.dp
         val rows = if (twoColumns) measurements.chunked(2) else measurements.map(::listOf)
-        Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+        val measurementsContent: @Composable ColumnScope.() -> Unit = {
             rows.forEach { row ->
-                val equalHeightTiles = theme.definition.id in setOf(WeatherThemeId.GLASS, WeatherThemeId.INSTRUMENT)
                 Row(
-                    Modifier.fillMaxWidth().then(if (equalHeightTiles) Modifier.height(IntrinsicSize.Min) else Modifier),
+                    Modifier.fillMaxWidth().then(if (grouped) Modifier.height(IntrinsicSize.Min) else Modifier),
                     horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
                 ) {
                     row.forEach { item ->
-                        ProductionMetricTile(
-                            theme,
-                            item.label,
-                            item.value,
-                            item.supporting,
-                            Modifier.weight(1f).then(if (equalHeightTiles) Modifier.fillMaxHeight() else Modifier),
-                        )
+                        if (grouped) {
+                            Column(
+                                Modifier.weight(1f).then(if (twoColumns) Modifier.fillMaxHeight() else Modifier)
+                                    .testTag("now-supporting-fact-${item.label.lowercase().replace(' ', '-') }"),
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Text(item.label, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
+                                Text(item.value, style = theme.typography.titleMedium, color = theme.palette.primaryData)
+                                item.supporting?.let { Text(it, style = theme.typography.bodyMedium, color = theme.palette.secondaryData) }
+                            }
+                        } else {
+                            val equalHeightTiles = theme.definition.id in setOf(WeatherThemeId.GLASS, WeatherThemeId.INSTRUMENT)
+                            ProductionMetricTile(
+                                theme,
+                                item.label,
+                                item.value,
+                                item.supporting,
+                                Modifier.weight(1f).then(if (equalHeightTiles) Modifier.fillMaxHeight() else Modifier),
+                            )
+                        }
                     }
                     if (twoColumns && row.size == 1) Spacer(Modifier.weight(1f))
                 }
             }
+        }
+        if (grouped) {
+            ProductionNowSupportingSurface(
+                theme,
+                Modifier.fillMaxWidth().testTag("now-supporting-group"),
+                content = measurementsContent,
+            )
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = measurementsContent)
         }
     }
 }
