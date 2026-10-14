@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.oxygen.weather.presentation.MetricGroupPresentation
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.SurfaceStyle
+import com.oxygen.weather.ui.themeengine.ThemeCatalog
 
 /** Displays supplied provenance and update text as two separately named inspection facts. */
 @Composable
@@ -122,12 +123,16 @@ fun ProductionInspectionMetricGroup(
 
 @Composable
 private fun DetailFact(theme: ResolvedTheme, label: String, value: String, separate: Boolean) {
+    val baseValueStyle = theme.typography.bodyMedium.copy(fontSize = if (separate) 14.sp else 12.sp, lineHeight = if (separate) 20.sp else 18.sp)
+    val valueStyle = if (label == "Source" || label == "Update time") {
+        ThemeCatalog.sourceMetadataStyle(theme.definition.id, baseValueStyle)
+    } else baseValueStyle
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(label,
             style = theme.typography.labelMedium.copy(fontSize = if (separate) 14.sp else 12.sp, lineHeight = if (separate) 20.sp else 18.sp),
             color = theme.palette.secondaryData)
         Text(value,
-            style = theme.typography.bodyMedium.copy(fontSize = if (separate) 14.sp else 12.sp, lineHeight = if (separate) 20.sp else 18.sp),
+            style = valueStyle,
             color = theme.palette.content)
     }
 }

@@ -164,7 +164,7 @@ class ThemeCatalogConformanceTest(unittest.TestCase):
 
     def test_unsupported_palette_constructor_and_override_fail_with_context(self) -> None:
         original = self.kotlin.read_text(encoding="utf-8")
-        self.kotlin.write_text(original.replace('palette("0B1220"', 'palette(colorFromToken("0B1220")', 1), encoding="utf-8")
+        self.kotlin.write_text(original.replace('palette("0B1110"', 'palette(colorFromToken("0B1110")', 1), encoding="utf-8")
         errors = self.parity_errors()
         self.assertIn("ThemeCatalog.kt glass.palette argument 1", errors)
         self.kotlin.write_text(original.replace("gridGap = 10.dp", "gridGap = dimensionToken", 1), encoding="utf-8")

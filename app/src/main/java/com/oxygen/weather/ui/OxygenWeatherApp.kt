@@ -1514,7 +1514,8 @@ private fun HourlyProvenance(
     updatedLine: String,
     status: StatusPresentation,
 ) {
-    val textStyle = theme.typography.labelMedium.copy(fontSize = 12.sp, lineHeight = 18.sp)
+    val baseTextStyle = theme.typography.labelMedium.copy(fontSize = 12.sp, lineHeight = 18.sp)
+    val textStyle = ThemeCatalog.sourceMetadataStyle(theme.definition.id, baseTextStyle)
     val themeId = theme.definition.id
     val isFlat = themeId == WeatherThemeId.MINIMAL_OLED || themeId == WeatherThemeId.TERMINAL
     val lineGap = if (themeId == WeatherThemeId.ATMOSPHERIC) 10.dp else 7.dp
@@ -1526,7 +1527,7 @@ private fun HourlyProvenance(
         Text(
             status.visibleText,
             modifier = Modifier.semantics { contentDescription = status.accessibilitySummary },
-            style = textStyle,
+            style = baseTextStyle,
             color = theme.palette.secondaryData,
         )
     }
@@ -1569,7 +1570,8 @@ private fun NowProvenanceStatus(
     updatedLine: String,
     status: StatusPresentation,
 ) {
-    val provenanceStyle = theme.typography.labelMedium.copy(fontSize = 12.sp, lineHeight = 16.sp)
+    val baseProvenanceStyle = theme.typography.labelMedium.copy(fontSize = 12.sp, lineHeight = 16.sp)
+    val provenanceStyle = ThemeCatalog.sourceMetadataStyle(theme.definition.id, baseProvenanceStyle)
     val provenanceContent: @Composable ColumnScope.() -> Unit = {
         Text(sourceLine, style = provenanceStyle, color = theme.palette.secondaryData)
         Spacer(Modifier.height(4.dp))
@@ -1578,7 +1580,7 @@ private fun NowProvenanceStatus(
         Text(
             status.visibleText,
             modifier = Modifier.semantics { contentDescription = status.accessibilitySummary },
-            style = provenanceStyle,
+            style = baseProvenanceStyle,
             color = theme.palette.secondaryData,
         )
     }

@@ -608,7 +608,7 @@ the owner's later waiver and accepts `redfin` in its place.
 - **Outcome:** cycle 183 incorporates this completed supplemental device record
   into the owner-approved SQ.1A matrix and records the separate Gate B decision.
 
-**SQ.2 — Approve the four-page static Full design source — NEXT (GATE B ADOPTED)**
+**SQ.2 — Approve the four-page static Full design source — DONE (OWNER-APPROVED SOURCE; GATE B ADOPTED)**
 
 - **Boundary:** review Now, Hourly, Daily, and Details compositions, page
   backgrounds, semantic palette and contrast pairs, typography, surfaces,
@@ -634,7 +634,15 @@ the owner's later waiver and accepts `redfin` in its place.
   motion window. Selection is not a performance pass. Motion-study timing remains subject to later design/lifecycle approval;
   see `.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`.
 
-**SQ.3 — Implement Glass palette and typography — PLANNED**
+Cycle 184 records the owner's approval of the exact source packet
+(SHA-256 `61eb5da7b1ce37e4104a35f971bc267818ed755e08386601100522ffa4c3639e`)
+and its page-by-page baseline comparison. This approves design-source
+decisions only; candidate runtime assets, installed Static Full acceptance,
+Gate B performance, and motion remain unapproved/unverified. See
+`.codex/history/2026-10-13-184-sq2-four-page-static-full-source.md` and
+`.codex/test-artifacts/184-sq2-four-page-static-full-source/`.
+
+**SQ.3 — Implement Glass palette and typography — DONE**
 
 - **Boundary:** implement SQ.2's semantic Glass colors and type roles in the
   resolver and directly affected styling. Preserve stored Glass selection and
@@ -644,6 +652,14 @@ the owner's later waiver and accepts `redfin` in its place.
   all four pages are readable at standard, large-font, and high-contrast
   settings. Record any cross-theme style effect.
 - **Evidence:** focused results and same-fixture installed captures.
+
+Cycle 185 implements the approved semantic role mapping and Glass type roles,
+with installed Now, Hourly, Daily, and Details captures at Standard 1.0,
+Standard 1.3, and High contrast 1.0. The API 37 emulator was 360×640 dp;
+large-font content continues vertically for browsing. This closes SQ.3 only;
+it is not Static Full acceptance, a TalkBack/RTL pass, or performance evidence.
+See `.codex/history/2026-10-13-185-implement-glass-palette-and-typography.md`
+and `.codex/test-artifacts/185-implement-glass-palette-and-typography/`.
 
 **SQ.4 — Build the static mineral background foundation — PLANNED**
 

@@ -1,11 +1,13 @@
 package com.oxygen.weather.ui.themeengine
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -22,8 +24,50 @@ class ThemeCatalogTest {
 
     @Test
     fun jsonOwnedActionPaletteRolesMatchApprovedCatalog() {
-        assertEquals(Color(0xFF0B1220), ThemeCatalog.glass.palette.actionContent)
+        assertEquals(Color(0xFF0B1110), ThemeCatalog.glass.palette.actionContent)
         assertEquals(Color(0xFFF5C451), ThemeCatalog.minimalOled.palette.action)
+    }
+
+    @Test
+    fun smokedQuartzUsesApprovedSemanticPaletteAndRoleFamilies() {
+        val palette = ThemeCatalog.glass.palette
+        assertEquals(Color(0xFF0B1110), palette.canvas)
+        assertEquals(Color(0xFF0B1110), palette.atmosphereTop)
+        assertEquals(Color(0xFF111916), palette.atmosphereBottom)
+        assertEquals(Color(0xFFD4E1D4), palette.atmosphereGlow)
+        assertEquals(Color(0xFF18211E), palette.surface)
+        assertEquals(Color(0xFF111916), palette.elevatedSurface)
+        assertEquals(Color(0xFFEAF2E9), palette.content)
+        assertEquals(Color(0xFFEAF2E9), palette.primaryData)
+        assertEquals(Color(0xFFA9BCB0), palette.secondaryData)
+        assertEquals(Color(0xFFA9BCB0), palette.outline)
+        assertEquals(Color(0xFFD4E1D4), palette.conditionAccent)
+        assertEquals(Color(0xFFA9BCB0), palette.precipitationAccent)
+        assertEquals(Color(0xFFEAF2E9), palette.warning)
+        assertEquals(Color(0xFFEAF2E9), palette.danger)
+        assertEquals(Color(0xFFC9DEC9), palette.action)
+        assertEquals(Color(0xFF0B1110), palette.actionContent)
+
+        val typography = ThemeCatalog.glass.typography
+        val prominentFamily = typography.displayLarge.fontFamily
+        val supportFamily = typography.bodyMedium.fontFamily
+        assertEquals(prominentFamily, typography.displayMedium.fontFamily)
+        assertEquals(prominentFamily, typography.headlineMedium.fontFamily)
+        assertEquals(prominentFamily, typography.titleMedium.fontFamily)
+        assertEquals(supportFamily, typography.bodyLarge.fontFamily)
+        assertEquals(supportFamily, typography.bodySmall.fontFamily)
+        assertEquals(supportFamily, typography.labelLarge.fontFamily)
+        assertEquals(supportFamily, typography.labelSmall.fontFamily)
+        assertNotEquals(prominentFamily, supportFamily)
+        assertEquals(56.sp, typography.displayLarge.fontSize)
+        assertEquals(20.sp, typography.headlineMedium.fontSize)
+        assertEquals(16.sp, typography.bodyMedium.fontSize)
+
+        val sample = TextStyle.Default
+        val glassMetadata = ThemeCatalog.sourceMetadataStyle(WeatherThemeId.GLASS, sample)
+        assertNotEquals(sample.fontFamily, glassMetadata.fontFamily)
+        assertEquals(sample, ThemeCatalog.sourceMetadataStyle(WeatherThemeId.TERMINAL, sample))
+        assertEquals(sample, ThemeCatalog.sourceMetadataStyle(WeatherThemeId.ATMOSPHERIC, sample))
     }
 
     @Test

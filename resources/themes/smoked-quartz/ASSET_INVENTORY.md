@@ -2,17 +2,16 @@
 
 **Product theme:** Glass
 **Art direction:** Smoked Quartz, with a mineral-strata material language
-**Status:** Design worksheet accepted for continued asset definition; the full
-theme package is not yet signed off.
+**Status:** Four-page source decisions owner-approved in cycle 184;
+all candidate assets remain unapproved for runtime use.
 **Worksheet:** [`asset-worksheet-v1.png`](asset-worksheet-v1.png) ·
 [`SVG source`](asset-worksheet-v1.svg)
 **Asset overview:** [`asset-pack-overview.png`](asset-pack-overview.png) ·
 [`SVG source`](asset-pack-overview.svg)
 
-This worksheet studies a Compose-native procedural background for the Now
-page. It demonstrates gradients, layered sediment curves, sparse grain,
-highlights, glass surfaces, a weather mark, palette, type direction, and a
-motion cue. It is a design mockup, not a screenshot of the installed app.
+The worksheet studies a Compose-native procedural background for Now. The
+four-page source is [`SOURCE.md`](SOURCE.md). The worksheet and overview remain
+design references, not screenshots of the installed app.
 
 ## Current concept decisions
 
@@ -28,17 +27,17 @@ motion cue. It is a design mockup, not a screenshot of the installed app.
 
 | Asset group | Current worksheet coverage | Remaining design work |
 | --- | --- | --- |
-| Page information layouts | Now page only | Define the visual recipe for Now, Hourly, Daily, and Details while keeping their existing content and order |
-| Palette | Initial semantic samples | Complete semantic roles, high contrast, disabled/status colors, and final contrast review |
-| Backgrounds and gradients | Four page-specific SVG art plates in [`backgrounds/`](backgrounds/) | Review per-page recipes, layer limits, fallback behavior, and None/Subtle/Full treatments |
-| Textures | Sediment curves and grain are part of background art; inclusion/glint overlays in [`decorations/`](decorations/) | Review texture vocabulary, density, opacity, and per-page use |
-| Glass surfaces | Main fact card and secondary cards in worksheet | Define the surface hierarchy across all four pages, menus, and controls |
-| Weather marks | Six matching SVG candidates in [`weather-marks/`](weather-marks/) | Review style, supported condition coverage, and fallback rules |
-| Functional icons | Sample controls on overview; existing app controls remain the semantic reference | Review the existing navigation/action inventory without changing its meaning |
-| Typography | Existing Fira Sans and Noto Sans family files and licenses referenced in [`typography/FONT_ASSETS.md`](typography/FONT_ASSETS.md) | Confirm roles, scaling, localization, and whether the current bundled faces are approved |
-| Imagery | None; procedural/vector direction | Confirm whether any authored images are needed; record “None” when native drawing is sufficient |
-| Animation | Three-frame seam-glint study and timing/lifecycle spec in [`motion/`](motion/) | Review trigger, duration/easing, lifecycle, reduced-motion behavior, and static Full first |
-| Accessibility and localization | Not fully specified on worksheet | Review large text, compact layout, high contrast, RTL, semantics, and controls |
+| Page information layouts | Four page recipes in [`SOURCE.md`](SOURCE.md) | Candidate source; owner disposition pending; installed recipe unverified |
+| Palette | Semantic source roles and proposed pairs in [`SOURCE.md`](SOURCE.md) | Candidate values only; measured contrast and runtime token review deferred to SQ.3 |
+| Backgrounds and gradients | Four SVG art plates in [`backgrounds/`](backgrounds/) | Candidate drawing references; level/layer policy in SOURCE; no runtime approval |
+| Textures | Grain and strata in backgrounds; inclusion/glint overlays in [`decorations/`](decorations/) | Base texture policy defined; separate overlays remain optional Full candidates and unapproved |
+| Glass surfaces | Worksheet examples; page hierarchy in SOURCE | Design-source proposal; implementation and contrast review deferred |
+| Weather marks | Six SVG candidates in [`weather-marks/`](weather-marks/) | Optional redundant decoration; omit in None and when unsupported/missing; unapproved |
+| Functional icons | Existing Home/page/window/action controls in app UI | Keep existing control icons, labels, semantics, and behavior; no replacement candidate |
+| Typography | Existing Fira Sans and Noto Sans assets in [`typography/FONT_ASSETS.md`](typography/FONT_ASSETS.md) | Proposed role pairing; files/licenses unchanged; owner review pending |
+| Imagery | None | No authored image required; native drawing direction is sufficient |
+| Animation | Three-frame seam-glint study and timing note in [`motion/`](motion/) | Draft and explicitly unapproved; excluded from SQ.2 and nonbinding |
+| Accessibility and localization | Compact, scale 1.3, RTL, High contrast, reduced motion, missing data in SOURCE | Source decisions only; installed states remain unverified |
 
 ## Effects intent to detail
 
@@ -48,25 +47,25 @@ motion cue. It is a design mockup, not a screenshot of the installed app.
 | Subtle | Restrained static smoked gradients, sediment texture, and optional decorative marks. Keep decoration behind the information. |
 | Full | Richer native lighting, layered strata, surface depth, and controlled motion after the static design is accepted. Keep data sharp and stationary. |
 
-These are design targets to refine against the repository effects contract, not
-implementation commitments. High contrast and reduced motion must remain
-independent overlays.
+See [`SOURCE.md`](SOURCE.md) for the adopted source proposal. The definitions
+are not implementation commitments until owner disposition. High contrast and
+reduced motion remain independent overlays.
 
 ## Complete-sheet checklist
 
-- [ ] Now, Hourly, Daily, and Details compositions
+- [x] Now, Hourly, Daily, and Details source compositions (owner review pending)
 - [x] Initial page-specific native-drawing background recipe studies (review pending)
 - [x] Six decorative weather mark candidates (review pending)
 - [x] Quartz inclusion and seam-glint vector studies
 - [x] Typeface candidates linked to existing bundled files and licenses
 - [x] Seam-glint timing and reduced-motion study
-- [ ] Final semantic palette and contrast pairs
-- [ ] Functional icon inventory
-- [ ] Image/artwork inventory or explicit “None” decision
-- [ ] Final None, Subtle, and Full appearance definitions
-- [ ] Motion and lifecycle approval
-- [ ] Compact, large-text, RTL, and high-contrast review
-- [ ] Owner review record and final asset manifest
+- [x] Proposed semantic palette roles and contrast pairs (numeric contrast still unverified)
+- [x] Existing functional control/icon inventory
+- [x] Image/artwork inventory: None required
+- [x] None, Subtle, and Static Full source definitions
+- [ ] Motion and lifecycle approval (out of scope; motion remains draft)
+- [x] Compact, large-text, RTL, high-contrast, reduced-motion, and missing-data source review
+- [ ] Owner review record and final asset manifest (pending disposition)
 
 Use [`../THEME_ASSET_TEMPLATE.md`](../THEME_ASSET_TEMPLATE.md) as the shared
 full inventory when continuing this design or starting one for another theme.

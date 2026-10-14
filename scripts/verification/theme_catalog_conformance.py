@@ -383,19 +383,20 @@ def _parse_theme(theme_id: str, block: str, helper_defaults: dict[str, dict[str,
     # args[3] is runtime typography and is intentionally outside JSON parity.
     geom = _geometry_values(theme_id, args[4], helper_defaults)
     visual = _call(args[5], _mask_comments(args[5]), args[5], "ThemeVisualLanguage", f"{context}.visualLanguage")
-    if len(visual) != 8: raise KotlinSourceError(f"{context}.visualLanguage: expected eight arguments, found {len(visual)}")
+    if len(visual) != 9: raise KotlinSourceError(f"{context}.visualLanguage: expected nine arguments, found {len(visual)}")
     enums = []
-    enum_types = ("BackdropStyle", "SurfaceStyle", "HeroStyle", "WeatherMarkStyle", "MotionStyle")
-    for raw, enum_type in zip(visual[:5], enum_types):
+    enum_types = ("AmbientBackgroundBase", "AmbientBackgroundOverlay", "SurfaceStyle", "HeroStyle", "WeatherMarkStyle", "MotionStyle")
+    for raw, enum_type in zip(visual[:6], enum_types):
         found = re.fullmatch(rf"{enum_type}\.([A-Z_]+)", raw.strip())
         if not found: raise KotlinSourceError(f"{context}.visualLanguage.{enum_type}: unsupported expression {raw!r}")
         enums.append(found.group(1))
-    boolean = visual[5].strip()
+    boolean = visual[6].strip()
     if boolean not in ("true", "false"): raise KotlinSourceError(f"{context}.visualLanguage.supportsFullMotion: unsupported boolean {boolean!r}")
-    opacity = _literal_number(visual[6], f"{context}.visualLanguage.panelOpacity", "f")
-    if visual[7].strip() != "1f": raise KotlinSourceError(f"{context}.visualLanguage.outlineOpacity: only approved literal 1f is supported")
+    opacity = _literal_number(visual[7], f"{context}.visualLanguage.panelOpacity", "f")
+    outline_opacity = _literal_number(visual[8], f"{context}.visualLanguage.outlineOpacity", "f")
+    if outline_opacity != 1.0: raise KotlinSourceError(f"{context}.visualLanguage.outlineOpacity: only approved literal 1f is supported")
     return {"identity": identity.group(1), "name": name.group(1), "palette": hexes, "geometry": geom,
-            "visual": {"backdrop": enums[0], "surface": enums[1], "weatherMarks": enums[3], "motion": enums[4],
+            "visual": {"backgroundBase": enums[0], "backgroundOverlay": enums[1], "surface": enums[2], "hero": enums[3], "weatherMarks": enums[4], "motion": enums[5],
                        "supportsFull": boolean == "true", "opacity": opacity}}
 
 
@@ -416,8 +417,10 @@ def validate_parity(root: Path, kotlin_path: Path, models_path: Path | None = No
     # palette(...) args map in this fixed, inventory-approved order.
     role_order = ("canvas", "atmosphereTop", "atmosphereBottom", "atmosphereGlow", "surface", "elevatedSurface", "content", "secondaryData", "outline", "conditionAccent", "precipitationAccent", "warning", "danger", "action", "actionContent")
     geometry_map = {"gutter": "pageGutter", "stack": "pageStackGap", "grid": "gridGap", "panel": "panelInset"}
-    enum_maps = {"atmosphere": "ATMOSPHERE", "glass_gradient": "GLASS_GRADIENT", "pure_black": "PURE_BLACK", "instrument_grid": "INSTRUMENT_GRID", "terminal_grid": "TERMINAL_GRID",
-                 "soft_translucent": "SOFT_TRANSLUCENT", "glass": "GLASS", "minimal": "MINIMAL", "instrument_panel": "INSTRUMENT_PANEL", "terminal_flat": "TERMINAL_FLAT",
+    background_maps = {"atmosphere": ("TONAL_FIELD", "SOFT_GLOW"), "glass_gradient": ("TONAL_FIELD", "SOFT_GLOW"),
+                       "pure_black": ("SOLID", "NONE"), "instrument_grid": ("TONAL_FIELD", "TECHNICAL_GRID"),
+                       "terminal_grid": ("SOLID", "SCAN_LINES")}
+    enum_maps = {"soft_translucent": "SOFT_TRANSLUCENT", "glass": "GLASS", "minimal": "MINIMAL", "instrument_panel": "INSTRUMENT_PANEL", "terminal_flat": "TERMINAL_FLAT",
                  "illustrative_line": "ILLUSTRATIVE_LINE", "soft_line": "SOFT_LINE", "minimal_line": "MINIMAL_LINE", "instrument_line": "INSTRUMENT_LINE", "terminal_glyph": "TERMINAL_GLYPH"}
     for theme_id in THEME_FILES:
         filename, data = THEME_FILES[theme_id], themes[theme_id]
@@ -437,7 +440,13 @@ def validate_parity(root: Path, kotlin_path: Path, models_path: Path | None = No
         for json_key, kotlin_key in geometry_map.items(): compare(f"$.spacingDp.{json_key}", float(data["spacingDp"][json_key]), actual["geometry"][kotlin_key])
         compare("$.motion.default", data["motion"]["default"].upper(), actual["visual"]["motion"])
         compare("$.motion.supportsFull", data["motion"]["supportsFull"], actual["visual"]["supportsFull"])
-        for json_key, actual_key in (("background", "backdrop"), ("surface", "surface"), ("weatherMarks", "weatherMarks")):
+        background = background_maps.get(manifest_row["background"])
+        if background is None:
+            errors.append(f"theme_manifest.json $.themes[].background: no closed Kotlin enum mapping for {manifest_row['background']!r}")
+        else:
+            compare("theme_manifest.json $.themes[].background.base", background[0], actual["visual"]["backgroundBase"])
+            compare("theme_manifest.json $.themes[].background.overlay", background[1], actual["visual"]["backgroundOverlay"])
+        for json_key, actual_key in (("surface", "surface"), ("weatherMarks", "weatherMarks")):
             mapped = enum_maps.get(manifest_row[json_key])
             if mapped is None: errors.append(f"theme_manifest.json $.themes[].{json_key}: no closed Kotlin enum mapping for {manifest_row[json_key]!r}")
             else: compare(f"theme_manifest.json $.themes[].{json_key}", mapped, actual["visual"][actual_key])

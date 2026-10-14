@@ -19,6 +19,7 @@ import com.oxygen.weather.presentation.PresentedDataOrigin
 import com.oxygen.weather.presentation.PresentedFreshness
 import com.oxygen.weather.presentation.PresentedRefreshOutcome
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
+import com.oxygen.weather.ui.themeengine.ThemeCatalog
 
 /** Renders supplied source and timing facts as visible, accessible text. */
 @Composable
@@ -72,12 +73,17 @@ fun ProductionForecastContext(
 
 @Composable
 private fun Fact(theme: ResolvedTheme, label: String, value: String, accessibilitySummary: String? = null) {
+    val baseValueStyle = theme.typography.bodyMedium.copy(fontSize = 16.sp)
+    val isSourceOrTime = label.contains("source", ignoreCase = true) ||
+        label.contains("time", ignoreCase = true) ||
+        label.contains("retrieved", ignoreCase = true)
+    val valueStyle = if (isSourceOrTime) ThemeCatalog.sourceMetadataStyle(theme.definition.id, baseValueStyle) else baseValueStyle
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(1.dp)) {
         Text(label, style = theme.typography.labelMedium.copy(fontSize = 13.sp), color = theme.palette.secondaryData)
         Text(
             value,
             modifier = accessibilitySummary?.let { summary -> Modifier.semantics { contentDescription = summary } } ?: Modifier,
-            style = theme.typography.bodyMedium.copy(fontSize = 16.sp),
+            style = valueStyle,
             color = theme.palette.content,
         )
     }

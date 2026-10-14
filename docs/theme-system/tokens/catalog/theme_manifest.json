@@ -18,9 +18,9 @@
       "intent": "Layered translucent surfaces with luminous cool accents",
       "background": "glass_gradient",
       "surface": "glass",
-      "typography": "clean_sans",
+      "typography": "fira_noto_sans_mono_metadata",
       "weatherMarks": "soft_line",
-      "accent": "#60A5FA"
+      "accent": "#C9DEC9"
     },
     {
       "id": "minimal_oled",

@@ -87,6 +87,28 @@ class ThemeResolverTest {
     }
 
     @Test
+    fun smokedQuartzStandardPaletteMeetsActualTextActionAndOutlinePairs() {
+        val theme = resolveTheme(WeatherThemeId.GLASS, ContrastLevel.STANDARD, ThemeEffectsLevel.SUBTLE)
+        textBackgrounds(theme).forEach { background ->
+            assertTrue("Glass primary text/background", wcagContrastRatio(theme.palette.content, background) >= 4.5)
+            assertTrue("Glass primary data/background", wcagContrastRatio(theme.palette.primaryData, background) >= 4.5)
+            assertTrue("Glass supporting text/background", wcagContrastRatio(theme.palette.secondaryData, background) >= 4.5)
+            assertTrue("Glass precipitation text/background", wcagContrastRatio(theme.palette.precipitationAccent, background) >= 4.5)
+        }
+        actionBackgrounds(theme).forEach { background ->
+            assertTrue("Glass action/background", wcagContrastRatio(theme.palette.action, background) >= 4.5)
+            assertTrue("Glass selected action/background", wcagContrastRatio(
+                theme.palette.action,
+                theme.palette.action.copy(alpha = 0.16f).compositeOver(background),
+            ) >= 4.5)
+        }
+        assertTrue("Glass action button text/fill", wcagContrastRatio(theme.palette.actionContent, theme.palette.action) >= 4.5)
+        outlineBackgrounds(theme).forEach { background ->
+            assertTrue("Glass outline/background", wcagContrastRatio(theme.palette.outline, background) >= 3.0)
+        }
+    }
+
+    @Test
     fun allSixtyCellsMeetActualHighContrastPairsAndOpacityRules() {
         var cells = 0
         var supportingPromotions = 0

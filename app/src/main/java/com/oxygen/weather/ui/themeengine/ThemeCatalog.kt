@@ -34,8 +34,8 @@ object ThemeCatalog {
     )
     val glass = ThemeDefinition(
         WeatherThemeId.GLASS, "Glass",
-        palette("0B1220", "122B58", "281A4A", "C084FC", "31527A", "3A5E88", "F8FAFF", "C9D7EC", "A6C8FF", "60A5FA", "22D3EE", "FBBF24", "FB7185", "60A5FA", "0B1220"),
-        referenceTypography(notoSans),
+        palette("0B1110", "0B1110", "111916", "D4E1D4", "18211E", "111916", "EAF2E9", "A9BCB0", "A9BCB0", "D4E1D4", "A9BCB0", "EAF2E9", "EAF2E9", "C9DEC9", "0B1110"),
+        smokedQuartzTypography(),
         spaciousGeometry(26.dp).copy(pageStackGap = 12.dp, gridGap = 10.dp, panelInset = 14.dp),
         ThemeVisualLanguage(AmbientBackgroundBase.TONAL_FIELD, AmbientBackgroundOverlay.SOFT_GLOW, SurfaceStyle.GLASS, HeroStyle.LAYERED, WeatherMarkStyle.SOFT_LINE, MotionStyle.SUBTLE, true, 0.42f, 1f),
     )
@@ -70,6 +70,10 @@ object ThemeCatalog {
     val all: List<ThemeDefinition> = listOf(atmospheric, glass, minimalOled, instrument, terminal)
     fun definition(id: WeatherThemeId): ThemeDefinition = all.single { it.id == id }
 
+    /** Use the bundled mono face only for Glass source/time values; other themes keep their styles. */
+    internal fun sourceMetadataStyle(themeId: WeatherThemeId, style: TextStyle): TextStyle =
+        if (themeId == WeatherThemeId.GLASS) style.copy(fontFamily = notoSansMono) else style
+
     private fun palette(
         canvas: String, top: String, bottom: String, glow: String, surface: String, elevated: String,
         content: String, secondary: String, outline: String, condition: String, precipitation: String,
@@ -92,4 +96,26 @@ object ThemeCatalog {
         bodyMedium = TextStyle(fontFamily = family, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp),
         labelMedium = TextStyle(fontFamily = family, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp),
     )
+
+    /** Smoked Quartz type roles retain the current type scale while assigning theme-specific families. */
+    private fun smokedQuartzTypography(): Typography {
+        val base = referenceTypography(notoSans)
+        return Typography(
+            displayLarge = base.displayLarge.copy(fontFamily = firaSans),
+            displayMedium = base.displayMedium.copy(fontFamily = firaSans),
+            displaySmall = base.displaySmall.copy(fontFamily = firaSans),
+            headlineLarge = base.headlineLarge.copy(fontFamily = firaSans),
+            headlineMedium = base.headlineMedium.copy(fontFamily = firaSans),
+            headlineSmall = base.headlineSmall.copy(fontFamily = firaSans),
+            titleLarge = base.titleLarge.copy(fontFamily = firaSans),
+            titleMedium = base.titleMedium.copy(fontFamily = firaSans),
+            titleSmall = base.titleSmall.copy(fontFamily = firaSans),
+            bodyLarge = base.bodyLarge.copy(fontFamily = notoSans),
+            bodyMedium = base.bodyMedium.copy(fontFamily = notoSans),
+            bodySmall = base.bodySmall.copy(fontFamily = notoSans),
+            labelLarge = base.labelLarge.copy(fontFamily = notoSans),
+            labelMedium = base.labelMedium.copy(fontFamily = notoSans),
+            labelSmall = base.labelSmall.copy(fontFamily = notoSans),
+        )
+    }
 }
