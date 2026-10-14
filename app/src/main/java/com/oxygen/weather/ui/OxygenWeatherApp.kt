@@ -1756,24 +1756,18 @@ private fun HourlyPage(
                 window.entries.take(6).forEach { entry -> SimpleHourlyEntry(theme, entry) }
             }
         } else {
-            BoxWithConstraints(Modifier.fillMaxWidth()) {
-                val twoColumns = (maxWidth - theme.geometry.gridGap) / 2 >= 144.dp
-                if (twoColumns) {
-                    Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
-                        window.entries.take(6).chunked(2).forEach { row ->
-                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
-                                row.forEach { entry ->
-                                    ProductionHourlyEntry(theme, entry, Modifier.weight(1f))
-                                }
-                                if (row.size == 1) Spacer(Modifier.weight(1f))
-                            }
-                        }
-                    }
-                } else {
-                    Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
-                        window.entries.take(6).forEach { entry -> ProductionHourlyEntry(theme, entry, Modifier.fillMaxWidth()) }
-                    }
+            val sharedGlassFullRows = theme.definition.id == WeatherThemeId.GLASS &&
+                theme.effects == ThemeEffectsLevel.FULL
+            if (sharedGlassFullRows) {
+                ProductionSectionSurface(
+                    theme,
+                    Modifier.fillMaxWidth().testTag("glass_full_hourly_group"),
+                    PaddingValues(theme.geometry.compactPanelInset),
+                ) {
+                    HourlyEntryGrid(theme, window.entries, sharedGlassFullRows = true)
                 }
+            } else {
+                HourlyEntryGrid(theme, window.entries)
             }
         }
         if (windows.isNotEmpty()) {
@@ -1787,6 +1781,45 @@ private fun HourlyPage(
             Text("Hourly forecast horizon is partial.", style = theme.typography.labelMedium, color = theme.palette.secondaryData)
         }
         HourlyProvenance(theme, home.sourceLine, home.updatedLine, status)
+    }
+}
+
+@Composable
+private fun HourlyEntryGrid(
+    theme: ResolvedTheme,
+    entries: List<com.oxygen.weather.presentation.HourlyEntryPresentation>,
+    sharedGlassFullRows: Boolean = false,
+) {
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        val twoColumns = (maxWidth - theme.geometry.gridGap) / 2 >= 144.dp
+        if (twoColumns) {
+            Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                entries.take(6).chunked(2).forEach { row ->
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                        row.forEach { entry ->
+                            ProductionHourlyEntry(
+                                theme,
+                                entry,
+                                Modifier.weight(1f),
+                                sharedGlassFullRow = sharedGlassFullRows,
+                            )
+                        }
+                        if (row.size == 1) Spacer(Modifier.weight(1f))
+                    }
+                }
+            }
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap)) {
+                entries.take(6).forEach { entry ->
+                    ProductionHourlyEntry(
+                        theme,
+                        entry,
+                        Modifier.fillMaxWidth(),
+                        sharedGlassFullRow = sharedGlassFullRows,
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -1816,10 +1849,22 @@ private fun DailyPage(
                     window.entries.take(5).forEach { entry -> SimpleDailyEntry(theme, entry) }
                 }
             } else {
+                val sharedGlassFullRows = theme.definition.id == WeatherThemeId.GLASS &&
+                    theme.effects == ThemeEffectsLevel.FULL
                 val rows: @Composable ColumnScope.() -> Unit = {
-                    window.entries.take(5).forEach { entry -> ProductionDailyRow(theme, entry) }
+                    window.entries.take(5).forEach { entry ->
+                        ProductionDailyRow(theme, entry, sharedGlassFullRow = sharedGlassFullRows)
+                    }
                 }
-                if (theme.definition.id == WeatherThemeId.ATMOSPHERIC) {
+                if (sharedGlassFullRows) {
+                    ProductionSectionSurface(
+                        theme,
+                        Modifier.fillMaxWidth().testTag("glass_full_daily_group"),
+                        PaddingValues(0.dp),
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = rows)
+                    }
+                } else if (theme.definition.id == WeatherThemeId.ATMOSPHERIC) {
                     ProductionSectionSurface(theme, Modifier.fillMaxWidth(), PaddingValues(0.dp), rows)
                 } else {
                     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = rows)

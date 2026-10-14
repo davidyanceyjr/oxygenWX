@@ -41,6 +41,13 @@ concrete regression risk that needs diagnosis. Installed visual review
 remains required for UI changes because automated tests do not establish visual
 acceptance.
 
+Use the Pixel 3 XL for every implementation-slice test and installed slice
+check. A separately planned full connected-suite session requires all
+registered devices: Pixel 3 XL, Pixel 5 (`redfin`), and Pixel Fold (`felix`).
+Do not run full-suite tests on every implementation slice. While each device
+is being used for testing, set its screen timeout to 0 or disabled and confirm
+**Stay Awake** is selected in Developer Options.
+
 ## Slice acceptance template
 
 Every visual task should identify three categories.

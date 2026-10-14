@@ -10,6 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
@@ -91,6 +92,31 @@ class ProductionDailyDetailsCompositionTest {
 
             compose.onNodeWithContentDescription("Settings, current theme: $themeName").assertExists()
         }
+    }
+
+    @Test
+    fun glassFullDailyKeepsOneSharedGroupAndExactWindows() {
+        val themeResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ThemePreferenceWriteResult>()
+        val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
+        val effectResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.EffectsPreferenceWriteResult>()
+        compose.activityRule.scenario.onActivity {
+            themeResult.set(it.selectThemeForTests(WeatherThemeId.GLASS))
+            contrastResult.set(it.selectContrastForTests(com.oxygen.weather.ui.themeengine.ContrastLevel.STANDARD))
+            effectResult.set(it.selectEffectsForTests(com.oxygen.weather.ui.themeengine.ThemeEffectsLevel.FULL))
+        }
+        assertEquals(com.oxygen.weather.application.ThemePreferenceWriteResult.SUCCESS, themeResult.get())
+        assertEquals(com.oxygen.weather.application.ContrastPreferenceWriteResult.SUCCESS, contrastResult.get())
+        assertEquals(com.oxygen.weather.application.EffectsPreferenceWriteResult.SUCCESS, effectResult.get())
+        compose.waitForIdle()
+
+        openPage("Daily", 3)
+        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(1)
+        assertDailyWindow(0)
+        dailyControl("Earlier unavailable").assertIsNotEnabled()
+        dailyControl("Later").performScrollTo().performClick()
+        assertDailyWindow(1)
+        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(1)
+        dailyControl("Later unavailable").assertIsNotEnabled()
     }
 
     @Test

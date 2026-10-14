@@ -314,6 +314,7 @@ fun ProductionHourlyEntry(
     theme: ResolvedTheme,
     entry: HourlyEntryPresentation,
     modifier: Modifier = Modifier,
+    sharedGlassFullRow: Boolean = false,
 ) {
     WithThemeTypography(theme) {
         val terminal = theme.surfaceStyle == SurfaceStyle.TERMINAL_FLAT
@@ -350,7 +351,7 @@ fun ProductionHourlyEntry(
                     )
                 }
             }
-            entry.conditionIdentity?.let { condition ->
+            if (!sharedGlassFullRow) entry.conditionIdentity?.let { condition ->
                 ProductionWeatherMark(
                     theme,
                     condition,
@@ -359,7 +360,13 @@ fun ProductionHourlyEntry(
             }
         }
         val entryModifier = modifier.clearAndSetSemantics { contentDescription = entry.spokenSummary }
-        if (flat) {
+        if (sharedGlassFullRow) {
+            Box(
+                entryModifier.fillMaxWidth().heightIn(min = 112.dp)
+                    .padding(horizontal = 8.dp, vertical = 10.dp),
+                content = textContent,
+            )
+        } else if (flat) {
             Box(
                 entryModifier.fillMaxWidth().heightIn(min = 112.dp).drawBehind {
                     drawLine(
@@ -391,6 +398,7 @@ fun ProductionDailyRow(
     theme: ResolvedTheme,
     entry: DailyEntryPresentation,
     modifier: Modifier = Modifier,
+    sharedGlassFullRow: Boolean = false,
 ) {
     WithThemeTypography(theme) {
         val rowModifier = modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = entry.spokenSummary }
@@ -404,8 +412,14 @@ fun ProductionDailyRow(
                 style = theme.typography.labelMedium.copy(fontSize = 14.sp, lineHeight = 20.sp),
                 color = theme.palette.secondaryData)
         }
-        when (theme.surfaceStyle) {
-            SurfaceStyle.SOFT_TRANSLUCENT -> Column(
+        when {
+            sharedGlassFullRow -> Column(
+                rowModifier.fillMaxWidth().heightIn(min = 126.dp)
+                    .padding(horizontal = theme.geometry.panelInset, vertical = theme.geometry.panelInset),
+                verticalArrangement = Arrangement.spacedBy(1.dp),
+                content = rowContent,
+            )
+            theme.surfaceStyle == SurfaceStyle.SOFT_TRANSLUCENT -> Column(
                 rowModifier.heightIn(min = 126.dp)
                     .drawBehind {
                         drawLine(theme.palette.outline, Offset(0f, size.height), Offset(size.width, size.height), 1.dp.toPx())
@@ -414,7 +428,7 @@ fun ProductionDailyRow(
                 verticalArrangement = Arrangement.spacedBy(1.dp),
                 content = rowContent,
             )
-            SurfaceStyle.MINIMAL, SurfaceStyle.TERMINAL_FLAT -> Column(
+            theme.surfaceStyle == SurfaceStyle.MINIMAL || theme.surfaceStyle == SurfaceStyle.TERMINAL_FLAT -> Column(
                 rowModifier.heightIn(min = 126.dp)
                     .drawBehind {
                         drawLine(theme.palette.outline, Offset(0f, size.height), Offset(size.width, size.height), 1.dp.toPx())
@@ -423,7 +437,7 @@ fun ProductionDailyRow(
                 verticalArrangement = Arrangement.spacedBy(1.dp),
                 content = rowContent,
             )
-            SurfaceStyle.GLASS, SurfaceStyle.INSTRUMENT_PANEL -> ProductionSectionSurface(
+            else -> ProductionSectionSurface(
                 theme,
                 rowModifier.heightIn(min = if (theme.surfaceStyle == SurfaceStyle.GLASS) 126.dp else 118.dp),
                 PaddingValues(theme.geometry.panelInset),

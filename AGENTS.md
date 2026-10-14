@@ -50,8 +50,9 @@ python scripts/dev.py check
 
 Testing policy:
 
-- Run tests that directly cover the changed behavior on each implementation slice.
-- Plan and run full relevant unit and connected-test suites in their own verification sessions, separate from implementation slices. Record their scope and evidence in their own cycle history.
+- Run tests that directly cover the changed behavior on each implementation slice, using the Pixel 3 XL for every slice test and installed slice check.
+- Plan and run full relevant unit and connected-test suites in their own verification sessions, separate from implementation slices. A full connected-suite session requires all registered devices: Pixel 3 XL, Pixel 5 (`redfin`), and Pixel Fold (`felix`). Record scope and evidence in that session's cycle history; do not run a full suite on every slice.
+- While a device is being used for testing, set its screen timeout to 0 or disabled and confirm **Stay Awake** is selected in Developer Options. This applies to the Pixel 3 XL during slice work and all three registered devices during a full connected-suite session.
 - Broaden a focused check only when its result exposes a concrete regression risk that needs diagnosis; this does not turn an implementation slice into a full-suite session.
 - Continue required non-test checks for the changed boundary, such as compilation, lint when sources require it, visual installed evidence for UI changes, and `git diff --check`.
 

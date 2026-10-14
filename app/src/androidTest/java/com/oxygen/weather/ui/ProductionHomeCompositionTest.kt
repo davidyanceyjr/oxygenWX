@@ -185,6 +185,57 @@ class ProductionHomeCompositionTest {
     }
 
     @Test
+    fun glassFullHourlyUsesOneOpenGroupAndPreservesWindowSemantics() {
+        val home = presentation
+        selectTheme(WeatherThemeId.GLASS)
+        val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
+        val effectResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.EffectsPreferenceWriteResult>()
+        val unitResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.UnitPresetWriteResult>()
+        compose.activityRule.scenario.onActivity {
+            contrastResult.set(it.selectContrastForTests(ContrastLevel.STANDARD))
+            effectResult.set(it.selectEffectsForTests(ThemeEffectsLevel.FULL))
+            unitResult.set(it.selectUnitPreset(UnitPreset.METRIC))
+        }
+        assertEquals(com.oxygen.weather.application.ContrastPreferenceWriteResult.SUCCESS, contrastResult.get())
+        assertEquals(com.oxygen.weather.application.EffectsPreferenceWriteResult.SUCCESS, effectResult.get())
+        assertEquals(com.oxygen.weather.application.UnitPresetWriteResult.SUCCESS, unitResult.get())
+        compose.waitForIdle()
+
+        selectPage("Hourly")
+        val firstWindow = home.hourlyWindows.first()
+        compose.onAllNodesWithTag("glass_full_hourly_group", useUnmergedTree = true).assertCountEquals(1)
+        compose.onNodeWithText(firstWindow.rangeLabel, substring = false, useUnmergedTree = true).assertExists()
+        val firstEntryBounds = firstWindow.entries.take(6).map { entry ->
+            compose.onAllNodesWithContentDescription(entry.spokenSummary, useUnmergedTree = true).assertCountEquals(1)
+            compose.onNodeWithContentDescription(entry.spokenSummary, useUnmergedTree = true)
+                .fetchSemanticsNode().boundsInRoot
+        }
+        assertTrue("first window entries should remain chronological", firstEntryBounds.zipWithNext().all { (first, next) ->
+            first.top < next.top || (first.top == next.top && first.left < next.left)
+        })
+        currentPageControl("Earlier unavailable").assertIsNotEnabled()
+        currentPageControl("Later").assertExists().performClick()
+        val nextWindow = home.hourlyWindows[1]
+        compose.onNodeWithText(nextWindow.rangeLabel, substring = false, useUnmergedTree = true).assertExists()
+        val nextEntryBounds = nextWindow.entries.take(6).map { entry ->
+            compose.onAllNodesWithContentDescription(entry.spokenSummary, useUnmergedTree = true).assertCountEquals(1)
+            compose.onNodeWithContentDescription(entry.spokenSummary, useUnmergedTree = true)
+                .fetchSemanticsNode().boundsInRoot
+        }
+        assertTrue("selected window entries should remain chronological", nextEntryBounds.zipWithNext().all { (first, next) ->
+            first.top < next.top || (first.top == next.top && first.left < next.left)
+        })
+        currentPageControl("Earlier").assertExists()
+        currentPageControl("Later").assertExists()
+        compose.onNodeWithContentDescription("Choose forecast date").performClick()
+        val dateJump = home.hourlyDateJumps.first { it.windowIndex > 0 }
+        compose.onNodeWithText(dateJump.label, substring = false).assertExists().performClick()
+        compose.onNodeWithText(home.hourlyWindows[dateJump.windowIndex].rangeLabel, substring = false, useUnmergedTree = true).assertExists()
+        assertTextPresent(home.sourceLine)
+        assertTextPresent(home.updatedLine)
+    }
+
+    @Test
     fun homeActionsAreOrderedReachableAndDismissWithoutMovingPages() {
         PAGE_LABELS.forEach { page ->
             selectPage(page)

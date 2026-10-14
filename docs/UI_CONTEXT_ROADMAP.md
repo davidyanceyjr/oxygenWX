@@ -661,7 +661,7 @@ it is not Static Full acceptance, a TalkBack/RTL pass, or performance evidence.
 See `.codex/history/2026-10-13-185-implement-glass-palette-and-typography.md`
 and `.codex/test-artifacts/185-implement-glass-palette-and-typography/`.
 
-**SQ.4 — Build the static mineral background foundation — PLANNED**
+**SQ.4 — Build the static mineral background foundation — DONE**
 
 - **Boundary:** draw approved opaque base fields, page-specific strata, and
   fine grain with native Compose primitives. Add no marks, separate overlays,
@@ -671,7 +671,12 @@ and `.codex/test-artifacts/185-implement-glass-palette-and-typography/`.
   focused renderer/resolver checks pass without a pager or data-flow change.
 - **Evidence:** four-page same-fixture captures, including a compact viewport.
 
-**SQ.5 — Finish static Full Now — PLANNED**
+Cycle 186 completed this boundary: focused renderer/resolver tests, debug
+build, contract/workflow/diff checks, and the installed API 37 four-page
+matrix are recorded in `.codex/history/2026-10-13-186-static-mineral-background-foundation.md`
+and `.codex/test-artifacts/186-static-mineral-background-foundation/`.
+
+**SQ.5 — Finish static Full Now — DONE**
 
 - **Boundary:** apply approved Full composition, restrained glass surfaces,
   depth, spacing, and lighting to Now. Preserve facts, condition text,
@@ -682,7 +687,13 @@ and `.codex/test-artifacts/185-implement-glass-palette-and-typography/`.
   four-page static Full acceptance.
 - **Evidence:** focused results and installed Now captures.
 
-**SQ.6 — Finish static Full Hourly — PLANNED**
+Cycle 187 completed this Now-only boundary with focused composition and sparse
+state checks, build/contract/lint/workflow/diff checks, and installed API 37
+captures. Its history and evidence are `.codex/history/2026-10-14-187-finish-static-full-now.md`
+and `.codex/test-artifacts/187-finish-static-full-now/`. This does not claim
+four-page Static Full acceptance or complete the remaining SQ branch.
+
+**SQ.6 — Finish static Full Hourly — DONE**
 
 - **Boundary:** apply approved Hourly composition and fine strata. Keep
   chronology, actual horizon, visible window controls, and the outer pager as
@@ -692,7 +703,18 @@ and `.codex/test-artifacts/185-implement-glass-palette-and-typography/`.
   compact, and large-font review pass SQ.2's Hourly criteria.
 - **Evidence:** focused results and installed Hourly captures.
 
-**SQ.7 — Finish static Full Daily — PLANNED**
+Cycle 188 implemented the Glass Full shared Hourly group and passed focused
+production-path checks. After an initial blocked close, the owner reconnected
+the Pixel Fold and the installed matrix was completed on Android 17/API 37:
+compact 360x640 dp first/later at font scales 1.0 and 1.3, RTL, High contrast,
+and None/Subtle leakage checks. The Fold was physically closed, so compact
+review used a size override on its cover display; the unfolded inner display
+was not reviewed. Android Lint's internal failure and the separately planned
+SQ.V full-suite boundary are recorded in the history. See
+`.codex/history/2026-10-14-188-finish-static-full-hourly.md` and
+`.codex/test-artifacts/188-finish-static-full-hourly/`.
+
+**SQ.7 — Finish static Full Daily — DONE**
 
 - **Boundary:** apply approved Daily composition and terraced mineral depth
   without encoding values in decoration. Keep day membership, chronology,
@@ -701,6 +723,14 @@ and `.codex/test-artifacts/185-implement-glass-palette-and-typography/`.
 - **Exit:** focused day/window checks and installed first/changed-window,
   compact, and large-font review pass SQ.2's Daily criteria.
 - **Evidence:** focused results and installed Daily captures.
+
+Cycle 189 completed the Glass Full Daily shared grouping and passed the focused
+production-path selectors, build, contract, workflow, lint, and diff checks.
+Installed Pixel 3 XL evidence covers first/later windows, large font, RTL, High
+contrast, and None/Subtle leakage checks. The history and evidence are
+`.codex/history/2026-10-14-189-finish-static-full-daily.md` and
+`.codex/test-artifacts/189-finish-static-full-daily/`. Four-page Static Full
+acceptance, TalkBack traversal, and the full-suite session remain unclaimed.
 
 **SQ.8 — Finish static Full Details — PLANNED**
 
