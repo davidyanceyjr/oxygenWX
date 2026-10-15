@@ -95,7 +95,7 @@ class ProductionDailyDetailsCompositionTest {
     }
 
     @Test
-    fun glassFullDailyKeepsOneSharedGroupAndExactWindows() {
+    fun glassFullDailyUsesOpenRowsAndExactWindowsAcrossLayouts() {
         val themeResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ThemePreferenceWriteResult>()
         val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
         val effectResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.EffectsPreferenceWriteResult>()
@@ -110,13 +110,35 @@ class ProductionDailyDetailsCompositionTest {
         compose.waitForIdle()
 
         openPage("Daily", 3)
-        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(1)
+        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(0)
         assertDailyWindow(0)
-        dailyControl("Earlier unavailable").assertIsNotEnabled()
+        val earlierUnavailable = dailyControl("Earlier unavailable").performScrollTo()
+        earlierUnavailable.assertIsNotEnabled()
+        assertControlHeight(earlierUnavailable.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
+        val later = dailyControl("Later").performScrollTo()
+        assertControlHeight(later.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
         dailyControl("Later").performScrollTo().performClick()
         assertDailyWindow(1)
-        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(1)
-        dailyControl("Later unavailable").assertIsNotEnabled()
+        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(0)
+        val earlier = dailyControl("Earlier").performScrollTo()
+        assertControlHeight(earlier.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
+        val laterUnavailable = dailyControl("Later unavailable").performScrollTo()
+        laterUnavailable.assertIsNotEnabled()
+        assertControlHeight(laterUnavailable.fetchSemanticsNode().boundsInRoot.height / compose.density.density)
+
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
+        compose.onNodeWithTag("settings-appearance").performScrollTo().performClick()
+        compose.onNodeWithTag("appearance-layout-simple").performScrollTo().performClick()
+        compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+        compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Choose Home page, current: Daily").assertExists()
+        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(0)
+        assertDailyWindow(1)
+        val simpleRows = collectDescriptions(compose.onNode(isRoot(), useUnmergedTree = true).fetchSemanticsNode())
+        val simplePositions = home.dailyWindows[1].entries.map { simpleRows.indexOf(it.spokenSummary) }
+        assertTrue("Simple Daily summaries missing or reordered: $simplePositions", simplePositions.all { it >= 0 } && simplePositions.zipWithNext().all { (a, b) -> a < b })
     }
 
     @Test
@@ -296,6 +318,7 @@ class ProductionDailyDetailsSparseCompositionTest {
         val derived = HistoricalSynthesis.derive(sparse)
         val mapped = HomePresentationMapper.map(sparse, derived)
         val first = mapped.dailyWindows.single().entries.single()
+        assertEquals(null, first.conditionIdentity)
         val home = mapped.copy(
             dailyWindows = listOf(mapped.dailyWindows.single(), DailyWindowPresentation("NO SUPPLIED DAYS", emptyList())),
             detailGroups = listOf(
@@ -309,6 +332,8 @@ class ProductionDailyDetailsSparseCompositionTest {
                 presentation = home,
                 status = StatusPresentation.of("Retained cached data; refresh failed."),
                 partialHorizons = ForecastHorizonPresentation(ForecastHorizonStatus.PARTIAL, ForecastHorizonStatus.PARTIAL),
+                selectedThemeId = WeatherThemeId.GLASS,
+                selectedEffects = com.oxygen.weather.ui.themeengine.ThemeEffectsLevel.FULL,
             )
         }
 
@@ -318,6 +343,7 @@ class ProductionDailyDetailsSparseCompositionTest {
         listOf(first.day, first.condition, "Low ${first.low} · High ${first.high}", first.precipitation, mapped.sourceLine, mapped.updatedLine,
             "Daily forecast horizon is partial.", "Retained cached data; refresh failed.").forEach(::assertText)
         compose.onAllNodesWithContentDescription(first.spokenSummary).assertCountEquals(1)
+        compose.onAllNodesWithTag("glass_full_daily_group", useUnmergedTree = true).assertCountEquals(0)
         dailyControl("Earlier unavailable").assertIsNotEnabled()
         dailyControl("Later").performScrollTo().performClick()
         assertText("NO SUPPLIED DAYS")

@@ -1854,15 +1854,7 @@ private fun DailyPage(
                         ProductionDailyRow(theme, entry, sharedGlassFullRow = sharedGlassFullRows)
                     }
                 }
-                if (sharedGlassFullRows) {
-                    ProductionSectionSurface(
-                        theme,
-                        Modifier.fillMaxWidth().testTag("glass_full_daily_group"),
-                        PaddingValues(0.dp),
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = rows)
-                    }
-                } else if (theme.definition.id == WeatherThemeId.ATMOSPHERIC) {
+                if (theme.definition.id == WeatherThemeId.ATMOSPHERIC) {
                     ProductionSectionSurface(theme, Modifier.fillMaxWidth(), PaddingValues(0.dp), rows)
                 } else {
                     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap), content = rows)
@@ -1922,6 +1914,8 @@ private fun SimpleHourlyEntry(theme: ResolvedTheme, entry: HourlyEntryPresentati
 /** Text-first Simple layout day. Every supplied fact remains visible and grouped by date. */
 @Composable
 private fun SimpleDailyEntry(theme: ResolvedTheme, entry: DailyEntryPresentation) {
+    val showGlassFullMark = theme.definition.id == WeatherThemeId.GLASS &&
+        theme.effects == ThemeEffectsLevel.FULL
     Column(
         Modifier.fillMaxWidth().heightIn(min = 88.dp)
             .drawBehind {
@@ -1932,7 +1926,12 @@ private fun SimpleDailyEntry(theme: ResolvedTheme, entry: DailyEntryPresentation
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Text(entry.day, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
-        Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+            if (showGlassFullMark) entry.conditionIdentity?.let { condition ->
+                ProductionWeatherMark(theme, condition, Modifier.size(18.dp))
+            }
+        }
         Text("Low ${entry.low} · High ${entry.high}", style = theme.typography.bodyMedium, color = theme.palette.primaryData)
         Text(entry.precipitation, style = theme.typography.labelMedium, color = theme.palette.secondaryData)
     }

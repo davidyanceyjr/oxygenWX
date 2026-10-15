@@ -44,6 +44,7 @@ import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.HeroStyle
 import com.oxygen.weather.ui.themeengine.SurfaceStyle
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.WeatherThemeId
 
 @Composable
 fun ProductionSectionSurface(
@@ -378,9 +379,16 @@ fun ProductionDailyRow(
 ) {
     WithThemeTypography(theme) {
         val rowModifier = modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = entry.spokenSummary }
+        val showGlassFullMark = theme.definition.id == WeatherThemeId.GLASS &&
+            theme.effects == ThemeEffectsLevel.FULL
         val rowContent: @Composable ColumnScope.() -> Unit = {
             Text(entry.day, style = theme.typography.labelMedium.copy(fontSize = 14.sp, lineHeight = 20.sp), color = theme.palette.secondaryData)
-            Text(entry.condition, style = theme.typography.bodyMedium.copy(fontSize = 16.sp, lineHeight = 24.sp), color = theme.palette.content)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(entry.condition, style = theme.typography.bodyMedium.copy(fontSize = 16.sp, lineHeight = 24.sp), color = theme.palette.content)
+                if (showGlassFullMark) entry.conditionIdentity?.let { condition ->
+                    ProductionWeatherMark(theme, condition, Modifier.size(18.dp))
+                }
+            }
             Text("Low ${entry.low} · High ${entry.high}",
                 style = theme.typography.bodyMedium.copy(fontSize = 16.sp, lineHeight = 22.sp),
                 color = theme.palette.content)

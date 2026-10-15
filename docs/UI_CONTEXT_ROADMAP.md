@@ -1002,10 +1002,10 @@ slice is `SQ.9A-FLOW-BACKDROP`.
 Cycle 199 completed this bounded Now change. The focused tests, build, lint,
 and installed target/preservation evidence passed on Pixel 5 under the owner's
 device direction. The attempted RTL state remained LTR and is UNVERIFIED; the
-Pixel 3 XL device condition was not exercised. The next eligible slice is
+Pixel 3 XL device condition was not exercised. The next eligible slice was
 `SQ.9A-FLOW-HOURLY`.
 
-**SQ.9A-FLOW-HOURLY — Add Hourly marks and unboxed grouping — PLANNED**
+**SQ.9A-FLOW-HOURLY — Add Hourly marks and unboxed grouping — DONE (CYCLE 200)**
 
 - **Requested outcome:** show each available hourly condition mark beside its
   readable condition text and remove Full-only enclosing surfaces used only
@@ -1039,6 +1039,14 @@ Pixel 3 XL device condition was not exercised. The next eligible slice is
 - **Exit:** available entries show their marks beside unchanged text, data-only
   enclosures are removed, functional controls remain usable, and focused tests
   plus installed evidence pass.
+
+Cycle 200 removed the Standard Glass Full Hourly data enclosure and added
+mapped decorative marks beside unchanged condition text in Standard and Simple
+layouts. Focused Pixel 5/API 34 UI and mapping tests, build, lint, workflow, and
+diff checks passed. The owner-directed Pixel 5 was used instead of Pixel 3 XL;
+the RTL attempt remained LTR, and installed Snow/null omission remains
+UNVERIFIED because the fixture has no such Hourly entry. See the cycle history
+for complete limitations. The next eligible slice is `SQ.9A-FLOW-DAILY`.
 
 **SQ.9A-FLOW-DAILY — Add Daily marks and unboxed grouping — PLANNED**
 
