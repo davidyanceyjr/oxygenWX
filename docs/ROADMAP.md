@@ -58,16 +58,27 @@ pages first, derive Subtle and the Smoked Quartz-specific None treatment, and
 consider seam-glint motion only after static installed acceptance, a static
 performance gate, and a separate motion lifecycle gate. Measure motion
 performance separately. The detailed roadmap defines ordered SQ.1–SQ.18
-boundaries, including SQ.17A/SQ.17B and the separate SQ.V full-suite session.
+boundaries, including the five SQ.9A-FLOW source, shared-background, and page
+integration slots inserted before SQ.9A, SQ.17A/SQ.17B, and the separate SQ.V
+full-suite session.
 Cycle 179 recorded the authority/baseline and owner decisions that were open at
 that time. In cycle 183, the owner selected Gate B, named the Pixel Fold as the
 required physical performance-evidence device, and made API 37 emulator
 evidence supplemental; the owner also waived Pixel 5a as a required
 readiness-matrix member and accepted Pixel 5 (`redfin`) in its place. SQ.1 and
-SQ.1A are complete under these decisions. SQ.2 is now the next eligible
-bounded plan. The remaining SQ entries are ordered roadmap slots, not active
-cycle plans. Gate selection is not a performance pass; measure only at SQ.10
-and later gates. Exact thresholds and scope are recorded in
+SQ.1A are complete under these decisions. SQ.2 through SQ.8 and the SQ.9
+implementation are complete; cycle 194 corrected the identified RTL and Glass
+High contrast defects. At the owner's direction, SQ.9A-NOWBG was inserted
+before the SQ.9A four-page acceptance review and completed in cycle 195. On
+2026-10-14, the owner approved a lower-opacity, weather-neutral Smoked Quartz
+flow-field background shared across all theme pages, with page-specific
+forecast marks and unboxed data grouping. Five ordered SQ.9A-FLOW slots were
+inserted before the existing SQ.9A four-page acceptance review;
+SQ.9A-FLOW-SOURCE and SQ.9A-FLOW-BACKDROP are complete in cycles 197 and 198.
+SQ.9A-FLOW-NOW is the next eligible outcome. The remaining SQ entries are
+ordered roadmap slots, not active cycle plans.
+Gate selection is not a performance pass; measure only at SQ.10 and later
+gates. Exact thresholds and scope are recorded in
 `.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`.
 Completed R5.4 Glass work is historical evidence, not acceptance of the
 replacement.

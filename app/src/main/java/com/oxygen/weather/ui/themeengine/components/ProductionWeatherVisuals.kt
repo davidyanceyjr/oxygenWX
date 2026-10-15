@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
@@ -29,10 +30,12 @@ import com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay
 import com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
+import com.oxygen.weather.ui.themeengine.ThemePalette
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.WeatherMarkStyle
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 internal const val TERMINAL_SUBTLE_SCANLINE_ALPHA = 0.06f
@@ -43,8 +46,8 @@ internal const val TERMINAL_FULL_SCANLINE_SPACING_DP = 5f
 /** Semantic Home identity; background drawing never receives forecast or status data. */
 enum class GlassHomePage { NOW, HOURLY, DAILY, DETAILS }
 
-internal enum class MineralGeometry { DIAGONAL_SEAM, HORIZONTAL_STRATA, TERRACES, MICRO_ETCH }
-internal enum class MineralPaletteRole { CANVAS, ATMOSPHERE_TOP, ATMOSPHERE_BOTTOM, SURFACE, OUTLINE }
+internal enum class MineralGeometry { DIAGONAL_SEAM, HORIZONTAL_STRATA, TERRACES, MICRO_ETCH, FLOW_FIELD }
+internal enum class MineralPaletteRole { CANVAS, ATMOSPHERE_TOP, ATMOSPHERE_BOTTOM, ATMOSPHERE_GLOW, SURFACE, OUTLINE }
 
 internal data class MineralRecipe(
     val geometry: MineralGeometry,
@@ -59,6 +62,7 @@ internal data class MineralRecipe(
 }
 
 internal fun mineralRecipe(page: GlassHomePage, theme: ResolvedTheme): MineralRecipe {
+    if (theme.effects == ThemeEffectsLevel.FULL) return sharedFullMineralRecipe(theme)
     val geometry = when (page) {
         GlassHomePage.NOW -> MineralGeometry.DIAGONAL_SEAM
         GlassHomePage.HOURLY -> MineralGeometry.HORIZONTAL_STRATA
@@ -69,7 +73,7 @@ internal fun mineralRecipe(page: GlassHomePage, theme: ResolvedTheme): MineralRe
     val strength = if (flat) 0f else when (theme.effects) {
         ThemeEffectsLevel.OFF -> 0.24f
         ThemeEffectsLevel.SUBTLE -> 0.36f
-        ThemeEffectsLevel.FULL -> 0.54f
+        ThemeEffectsLevel.FULL -> error("Full uses the page-independent recipe")
     }
     return MineralRecipe(
         geometry = geometry,
@@ -78,9 +82,28 @@ internal fun mineralRecipe(page: GlassHomePage, theme: ResolvedTheme): MineralRe
         flatOpaque = flat,
         roles = if (flat) setOf(MineralPaletteRole.CANVAS) else setOf(
             MineralPaletteRole.CANVAS, MineralPaletteRole.ATMOSPHERE_TOP,
-            MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE,
+            MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.ATMOSPHERE_GLOW,
+            MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE,
         ),
         directional = page == GlassHomePage.NOW,
+    )
+}
+
+/** Static Full is a separate page-independent recipe shared by all Smoked Quartz Home pages. */
+internal fun sharedFullMineralRecipe(theme: ResolvedTheme): MineralRecipe {
+    val flat = theme.contrast == ContrastLevel.HIGH
+    val strength = if (flat) 0f else 0.54f
+    return MineralRecipe(
+        geometry = MineralGeometry.FLOW_FIELD,
+        strength = strength,
+        grainAlpha = if (flat) 0f else strength * 0.25f,
+        flatOpaque = flat,
+        roles = if (flat) setOf(MineralPaletteRole.CANVAS) else setOf(
+            MineralPaletteRole.CANVAS, MineralPaletteRole.ATMOSPHERE_TOP,
+            MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.ATMOSPHERE_GLOW,
+            MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE,
+        ),
+        directional = false,
     )
 }
 
@@ -286,9 +309,21 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
     direction: LayoutDirection,
 ) {
     val palette = theme.palette
-    drawRect(palette.canvas) // Opaque at every effects level, including None.
-    if (recipe.flatOpaque) return
     val strength = recipe.strength
+    val contrastAdjustedNow = shouldAdjustMineralNowContrast(recipe.geometry, theme)
+    val darkSide = if (contrastAdjustedNow) adjustSrgbBrightness(palette.canvas, 0.93f) else palette.canvas
+    val lightSide = if (contrastAdjustedNow) {
+        adjustedMineralNowLightSide(palette.canvas, palette.atmosphereBottom, strength)
+    } else {
+        palette.atmosphereBottom.copy(alpha = strength)
+    }
+    val darkSideLight = if (contrastAdjustedNow) {
+        adjustSrgbBrightness(palette.atmosphereTop, 0.93f)
+    } else {
+        palette.atmosphereTop
+    }
+    drawRect(darkSide) // Opaque at every effects level, including None.
+    if (recipe.flatOpaque) return
     // All geometry is viewport relative and sits behind caller content.
     when (recipe.geometry) {
         MineralGeometry.DIAGONAL_SEAM -> {
@@ -301,10 +336,10 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
                 lineTo(if (direction == LayoutDirection.Rtl) 0f else size.width, 0f)
                 close()
             }
-            drawPath(field, palette.atmosphereBottom.copy(alpha = strength))
+            drawPath(field, lightSide)
             drawRect(
                 Brush.radialGradient(
-                    listOf(palette.atmosphereTop.copy(alpha = strength * 0.8f), Color.Transparent),
+                    listOf(darkSideLight.copy(alpha = strength * 0.8f), Color.Transparent),
                     center = Offset(recipe.horizontalFraction(0.16f, direction) * size.width, size.height * 0.12f),
                     radius = size.maxDimension * 0.78f,
                 ),
@@ -377,6 +412,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
                 }
             }
         }
+        MineralGeometry.FLOW_FIELD -> drawSmokedQuartzFlowField(palette, strength)
     }
     // Sparse, deterministic embedded grain. No randomized state or recomposition changes.
     val grain = palette.outline.copy(alpha = recipe.grainAlpha)
@@ -386,6 +422,84 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
         drawCircle(grain, radius = 0.55.dp.toPx(), center = Offset(size.width * x, size.height * y))
     }
 }
+
+/** Shared, viewport-relative static mineral lighting; it carries no weather or time meaning. */
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawSmokedQuartzFlowField(
+    palette: ThemePalette,
+    strength: Float,
+) {
+    val broadLight = palette.atmosphereGlow.copy(alpha = strength * 0.30f)
+    val softLight = palette.atmosphereGlow.copy(alpha = strength * 0.25f)
+    val mineralEdge = palette.outline.copy(alpha = strength * 0.55f)
+    val smoke = palette.surface.copy(alpha = strength * 0.56f)
+
+    // Broad ribbons use the same normalized geometry on every Home page and layout direction.
+    val upperRibbon = Path().apply {
+        moveTo(-size.width * 0.08f, size.height * 0.30f)
+        cubicTo(size.width * 0.16f, size.height * 0.13f, size.width * 0.31f, size.height * 0.42f, size.width * 0.55f, size.height * 0.28f)
+        cubicTo(size.width * 0.77f, size.height * 0.16f, size.width * 0.89f, size.height * 0.03f, size.width * 1.08f, size.height * 0.16f)
+        lineTo(size.width * 1.08f, size.height * 0.24f)
+        cubicTo(size.width * 0.87f, size.height * 0.13f, size.width * 0.73f, size.height * 0.34f, size.width * 0.54f, size.height * 0.39f)
+        cubicTo(size.width * 0.29f, size.height * 0.50f, size.width * 0.13f, size.height * 0.23f, -size.width * 0.08f, size.height * 0.38f)
+        close()
+    }
+    drawPath(upperRibbon, smoke)
+    drawPath(
+        upperRibbon,
+        mineralEdge,
+        style = Stroke(width = size.minDimension * 0.0017f),
+    )
+
+    val lowerRibbon = Path().apply {
+        moveTo(-size.width * 0.08f, size.height * 0.78f)
+        cubicTo(size.width * 0.17f, size.height * 0.62f, size.width * 0.31f, size.height * 0.94f, size.width * 0.53f, size.height * 0.78f)
+        cubicTo(size.width * 0.73f, size.height * 0.63f, size.width * 0.90f, size.height * 0.50f, size.width * 1.08f, size.height * 0.64f)
+        lineTo(size.width * 1.08f, size.height * 0.72f)
+        cubicTo(size.width * 0.87f, size.height * 0.60f, size.width * 0.71f, size.height * 0.82f, size.width * 0.52f, size.height * 0.89f)
+        cubicTo(size.width * 0.29f, size.height * 0.99f, size.width * 0.13f, size.height * 0.71f, -size.width * 0.08f, size.height * 0.86f)
+        close()
+    }
+    drawPath(lowerRibbon, broadLight)
+    drawPath(lowerRibbon, mineralEdge.copy(alpha = mineralEdge.alpha * 0.68f), style = Stroke(width = size.minDimension * 0.0012f))
+
+    // Soft illumination falls across the mineral forms without encoding a condition or page.
+    drawRect(
+        Brush.radialGradient(
+            listOf(softLight, Color.Transparent),
+            center = Offset(size.width * 0.18f, size.height * 0.13f),
+            radius = size.maxDimension * 0.78f,
+        ),
+    )
+    drawRect(
+        Brush.radialGradient(
+            listOf(broadLight.copy(alpha = broadLight.alpha * 0.55f), Color.Transparent),
+            center = Offset(size.width * 0.86f, size.height * 0.56f),
+            radius = size.maxDimension * 0.9f,
+        ),
+    )
+}
+
+/** Scale sRGB brightness per channel, rounding back to an 8-bit display value. */
+internal fun adjustSrgbBrightness(color: Color, multiplier: Float): Color {
+    require(multiplier >= 0f && multiplier.isFinite())
+    fun channel(value: Float): Float = (value * 255f * multiplier).roundToInt().coerceIn(0, 255) / 255f
+    return Color(
+        red = channel(color.red),
+        green = channel(color.green),
+        blue = channel(color.blue),
+        alpha = color.alpha,
+        colorSpace = color.colorSpace,
+    )
+}
+
+/** Preserve the existing field blend, then apply the requested visible light-side lift. */
+internal fun adjustedMineralNowLightSide(canvas: Color, atmosphere: Color, strength: Float): Color =
+    adjustSrgbBrightness(atmosphere.copy(alpha = strength).compositeOver(canvas), 1.20f)
+
+internal fun shouldAdjustMineralNowContrast(geometry: MineralGeometry, theme: ResolvedTheme): Boolean =
+    geometry == MineralGeometry.DIAGONAL_SEAM &&
+        theme.definition.id == WeatherThemeId.GLASS &&
+        theme.contrast == ContrastLevel.STANDARD
 
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawSoftAtmosphere(theme: ResolvedTheme) {
     val (glowAlpha, fieldAlpha) = when (theme.ambientBackground.overlayStrength) {

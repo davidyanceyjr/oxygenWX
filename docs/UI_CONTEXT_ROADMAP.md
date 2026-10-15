@@ -770,7 +770,7 @@ are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
 - **Evidence:** `.codex/history/2026-10-14-192-complete-four-page-static-full.md`
   and `.codex/test-artifacts/192-complete-four-page-static-full/`.
 
-**SQ.9A-CORR — Correct RTL and Glass High contrast failures — PLANNED (CYCLE 194)**
+**SQ.9A-CORR — Correct RTL and Glass High contrast failures — DONE (CYCLE 194)**
 
 - **Outcome:** correct only the two concrete SQ.9A failures found in Cycle
   193: page content/art direction does not mirror in RTL, and Glass High
@@ -796,12 +796,282 @@ are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
   installed configuration, captures, hashes, inspected hierarchy/semantics,
   per-cell dispositions, and final diff review.
 
+**SQ.9A-NOWBG — Increase Smoked Quartz Now background contrast — DONE (CYCLE 195)**
+
+- **Requested outcome:** make the light side of the Now mineral background
+  20% lighter and its dark side 7% darker, then capture the installed Now
+  screen again.
+- **Surface and states:** Glass/Smoked Quartz Now page; preserve the user's
+  currently selected contrast, effects, layout, and unit settings. Keep High
+  contrast's approved opaque black/white rendering unchanged.
+- **Functional invariants:** weather values and text, page identity, source and
+  freshness, semantics, navigation, decoration behavior, and request/cache
+  behavior remain unchanged.
+- **Visual objective:** increase separation across the existing diagonal
+  mineral field. Define lighten by multiplying each rendered light-side sRGB
+  channel by 1.20 and darken by multiplying each dark-side sRGB channel by
+  0.93, rounding to the nearest 8-bit channel value and clamping to 255. Keep
+  the light-side effect-level blend, then apply its requested lift to the
+  resulting color.
+- **Layout and accessibility conditions:** Pixel 3 XL native 1440×2960 capture
+  at the recorded device density; retain text-safe readability and the existing
+  RTL mirroring behavior. No large-font, full contrast matrix, or accessibility
+  traversal expansion is introduced by this background-only adjustment.
+- **Installed baseline and evidence:** retain the before/after Now captures,
+  actual device/app configuration, focused regression result, and screenshot
+  hashes under `.codex/test-artifacts/195-smoked-quartz-now-background-contrast/`.
+- **Bounded exit:** the installed Now screen shows the requested channel
+  changes on the current Glass Standard appearance, retains all weather facts
+  and existing settings behavior, and passes focused renderer checks. If the
+  percentage operation produces a visible readability or effects-level
+  regression, record the result and stop for replanning.
+- **Plan:** `.codex/plans/195-smoked-quartz-now-background-contrast.md`.
+- **Dependencies:** cycle 194's Glass RTL/High contrast correction; this
+  refinement precedes the separate SQ.9A four-page acceptance review.
+- **Evidence:** `.codex/history/2026-10-14-195-smoked-quartz-now-background-contrast.md`
+  and `.codex/test-artifacts/195-smoked-quartz-now-background-contrast/`.
+
+Cycle 195 completed the requested Now background refinement. SQ.9A had been
+the next eligible outcome. On 2026-10-14, the owner approved a lower-opacity,
+weather-neutral Smoked Quartz flow-field direction shared across the theme's
+pages. The five SQ.9A-FLOW slots below are inserted before the existing
+SQ.9A acceptance review. SQ.9A-FLOW-SOURCE is now the next eligible outcome;
+these are ordered roadmap slots, not active cycle plans. The four-page
+acceptance review remains pending.
+
+**SQ.9A-FLOW-SOURCE — Preserve approved flow-field source and amend criteria — DONE (CYCLE 197)**
+
+- **Requested outcome:** make the owner-approved, lower-opacity Smoked Quartz
+  flow-field mockup the durable source for the next static Full implementation
+  work, and update SQ.2's static Full acceptance criteria to match it.
+- **Surface and states:** Glass/Smoked Quartz Full across Now, Hourly, Daily,
+  and Details. The background recipe is shared; page-specific weather marks
+  and content remain foreground presentation.
+- **Functional invariants:** preserve weather meaning, values, units,
+  chronology, provenance, freshness, page identity, navigation, accessibility
+  semantics, and request/cache behavior. Decorative background flow does not
+  encode condition, day/night, quantity, warning, or chronology.
+- **Visual objective:** retain the approved smoky translucent material,
+  subdued mineral grain and illumination, flowing data-led forms, and reduced
+  background intensity that leaves text as the first read. The same
+  viewport-anchored background recipe applies on every page; it is not selected
+  by forecast conditions or page identity.
+- **Boundary:** documentation and cycle evidence only. Preserve the exact
+  approved mockup and its hash in the cycle evidence directory, amend SQ.2's
+  source/acceptance criteria, and record that motion remains deferred to the
+  existing lifecycle/performance gates. Do not change application code or add
+  the concept image to runtime resources.
+- **Required references:** use the owner-approved reduced-opacity flow-field
+  image from this conversation as the visual target; archive it at
+  `.codex/test-artifacts/<cycle-id>/references/approved-smoked-quartz-flow-field.png`
+  and record its SHA-256 before drafting the amendment. Preserve SQ.2's prior
+  source packet unchanged at
+  `.codex/test-artifacts/184-sq2-four-page-static-full-source/`, including its
+  reviewed-packet hash `61eb5da7b1ce37e4104a35f971bc267818ed755e08386601100522ffa4c3639e`
+  and history record
+  `.codex/history/2026-10-13-184-sq2-four-page-static-full-source.md`;
+  append the new owner decision as an amendment rather than replacing that
+  earlier approval. Consult `resources/themes/smoked-quartz/SOURCE.md`,
+  `ASSET_INVENTORY.md`, and `ASSET_MANIFEST.md` for material vocabulary and
+  candidate status only. Treat `docs/SPECIFICATION.md`,
+  `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`, and
+  `docs/theme-system/EFFECTS_CONTRACT.md` as normative constraints. The
+  approved image is a visual concept, not a runtime asset; candidate SVGs and
+  historical Glass/Atmosphere Deck boards are not acceptance targets.
+- **Tests/evidence:** no application tests. Review the recorded mockup and
+  criteria against the effects contract, and verify source references and
+  evidence links. Record any limitation of the concept image.
+- **Dependencies:** SQ.9A-NOWBG and the owner-confirmed source direction
+  recorded in Cycle 197.
+- **Exit:** the approved image is preserved in cycle evidence; SQ.2's static
+  Full criteria describe one common, weather-neutral Smoked Quartz background
+  across all four pages and preserve the existing semantic/accessibility
+  constraints. No production code changes.
+
+**Additive SQ.2 criteria amendment — 2026-10-14 (Cycle 197)**
+
+This amendment supplements, and does not revise or replace, the cycle 184
+approved design-source packet or owner decision. The owner-selected flow-field
+concept is archived at
+[`approved-smoked-quartz-flow-field.png`](../.codex/test-artifacts/197-sq9a-flow-source-reconciled/references/approved-smoked-quartz-flow-field.png),
+SHA-256
+`9707e1eabee3e25aaf755c24f5a8c95d7ff4fc49cdd6acba05da63458a771d46`.
+
+For static Full, use one subdued, smoky, translucent mineral flow-field
+background direction with restrained illumination and fine grain, anchored to
+the viewport and shared across Now, Hourly, Daily, and Details. Keep the
+background weather/time neutral and text as the first read. The concept image
+supports material and visual direction only; it does not prescribe exact
+renderer geometry, numeric color/opacity values, or page-specific variants.
+Weather facts, condition identity, chronology, provenance, freshness,
+navigation, controls, accessibility semantics, and request/cache behavior
+remain unchanged. Existing None (internal `OFF`), Subtle, High contrast,
+reduced-motion, and accessibility requirements remain in force. Motion stays
+deferred to its existing lifecycle/performance gates. This source amendment
+does not approve runtime assets, installed appearance, performance, or motion.
+
+The owner authorized treating cycle 184's recorded packet digest as stale and
+waiving its recomputation for this additive amendment. The original digest
+remains only as a historical value in cycle 184; it is not replaced here and
+this amendment does not reapprove or revise the cycle 184 packet. See the
+[packet preservation and owner override record](../.codex/test-artifacts/197-sq9a-flow-source-reconciled/packet-preservation.txt),
+[source provenance](../.codex/test-artifacts/197-sq9a-flow-source-reconciled/source-provenance.md),
+and [cycle 197 history](../.codex/history/2026-10-14-197-sq9a-flow-source-reconciled.md).
+
+Cycle 197 completed this documentation/evidence outcome. The historical
+cycle 184 packet digest was not recomputed under the owner's explicit override;
+no application or installed visual acceptance was claimed. The next eligible
+slice is `SQ.9A-FLOW-BACKDROP`.
+
+**SQ.9A-FLOW-BACKDROP — Implement the shared static Full background — DONE (CYCLE 198)**
+
+- **Requested outcome:** replace the current page-specific mineral geometry
+  with one shared Smoked Quartz flow-field background for all four Home pages.
+- **Surface and states:** Glass/Smoked Quartz, Effects Full, Now through
+  Details. The background remains viewport-anchored while page content scrolls
+  above it.
+- **Functional invariants:** page identity, weather content and meaning,
+  chronology, provenance, navigation, accessibility, and request/cache
+  behavior remain unchanged. None/Subtle, High contrast, and reduced-motion
+  behavior remain complete and must not inherit Full-only decoration.
+- **Visual objective:** match the approved subdued smoky-glass appearance with
+  layered translucent forms, flowing mineral illumination, and fine embedded
+  grain, using semantic palette roles. Keep the same geometry and recipe on all
+  pages. Background artwork remains static and weather/time neutral.
+- **Boundary:** shared background renderer and its integration across Now,
+  Hourly, Daily, and Details at static Full. No page-specific background
+  variants, weather-driven backdrop changes, forecast content changes, or
+  animation.
+- **Required references:** follow the archived approved image and amended SQ.2
+  source/acceptance matrix produced by `SQ.9A-FLOW-SOURCE`. Use
+  `resources/themes/smoked-quartz/SOURCE.md`, `ASSET_INVENTORY.md`, and
+  `ASSET_MANIFEST.md` to keep the rendering within the approved mineral/glass
+  material vocabulary; candidate plates are references only unless separately
+  approved for runtime. Apply `docs/theme-system/EFFECTS_CONTRACT.md` and
+  `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md` for effect behavior, palette roles,
+  text clarity, and semantic boundaries. Compare against the cycle 193
+  installed baseline and cycle 195 Now capture; neither baseline overrides the
+  newly approved mockup.
+- **Focused tests and installed evidence:** extend the mineral-renderer tests
+  for one page-independent recipe, palette-role use, effect-level behavior,
+  and contrast handling. On the Pixel 3 XL, capture the actual app on all four
+  pages at Full and check affected None/Subtle, High contrast, RTL, and reduced
+  motion states. Keep timeout disabled and Stay Awake selected.
+- **Dependencies:** SQ.9A-FLOW-SOURCE.
+- **Exit:** all four installed pages show the same approved static background
+  composition at Full; affected alternate states remain correct; focused
+  checks pass and evidence records the actual device/configuration. No
+  performance or motion pass is claimed here.
+- **Evidence:** `.codex/history/2026-10-14-198-sq9a-flow-backdrop.md` and
+  `.codex/test-artifacts/198-sq9a-flow-backdrop/`.
+
+**SQ.9A-FLOW-NOW — Remove the Now data enclosure — PLANNED**
+
+- **Requested outcome:** let the shared background flow behind Now's weather
+  facts by removing the data-only outline/container shown in the current
+  presentation.
+- **Surface and states:** Glass/Smoked Quartz Now, Effects Full. Functional
+  controls and the current condition mark remain visible.
+- **Functional invariants:** preserve all displayed facts, values, spoken
+  summary, semantics, provenance, and usable control targets. Text remains
+  sharp and readable over the shared background.
+- **Visual objective:** use spacing, hierarchy, and the subdued shared
+  background instead of an enclosing facts outline to group the Now content.
+- **Boundary:** Now content grouping only. Do not change the shared background
+  recipe, data meaning, other pages, or None/Subtle appearance.
+- **Required references:** use the archived approved flow-field image, amended
+  SQ.2 matrix, and accepted shared-backdrop capture from
+  `SQ.9A-FLOW-BACKDROP`. Consult the cycle 193 Now capture and cycle 195
+  before/after Now captures to identify the existing layout and recent
+  contrast correction. Keep the Now page's meaning and effect constraints
+  aligned with `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md` and
+  `docs/theme-system/EFFECTS_CONTRACT.md`; the image and background must not
+  substitute for readable text or semantics.
+- **Focused tests and installed evidence:** extend affected Compose/layout or
+  semantics checks for the facts and condition mark. Install on Pixel 3 XL and
+  capture Now at Full; inspect compact and large-font layout plus applicable
+  RTL/contrast states. Keep timeout disabled and Stay Awake selected.
+- **Dependencies:** SQ.9A-FLOW-BACKDROP.
+- **Exit:** Now uses the shared backdrop without a data-only enclosure, all
+  facts and semantics remain present and readable in installed evidence, and
+  focused checks pass.
+
+**SQ.9A-FLOW-HOURLY — Add Hourly marks and unboxed grouping — PLANNED**
+
+- **Requested outcome:** show each available hourly condition mark beside its
+  readable condition text and remove Full-only enclosing surfaces used only
+  to group forecast data.
+- **Surface and states:** Glass/Smoked Quartz Hourly, Effects Full. Keep the
+  forecast-date selector and window controls usable with their functional
+  surfaces.
+- **Functional invariants:** preserve hour order, values, conditions,
+  precipitation, window selection, spoken summaries, semantics, and missing
+  data behavior. Marks supplement the adjacent text and disappear when the
+  condition identity is unavailable.
+- **Visual objective:** let the shared neutral flow field and spacing organize
+  the forecast entries; marks use the Glass semantic palette and do not imply
+  measurements.
+- **Boundary:** Hourly forecast presentation only. No change to the common
+  background recipe, forecast data, control behavior, or animation.
+- **Required references:** use the archived approved flow-field image, amended
+  SQ.2 matrix, and accepted shared-backdrop capture from
+  `SQ.9A-FLOW-BACKDROP`. Compare Hourly against the cycle 193 installed
+  captures, including standard, RTL, sparse-data, and controls-visible states.
+  Use `resources/themes/smoked-quartz/SOURCE.md` and the adopted UI/effects
+  contracts to keep marks supplemental to visible condition text and controls;
+  candidate weather-mark SVGs remain optional references unless separately
+  approved for runtime.
+- **Focused tests and installed evidence:** check condition-mark visibility,
+  entry order, spoken semantics, and missing-condition behavior. Install on
+  Pixel 3 XL and capture Hourly at Full; inspect compact/large-font and
+  applicable RTL/contrast states. Keep timeout disabled and Stay Awake
+  selected.
+- **Dependencies:** SQ.9A-FLOW-NOW.
+- **Exit:** available entries show their marks beside unchanged text, data-only
+  enclosures are removed, functional controls remain usable, and focused tests
+  plus installed evidence pass.
+
+**SQ.9A-FLOW-DAILY — Add Daily marks and unboxed grouping — PLANNED**
+
+- **Requested outcome:** show each available daily condition mark beside its
+  readable condition text and remove Full-only enclosing surfaces used only
+  to group forecast data.
+- **Surface and states:** Glass/Smoked Quartz Daily, Effects Full. Keep the
+  forecast-window controls usable with their functional surfaces.
+- **Functional invariants:** preserve day order, condition, highs/lows,
+  precipitation, window selection, spoken summaries, semantics, and missing
+  data behavior. Marks supplement the adjacent text and disappear when the
+  condition identity is unavailable.
+- **Visual objective:** use the same shared neutral flow field as the other
+  pages; group Daily entries through spacing, hierarchy, and small condition
+  marks rather than data-only enclosures.
+- **Boundary:** Daily forecast presentation only. No change to the common
+  background recipe, forecast data, control behavior, or animation.
+- **Required references:** use the archived approved flow-field image, amended
+  SQ.2 matrix, and accepted shared-backdrop capture from
+  `SQ.9A-FLOW-BACKDROP`. Compare Daily against the cycle 193 installed
+  captures, including standard, RTL, sparse-data, and controls-visible states.
+  Use `resources/themes/smoked-quartz/SOURCE.md` and the adopted UI/effects
+  contracts to keep marks supplemental to visible condition text and controls;
+  candidate weather-mark SVGs remain optional references unless separately
+  approved for runtime.
+- **Focused tests and installed evidence:** check condition-mark visibility,
+  day order, forecast values, spoken semantics, and missing-condition
+  behavior. Install on Pixel 3 XL and capture Daily at Full; inspect
+  compact/large-font and applicable RTL/contrast states. Keep timeout disabled
+  and Stay Awake selected.
+- **Dependencies:** SQ.9A-FLOW-HOURLY.
+- **Exit:** available entries show their marks beside unchanged text, data-only
+  enclosures are removed, functional controls remain usable, and focused tests
+  plus installed evidence pass.
+
 **SQ.9A — Accept installed four-page static Full (Part 2 of 2) — PENDING CORRECTION**
 
 - **Outcome:** independently review the completed SQ.9 implementation against
-  SQ.2's full four-page Static Full source and acceptance matrix in the real
-  installed app. This is an evidence/acceptance slice; do not begin unrelated
-  decoration or broad redesign.
+  the amended SQ.2 source and acceptance matrix, including the shared
+  Smoked Quartz flow-field background and unboxed Now/Hourly/Daily data
+  treatment, in the real installed app. This is an evidence/acceptance slice;
+  do not begin unrelated decoration or broad redesign.
 - **Boundary:** installed review of Now, Hourly, Daily, and Details using the
   same deterministic fixture where applicable. Cover compact 360×640 dp at
   font scales 1.0 and 1.3, Standard LTR, RTL, High contrast, sparse/missing
@@ -809,8 +1079,9 @@ are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
   None/Subtle leakage. Exercise page navigation and Hourly/Daily controls.
   Use the physical Pixel 3 XL and preserve configuration, captures,
   hierarchies/semantics observations, hashes, and a PASS/FAIL/UNVERIFIED matrix.
-- **Dependencies:** SQ.9 implementation, SQ.2 source decisions, and a passing
-  SQ.9A-CORR correction review.
+- **Dependencies:** SQ.9 implementation, SQ.2 source decisions,
+  SQ.9A-FLOW-SOURCE through SQ.9A-FLOW-DAILY, and a passing SQ.9A-CORR
+  correction review.
 - **Exit:** each required matrix cell is recorded and the installed four-page
   review accepts Static Full with functional invariants preserved. A failed
   required criterion records the exact gap and stops SQ.10–SQ.16; any material

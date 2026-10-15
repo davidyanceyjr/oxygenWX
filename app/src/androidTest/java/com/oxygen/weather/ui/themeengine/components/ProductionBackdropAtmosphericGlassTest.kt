@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +36,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.click
@@ -60,6 +62,57 @@ import java.util.concurrent.atomic.AtomicInteger
 @RunWith(AndroidJUnit4::class)
 class ProductionBackdropAtmosphericGlassTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun glassFullFlowFieldIsSharedAcrossPagesAndKeepsForegroundInteractive() {
+        val page = mutableStateOf(GlassHomePage.NOW)
+        val clicks = AtomicInteger(0)
+        val theme = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.FULL)
+        compose.setContent {
+            CompositionLocalProvider(
+                LocalDensity provides Density(LocalDensity.current.density, fontScale = 1f),
+                LocalLayoutDirection provides LayoutDirection.Ltr,
+            ) {
+                ProductionBackdrop(
+                    theme,
+                    Modifier.requiredSize(360.dp, 640.dp).testTag(FLOW_BACKDROP_TAG),
+                    homePage = page.value,
+                ) {
+                    Column(Modifier.fillMaxSize().padding(24.dp)) {
+                        Text("Forecast background check", color = theme.palette.content)
+                        Spacer(Modifier.weight(1f))
+                        Text(
+                            "Open forecast details",
+                            color = theme.palette.content,
+                            modifier = Modifier.clickable { clicks.incrementAndGet() }
+                                .semantics { contentDescription = FLOW_ACTION_LABEL },
+                        )
+                    }
+                }
+            }
+        }
+
+        var first = null as Bitmap?
+        GlassHomePage.entries.forEach { homePage ->
+            compose.runOnIdle { page.value = homePage }
+            compose.waitForIdle()
+            compose.onNodeWithText("Forecast background check").assertIsDisplayed()
+            val rendered = compose.onNodeWithTag(FLOW_BACKDROP_TAG).captureToImage().asAndroidBitmap()
+            if (first == null) {
+                first = rendered
+                saveCapture(rendered, "glass-full-flow-field-shared-360x640-font1-ltr.png")
+            } else {
+                assertTrue("Shared Full backdrop must not vary by page", first!!.sameAs(rendered))
+            }
+        }
+
+        compose.onNodeWithTag(FLOW_BACKDROP_TAG)
+            .performTouchInput { click(androidx.compose.ui.geometry.Offset(340f, 320f)) }
+        compose.runOnIdle { assertEquals("Backdrop tap must not invoke foreground action", 0, clicks.get()) }
+        compose.onNodeWithContentDescription(FLOW_ACTION_LABEL).performClick()
+        compose.runOnIdle { assertEquals("Foreground action remains interactive", 1, clicks.get()) }
+        println("Glass Full shared flow field: all four page identities produce identical static render; foreground tap isolation=PASS")
+    }
 
     private data class Case(
         val id: WeatherThemeId,
@@ -195,6 +248,8 @@ class ProductionBackdropAtmosphericGlassTest {
 
     private companion object {
         const val BACKDROP_TAG = "backdrop-host"
+        const val FLOW_BACKDROP_TAG = "glass-full-flow-backdrop"
+        const val FLOW_ACTION_LABEL = "Open forecast details"
         const val CONDITION_TAG = "caller-condition"
         const val ACTION_LABEL = "Inspect forecast button"
     }
