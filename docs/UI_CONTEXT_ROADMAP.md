@@ -1119,7 +1119,10 @@ eligible outcome is the separately planned four-page `SQ.9A` acceptance review.
   and installed check as follow-up; create its bounded plan before implementation. See
   `.codex/history/2026-10-15-202-reconcile-installed-four-page-static-full-acceptance.md`
   and its evidence directory. Dependent SQ.10–SQ.16 work remains gated until
-  the Snow cell is verified or acceptance scope is explicitly amended.
+  the Snow cell is verified or acceptance scope is explicitly amended. Cycle
+  204 completed the separate Snow mark-gap check on Pixel 3 XL and resolves
+  this specific unverified cell; the SQ.9A acceptance matrix remains a
+  separate review.
 
 **SQ.9A-SNOW — Add deterministic Snow mark-gap fixture and installed check — BLOCKED (CYCLE 203)**
 
@@ -1159,10 +1162,48 @@ eligible outcome is the separately planned four-page `SQ.9A` acceptance review.
   `.codex/test-artifacts/203-sq9a-snow-mark-gap-fixture-and-installed-check/`.
   Keep SQ.9A-SNOW blocked until a Pixel 3 XL rerun passes and the installed
   captures confirm the visible Snow/no-mark state; do not proceed to SQ.9A or
-  SQ.10 before that evidence is reviewed.
+  SQ.10 before that evidence is reviewed. Cycle 204 completed the required
+  rerun and captures; see its history and evidence directory below.
 - **Out of scope:** changing D29 mark signatures/drawing, adding a Snow glyph or
   asset, live-provider changes, broad theme/effects acceptance, full suites,
   Pixel Fold/performance work, or SQ.9A acceptance itself.
+
+**SQ.9A-SNOW-R — Complete Pixel 3 XL Snow mark-gap verification — DONE (CYCLE 204)**
+
+- **Outcome:** finish the verification portion left incomplete by cycle 203
+  using its existing `snow_mark_gap` review scenario and debug APK. Do not
+  change production or test sources unless a focused failure proves the
+  existing cycle 203 result cannot be reviewed as written; such a failure
+  requires recording the concrete gap and stopping for a new plan.
+- **Boundary:** focused Pixel 3 XL execution of
+  `ProductionSnowMarkGapReviewScenarioTest`, then install/launch the cycle 203
+  debug build and capture Glass / Standard contrast / Full at 360×640 dp,
+  font 1.0, LTR for Now, Hourly, and Daily. Review visible Snow text and the
+  absence of marks. Preserve paired hierarchies and screenshots in the new
+  cycle evidence directory; use cycle 203's source/build identity and fixture
+  definition. Details remains optional as a mark-free control.
+- **Functional invariants:** preserve the `WeatherCondition.SNOW` identity and
+  visible label, D29 no-mark rule, default and sparse fixture behavior,
+  provenance, times, units, forecast order, and release behavior. No weather
+  mark or fallback is added.
+- **Dependencies:** cycle 203's implementation and focused host checks, plus
+  reconnection of Pixel 3 XL serial `8AKY0M32X`. Cycle 203 history records
+  that the device reconnected after close; verify its current state before
+  use and apply the repository screen-timeout / Stay Awake requirements.
+- **Exit:** the named connected test passes on Pixel 3 XL; installed captures
+  visibly confirm Snow text with no mark on all three pages; focused source,
+  workflow, and diff checks pass; evidence records exact device/build/config
+  and any unverified boundaries. If the device or checks fail, record the
+  blocker and stop; do not proceed to SQ.9A acceptance or SQ.10.
+- **Evidence:** `.codex/test-artifacts/<cycle-id>/`, linked to cycle 203's
+  retained scenario implementation and evidence.
+
+Cycle 204 passed the named connected test (1 test, 0 failures) on Pixel 3 XL
+and captured Now, Hourly, and Daily through the installed cycle 203 APK. Each
+page visibly shows Snow text with no weather mark. See the cycle history and
+`.codex/test-artifacts/204-complete-pixel3xl-snow-mark-gap-verification/`.
+The next eligible outcome is the separately bounded SQ.9A installed acceptance
+review; SQ.10 remains gated on SQ.9A acceptance.
 
 **SQ.10 — Measure static Full performance — PLANNED**
 
