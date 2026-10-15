@@ -195,7 +195,7 @@ class ProductionHomeCompositionTest {
     }
 
     @Test
-    fun glassFullHourlyUsesOneOpenGroupAndPreservesWindowSemantics() {
+    fun glassFullHourlyShowsOpenRowsAndPreservesWindowSemanticsAcrossLayouts() {
         val home = presentation
         selectTheme(WeatherThemeId.GLASS)
         val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
@@ -213,7 +213,7 @@ class ProductionHomeCompositionTest {
 
         selectPage("Hourly")
         val firstWindow = home.hourlyWindows.first()
-        compose.onAllNodesWithTag("glass_full_hourly_group", useUnmergedTree = true).assertCountEquals(1)
+        compose.onAllNodesWithTag("glass_full_hourly_group", useUnmergedTree = true).assertCountEquals(0)
         compose.onNodeWithText(firstWindow.rangeLabel, substring = false, useUnmergedTree = true).assertExists()
         val firstEntryBounds = firstWindow.entries.take(6).map { entry ->
             compose.onAllNodesWithContentDescription(entry.spokenSummary, useUnmergedTree = true).assertCountEquals(1)
@@ -240,7 +240,26 @@ class ProductionHomeCompositionTest {
         compose.onNodeWithContentDescription("Choose forecast date").performClick()
         val dateJump = home.hourlyDateJumps.first { it.windowIndex > 0 }
         compose.onNodeWithText(dateJump.label, substring = false).assertExists().performClick()
-        compose.onNodeWithText(home.hourlyWindows[dateJump.windowIndex].rangeLabel, substring = false, useUnmergedTree = true).assertExists()
+        val jumpedWindow = home.hourlyWindows[dateJump.windowIndex]
+        compose.onNodeWithText(jumpedWindow.rangeLabel, substring = false, useUnmergedTree = true).assertExists()
+
+        compose.onNodeWithTag("home-actions-trigger").performClick()
+        compose.onNodeWithTag("home-action-settings").performClick()
+        compose.onNodeWithTag("settings-appearance").performScrollTo().performClick()
+        compose.onNodeWithTag("appearance-layout-simple").performScrollTo().performClick()
+        compose.onNodeWithTag("appearance-return").performScrollTo().performClick()
+        compose.onNodeWithTag("settings-return").performScrollTo().performClick()
+        compose.waitForIdle()
+        assertPageIdentity("Hourly")
+        compose.onAllNodesWithTag("glass_full_hourly_group", useUnmergedTree = true).assertCountEquals(0)
+        jumpedWindow.entries.take(6).forEach { entry ->
+            compose.onAllNodesWithContentDescription(entry.spokenSummary, useUnmergedTree = true).assertCountEquals(1)
+        }
+        val simpleDescriptions = collectDescriptions(compose.onNode(isRoot(), useUnmergedTree = true).fetchSemanticsNode())
+        val simpleEntryOrder = jumpedWindow.entries.take(6).map { simpleDescriptions.indexOf(it.spokenSummary) }
+        assertTrue("Simple window summaries should remain in chronological traversal order: $simpleEntryOrder", simpleEntryOrder.all { it >= 0 } && simpleEntryOrder.zipWithNext().all { (first, next) -> first < next })
+        currentPageControl("Earlier").assertExists()
+        currentPageControl("Later").assertExists()
         assertTextPresent(home.sourceLine)
         assertTextPresent(home.updatedLine)
     }
@@ -485,6 +504,11 @@ class ProductionHomeCompositionTest {
             node.config.contains(SemanticsProperties.ContentDescription)
         ) node.config[SemanticsProperties.ContentDescription] else emptyList()) +
             node.children.flatMap { collectVisibleDescriptions(it, left, right) }
+
+    private fun collectDescriptions(node: SemanticsNode): List<String> =
+        (if (node.config.contains(SemanticsProperties.ContentDescription)) {
+            node.config[SemanticsProperties.ContentDescription]
+        } else emptyList()) + node.children.flatMap(::collectDescriptions)
 
     private fun assertMinimumTarget(widthPx: Float, heightPx: Float) {
         val minimumPx = 48f * compose.density.density

@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -17,6 +18,7 @@ import com.oxygen.weather.presentation.DateJumpPresentation
 import com.oxygen.weather.presentation.HomePresentationMapper
 import com.oxygen.weather.presentation.StatusPresentation
 import com.oxygen.weather.ui.themeengine.ThemeCatalog
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -119,6 +121,8 @@ class ProductionHomeSparseCompositionTest {
                 presentation = presentation,
                 status = StatusPresentation.of("Sparse development fixture status."),
                 partialHorizons = (HomePresentationMapper.mapState(sparse, derived) as? com.oxygen.weather.presentation.HomePresentationState.Partial)?.horizon,
+                selectedThemeId = WeatherThemeId.GLASS,
+                selectedEffects = ThemeEffectsLevel.FULL,
             )
         }
 
@@ -137,6 +141,7 @@ class ProductionHomeSparseCompositionTest {
         compose.onNodeWithContentDescription("Choose Home page, current: Now").performClick()
         compose.onNodeWithContentDescription("Hourly page, 2 of 4, not selected").performClick()
         compose.onNodeWithContentDescription("Choose Home page, current: Hourly").assertExists()
+        compose.onAllNodesWithTag("glass_full_hourly_group", useUnmergedTree = true).assertCountEquals(0)
         val entry = presentation.hourlyWindows.single().entries.single()
         assertTextPresent(entry.time)
         assertTextPresent(entry.condition)

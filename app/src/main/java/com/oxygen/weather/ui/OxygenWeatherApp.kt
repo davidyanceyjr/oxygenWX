@@ -1766,17 +1766,7 @@ private fun HourlyPage(
         } else {
             val sharedGlassFullRows = theme.definition.id == WeatherThemeId.GLASS &&
                 theme.effects == ThemeEffectsLevel.FULL
-            if (sharedGlassFullRows) {
-                ProductionSectionSurface(
-                    theme,
-                    Modifier.fillMaxWidth().testTag("glass_full_hourly_group"),
-                    PaddingValues(theme.geometry.compactPanelInset),
-                ) {
-                    HourlyEntryGrid(theme, window.entries, sharedGlassFullRows = true)
-                }
-            } else {
-                HourlyEntryGrid(theme, window.entries)
-            }
+            HourlyEntryGrid(theme, window.entries, sharedGlassFullRows = sharedGlassFullRows)
         }
         if (windows.isNotEmpty()) {
             ProductionWindowControls(
@@ -1896,6 +1886,8 @@ private fun DailyPage(
 /** Text-first Simple layout entry. The supplied summary remains the concise spoken equivalent. */
 @Composable
 private fun SimpleHourlyEntry(theme: ResolvedTheme, entry: HourlyEntryPresentation) {
+    val showGlassFullMark = theme.definition.id == WeatherThemeId.GLASS &&
+        theme.effects == ThemeEffectsLevel.FULL
     Column(
         Modifier.fillMaxWidth().heightIn(min = 64.dp)
             .drawBehind {
@@ -1910,7 +1902,16 @@ private fun SimpleHourlyEntry(theme: ResolvedTheme, entry: HourlyEntryPresentati
             Text(entry.temperature, style = theme.typography.titleMedium, color = theme.palette.primaryData)
         }
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(entry.condition, style = theme.typography.bodyMedium, color = theme.palette.content)
+                if (showGlassFullMark) entry.conditionIdentity?.let { condition ->
+                    ProductionWeatherMark(
+                        theme,
+                        condition,
+                        Modifier.size(18.dp),
+                    )
+                }
+            }
             entry.precipitation?.let {
                 Text("Precipitation $it", style = theme.typography.labelMedium, color = theme.palette.precipitationAccent)
             }

@@ -295,11 +295,21 @@ fun ProductionHourlyEntry(
                     style = theme.typography.labelMedium.copy(fontSize = if (glass) 12.sp else 14.sp, lineHeight = 20.sp),
                     color = theme.palette.secondaryData,
                 )
-                Text(
-                    entry.condition,
-                    style = theme.typography.bodyMedium.copy(fontSize = if (terminal) 14.sp else 16.sp, lineHeight = 24.sp),
-                    color = theme.palette.content,
-                )
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Text(
+                        entry.condition,
+                        Modifier.weight(1f, fill = false),
+                        style = theme.typography.bodyMedium.copy(fontSize = if (terminal) 14.sp else 16.sp, lineHeight = 24.sp),
+                        color = theme.palette.content,
+                    )
+                    if (sharedGlassFullRow) entry.conditionIdentity?.let { condition ->
+                        ProductionWeatherMark(theme, condition, Modifier.size(22.dp))
+                    }
+                }
                 Text(
                     entry.temperature,
                     style = theme.typography.titleMedium.copy(
