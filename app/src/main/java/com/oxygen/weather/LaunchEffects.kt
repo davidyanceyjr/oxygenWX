@@ -18,6 +18,7 @@ internal enum class ReviewScenario(val key: String) {
     FAILURE_WITHOUT_DATA("failure_without_data"),
     METADATA_MISSING("metadata_missing"),
     LONG_TEXT("long_text"),
+    SNOW_MARK_GAP("snow_mark_gap"),
 }
 
 internal fun selectReviewScenario(isDebugBuild: Boolean, requestedKey: String?): ReviewScenario? =

@@ -220,6 +220,7 @@ class MainActivity : ComponentActivity() {
                     ),
                 ),
             )
+            ReviewScenario.SNOW_MARK_GAP -> DemoWeatherRepository.snowMarkGapReviewScenario(regularBundle)
             ReviewScenario.FAILURE_WITHOUT_DATA -> regularBundle.withUnavailableCurrentAndForecast()
             else -> regularBundle
         }

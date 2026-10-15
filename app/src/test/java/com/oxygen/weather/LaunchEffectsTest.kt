@@ -37,7 +37,9 @@ class LaunchEffectsTest {
     @Test
     fun reviewScenariosAreNamedAndDebugOnly() {
         assertEquals(ReviewScenario.CACHED_STALE, selectReviewScenario(true, "cached_stale"))
+        assertEquals(ReviewScenario.SNOW_MARK_GAP, selectReviewScenario(true, "snow_mark_gap"))
         assertEquals(null, selectReviewScenario(true, "unknown"))
+        assertEquals(null, selectReviewScenario(false, "snow_mark_gap"))
         assertEquals(null, selectReviewScenario(false, "cached_stale"))
     }
 }

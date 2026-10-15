@@ -13,6 +13,38 @@ import kotlin.math.sin
  * this fixture without changing screen composition or weather meaning.
  */
 object DemoWeatherRepository {
+    /** Returns a deterministic Snow review copy without changing the ordinary development fixture. */
+    fun snowMarkGapReviewScenario(bundle: WeatherBundle): WeatherBundle = bundle.copy(
+        current = bundle.current.copy(
+            condition = WeatherCondition.SNOW,
+            temperatureC = -4.0,
+            apparentC = -7.0,
+            dewPointC = -8.0,
+            relativeHumidityPct = 88.0,
+            cloudCoverPct = 94.0,
+            precipitationMmPerHr = 0.8,
+        ),
+        hourly = bundle.hourly.mapIndexed { index, hour ->
+            hour.copy(
+                condition = WeatherCondition.SNOW,
+                temperatureC = -4.0 + (index % 4) * 0.5,
+                dewPointC = -8.0 + (index % 3) * 0.5,
+                precipitationProbabilityPct = 72.0,
+                precipitationMm = 0.6 + (index % 3) * 0.2,
+                cloudCoverPct = 92.0,
+            )
+        },
+        daily = bundle.daily.mapIndexed { index, day ->
+            day.copy(
+                condition = WeatherCondition.SNOW,
+                lowC = -8.0 + (index % 3) * 0.5,
+                highC = -2.0 + (index % 3) * 0.5,
+                precipitationProbabilityPct = 72.0,
+                precipitationMm = 5.0 + (index % 3),
+            )
+        },
+    )
+
     fun load(now: LocalDateTime = LocalDateTime.now()): WeatherBundle {
         val anchor = now.withMinute(0).withSecond(0).withNano(0)
         val location = WeatherLocation(

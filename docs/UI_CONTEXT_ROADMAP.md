@@ -1046,9 +1046,9 @@ layouts. Focused Pixel 5/API 34 UI and mapping tests, build, lint, workflow, and
 diff checks passed. The owner-directed Pixel 5 was used instead of Pixel 3 XL;
 the RTL attempt remained LTR, and installed Snow/null omission remains
 UNVERIFIED because the fixture has no such Hourly entry. See the cycle history
-for complete limitations. The next eligible slice is `SQ.9A-FLOW-DAILY`.
+for complete limitations. The next eligible slice was `SQ.9A-FLOW-DAILY`.
 
-**SQ.9A-FLOW-DAILY — Add Daily marks and unboxed grouping — PLANNED**
+**SQ.9A-FLOW-DAILY — Add Daily marks and unboxed grouping — DONE (CYCLE 201)**
 
 - **Requested outcome:** show each available daily condition mark beside its
   readable condition text and remove Full-only enclosing surfaces used only
@@ -1082,7 +1082,14 @@ for complete limitations. The next eligible slice is `SQ.9A-FLOW-DAILY`.
   enclosures are removed, functional controls remain usable, and focused tests
   plus installed evidence pass.
 
-**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — PENDING CORRECTION**
+Cycle 201 completed the Daily change with focused Pixel 5/API 34 connected
+tests, the approved marks unit test, build, lint, and installed Standard/Simple
+captures. Pixel 3 XL-specific verification, installed null-identity omission,
+an effective RTL render, and several preservation states remain UNVERIFIED as
+recorded in `.codex/history/2026-10-15-201-sq9a-flow-daily.md`. The next
+eligible outcome is the separately planned four-page `SQ.9A` acceptance review.
+
+**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — REVIEWED, NOT ACCEPTED (CYCLE 202)**
 
 - **Outcome:** independently review the completed SQ.9 implementation against
   the amended SQ.2 source and acceptance matrix, including the shared
@@ -1103,11 +1110,59 @@ for complete limitations. The next eligible slice is `SQ.9A-FLOW-DAILY`.
   review accepts Static Full with functional invariants preserved. A failed
   required criterion records the exact gap and stops SQ.10–SQ.16; any material
   production correction requires a new bounded plan before implementation.
-- **Evidence:** Cycle 193 records the failed initial matrix. After SQ.9A-CORR,
-  complete the acceptance disposition using retained passing evidence where
-  valid and updated installed evidence for all corrected/affected criteria.
-  Snow remains explicitly unverified unless an installed fixture can provide
-  it. This is not a current cycle plan until the correction passes.
+- **Evidence / disposition:** Cycle 193 records the failed initial matrix.
+  Cycle 202 completed current Pixel 5/API 34 review under the owner-approved
+  cycle-specific device exception and recorded current captures, hierarchies,
+  focused checks, and a PASS/FAIL/UNVERIFIED matrix. SQ.9A was not accepted:
+  the installed fixture cannot render Snow, so mark omission remains
+  UNVERIFIED. On 2026-10-15, the owner selected a separate deterministic Snow fixture
+  and installed check as follow-up; create its bounded plan before implementation. See
+  `.codex/history/2026-10-15-202-reconcile-installed-four-page-static-full-acceptance.md`
+  and its evidence directory. Dependent SQ.10–SQ.16 work remains gated until
+  the Snow cell is verified or acceptance scope is explicitly amended.
+
+**SQ.9A-SNOW — Add deterministic Snow mark-gap fixture and installed check — BLOCKED (CYCLE 203)**
+
+- **Outcome:** provide a deterministic installed Snow state for the existing
+  approved D29 Snow no-mark gap, then verify the current Glass Full app keeps
+  the visible Snow condition text while drawing no weather mark on Now,
+  Hourly, and Daily.
+- **Boundary:** add a named debug-only review scenario based on the existing
+  Demo Station fixture. Keep values coherent for Snow and deterministic; do not
+  alter provider mappings, the approved D29 no-mark rule, product semantics, or
+  release behavior. Add focused coverage for scenario selection and installed
+  rendering. Details remains mark-free by its existing contract.
+- **Functional invariants:** retain `WeatherCondition.SNOW` identity and the
+  visible “Snow” label; no generic/fallback mark; decorative content stays out
+  of accessibility semantics; source, times, units, forecast order, and
+  unavailable behavior stay intact. The standard and sparse fixtures remain
+  unchanged.
+- **Verification:** focused tests plus installed Glass Full Standard/LTR
+  captures for Now, Hourly, and Daily with the Snow scenario. Use compact
+  360×640 dp/font 1.0, capture hierarchies alongside screenshots, and inspect
+  mark areas while confirming condition text remains. Use Pixel 3 XL for slice
+  tests and installed evidence, with timeout disabled and Stay Awake selected.
+  Pixel 5 may provide supplementary evidence; an exception requires owner
+  approval before it can substitute for Pixel 3 XL.
+- **Dependencies:** cycle 202's UNVERIFIED Snow cell and the existing D29
+  source decision that Snow has no mark.
+- **Exit:** the named scenario is debug-only and deterministic; the installed
+  three-page review visibly shows Snow text with no Snow mark; focused tests
+  pass; standard/sparse fixture behavior is unchanged; evidence is retained.
+  Then rerun the separate SQ.9A acceptance matrix before starting SQ.10.
+- **Cycle 203 disposition:** the deterministic debug-only scenario and focused
+  unit coverage were implemented. Unit filters, debug build, sparse connected
+  regression, and D29 mark matrix passed. The new Snow connected test and
+  installed Now/Hourly/Daily captures remain unverified: the Pixel 3 XL
+  disconnected from USB during final focused verification. The test and build
+  evidence are under
+  `.codex/test-artifacts/203-sq9a-snow-mark-gap-fixture-and-installed-check/`.
+  Keep SQ.9A-SNOW blocked until a Pixel 3 XL rerun passes and the installed
+  captures confirm the visible Snow/no-mark state; do not proceed to SQ.9A or
+  SQ.10 before that evidence is reviewed.
+- **Out of scope:** changing D29 mark signatures/drawing, adding a Snow glyph or
+  asset, live-provider changes, broad theme/effects acceptance, full suites,
+  Pixel Fold/performance work, or SQ.9A acceptance itself.
 
 **SQ.10 — Measure static Full performance — PLANNED**
 

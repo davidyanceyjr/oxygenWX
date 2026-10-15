@@ -75,9 +75,11 @@ flow-field background shared across all theme pages, with page-specific
 forecast marks and unboxed data grouping. Five ordered SQ.9A-FLOW slots were
 inserted before the existing SQ.9A four-page acceptance review;
 SQ.9A-FLOW-SOURCE and SQ.9A-FLOW-BACKDROP are complete in cycles 197 and 198;
-SQ.9A-FLOW-NOW and SQ.9A-FLOW-HOURLY are complete in cycles 199 and 200.
-SQ.9A-FLOW-DAILY is the next eligible outcome. The remaining SQ entries are
-ordered roadmap slots, not active cycle plans.
+SQ.9A-FLOW-NOW, SQ.9A-FLOW-HOURLY, and SQ.9A-FLOW-DAILY are complete in
+cycles 199, 200, and 201. Cycle 202 completed the four-page SQ.9A installed
+review, but did not accept SQ.9A because the required installed Snow mark
+omission remains unverified. The next UI-branch slice is `SQ.9A-SNOW`, a deterministic Snow fixture and
+installed mark-gap check, before SQ.9A is reviewed again. The remaining SQ entries are ordered roadmap slots, not active cycle plans.
 Gate selection is not a performance pass; measure only at SQ.10 and later
 gates. Exact thresholds and scope are recorded in
 `.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`.
