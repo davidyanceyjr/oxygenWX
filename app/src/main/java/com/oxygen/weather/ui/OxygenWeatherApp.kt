@@ -161,6 +161,7 @@ fun OxygenWeatherApp(
     officialAlertChoices: List<OfficialAlertChoicePresentation> = emptyList(),
     onOpenOfficialAlertSource: (String) -> Unit = {},
     layoutDirectionOverride: LayoutDirection? = null,
+    systemLayoutDirection: LayoutDirection? = null,
     selectedThemeId: WeatherThemeId = WeatherThemeId.ATMOSPHERIC,
     onSelectTheme: (WeatherThemeId) -> Unit = {},
     selectedContrast: ContrastLevel = ContrastLevel.STANDARD,
@@ -252,7 +253,9 @@ fun OxygenWeatherApp(
         }
     }
 
-    CompositionLocalProvider(LocalLayoutDirection provides (layoutDirectionOverride ?: LocalLayoutDirection.current)) {
+    CompositionLocalProvider(
+        LocalLayoutDirection provides (layoutDirectionOverride ?: systemLayoutDirection ?: LocalLayoutDirection.current)
+    ) {
         MaterialTheme(typography = theme.typography) {
             ProductionBackdrop(
                 theme,

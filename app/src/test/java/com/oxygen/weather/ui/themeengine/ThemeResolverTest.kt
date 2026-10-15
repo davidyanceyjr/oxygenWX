@@ -77,6 +77,68 @@ class ThemeResolverTest {
     }
 
     @Test
+    fun glassHighContrastUsesApprovedOpaqueBlackAndWhiteRolesOnlyForGlass() {
+        val black = Color(0xFF000000)
+        val nearBlack = Color(0xFF101010)
+        val white = Color(0xFFFFFFFF)
+        val glassDefinition = ThemeCatalog.definition(WeatherThemeId.GLASS)
+        val standardGlass = resolveTheme(WeatherThemeId.GLASS, ContrastLevel.STANDARD)
+        val highGlass = resolveTheme(WeatherThemeId.GLASS, ContrastLevel.HIGH)
+
+        assertEquals(glassDefinition.palette, standardGlass.palette)
+        assertEquals(black, highGlass.palette.canvas)
+        assertEquals(black, highGlass.palette.atmosphereTop)
+        assertEquals(black, highGlass.palette.atmosphereBottom)
+        assertEquals(white, highGlass.palette.atmosphereGlow)
+        assertEquals(nearBlack, highGlass.palette.surface)
+        assertEquals(nearBlack, highGlass.palette.elevatedSurface)
+        assertEquals(white, highGlass.palette.content)
+        assertEquals(white, highGlass.palette.primaryData)
+        assertEquals(white, highGlass.palette.secondaryData)
+        assertEquals(white, highGlass.palette.outline)
+        assertEquals(white, highGlass.palette.conditionAccent)
+        assertEquals(white, highGlass.palette.precipitationAccent)
+        assertEquals(white, highGlass.palette.warning)
+        assertEquals(white, highGlass.palette.danger)
+        assertEquals(white, highGlass.palette.action)
+        assertEquals(black, highGlass.palette.actionContent)
+        listOf(
+            highGlass.palette.canvas,
+            highGlass.palette.atmosphereTop,
+            highGlass.palette.atmosphereBottom,
+            highGlass.palette.atmosphereGlow,
+            highGlass.palette.surface,
+            highGlass.palette.elevatedSurface,
+            highGlass.palette.content,
+            highGlass.palette.primaryData,
+            highGlass.palette.secondaryData,
+            highGlass.palette.outline,
+            highGlass.palette.conditionAccent,
+            highGlass.palette.precipitationAccent,
+            highGlass.palette.warning,
+            highGlass.palette.danger,
+            highGlass.palette.action,
+            highGlass.palette.actionContent,
+        ).forEach { assertEquals(1f, it.alpha, 0f) }
+
+        WeatherThemeId.values().filterNot { it == WeatherThemeId.GLASS }.forEach { id ->
+            val source = ThemeCatalog.definition(id).palette
+            val standard = resolveTheme(id, ContrastLevel.STANDARD).palette
+            val high = resolveTheme(id, ContrastLevel.HIGH).palette
+            assertEquals(source, standard)
+            assertEquals(source.canvas, high.canvas)
+            assertEquals(source.atmosphereTop, high.atmosphereTop)
+            assertEquals(source.atmosphereBottom, high.atmosphereBottom)
+            assertEquals(source.atmosphereGlow, high.atmosphereGlow)
+            assertEquals(source.surface, high.surface)
+            assertEquals(source.elevatedSurface, high.elevatedSurface)
+            assertEquals(source.conditionAccent, high.conditionAccent)
+            assertEquals(source.warning, high.warning)
+            assertEquals(source.danger, high.danger)
+        }
+    }
+
+    @Test
     fun wcagContrastMathCoversKnownValuesCompositingAndThresholdNeighbors() {
         assertEquals(21.0, wcagContrastRatio(Color.White, Color.Black), 0.0001)
         assertEquals(1.0, wcagContrastRatio(Color(0xFF557799), Color(0xFF557799)), 0.0001)
@@ -139,7 +201,14 @@ class ThemeResolverTest {
                                 assertTrue("$id precipitation/background", wcagContrastRatio(resolved.palette.precipitationAccent, background) >= 4.5)
                             }
                             val sourceSecondary = resolved.definition.palette.secondaryData
-                            if (backgrounds.any { wcagContrastRatio(sourceSecondary, it) < 7.0 }) {
+                            if (id == WeatherThemeId.GLASS) {
+                                assertEquals(Color.White, resolved.palette.content)
+                                assertEquals(Color.White, resolved.palette.secondaryData)
+                                assertEquals(Color.White, resolved.palette.precipitationAccent)
+                                backgrounds.forEach { background ->
+                                    assertTrue("$id approved white supporting text/background", wcagContrastRatio(resolved.palette.secondaryData, background) >= 4.5)
+                                }
+                            } else if (backgrounds.any { wcagContrastRatio(sourceSecondary, it) < 7.0 }) {
                                 supportingPromotions++
                                 assertEquals(resolved.palette.content, resolved.palette.secondaryData)
                                 backgrounds.forEach { background ->

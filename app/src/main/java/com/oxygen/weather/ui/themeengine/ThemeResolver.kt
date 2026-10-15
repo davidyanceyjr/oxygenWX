@@ -19,7 +19,9 @@ fun resolveTheme(
     }
     val palette = when (contrast) {
         ContrastLevel.STANDARD -> definition.palette
-        ContrastLevel.HIGH -> definition.palette.highContrast(
+        ContrastLevel.HIGH -> if (themeId == WeatherThemeId.GLASS) {
+            definition.palette.glassHighContrast()
+        } else definition.palette.highContrast(
             textBackgrounds = listOf(
                 definition.palette.canvas, // bare hero and selected page/date controls
                 definition.palette.atmosphereTop, // page header and theme-picker text over backdrop
@@ -87,6 +89,25 @@ fun resolveTheme(
         layout = layout,
     )
 }
+
+private fun ThemePalette.glassHighContrast(): ThemePalette = copy(
+    canvas = Color(0xFF000000),
+    atmosphereTop = Color(0xFF000000),
+    atmosphereBottom = Color(0xFF000000),
+    atmosphereGlow = Color(0xFFFFFFFF),
+    surface = Color(0xFF101010),
+    elevatedSurface = Color(0xFF101010),
+    content = Color(0xFFFFFFFF),
+    primaryData = Color(0xFFFFFFFF),
+    secondaryData = Color(0xFFFFFFFF),
+    outline = Color(0xFFFFFFFF),
+    conditionAccent = Color(0xFFFFFFFF),
+    precipitationAccent = Color(0xFFFFFFFF),
+    warning = Color(0xFFFFFFFF),
+    danger = Color(0xFFFFFFFF),
+    action = Color(0xFFFFFFFF),
+    actionContent = Color(0xFF000000),
+)
 
 private fun ThemePalette.highContrast(
     textBackgrounds: List<Color>,

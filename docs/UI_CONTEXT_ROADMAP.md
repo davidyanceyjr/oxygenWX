@@ -770,7 +770,33 @@ are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
 - **Evidence:** `.codex/history/2026-10-14-192-complete-four-page-static-full.md`
   and `.codex/test-artifacts/192-complete-four-page-static-full/`.
 
-**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — NEXT**
+**SQ.9A-CORR — Correct RTL and Glass High contrast failures — PLANNED (CYCLE 194)**
+
+- **Outcome:** correct only the two concrete SQ.9A failures found in Cycle
+  193: page content/art direction does not mirror in RTL, and Glass High
+  contrast remains theme-tinted instead of using the approved opaque
+  black/white treatment. Keep this as one bounded cross-page correction slice.
+- **Boundary:** fix the app's affected Home page layout direction for Now,
+  Hourly, Daily, and Details while preserving earliest-to-latest forecast
+  order and Details semantic group order; resolve Glass High contrast to the
+  approved opaque black/white presentation across those pages. Preserve
+  Standard contrast and all non-Glass theme behavior. Add focused regression
+  coverage and installed Pixel 3 XL evidence for the failed matrix cells.
+- **Dependencies:** SQ.9 implementation and the failed SQ.9A review in Cycle
+  193. Use the owner-approved SQ.2 source matrix and Cycle 193's installed
+  acceptance matrix as the exact correction targets.
+- **Plan:** `.codex/plans/194-correct-rtl-glass-high-contrast.md`.
+- **Exit:** focused tests, changed-boundary checks, and installed recaptures
+  show all four pages mirror in RTL and Glass High contrast uses the approved
+  opaque black/white treatment, with weather meaning, chronology, navigation,
+  controls, semantics, Standard contrast, and other themes preserved. Any
+  broader page redesign or newly discovered design ambiguity stops this slice
+  for replanning. This correction does not itself claim SQ.9A accepted.
+- **Evidence:** `.codex/test-artifacts/<cycle-id>/` with test outputs,
+  installed configuration, captures, hashes, inspected hierarchy/semantics,
+  per-cell dispositions, and final diff review.
+
+**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — PENDING CORRECTION**
 
 - **Outcome:** independently review the completed SQ.9 implementation against
   SQ.2's full four-page Static Full source and acceptance matrix in the real
@@ -783,14 +809,17 @@ are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
   None/Subtle leakage. Exercise page navigation and Hourly/Daily controls.
   Use the physical Pixel 3 XL and preserve configuration, captures,
   hierarchies/semantics observations, hashes, and a PASS/FAIL/UNVERIFIED matrix.
-- **Dependencies:** SQ.9 implementation and SQ.2 source decisions.
+- **Dependencies:** SQ.9 implementation, SQ.2 source decisions, and a passing
+  SQ.9A-CORR correction review.
 - **Exit:** each required matrix cell is recorded and the installed four-page
   review accepts Static Full with functional invariants preserved. A failed
   required criterion records the exact gap and stops SQ.10–SQ.16; any material
   production correction requires a new bounded plan before implementation.
-- **Evidence:** same-fixture installed captures and acceptance matrix under
-  the Part 2 cycle evidence path. This roadmap slot is the next planning target
-  after Cycle 192; it is not a current cycle plan.
+- **Evidence:** Cycle 193 records the failed initial matrix. After SQ.9A-CORR,
+  complete the acceptance disposition using retained passing evidence where
+  valid and updated installed evidence for all corrected/affected criteria.
+  Snow remains explicitly unverified unless an installed fixture can provide
+  it. This is not a current cycle plan until the correction passes.
 
 **SQ.10 — Measure static Full performance — PLANNED**
 

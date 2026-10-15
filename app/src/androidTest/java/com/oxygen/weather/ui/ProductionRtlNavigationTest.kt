@@ -1,7 +1,6 @@
 package com.oxygen.weather.ui
 
 import android.content.Context
-import android.view.View
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.isRoot
@@ -10,14 +9,23 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.MainActivity
+import com.oxygen.weather.ContrastPreferenceTestHooks
+import com.oxygen.weather.EffectsPreferenceTestHooks
+import com.oxygen.weather.LocationSearchTestHooks
+import com.oxygen.weather.MotionPolicyTestHooks
 import com.oxygen.weather.ThemePreferenceTestHooks
 import com.oxygen.weather.data.DemoWeatherRepository
 import com.oxygen.weather.derived.HistoricalSynthesis
 import com.oxygen.weather.presentation.HomePresentationMapper
+import com.oxygen.weather.ui.themeengine.ContrastLevel
+import com.oxygen.weather.ui.themeengine.ResolvedTheme
+import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
+import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.After
@@ -36,10 +44,13 @@ class ProductionRtlNavigationTest {
         val bundle = DemoWeatherRepository.load(fixtureAnchor)
         HomePresentationMapper.map(bundle, HistoricalSynthesis.derive(bundle))
     }
+    private var effectiveTheme: ResolvedTheme? = null
 
     @Before
     fun resetTheme() {
         ThemePreferenceTestHooks.fixtureAnchorOverride = fixtureAnchor
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+        MotionPolicyTestHooks.onBackdropTheme = { effectiveTheme = it }
         InstrumentationRegistry.getInstrumentation().targetContext
             .getSharedPreferences("theme_preference_v1", Context.MODE_PRIVATE)
             .edit().clear().commit()
@@ -49,25 +60,39 @@ class ProductionRtlNavigationTest {
     @After
     fun clearFixtureAnchor() {
         ThemePreferenceTestHooks.fixtureAnchorOverride = null
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = null
+        MotionPolicyTestHooks.onBackdropTheme = null
     }
 
     @Test
     fun installedRtlHomeNavigationAndChronology() {
-        assertEquals("test requires system RTL configuration", View.LAYOUT_DIRECTION_RTL,
-            compose.activity.resources.configuration.layoutDirection)
+        ThemePreferenceTestHooks.selectTheme?.invoke(WeatherThemeId.GLASS)
+        EffectsPreferenceTestHooks.selectEffects?.invoke(ThemeEffectsLevel.FULL)
+        ContrastPreferenceTestHooks.selectContrast?.invoke(ContrastLevel.STANDARD)
+        compose.waitForIdle()
+        assertEquals(WeatherThemeId.GLASS, effectiveTheme?.definition?.id)
+        assertEquals(ThemeEffectsLevel.FULL, effectiveTheme?.effects)
+        assertRootDirection(LayoutDirection.Rtl)
+
+        selectPage("Now")
+        assertRtlStart("Demo Station")
 
         selectPage("Hourly")
+        assertRtlStart("Demo Station")
         assertVisibleDescriptionOrder(home.hourlyWindows.first().entries.take(6).map { it.spokenSummary })
 
         selectPage("Daily")
+        assertRtlStart("Demo Station")
         assertVisibleDescriptionOrder(home.dailyWindows.first().entries.take(5).map { it.spokenSummary })
+
+        selectPage("Details")
+        assertRtlStart("Demo Station")
+        assertDetailsGroupOrder()
 
         Espresso.pressBack()
         compose.waitForIdle()
-        assertPage("Hourly")
-        Espresso.pressBack()
-        compose.waitForIdle()
-        assertPage("Now")
+        assertPage("Daily")
+        assertRootDirection(LayoutDirection.Rtl)
     }
 
     private fun selectPage(page: String) {
@@ -84,6 +109,32 @@ class ProductionRtlNavigationTest {
     private fun assertPage(page: String) {
         compose.onNodeWithContentDescription("Choose Home page, current: $page").assertExists()
         compose.onNodeWithText("$page  ▾", substring = false, useUnmergedTree = true).assertExists()
+    }
+
+    private fun assertRootDirection(expected: LayoutDirection) {
+        val actual = compose.onNodeWithText("Demo Station", useUnmergedTree = true)
+            .fetchSemanticsNode().layoutInfo.layoutDirection
+        assertEquals("production Home layout direction", expected, actual)
+    }
+
+    private fun assertRtlStart(text: String) {
+        val viewport = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+        val bounds = compose.onNodeWithText(text, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
+        assertTrue("$text should be placed at RTL start: bounds=$bounds viewport=$viewport", bounds.center.x > viewport.center.x)
+    }
+
+    private fun assertDetailsGroupOrder() {
+        val groupNames = listOf("Conditions", "Forecast pattern", "Historical context")
+        val treeTexts = collectSemanticsTexts(compose.onNode(isRoot(), useUnmergedTree = true).fetchSemanticsNode())
+        val positions = groupNames.map(treeTexts::indexOf)
+        assertTrue("Details groups must remain present in semantic order: $positions", positions.all { it >= 0 } && positions.zipWithNext().all { (first, second) -> first < second })
+    }
+
+    private fun collectSemanticsTexts(node: SemanticsNode): List<String> {
+        val ownTexts = if (node.config.contains(SemanticsProperties.Text)) {
+            node.config[SemanticsProperties.Text].map { it.text }
+        } else emptyList()
+        return ownTexts + node.children.flatMap(::collectSemanticsTexts)
     }
 
     private fun assertVisibleDescriptionOrder(expected: List<String>) {
