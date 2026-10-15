@@ -434,11 +434,6 @@ class MainActivity : ComponentActivity() {
         )
         deviceLocationCoordinator = deviceCoordinator
         val initialEffects = launchEffectsOverride ?: selectedEffectsState.value
-        val systemLocales = android.os.LocaleList.getDefault()
-        val primaryLocale = if (systemLocales.isEmpty) java.util.Locale.getDefault() else systemLocales[0]
-        val systemLayoutDirection = if (
-            android.text.TextUtils.getLayoutDirectionFromLocale(primaryLocale) == android.view.View.LAYOUT_DIRECTION_RTL
-        ) LayoutDirection.Rtl else LayoutDirection.Ltr
         setContent {
             OxygenWeatherApp(
                 presentation = presentation,
@@ -464,7 +459,6 @@ class MainActivity : ComponentActivity() {
                 onSelectUnitPreset = ::selectUnitPreset,
                 onOpenOfficialAlertSource = ::openOfficialAlertSource,
                 layoutDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests,
-                systemLayoutDirection = systemLayoutDirection,
                 systemMotionScaleOverride = MotionPolicyTestHooks.systemScaleOverride.value,
                 onEffectiveMotionStyleForTests = MotionPolicyTestHooks.onEffectiveMotionStyle,
                 onBackdropThemeForTests = MotionPolicyTestHooks.onBackdropTheme,
