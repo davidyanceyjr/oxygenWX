@@ -7,8 +7,10 @@ import com.oxygen.weather.presentation.UnitPreset
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertHasNoClickAction
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -150,7 +152,7 @@ class ProductionOfficialAlertSummaryFlowTest {
         LocationSearchTestHooks.effectsOverrideForTests = ThemeEffectsLevel.FULL
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
-        compose.onNodeWithTag("now-supporting-group", useUnmergedTree = true).assertExists()
+        compose.onAllNodesWithTag("now-supporting-group", useUnmergedTree = true).assertCountEquals(0)
 
         alertTransport = NwsTransport { oneAlert }
         selectTestLocation()

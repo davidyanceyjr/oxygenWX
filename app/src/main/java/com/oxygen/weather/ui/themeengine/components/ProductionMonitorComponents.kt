@@ -66,40 +66,6 @@ fun ProductionQuietSectionSurface(
     ProductionSurface(theme, modifier, contentPadding, quiet = true, content = content)
 }
 
-/** One Now-only group for Glass Full; support facts stay text-first inside a single surface. */
-@Composable
-fun ProductionNowSupportingSurface(
-    theme: ResolvedTheme,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(theme.geometry.compactPanelInset),
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    val highContrast = theme.contrast == com.oxygen.weather.ui.themeengine.ContrastLevel.HIGH
-    val shape = RoundedCornerShape(theme.geometry.panelCornerRadius)
-    Surface(
-        modifier = modifier.then(
-            Modifier.border(
-                BorderStroke(
-                    theme.geometry.panelBorderWidth,
-                    theme.palette.outline.copy(alpha = if (highContrast) 1f else 0.56f),
-                ),
-                shape,
-            ),
-        ),
-        shape = shape,
-        color = if (highContrast) theme.palette.elevatedSurface else theme.palette.elevatedSurface.copy(alpha = 0.82f),
-        contentColor = theme.palette.content,
-        tonalElevation = 0.dp,
-        shadowElevation = 0.dp,
-    ) {
-        Column(
-            Modifier.fillMaxWidth().padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(theme.geometry.gridGap),
-            content = content,
-        )
-    }
-}
-
 @Composable
 private fun ProductionSurface(
     theme: ResolvedTheme,

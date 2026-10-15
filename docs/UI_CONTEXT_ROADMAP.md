@@ -965,7 +965,7 @@ slice is `SQ.9A-FLOW-BACKDROP`.
 - **Evidence:** `.codex/history/2026-10-14-198-sq9a-flow-backdrop.md` and
   `.codex/test-artifacts/198-sq9a-flow-backdrop/`.
 
-**SQ.9A-FLOW-NOW — Remove the Now data enclosure — PLANNED**
+**SQ.9A-FLOW-NOW — Remove the Now data enclosure — DONE (CYCLE 199)**
 
 - **Requested outcome:** let the shared background flow behind Now's weather
   facts by removing the data-only outline/container shown in the current
@@ -988,13 +988,22 @@ slice is `SQ.9A-FLOW-BACKDROP`.
   `docs/theme-system/EFFECTS_CONTRACT.md`; the image and background must not
   substitute for readable text or semantics.
 - **Focused tests and installed evidence:** extend affected Compose/layout or
-  semantics checks for the facts and condition mark. Install on Pixel 3 XL and
-  capture Now at Full; inspect compact and large-font layout plus applicable
-  RTL/contrast states. Keep timeout disabled and Stay Awake selected.
+  semantics checks for the facts and condition mark. Install on the owner-
+  directed connected Pixel 5 and capture Now at Full; inspect compact and
+  large-font layout plus applicable RTL/contrast states. Keep timeout disabled
+  and Stay Awake selected.
 - **Dependencies:** SQ.9A-FLOW-BACKDROP.
 - **Exit:** Now uses the shared backdrop without a data-only enclosure, all
   facts and semantics remain present and readable in installed evidence, and
   focused checks pass.
+- **Evidence:** `.codex/history/2026-10-15-199-sq9a-flow-now.md` and
+  `.codex/test-artifacts/199-sq9a-flow-now/`.
+
+Cycle 199 completed this bounded Now change. The focused tests, build, lint,
+and installed target/preservation evidence passed on Pixel 5 under the owner's
+device direction. The attempted RTL state remained LTR and is UNVERIFIED; the
+Pixel 3 XL device condition was not exercised. The next eligible slice is
+`SQ.9A-FLOW-HOURLY`.
 
 **SQ.9A-FLOW-HOURLY — Add Hourly marks and unboxed grouping — PLANNED**
 

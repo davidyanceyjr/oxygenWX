@@ -137,7 +137,7 @@ class ProductionHomeCompositionTest {
     }
 
     @Test
-    fun glassFullNowKeepsOneSupportingGroupAndFactSemantics() {
+    fun glassFullNowUsesOpenSupportingFactsAndPreservesSemantics() {
         val home = presentation
         selectTheme(WeatherThemeId.GLASS)
         val contrastResult = java.util.concurrent.atomic.AtomicReference<com.oxygen.weather.application.ContrastPreferenceWriteResult>()
@@ -154,25 +154,35 @@ class ProductionHomeCompositionTest {
         compose.waitForIdle()
 
         assertPageIdentity("Now")
-        compose.onAllNodesWithTag("now-supporting-group", useUnmergedTree = true).assertCountEquals(1)
-        val group = compose.onNodeWithTag("now-supporting-group", useUnmergedTree = true)
-            .fetchSemanticsNode().boundsInRoot
+        compose.onAllNodesWithTag("now-supporting-group", useUnmergedTree = true).assertCountEquals(0)
+        val viewport = compose.onNode(isRoot()).fetchSemanticsNode().boundsInRoot
+        val factBounds = mutableListOf<Pair<String, androidx.compose.ui.geometry.Rect>>()
         listOf(
-            "Humidity" to home.current.humidity,
-            "Dew point" to home.current.dewPoint,
-            "Precipitation" to home.current.precipitationHeadline,
-            "Wind" to home.current.windHeadline,
-        ).forEach { (label, value) ->
-            assertTextPresent(label)
-            assertTextPresent(value)
-            listOf(label, value).forEach { text ->
-                val bounds = compose.onNodeWithText(text, substring = false, useUnmergedTree = true)
-                    .fetchSemanticsNode().boundsInRoot
+            Triple("Humidity", home.current.humidity, null),
+            Triple("Dew point", home.current.dewPoint, null),
+            Triple("Precipitation", home.current.precipitationHeadline, home.current.precipitationSupporting.takeIf(String::isNotBlank)),
+            Triple("Wind", home.current.windHeadline, home.current.windSupporting.takeIf(String::isNotBlank)),
+        ).forEach { (label, value, supporting) ->
+            val factTag = "now-supporting-fact-${label.lowercase().replace(' ', '-')}"
+            val fact = compose.onNodeWithTag(factTag, useUnmergedTree = true).assertIsDisplayed()
+            val factRect = fact.fetchSemanticsNode().boundsInRoot
+            factBounds += label to factRect
+            assertTrue("$label fact should remain within the horizontal viewport", factRect.left >= viewport.left && factRect.right <= viewport.right)
+            (listOf(label, value) + listOfNotNull(supporting)).forEach { text ->
+                val textNode = compose.onNodeWithText(text, substring = false, useUnmergedTree = true).assertIsDisplayed()
+                val bounds = textNode.fetchSemanticsNode().boundsInRoot
                 assertTrue(
-                    "$text should be inside the single Now supporting group",
-                    bounds.left >= group.left && bounds.top >= group.top &&
-                        bounds.right <= group.right && bounds.bottom <= group.bottom,
+                    "$text should remain associated with its $label fact",
+                    bounds.left >= factRect.left && bounds.top >= factRect.top &&
+                        bounds.right <= factRect.right && bounds.bottom <= factRect.bottom,
                 )
+            }
+        }
+        factBounds.forEachIndexed { index, (label, bounds) ->
+            factBounds.drop(index + 1).forEach { (otherLabel, otherBounds) ->
+                val overlaps = bounds.left < otherBounds.right && otherBounds.left < bounds.right &&
+                    bounds.top < otherBounds.bottom && otherBounds.top < bounds.bottom
+                assertTrue("$label and $otherLabel supporting facts should not overlap", !overlaps)
             }
         }
         assertTextPresent(home.current.temperature)

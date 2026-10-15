@@ -111,7 +111,6 @@ import com.oxygen.weather.ui.themeengine.components.ProductionMetricTile
 import com.oxygen.weather.ui.themeengine.components.ProductionPageHeader
 import com.oxygen.weather.ui.themeengine.components.ProductionQuietSectionSurface
 import com.oxygen.weather.ui.themeengine.components.ProductionSectionSurface
-import com.oxygen.weather.ui.themeengine.components.ProductionNowSupportingSurface
 import com.oxygen.weather.ui.themeengine.components.ProductionSourceFreshnessPanel
 import com.oxygen.weather.ui.themeengine.components.ProductionHourlyEntry
 import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
@@ -1521,9 +1520,9 @@ private fun NowSupportingMeasurements(
             }
         }
         if (grouped) {
-            ProductionNowSupportingSurface(
-                theme,
-                Modifier.fillMaxWidth().testTag("now-supporting-group"),
+            Column(
+                Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = measurementsContent,
             )
         } else {
