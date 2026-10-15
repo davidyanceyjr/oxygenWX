@@ -92,7 +92,7 @@ fun ProductionWeatherMark(
     modifier: Modifier = Modifier,
     accentAllStrokes: Boolean = false,
 ) {
-    val treatment = markStyleSignature(theme.weatherMarkStyle, condition) ?: return
+    val treatment = weatherMarkTreatment(theme, condition) ?: return
     val style = theme.weatherMarkStyle
     val palette = theme.palette
     BoxWithConstraints(Modifier.clearAndSetSemantics { }.then(modifier), contentAlignment = Alignment.Center) {
@@ -498,4 +498,10 @@ internal fun markStyleSignature(style: WeatherMarkStyle, condition: WeatherMarkC
             else -> null
         }
     }
+}
+
+/** Glass None retains its mineral base but removes every separate weather mark. */
+internal fun weatherMarkTreatment(theme: ResolvedTheme, condition: WeatherMarkCondition?): String? {
+    if (theme.definition.id == WeatherThemeId.GLASS && theme.effects == ThemeEffectsLevel.OFF) return null
+    return markStyleSignature(theme.weatherMarkStyle, condition)
 }

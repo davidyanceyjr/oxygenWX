@@ -75,7 +75,11 @@ class ProductionWeatherMarkTest {
                         val theme = resolveTheme(
                             id,
                             contrast = if (modeValue == 1) ContrastLevel.HIGH else ContrastLevel.STANDARD,
-                            effects = if (modeValue == 0) ThemeEffectsLevel.SUBTLE else ThemeEffectsLevel.OFF,
+                            effects = when {
+                                modeValue != 0 -> ThemeEffectsLevel.OFF
+                                id == WeatherThemeId.GLASS -> ThemeEffectsLevel.FULL
+                                else -> ThemeEffectsLevel.SUBTLE
+                            },
                         )
                         ProductionBackdrop(theme, Modifier.fillMaxWidth().height(54.dp)) {
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -196,7 +200,7 @@ class ProductionWeatherMarkTest {
     }
 
     private fun modeLabel(index: Int) = when (index) {
-        0 -> "Standard Subtle"
+        0 -> "Standard Glass Full"
         1 -> "Effects Off High Contrast"
         else -> "Compact Large Font RTL Effects Off"
     }

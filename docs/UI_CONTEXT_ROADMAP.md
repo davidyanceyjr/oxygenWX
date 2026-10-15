@@ -753,24 +753,51 @@ sparse-state captures and visual review are in
 are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
 `.codex/history/2026-10-14-191-capture-installed-sparse-details.md`.
 
-**SQ.9 — Complete and accept four-page static Full — PLANNED**
+**SQ.9 — Implement static Full decoration (Part 1 of 2) — DONE (IMPLEMENTATION ONLY)**
 
-- **Boundary:** add approved decorative condition marks, quartz inclusions,
-  and static seam highlights only where SQ.2 permits. Keep control icons
-  functional and condition identity visible as text; use an honest unsupported
-  condition fallback. Add no animation.
+- **Boundary:** implement only the source-supported static Full decoration on
+  Now, Hourly, and Daily, plus permitted static edge accents, using existing
+  or native Compose primitives. Keep control icons functional and condition
+  identity visible as text; unsupported or missing conditions use the no-mark
+  fallback. Do not package candidate SVGs or add animation. Details receives
+  no weather marks or inclusion overlay. Capture a compact Standard/LTR
+  installed smoke pass on all four pages.
 - **Dependencies:** SQ.8 and SQ.2's coverage decisions.
-- **Exit:** focused condition/visibility checks pass and an installed four-page
-  review accepts static Full, including supported/unsupported conditions.
-  Failed acceptance stops SQ.10–SQ.16.
-- **Evidence:** acceptance matrix and same-fixture four-page captures.
+- **Exit:** focused condition/visibility checks pass and the installed smoke
+  pass shows the implemented treatment on all four pages without changing
+  weather facts, semantics, controls, or None/Subtle behavior. Cycle 192 met
+  this implementation exit; full Static Full acceptance remains SQ.9A.
+- **Evidence:** `.codex/history/2026-10-14-192-complete-four-page-static-full.md`
+  and `.codex/test-artifacts/192-complete-four-page-static-full/`.
+
+**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — NEXT**
+
+- **Outcome:** independently review the completed SQ.9 implementation against
+  SQ.2's full four-page Static Full source and acceptance matrix in the real
+  installed app. This is an evidence/acceptance slice; do not begin unrelated
+  decoration or broad redesign.
+- **Boundary:** installed review of Now, Hourly, Daily, and Details using the
+  same deterministic fixture where applicable. Cover compact 360×640 dp at
+  font scales 1.0 and 1.3, Standard LTR, RTL, High contrast, sparse/missing
+  data where applicable, supported and unsupported condition cases, and
+  None/Subtle leakage. Exercise page navigation and Hourly/Daily controls.
+  Use the physical Pixel 3 XL and preserve configuration, captures,
+  hierarchies/semantics observations, hashes, and a PASS/FAIL/UNVERIFIED matrix.
+- **Dependencies:** SQ.9 implementation and SQ.2 source decisions.
+- **Exit:** each required matrix cell is recorded and the installed four-page
+  review accepts Static Full with functional invariants preserved. A failed
+  required criterion records the exact gap and stops SQ.10–SQ.16; any material
+  production correction requires a new bounded plan before implementation.
+- **Evidence:** same-fixture installed captures and acceptance matrix under
+  the Part 2 cycle evidence path. This roadmap slot is the next planning target
+  after Cycle 192; it is not a current cycle plan.
 
 **SQ.10 — Measure static Full performance — PLANNED**
 
 - **Boundary:** measure static draw cost, memory, and interaction on SQ.1's
   named devices/APIs against its budgets. Only tightly scoped,
   appearance-preserving corrections belong here; no motion.
-- **Dependencies:** SQ.9 static acceptance.
+- **Dependencies:** SQ.9 implementation and SQ.9A installed acceptance pass.
 - **Exit:** measurements meet each named static budget, or record the exact
   failed gate and stop dependent level/motion work pending replanning.
 - **Evidence:** repeatable method, raw measurements, configuration, and
@@ -828,7 +855,7 @@ are `.codex/history/2026-10-14-190-finish-static-full-details.md` and
 - **Boundary:** establish active-page, foreground/background, reduced-motion,
   animator-scale, and fallback policy with an installed probe. Add no
   seam-glint artwork; None and Subtle remain static.
-- **Dependencies:** SQ.9 static acceptance, SQ.10 pass, and SQ.14.
+- **Dependencies:** SQ.9A installed acceptance pass, SQ.10 pass, and SQ.14.
 - **Exit:** focused lifecycle/policy checks and installed probe show decorative
   drawing stops on inactive pages/background and respects motion settings.
   Failure stops SQ.16.

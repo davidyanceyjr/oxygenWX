@@ -6,6 +6,7 @@ import com.oxygen.weather.ui.themeengine.components.GlassHomePage
 import com.oxygen.weather.ui.themeengine.components.MineralGeometry
 import com.oxygen.weather.ui.themeengine.components.MineralPaletteRole
 import com.oxygen.weather.ui.themeengine.components.mineralRecipe
+import com.oxygen.weather.ui.themeengine.components.weatherMarkTreatment
 import androidx.compose.ui.unit.LayoutDirection
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -90,6 +91,56 @@ class ProductionWeatherVisualsTest {
         }
         assertEquals("D29 coverage should account for all 30 pairs", 30, expected.size * conditions.size)
         assertEquals("D29 has eleven approved source gaps", 11, expected.values.sumOf { row -> row.count { it == null } })
+    }
+
+    @Test
+    fun glassStaticFullUsesOnlyTheApprovedStaticRecipeAndMarks() {
+        val full = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.FULL)
+        val expectedGeometry = mapOf(
+            GlassHomePage.NOW to MineralGeometry.DIAGONAL_SEAM,
+            GlassHomePage.HOURLY to MineralGeometry.HORIZONTAL_STRATA,
+            GlassHomePage.DAILY to MineralGeometry.TERRACES,
+            GlassHomePage.DETAILS to MineralGeometry.MICRO_ETCH,
+        )
+        expectedGeometry.forEach { (page, geometry) ->
+            val recipe = mineralRecipe(page, full)
+            assertEquals("$page retains its approved Glass geometry", geometry, recipe.geometry)
+            assertEquals("$page receives static Full mineral strength", 0.54f, recipe.strength, 0f)
+        }
+
+        val signatures = WeatherMarkCondition.entries.map { markStyleSignature(full.weatherMarkStyle, it) }
+        assertEquals(
+            listOf(
+                "glass:sun-fine-8ray",
+                "glass:cloud-front-sun-4ray",
+                "glass:rounded-cloud",
+                "glass:cloud-3-cyan-strokes",
+                "glass:cloud-violet-bolt",
+                null,
+            ),
+            signatures,
+        )
+        assertEquals(null, markStyleSignature(full.weatherMarkStyle, null))
+        assertEquals(null, weatherMarkTreatment(full, WeatherMarkCondition.SNOW))
+        assertEquals(null, weatherMarkTreatment(full, null))
+
+        val none = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.OFF)
+        val subtle = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.SUBTLE)
+        assertEquals(0.24f, mineralRecipe(GlassHomePage.NOW, none).strength, 0f)
+        assertEquals(0.36f, mineralRecipe(GlassHomePage.NOW, subtle).strength, 0f)
+        assertEquals(null, weatherMarkTreatment(none, WeatherMarkCondition.CLEAR))
+        assertEquals("glass:sun-fine-8ray", weatherMarkTreatment(subtle, WeatherMarkCondition.CLEAR))
+        assertEquals("glass:sun-fine-8ray", weatherMarkTreatment(full, WeatherMarkCondition.CLEAR))
+        assertEquals(
+            markStyleSignature(full.weatherMarkStyle, WeatherMarkCondition.CLOUDY),
+            markStyleSignature(none.weatherMarkStyle, WeatherMarkCondition.CLOUDY),
+        )
+        WeatherThemeId.entries.filter { it != WeatherThemeId.GLASS }.forEach { id ->
+            val other = resolveTheme(id, effects = ThemeEffectsLevel.FULL)
+            assertEquals(null, markStyleSignature(other.weatherMarkStyle, WeatherMarkCondition.SNOW))
+            assertEquals(markStyleSignature(other.weatherMarkStyle, WeatherMarkCondition.CLEAR),
+                weatherMarkTreatment(resolveTheme(id, effects = ThemeEffectsLevel.OFF), WeatherMarkCondition.CLEAR))
+        }
     }
 
     @Test
