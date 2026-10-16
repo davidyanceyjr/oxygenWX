@@ -1089,7 +1089,7 @@ an effective RTL render, and several preservation states remain UNVERIFIED as
 recorded in `.codex/history/2026-10-15-201-sq9a-flow-daily.md`. The next
 eligible outcome is the separately planned four-page `SQ.9A` acceptance review.
 
-**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — REVIEWED, NOT ACCEPTED (CYCLE 202)**
+**SQ.9A — Accept installed four-page static Full (Part 2 of 2) — DONE (CYCLE 208)**
 
 - **Outcome:** independently review the completed SQ.9 implementation against
   the amended SQ.2 source and acceptance matrix, including the shared
@@ -1123,6 +1123,16 @@ eligible outcome is the separately planned four-page `SQ.9A` acceptance review.
   204 completed the separate Snow mark-gap check on Pixel 3 XL and resolves
   this specific unverified cell; the SQ.9A acceptance matrix remains a
   separate review.
+
+Cycle 208 repeated the unresolved matrix on the current debug APK after cycle
+207's device-RTL correction. Pixel 3 XL installed evidence covers all four
+pages at compact font 1.0/1.3 with lower-content scrolling, effective device
+RTL, High contrast, None, Subtle, sparse data, Snow mark omission, navigation,
+and reduced motion. Nine focused connected methods passed. The exact APK,
+state-specific captures, checks, and limitations are recorded in
+`.codex/test-artifacts/208-repeat-unresolved-installed-static-full-acceptance/acceptance-matrix.md`
+and its cycle history. SQ.9A is accepted; SQ.10 static performance measurement
+is the next eligible slice. Full suites remain assigned to SQ.V.
 
 **SQ.9A-SNOW — Add deterministic Snow mark-gap fixture and installed check — BLOCKED (CYCLE 203)**
 
