@@ -1,0 +1,80 @@
+# Plan 213 — Resolve screenshot-backed SQ.10 path visibility
+
+Status: Completed
+Cycle ID: 213-resolve-screenshot-backed-sq-10-path-visibility
+Roadmap item: SQ.10-TEST-PATH-RESOLUTION
+Created: 2026-10-21
+Evidence: .codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/
+
+## Objective
+
+On the unchanged accepted cycle 208 app candidate, resolve the remaining SQ.10 test-path blockers with bounded, screenshot-backed scrolling and state review. Determine whether the expected Daily window and Settings controls can be exposed safely on the Pixel 3 XL, and distinguish rendered visible state from eligible-event confirmation when the accessibility hierarchy omits a range label.
+
+The independently observable outcome is a five-trial result for each remaining path—Daily Later in None and Full, and Settings open/return in None and Full—with retained screenshots showing setup, target reachability, and each resulting state. Installed screenshots may establish the rendered-state portion of this path-resolution gate when the hierarchy omits a label, even if the eligible-event observer misses that state. Record visual and event outcomes separately; a screenshot-only confirmation never counts as an observer pass. No SQ.10-A performance score is produced.
+
+## Production boundary
+
+Test-only changes under `app/src/androidTest/` plus `.codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/`. Keep accepted app source `dfe7fb2d14fb82d47143454826046619fd73f661` and APK SHA-256 `a397dbd70467518fbf79e37b0b5068ab103210689be7f2d547e3561d8872161a` unchanged. Use cycle 212 action JSON, hierarchy records, screenshots, findings, and visual review as linked inputs.
+
+No production app, resource, theme, accessibility-semantic, build, weather, provider, fixture, or cache changes are in this slice. If installed screenshots establish a user-visible reachability defect that cannot be resolved by safe test setup, stop and record a separate production-fix proposal for its own bounded plan.
+
+## Functional invariants
+
+- Preserve Now → Hourly → Daily → Details, outer pager ownership, named page identity, Android Back, visible Earlier/Later controls, Settings navigation, and relevant 48dp targets.
+- Preserve all fixture facts, chronology, units, provenance, update/freshness information, missing-data behavior, and request/cache behavior. Do not change weather meaning or fetch weather to make a visual result easier to match.
+- Use only the pinned accepted app candidate. Appearance changes must not alter page meaning or semantics. Effects None (`OFF`) remains opaque, static, and complete.
+- Use fresh window/node snapshots and safe live bounds. A target must be unique, enabled, in the active/focused app window, within the visible scroll container/app/display intersection, and unobscured. Revalidate immediately before each tap. `clickable=false` is recorded independently and does not alone prohibit touchscreen input.
+- Scroll gestures are setup input, not target taps: constrain each to the current app's identified visible scrollable bounds, record the source and coordinates, take a fresh hierarchy plus screenshot after each gesture, and stop on unexpected navigation or state loss. No tap is sent to an offscreen, missing, disabled, ambiguous, moved, or occluded target.
+- Keep the existing eligible active/focused app-window event endpoint and 2-second observer timeout. Record injection, rendered state, and event confirmation as separate outcomes. A screenshot may confirm rendered state for this path-resolution gate, but cannot be recorded as an eligible event or by itself produce an observer pass. A missing event therefore leaves observer confirmation unverified while preserving a screenshot-confirmed rendered-state outcome.
+- Do not score latency or claim accessibility-action support.
+
+## Implementation steps
+
+1. Reconcile cycle 212 without repeating its successful Full Hourly path. Review the linked Daily None before/after images, Daily Full target-selection trees, and Settings screenshots. Treat a visible expected Wednesday row and changed Earlier/Later state as positive partial visual evidence; do not describe it as no state change. Define a screenshot review record with separate fields for (a) visible date rows and visual window determination, (b) expected fixture state, and (c) eligible-event disposition. When the screenshot evidence identifies the rendered state but no eligible event confirms it, mark the rendered-state gate satisfied and the observer result unconfirmed; do not downgrade the visual result or upgrade the observer result.
+2. Add a bounded test-only scroll helper that selects the current active/focused page's unique visible scrollable container, injects one recorded touchscreen vertical gesture inside its live bounds, then immediately captures fresh window/node state and a readable screenshot. For Daily Full, use it only to expose Later; for Settings, use it only to expose Return to Home. Try at most six fresh screenshot-checked setup swipes for a target. Stop the path without tapping if the target remains unavailable or any swipe causes an unexpected page/state change.
+3. Revise Daily outcome matching so it does not require a hidden textual `MON–FRI` node if the installed Daily screen represents the exact window through visible date rows. Freeze the expected next-window entries and their displayed local dates from the pinned fixture before input. Capture readable, overlapping scroll-positioned screenshots sufficient to account for the complete five-date window, expected same-slot row, and Earlier/Later state; preserve their order and hierarchy snapshots so continuity and the selected window can be reviewed without inferring hidden rows. Review the screenshots against the frozen fixture. If the visible date set and expected row establish the rendered next window, that satisfies the visual path-resolution criterion even when the event observer has no eligible match. Independently match a fresh eligible event to the expected row in the active Daily window and report its result. Store separate `rendered_state` (`EXPECTED_WINDOW_VISIBLE`, `PARTIAL_VISIBLE`, `STATE_UNREADABLE`, or `WRONG_STATE`) and `event_state` (`ELIGIBLE_WITHIN_TIMEOUT`, `NO_ELIGIBLE_EVENT`, `LATE`, `WRONG_DESTINATION`, or `NOT_APPLICABLE`) fields; never collapse partial visual evidence into no state change or describe screenshot confirmation as observer confirmation.
+4. For each Settings effects level, capture and review Home actions, then the Settings heading. The post-input screenshot may establish each rendered destination for this path-resolution gate, while the eligible-event result remains an independent field. If Return to Home is below the viewport, scroll the verified Settings container with the bounded helper. Only after a fresh snapshot and screenshot show one enabled, safe Return target may the harness tap it. Confirm rendered Now/Home identity with a post-action screenshot and record eligible event confirmation separately.
+5. Run five independent trials for each of the four unresolved paths (20 path trials maximum; up to 40 separately observed taps if every Settings path reaches all three actions). Re-establish the first Daily window / Now with the menu closed between trials. Capture and retain the initial state, each setup swipe state, pre-action and post-action hierarchy/window snapshots and screenshots, observer events, and every skipped trial. Stop a path after six setup swipes without a safe target, a repeated independently reset wrong-state outcome, unreadable attribution, or any unexpected navigation. No alternate input source or guessed tap is allowed.
+6. Add/update deterministic AndroidTest checks for the separate rendered-state/event-state outcome matrix, visible partial state, event eligibility, moved/ambiguous targets, and safe scroll bounds. Keep existing safe-point regression cases. Add one filtered connected method for the four unresolved paths; do not rerun Full Hourly unless a concrete regression in shared code requires it.
+7. Assemble AndroidTest and run only the focused synthetic methods and the new connected method on Pixel 3 XL `8AKY0M32X`. Preserve exact invocations, XML, logcat, and all screenshots. Review the installed screenshots against the frozen fixture and record the visual review table under cycle evidence. If evidence shows an app UI reachability defect, stop before changing production code and leave a precise separate-plan recommendation.
+8. Restore the Pixel 3 XL display/profile, screen timeout, Stay Awake setting, animation scales, app appearance preferences, and pinned installed APK; record final readbacks and verify the installed APK hash. Run `python scripts/dev.py workflow`, `git diff --check`, inspect the full diff, write findings/handoff, and verify `manifest.sha256` before closing.
+
+## Acceptance criteria
+
+- The cycle 212 Daily None screenshots are interpreted accurately: the expected Wednesday forecast row and a changed window-control state are visible; the state report says whether the full expected window is established from the displayed date rows, not merely whether a hidden label was found.
+- For Daily None, the expected next window is established from installed screenshot evidence showing its complete date-row set and expected same-slot forecast row; this visual finding can satisfy the rendered-state portion of the path-resolution gate without a matching accessibility range string. Report event confirmation independently. A fresh eligible event within 2 seconds identifying the expected row in the active/focused Daily window is observer-confirmed; if the screenshot establishes rendered state but the event is absent or ineligible, report a visible observer miss and leave observer confirmation unverified. If screenshots cannot establish the window, report partial/unreadable state.
+- For Daily Full, Later becomes one enabled visible safe target after no more than six screenshot-checked scrolls, or the path stops with no tap and retained evidence identifying why. Each accepted action shows the expected next-window rows and date set in screenshots. Those screenshots may establish the rendered-state result for path resolution; the event result remains separate, and only an eligible match within the unchanged 2-second timeout counts as observer-validated.
+- For Settings None and Full, each trial independently records the rendered Home actions menu, Settings destination, and return to Now/Home from screenshots, plus a separate eligible-event result for each endpoint. Screenshot-confirmed destinations can satisfy the rendered-state part of path resolution when the event observer misses; they never count as observer confirmations. If Return begins offscreen, only bounded in-container scrolling may expose it. Every tap requires a fresh safe target; every endpoint has its own screenshot and event result.
+- Five independent trials per path are retained unless a planned stop rule leaves later trials explicitly `SKIPPED` with reasons. Every setup swipe, action, state classification, screenshot, event, and skip is represented in the final JSON/evidence.
+- Target absence, unsafe geometry, screenshot uncertainty, incomplete injection, screenshot-confirmed visible state without an eligible event, late state, and wrong state remain distinct. Screenshot review may satisfy the rendered-state path-resolution criterion when it directly identifies the state, but never substitutes for event eligibility or an observer pass.
+- An eligible-event miss alone does not block this path-visibility cycle from closing when the required installed screenshots clearly establish the rendered outcome and safe path. Record the observer gap in findings and handoff; do not describe it as resolved, and do not claim this cycle establishes performance readiness or satisfies any separate observer/performance gate.
+- Production app inputs and pinned APK remain unchanged. Device and app state are restored and read back. Evidence manifest hashes verify.
+- No latency scoring, SQ.10-A PASS/FAIL, 500 ms claim, Gate B disposition, or broad accessibility claim is produced.
+
+## Verification and evidence
+
+- Device: physical Pixel 3 XL `crosshatch`, serial `8AKY0M32X`, Android 12/API 31. Compact viewport 1080×1920 / 480 dpi, 60 Hz, font scale 1.0, LTR, Glass / Standard; effects None and Full for scoped paths. During testing use timeout 0 and confirm Stay Awake=7. Save and restore original device/app state.
+- Confirm pinned app APK SHA-256 before and after; assemble only the AndroidTest APK for the changed test boundary.
+- Run focused synthetic AndroidTest methods for safe-point geometry and outcome classification, plus the new connected path method on Pixel 3 XL. Use `ANDROID_SERIAL=8AKY0M32X` and filtered `connectedDebugAndroidTest` invocations. Do not run a full unit/connected suite or `python scripts/dev.py check`; those remain separate SQ.V work.
+- Evidence directory `.codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/`: preflight/device readbacks; APK hashes; screenshots before/after every setup swipe and action; complete hierarchy/window snapshots and events; per-path trial JSON with distinct `rendered_state` and `event_state`; screenshot-to-fixture review table with reviewer conclusion and cited image filenames; connected XML/logcat; restoration readbacks; findings, handoff, and verified manifest.
+- Link cycle 212 raw screenshots and action records instead of duplicating them: `.codex/test-artifacts/212-sq10-test-path-observability/`.
+- Run workflow validation, `git diff --check`, and final diff review before close.
+
+## Risks and assumptions
+
+- Cycle 212 used six Daily Full setup swipes but captured no screenshot after each swipe, so it did not establish whether the gesture moved the Daily scroll position or exposed the control. Screenshot-backed revalidation will distinguish test setup failure from a product reachability issue.
+- Cycle 212's Daily None post-action screenshot shows a visible transition and expected Wednesday row, even though the hierarchy matcher did not find the expected range label. This plan uses reviewable date-row screenshots to establish rendered state when they identify the complete expected window; any absent eligible event is retained as an observer miss, not a reason to erase the visual finding.
+- Settings uses a vertically scrollable surface; test-only scrolling may expose Return to Home, but screenshots must verify that gestures affect the intended container and not a different page.
+- If the rendered date labels do not uniquely identify the Daily window, or any control remains inaccessible, this cycle cannot silently infer success. Preserve the screenshots and stop for a separately reviewed product or method plan.
+- Cycle 211's FrameTimeline attribution, PSS cadence/tail, host/device clock mapping, and request/cache evidence remain unverified; cycle 213 does not resolve those SQ.10-A prerequisites.
+
+## Context budget
+
+Target approximately 35–45% context for this bounded test/evidence slice. The instrumentation file is large; inspect only the safe scroll, target-selection, outcome, Settings, and screenshot helpers. Keep raw JSON and screenshots in the cycle evidence directory and review with compact per-path summaries. If implementation or diagnosis is estimated above 55% context, split the remaining obligation into ordered partial plans before activation rather than silently reducing the four-path/five-trial boundary.
+
+## Out of scope
+
+- Production app/source/resource/layout/semantics/accessibility changes. A demonstrated defect requires its own bounded plan.
+- Full Hourly path repetition, except a focused regression check if shared code changes create concrete risk.
+- Scored SQ.10-A runs, performance budgets, Gate B disposition, threshold changes, or FrameTimeline/PSS/clock/request-cache method resolution.
+- Full test suites, other devices, broad TalkBack acceptance, provider/network work, fixture changes, visual theme acceptance, or unrelated navigation work.

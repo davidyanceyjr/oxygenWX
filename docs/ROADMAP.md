@@ -66,7 +66,11 @@ that time. In cycle 183, the owner selected Gate B, named the Pixel Fold as the
 required physical performance-evidence device, and made API 37 emulator
 evidence supplemental; the owner also waived Pixel 5a as a required
 readiness-matrix member and accepted Pixel 5 (`redfin`) in its place. SQ.1 and
-SQ.1A are complete under these decisions. SQ.2 through SQ.8 and the SQ.9
+SQ.1A are complete under these decisions. On 2026-10-16, the owner superseded
+the Fold-only performance-device requirement: any one enrolled physical Pixel
+3 XL (`crosshatch`), Pixel 5 (`redfin`), or Pixel Fold (`felix`) is acceptable
+for Gate B evidence. Report results for the device actually measured; an
+emulator alone remains supplemental. SQ.2 through SQ.8 and the SQ.9
 implementation are complete; cycle 194 corrected the identified RTL and Glass
 High contrast defects. At the owner's direction, SQ.9A-NOWBG was inserted
 before the SQ.9A four-page acceptance review and completed in cycle 195. On
@@ -78,11 +82,44 @@ SQ.9A-FLOW-SOURCE and SQ.9A-FLOW-BACKDROP are complete in cycles 197 and 198;
 SQ.9A-FLOW-NOW, SQ.9A-FLOW-HOURLY, and SQ.9A-FLOW-DAILY are complete in
 cycles 199, 200, and 201. Cycle 202 completed the four-page SQ.9A installed
 review, but did not accept SQ.9A because the required installed Snow mark
-omission remains unverified. The next UI-branch slice is `SQ.9A-SNOW`, a deterministic Snow fixture and
-installed mark-gap check, before SQ.9A is reviewed again. The remaining SQ entries are ordered roadmap slots, not active cycle plans.
-Gate selection is not a performance pass; measure only at SQ.10 and later
-gates. Exact thresholds and scope are recorded in
-`.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`.
+omission remained unverified. Cycle 204 verified the deterministic installed
+Snow mark gap; cycle 208 then accepted SQ.9A on Pixel 3 XL. Cycle 210 tested
+the SQ.10 device-timed accessibility observer on Pixel 3 XL. Its direct probe
+confirmed four None page transitions, but its final filtered connected run
+could not reproduce the chooser item, so the observer exit was not met. The
+owner then directed a bounded SQ.10-OBSERVER-RESOLUTION follow-up (cycle
+210-A). Its five connected trials and one direct comparison accepted touch
+injection but left the chooser closed, with no chooser item or popup window.
+The observer remains blocked; the fixed action set was skipped and cycle 211
+is not authorized. The owner directed a bounded SQ.10-OBSERVER-INPUT-RESOLUTION
+plan (cycle 210-B) to test the input source and clickable control path, then
+repeat the connected observer evidence if that path works. Cycle 210-B showed
+that touchscreen-sourced input opens and selects the Hourly chooser item, but
+its observer discarded the null-package window-change events that first
+exposed the Hourly destination; the required repeatability and action-set
+checks were skipped. The owner directed a bounded SQ.10-OBSERVER-EVENT-RESOLUTION
+plan (cycle 210-C) to validate that event path and revalidate the observer.
+Cycle 210-C passed the focused matcher, diagnostic, and five independent None
+chooser trials, then stopped at Daily Later; remaining None and Full actions
+were unrun. Cycle 210-D exposed an enabled visible Later node reported as
+nonclickable but did not tap it. On 2026-10-21 the owner waived the 210*
+observer-exit prerequisite for one unscored dry run; this did not accept
+210-D or establish a performance result. Cycle 211 completed that dry run on
+the pinned candidate: its fixed Daily Later point was outside live bounds,
+and Full Hourly Later plus Settings open observations timed out. No scored
+pair or Gate B result was produced. Cycle 212 retained the accepted app and used live target bounds for test-only
+touchscreen input. It confirmed Full Hourly Later in five trials but left
+Daily range/visibility and Settings return paths unresolved or incompletely
+observed. Cycle 213 is the bounded screenshot-backed test-path follow-up; it
+retains the accepted app and uses fresh safe scrolling/input with installed
+screenshot review. SQ.10-A remains gated on cycle 213's reviewed result and an
+explicit method decision for cycle 211's still-unverified sources.
+The remaining SQ entries are ordered roadmap slots, not active cycle plans.
+Gate selection is not a performance pass; scored static measurement begins
+at SQ.10-A. The Gate B thresholds and original device decision are recorded in
+`.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`;
+the 2026-10-16 device clarification above supersedes that decision's
+Fold-only requirement.
 Completed R5.4 Glass work is historical evidence, not acceptance of the
 replacement.
 

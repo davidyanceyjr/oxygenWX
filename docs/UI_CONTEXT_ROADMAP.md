@@ -516,7 +516,8 @@ relevant suites for SQ.V.
 Cycle 179 reconciled written authority and captured the existing Glass None
 and Subtle Now baseline. In cycle 183, the owner adopted Gate B and named the
 Pixel Fold as the required physical performance-evidence device; API 37
-emulator evidence is supplemental. The thresholds are recorded in cycle 183
+emulator evidence is supplemental. The later device clarification below
+supersedes the Fold-only requirement. The thresholds are recorded in cycle 183
 and are not a measured pass. SQ.1 is complete and SQ.2 may proceed to bounded
 design-source review. See
 `.codex/test-artifacts/179-smoked-quartz-authority-baseline/authority-matrix.md`,
@@ -554,7 +555,12 @@ evidence. The owner decision and reconciliation are at
 
 The device matrix alone did not select performance policy. Cycle 183 separately
 records Gate B and the Pixel Fold as the required named physical performance-
-evidence device, with API 37 emulator evidence supplemental.
+evidence device, with API 37 emulator evidence supplemental. On 2026-10-16,
+the owner superseded the Fold-only requirement: Gate B physical-device
+evidence may come from any one enrolled Pixel 3 XL (`crosshatch`), Pixel 5
+(`redfin`), or Pixel Fold (`felix`). Name and configure the device actually
+measured, retain the result's device scope, and do not treat emulator-only
+evidence as sufficient. The cycle 183 record remains the historical decision.
 
 **SQ.1A.1 — Enroll ADB-recognized Pixel 5 as supplemental device — DONE**
 
@@ -624,10 +630,10 @@ the owner's later waiver and accepts `redfin` in its place.
   implementation.
 - **Evidence:** design source, installed-baseline comparison, and decision and
   coverage matrix; artwork is labeled design evidence.
-- **Gate:** use the owner-selected Gate B thresholds and require physical
-  Pixel Fold evidence for later performance acceptance. API 37 emulator results
-  are supplemental. Static thresholds are ≥90% frames within 16.67 ms, p95
-  frame duration ≤25 ms, added settled/peak PSS ≤16 MiB, and scripted
+- **Gate:** use the owner-selected Gate B thresholds and require evidence from
+  one enrolled physical Pixel 3 XL, Pixel 5, or Pixel Fold. API 37 emulator
+  results are supplemental. Static thresholds are ≥90% frames within 16.67 ms,
+  p95 frame duration ≤25 ms, added settled/peak PSS ≤16 MiB, and scripted
   interaction p95 ≤500 ms. Motion deltas are an increase in deadline-miss
   fraction of ≤5 percentage points, added peak PSS ≤4 MiB, and interaction p95
   increase ≤100 ms; one pass must return to static within the later approved
@@ -1212,26 +1218,296 @@ Cycle 204 passed the named connected test (1 test, 0 failures) on Pixel 3 XL
 and captured Now, Hourly, and Daily through the installed cycle 203 APK. Each
 page visibly shows Snow text with no weather mark. See the cycle history and
 `.codex/test-artifacts/204-complete-pixel3xl-snow-mark-gap-verification/`.
-The next eligible outcome is the separately bounded SQ.9A installed acceptance
-review; SQ.10 remains gated on SQ.9A acceptance.
+Cycle 208 accepted the SQ.9A installed candidate on Pixel 3 XL. SQ.10 is now
+the next performance-method slice; SQ.10-A remains dependent on its reviewed
+measurement handoff.
 
-**SQ.10 — Measure static Full performance — PLANNED**
+**SQ.10-OBSERVER — Establish static Full performance observer feasibility — BLOCKED (cycle 210 closed)**
 
-- **Boundary:** measure static draw cost, memory, and interaction on SQ.1's
-  named devices/APIs against its budgets. Only tightly scoped,
-  appearance-preserving corrections belong here; no motion.
+- **Boundary:** replace the infeasible hierarchy-poll observer with a
+  reproducible device-timed interaction measure that ends when expected
+  destination semantics are exposed as visible. Probe each scripted
+  destination class in None and Full on compact LTR Pixel 3 XL. FrameTimeline
+  remains the later source for frame-duration analysis. No complete None/Full
+  performance pair, PSS performance sampling, or scored result.
 - **Dependencies:** SQ.9 implementation and SQ.9A installed acceptance pass.
-- **Exit:** measurements meet each named static budget, or record the exact
-  failed gate and stop dependent level/motion work pending replanning.
-- **Evidence:** repeatable method, raw measurements, configuration, and
-  installed captures before/after any correction.
+- **Exit result:** cycle 210 published the protocol and raw unscored evidence.
+  Its direct probe confirmed four None page transitions, but the final filtered
+  connected run stopped before selecting a chooser item. The complete action
+  set and Effects Full were not verified. The observer is not accepted and
+  cycle 211 remains ineligible. See
+  `.codex/history/2026-10-21-210-sq10-static-performance-method-revision.md`
+  and its linked evidence.
+- **Evidence:** plan 210 and
+  `.codex/test-artifacts/210-sq10-static-performance-method-revision/`.
+
+**SQ.10-OBSERVER-RESOLUTION — Diagnose chooser variance and revalidate observer — BLOCKED (cycle 210-A closed)**
+
+- **Boundary:** make test-only diagnostic changes under
+  `app/src/androidTest/` and run a bounded Pixel 3 XL probe using the accepted
+  cycle 208 APK. Record tap coordinates/injection results, accessibility events
+  and all interactive window trees immediately before and after tapping the
+  Now page identity. Capture a screenshot on chooser failure. Run five
+  independent Now-to-Hourly chooser open/select trials through the filtered
+  connected test path in Effects None; retain every trial and classify whether
+  input was missed, a popup opened/closed, or visible popup semantics were
+  unavailable. If all five pass, rerun the full fixed observer action set once
+  in both None and Full. Retain the earlier direct-instrumentation result as a
+  comparison; any additional direct run must be explicitly diagnostic and
+  preserved.
+- **Dependencies:** closed cycle 210 blocker evidence, unchanged accepted cycle
+  208 candidate, and physical Pixel 3 XL `crosshatch` (`8AKY0M32X`) with the
+  required timeout/Stay Awake setup.
+- **Exit result:** five connected trials and one direct diagnostic comparison
+  all returned successful touch injection, but showed the chooser closed,
+  with no chooser item or popup window. This reproduces an input/hit-target
+  failure before any semantics gap can be assessed. The fixed action set was
+  correctly skipped. Cycle 211 remains unauthorized. See cycle 210-A findings,
+  handoff, and history.
+- **Exit:** either (a) all five connected-path chooser trials expose and select
+  the visible existing item, and every fixed action in both appearances
+  confirms its expected visible destination with same-process device monotonic
+  timestamps, or (b) publish the exact reproducible input/window/semantics
+  blocker and stop. No production semantics may be added to make the probe
+  pass. Cycle 211 is eligible only after outcome (a) and review of the complete
+  handoff; outcome (b) requires a further owner-reviewed roadmap plan.
+- **Evidence:** `.codex/test-artifacts/210-a-sq10-observer-resolution/`.
+
+**SQ.10-OBSERVER-INPUT-RESOLUTION — Resolve chooser input path and revalidate observer — BLOCKED (cycle 210-B closed)**
+
+- **Boundary:** use the unchanged accepted cycle 208 app on Pixel 3 XL and
+  change only the test-side observer input/diagnostics. The cycle 210-A tap
+  reported `MotionEvent.source=0` with accepted down/up injections, while the
+  described node was not clickable and an ancestor at the same bounds was.
+  Compare a correctly sourced touchscreen tap with bounded shell-tap and
+  accessibility-click controls, each from fresh Home/Now, to identify whether
+  the blocker is input transport or the visible target. Retain input, event,
+  window, and screenshot evidence for each attempted path. Diagnostic controls
+  are not performance observations.
+- **Dependencies:** closed cycle 210-A findings and history; accepted cycle 208
+  APK; physical Pixel 3 XL `crosshatch` (`8AKY0M32X`) with timeout disabled and
+  Stay Awake selected during device work.
+- **Exit:** if a touchscreen-sourced device tap opens the existing chooser and
+  selects Hourly, retain five independent filtered-connected None successes,
+  then confirm the complete fixed observer action set in both None and Full.
+  If it does not, classify the differential result and stop with the exact
+  remaining input/target blocker. No production semantics or UI changes, no
+  performance score, and no cycle 211 activation follow a failed exit.
+- **Evidence:** `.codex/test-artifacts/210-b-sq10-observer-input-resolution/`.
+
+Cycle 210-B's touchscreen-sourced tap opened the exact Hourly chooser item and
+its sourced selection changed the visible page. The observer still failed its
+semantic endpoint: the first event-triggered snapshots exposing the Hourly
+identity came from null-package window-change events, which the app-package
+filter discarded. The required five-trial batch and fixed None/Full action set
+were skipped. See cycle 210-B findings and history.
+
+**SQ.10-OBSERVER-EVENT-RESOLUTION — Validate destination event matching and revalidate observer — BLOCKED (cycle 210-C closed)**
+
+- **Boundary:** change only the test-side observer event matcher and focused
+  diagnostics. Permit a null-package window-change event only when a fresh
+  event is tied to the exact active app window containing the expected visible
+  destination node; retain the original app-package event path. Reject stale,
+  unrelated-window, obscured, or off-display matches in deterministic matcher
+  checks. Keep touchscreen-sourced input, same-process device timestamps, and
+  the 2-second action timeout.
+- **Dependencies:** cycle 210-B raw event/window evidence, unchanged accepted
+  cycle 208 APK, and physical Pixel 3 XL `crosshatch` with timeout disabled and
+  Stay Awake selected during testing.
+- **Exit:** one filtered connected diagnostic confirms the exact Hourly
+  destination from a qualifying event, followed by five independent None
+  chooser trials and the complete fixed action set once in None and once in
+  Full. Every required action must confirm its own visible destination within
+  the timeout; otherwise stop and record the exact remaining blocker. No
+  production UI changes or scored performance result. Cycle 211 remains
+  ineligible until a successful exit and reviewed handoff.
+- **Evidence:** `.codex/test-artifacts/210-c-sq10-observer-event-resolution/`.
+
+Cycle 210-C's focused matcher check, filtered chooser diagnostic, and five
+independent None chooser trials passed. The fixed action set stopped after five
+confirmed actions at Daily Later: no visible Later input node was present at
+the compact viewport, so that action was INPUT_ERROR. Full and the remaining
+None actions were not run. Cycle 211 stays gated pending a separately planned
+input-reachability resolution and complete revalidation. See
+`.codex/history/2026-10-21-210-c-sq10-observer-event-resolution.md`.
+
+**SQ.10-OBSERVER-REACHABILITY — Resolve compact Daily Later input and revalidate observer — CLOSED BLOCKED (cycle 210-D)**
+
+- **Boundary:** test-side, bounded touchscreen vertical setup on Daily at the compact Pixel 3 XL viewport; retain accepted cycle 210-C event matching and unchanged cycle 208 app/APK. Measure only the subsequent Later tap, with setup recorded separately.
+- **Dependencies:** closed cycle 210-C raw failure and five successful chooser trials, accepted candidate, and Pixel 3 XL timeout/Stay Awake setup.
+- **Exit:** focused Daily Later reachability/confirmation and the complete fixed action set once in None and once in Full, every destination confirmed by a fresh eligible event within two seconds. On any failure, preserve the exact blocker and stop. Review the setup-scroll handoff against cycle 211's method before activation. No production UI change or score.
+- **Evidence:** `.codex/test-artifacts/210-d-sq10-daily-later-reachability/`.
+
+Cycle 210-D stopped at its reachability gate. The prescribed swipes exposed an
+enabled, on-display `Later` accessibility node, but that node reported
+`clickable=false`; no Later tap or complete fixed set was verified. Its
+MediaStore screenshot capture also failed. See cycle 210-D history and raw
+evidence. **Owner release decision (2026-10-21):** accept the application's
+observed functional responsiveness for this release and override the 210*
+observer-exit prerequisite for starting cycle 211. This is a workflow gate
+waiver, not a passing 210-D test result or a Gate B performance finding. Cycle
+211 must record the observer's actual behavior and any missing measurement as
+UNVERIFIED. It may continue collecting independent unscored frame and PSS
+evidence when an observer endpoint fails, provided input and navigation remain
+safe and recoverable.
+
+Cycle 209 pinned the accepted cycle 208 Pixel 3 XL APK and confirmed the
+device emits FrameTimeline and permits PSS reads through `run-as`. The
+exploratory 30-second trace had 160 joined presented main-surface frames, and
+shell `uiautomator dump` polls took 2.76–2.81 seconds. These findings invalidate
+the old 1,000-frame floor and 100 ms hierarchy-poll observer for the static
+action-bounded workload; they are diagnostic only and are preserved in cycle
+209 history and `.codex/test-artifacts/209-sq10-static-full-performance/`.
+The revised protocol does not lengthen captures or add artificial motion to
+accumulate frames. It reports observed transition frames and marks that frame
+gate UNVERIFIED when the evidence is insufficient.
+
+Owner clarification (2026-10-21): use the device-side monotonic timestamp
+when instrumentation receives an accessibility event and confirms the expected
+destination node is visible as the interaction endpoint for the 500 ms
+scripted-interaction limit. This is a semantic-readiness measure, not a claim
+about the exact first presented pixel or frame. Event delivery and confirmation
+time are included in the measured interval. FrameTimeline remains responsible
+for transition-frame duration analysis; exact screenshot-to-frame correlation
+is out of scope.
+
+**SQ.10-DRY-RUN — Establish static Full method feasibility under owner waiver — DONE (cycle 211)**
+
+- **Planning/activation:** the owner waived the successful 210-D observer exit
+  prerequisite. Review its failed evidence and define safe touchscreen Daily
+  input, exact endpoint, and setup exclusions before activation. A recorded,
+  unmeasured Daily setup swipe is permitted; exclude its time and frames from
+  the Later tap sample.
+- **Boundary:** attempt one unscored compact LTR None/Full pair on Pixel 3 XL.
+  Assess scripted action semantics, FrameTimeline, PSS, clock mapping,
+  calculations, request/cache invariance, and restoration as separate sources.
+  Missing semantic endpoints are UNVERIFIED for interaction timing but do not
+  discard independent valid frame/memory evidence. No scored run or Gate B
+  disposition.
+- **Dependencies:** recorded owner override, reviewed 210-D blocker, unchanged
+  accepted SQ.9A candidate, and revalidated Pixel 3 XL setup.
+- **Exit:** publish protocol, raw unscored evidence, per-source validity and
+  UNVERIFIED reasons, calculation checks, and a precise SQ.10-A handoff. Stop
+  when input/navigation, candidate, fixture, or trace capture cannot be kept
+  safe and attributable.
+- **Evidence:** plan 211 and
+  `.codex/test-artifacts/211-sq10-static-full-dry-run-method-validation/`.
+
+Cycle 211 completed the unscored feasibility dry run on the pinned Pixel 3 XL
+candidate and published per-source findings plus the SQ.10-A handoff. The
+fixed Daily Later point was outside live bounds in both appearances, so the
+safe guard sent no touch; Full Hourly Later and both Settings-open observers
+also timed out. Selected page/menu endpoints were observed, but late endpoints
+are not 500 ms samples. FrameTimeline attribution, PSS adequacy, host/device
+clock joins, and request/cache invariance remain UNVERIFIED. The run produced
+no complete scored pair or Gate B disposition. Do not plan SQ.10-A as written;
+resolve the documented observer/input and measurement gaps in a separate
+reviewed plan. See `.codex/history/2026-10-21-211-sq10-static-full-dry-run-method-validation.md`
+and its evidence directory.
+
+**SQ.10-TEST-OBSERVABILITY — Make unresolved SQ.10 controls reliably reachable and observable — CLOSED BLOCKED (cycle 212)**
+
+- **Boundary:** test-only changes under `app/src/androidTest/` and cycle
+  evidence. Use the unchanged accepted cycle 208 app candidate on Pixel 3 XL.
+  Derive touchscreen coordinates from each fresh live target's bounds and
+  confirm the resulting visible control/page state with the existing eligible
+  active-window event observer. No production UI or accessibility semantics
+  change in this slice.
+- **Dependencies:** cycle 211 findings and handoff, accepted SQ.9A candidate,
+  and Pixel 3 XL with the required timeout/Stay Awake setup.
+- **Scope:** validate Daily Later in None and Full; Full Hourly Later; and
+  Settings open/return in None and Full. Use five independent trials for each
+  scoped path. Confirm target visibility, enabled state, active/focused app
+  window, safe on-screen bounds, fresh touch down/up, and exact resulting
+  visible state. For Settings, attempt Return to Home only after its control is
+  visibly confirmed. Record `clickable=false` separately; do not let that
+  property alone suppress a safe touchscreen tap. If a target is missing,
+  disabled, obscured, or has no safe point, send no input and stop that path.
+- **Exit:** retain input, event/window, hierarchy, and readable screenshot
+  evidence for every scoped trial. A path is observer-validated only when its
+  expected state is confirmed by a fresh eligible event in the active/focused
+  app window. Preserve elapsed values, including late or timed-out observations,
+  but produce no latency score, Gate B result, or claim that the 500 ms limit
+  passed. A reproducible user-visible behavior failure stops this cycle and
+  requires a separately bounded production-fix plan; this cycle does not fix
+  product UI.
+- **Evidence:** `.codex/test-artifacts/212-sq10-test-path-observability/`, linked
+  to cycle 211 raw evidence.
+- **Disposition:** The bounded run confirmed Full Hourly Later in five of five
+  trials. Daily None visibly changed and showed the expected Wednesday row, but
+  the explicit next-range label was not visible, so its exact window identity
+  remained unverified. The run stopped Daily Full at an unavailable safe Later
+  target after six bounded setup scrolls, and both Settings variants at a Return
+  to Home control below the visible scroll area.
+  No further input was sent after these stop conditions. This is not a
+  production-defect finding, SQ.10-A score, or Gate B disposition. See cycle
+  212 findings and handoff before creating a separately reviewed follow-up.
+- **Out of scope:** app source/resources, accessibility semantics or visual
+  changes, scored repetitions, FrameTimeline/PSS acceptance, request/cache
+  invariance claims, changing the endpoint or 500 ms limit, and Gate B.
+
+**SQ.10-TEST-PATH-RESOLUTION — Resolve screenshot and scroll verification for remaining SQ.10 paths — PLANNED (cycle 213)**
+
+- **Boundary:** test-only Android instrumentation and cycle evidence; retain the
+  accepted cycle 208 app candidate. Revalidate Daily Later in None and Full and
+  Settings open/return in None and Full. Full Hourly Later already passed its
+  five-trial observer criterion in cycle 212 and is out of scope.
+- **Objective:** use bounded, screenshot-backed vertical scrolling to establish
+  whether the remaining controls can be reached safely, and use installed
+  screenshots alongside the fresh hierarchy/event observer to distinguish
+  visible state, partial state, and observer confirmation. Preserve the exact
+  screenshots needed to review every setup and post-action state.
+- **Exit:** five independent trials per remaining path when no stop condition
+  applies. Capture readable before/after screenshots for each action and a
+  screenshot after each setup scroll. Require the expected rows/window to be
+  visually identifiable from the complete displayed date rows and controls;
+  do not require an accessibility range string if the installed UI represents
+  the window with visible forecast dates. Record visual state separately from
+  the eligible event result. No SQ.10-A score, 500 ms result, or Gate B outcome.
+- **Stop rule:** if a safe live Later or Return target remains unavailable after
+  six fresh screenshot-checked setup scrolls, send no input and stop that path.
+  If installed screenshots establish a production UI reachability defect, stop
+  test-path retries and create a separate bounded production plan; this cycle
+  changes no app source, resources, or accessibility semantics.
+- **Dependencies:** cycle 212 findings and raw screenshots, pinned accepted
+  APK, and Pixel 3 XL setup. Cycle 211's performance measurement gaps remain
+  separate and block SQ.10-A.
+- **Evidence:** `.codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/`, linked
+  to cycle 212 screenshots and raw action records.
+
+**SQ.10-A — Score static Full performance — PLANNED (DEPENDENT)**
+
+- **Planning:** plan only after cycle 213's path-resolution result is reviewed
+  and an explicit measurement-method decision addresses cycle 211's
+  FrameTimeline, PSS, clock, and request/cache limitations.
+- **Boundary:** collect five valid paired None/Full runs in each of four
+  Standard-contrast Pixel 3 XL cells (font 1.0/1.3 × LTR/RTL), alternating
+  appearance order. Score only scripted interaction and transition windows;
+  no idle-frame accumulation, scrolling, or motion.
+- **Gate B limits:** retain the adopted limits: at least 90% of observed
+  transition frames meet the active refresh deadline (16.67 ms at 60 Hz),
+  transition-frame p95 duration at most 25 ms, added settled/peak PSS at most
+  16 MiB, and scripted interaction p95 at most 500 ms. Report raw sample/frame
+  counts and each configuration's device-scoped result. Use nearest-rank p95
+  on pooled valid frame/action samples per appearance and cell; compute the
+  deadline-hit share over all valid transition frames and memory as the median
+  of matched Full-minus-None pair deltas. Insufficient frame evidence is
+  UNVERIFIED, never an inferred pass or fail. Startup TTID/TTFD,
+  if collected, is diagnostic and outside Gate B.
+- **Dependencies:** cycle 213 path-resolution exit, accepted SQ.9A candidate,
+  revalidated Pixel 3 XL setup, and the explicit measurement-method decision.
+- **Exit:** publish PASS/FAIL/UNVERIFIED for every budget and the Pixel 3 XL
+  scoped result. Record any failed or unavailable gate precisely and stop
+  dependent level/motion work pending replanning.
+- **Evidence:** complete raw scored runs, invalid-run records, paired and
+  pooled calculations, installed captures, configuration, and gate matrix.
 
 **SQ.11 — Derive static Subtle — PLANNED**
 
 - **Boundary:** reduce approved Full lighting, texture, marks, and ornament
   through Glass Subtle policy. Keep the finished background, facts, controls,
   semantics, and static behavior on all four pages.
-- **Dependencies:** SQ.10 pass.
+- **Dependencies:** SQ.10-A Gate B pass.
 - **Exit:** focused level/mark checks pass; paired installed Full/Subtle
   captures show a distinct, readable reduction on every page.
 - **Evidence:** checks and paired same-fixture four-page captures.
@@ -1278,7 +1554,7 @@ review; SQ.10 remains gated on SQ.9A acceptance.
 - **Boundary:** establish active-page, foreground/background, reduced-motion,
   animator-scale, and fallback policy with an installed probe. Add no
   seam-glint artwork; None and Subtle remain static.
-- **Dependencies:** SQ.9A installed acceptance pass, SQ.10 pass, and SQ.14.
+- **Dependencies:** SQ.9A installed acceptance pass, SQ.10-A Gate B pass, and SQ.14.
 - **Exit:** focused lifecycle/policy checks and installed probe show decorative
   drawing stops on inactive pages/background and respects motion settings.
   Failure stops SQ.16.
