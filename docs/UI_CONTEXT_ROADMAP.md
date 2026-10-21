@@ -1219,8 +1219,10 @@ and captured Now, Hourly, and Daily through the installed cycle 203 APK. Each
 page visibly shows Snow text with no weather mark. See the cycle history and
 `.codex/test-artifacts/204-complete-pixel3xl-snow-mark-gap-verification/`.
 Cycle 208 accepted the SQ.9A installed candidate on Pixel 3 XL. SQ.10 is now
-the next performance-method slice; SQ.10-A remains dependent on its reviewed
-measurement handoff.
+the performance-method track. Cycle 213 completed screenshot-backed path
+review, but observer endpoints remain unresolved; SQ.10-A also depends on a
+reviewed method for the cycle 211 measurement sources. Cycle 214 is the bounded
+method-decision review before any scored work.
 
 **SQ.10-OBSERVER — Establish static Full performance observer feasibility — BLOCKED (cycle 210 closed)**
 
@@ -1446,7 +1448,7 @@ and its evidence directory.
   changes, scored repetitions, FrameTimeline/PSS acceptance, request/cache
   invariance claims, changing the endpoint or 500 ms limit, and Gate B.
 
-**SQ.10-TEST-PATH-RESOLUTION — Resolve screenshot and scroll verification for remaining SQ.10 paths — PLANNED (cycle 213)**
+**SQ.10-TEST-PATH-RESOLUTION — Resolve screenshot and scroll verification for remaining SQ.10 paths — DONE (cycle 213)**
 
 - **Boundary:** test-only Android instrumentation and cycle evidence; retain the
   accepted cycle 208 app candidate. Revalidate Daily Later in None and Full and
@@ -1475,11 +1477,29 @@ and its evidence directory.
 - **Evidence:** `.codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/`, linked
   to cycle 212 screenshots and raw action records.
 
+**SQ.10-METHOD-DECISION — Decide SQ.10 static measurement method — PLANNED (cycle 214)**
+
+- **Boundary:** review the existing cycle 211 measurement evidence and cycle
+  213 path/event evidence; make no app, test, or build-source changes and collect
+  no new device measurements.
+- **Objective:** decide, source by source, whether the semantic interaction
+  endpoint, transition FrameTimeline attribution, frame-clock mapping, PSS
+  cadence/tail, request/cache controls, and Gate B calculations have a valid
+  method or still require bounded feasibility work. Preserve unresolved sources
+  as UNVERIFIED and keep SQ.10-A gated where required.
+- **Exit:** publish the evidence-backed method matrix, valid/diagnostic/unverified
+  dispositions, explicit SQ.10-A eligibility decision, and one bounded next
+  prerequisite if any source remains unsupported. The 500 ms limit and Gate B
+  thresholds are unchanged; no score or Gate B result is produced.
+- **Dependencies:** closed cycles 211 and 213 and their linked evidence.
+- **Evidence:** `.codex/test-artifacts/214-sq10-method-decision/`.
+
 **SQ.10-A — Score static Full performance — PLANNED (DEPENDENT)**
 
-- **Planning:** plan only after cycle 213's path-resolution result is reviewed
-  and an explicit measurement-method decision addresses cycle 211's
-  FrameTimeline, PSS, clock, and request/cache limitations.
+- **Planning:** plan only after cycle 214's method decision supports the
+  interaction endpoint and each scored source, with any required feasibility
+  validation completed. Cycle 213's screenshot visibility alone does not
+  resolve its remaining event-observer gaps.
 - **Boundary:** collect five valid paired None/Full runs in each of four
   Standard-contrast Pixel 3 XL cells (font 1.0/1.3 × LTR/RTL), alternating
   appearance order. Score only scripted interaction and transition windows;

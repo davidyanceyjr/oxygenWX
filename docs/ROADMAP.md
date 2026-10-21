@@ -110,10 +110,12 @@ and Full Hourly Later plus Settings open observations timed out. No scored
 pair or Gate B result was produced. Cycle 212 retained the accepted app and used live target bounds for test-only
 touchscreen input. It confirmed Full Hourly Later in five trials but left
 Daily range/visibility and Settings return paths unresolved or incompletely
-observed. Cycle 213 is the bounded screenshot-backed test-path follow-up; it
-retains the accepted app and uses fresh safe scrolling/input with installed
-screenshot review. SQ.10-A remains gated on cycle 213's reviewed result and an
-explicit method decision for cycle 211's still-unverified sources.
+observed. Cycle 213 completed screenshot-backed path review on the accepted
+app, but several visible controls still lacked unique safe targets and eligible
+event confirmation. Cycle 214 is the PLANNED source-by-source method decision
+for cycle 211's measurement gaps and the cycle 213 observer gaps. SQ.10-A stays
+gated until each required method is supported by evidence or receives a
+separately bounded feasibility plan.
 The remaining SQ entries are ordered roadmap slots, not active cycle plans.
 Gate selection is not a performance pass; scored static measurement begins
 at SQ.10-A. The Gate B thresholds and original device decision are recorded in
