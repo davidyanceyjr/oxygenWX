@@ -467,15 +467,15 @@ The owner-authorized Smoked Quartz branch replaces the Glass visual direction
 while retaining its persisted theme identity. SQ.1–SQ.18 and a separate SQ.V
 full-suite verification session are ordered roadmap slots, not activated
 cycles. Complete and review the four-page static Full design source
-first; implement and accept static Full, including its own performance gate;
+first; implement and accept static Full with installed evidence;
 derive static Subtle by reducing decoration and None by removing separate
 decorative marks, icons, overlays, glyphs, and motion while retaining the
 finished opaque, static Smoked Quartz mineral background specified in the
 effects contract. Keep weather facts and usable text controls at every level.
 SQ.17A covers layout/localization acceptance and SQ.17B covers
 appearance/behavior acceptance. Seam-glint motion is conditional on static
-Full acceptance and a separate lifecycle gate; its incremental performance
-check has a separate boundary from static performance. Each implementation
+Full acceptance and a separate lifecycle gate. Revisit performance if an
+issue is observed in use. Each implementation
 session uses focused tests for its changed behavior; SQ.V is a separately
 planned full-suite verification session. Bound each implementation plan below
 55% of the context window, targeting 35–45%.
@@ -561,6 +561,10 @@ evidence may come from any one enrolled Pixel 3 XL (`crosshatch`), Pixel 5
 (`redfin`), or Pixel Fold (`felix`). Name and configure the device actually
 measured, retain the result's device scope, and do not treat emulator-only
 evidence as sufficient. The cycle 183 record remains the historical decision.
+On 2026-10-21, the owner withdrew static performance measurement as a standing
+requirement; revisit it if a performance issue is observed in use. Gate B and
+the later device clarification are historical and no longer gate this branch.
+See `.codex/history/2026-10-21-owner-defers-static-performance-gate.md`.
 
 **SQ.1A.1 — Enroll ADB-recognized Pixel 5 as supplemental device — DONE**
 
@@ -1137,8 +1141,9 @@ RTL, High contrast, None, Subtle, sparse data, Snow mark omission, navigation,
 and reduced motion. Nine focused connected methods passed. The exact APK,
 state-specific captures, checks, and limitations are recorded in
 `.codex/test-artifacts/208-repeat-unresolved-installed-static-full-acceptance/acceptance-matrix.md`
-and its cycle history. SQ.9A is accepted; SQ.10 static performance measurement
-is the next eligible slice. Full suites remain assigned to SQ.V.
+and its cycle history. SQ.9A is accepted. Full suites remain assigned to SQ.V.
+The owner later deferred SQ.10 static performance measurement; see the decision
+below.
 
 **SQ.9A-SNOW — Add deterministic Snow mark-gap fixture and installed check — BLOCKED (CYCLE 203)**
 
@@ -1218,11 +1223,11 @@ Cycle 204 passed the named connected test (1 test, 0 failures) on Pixel 3 XL
 and captured Now, Hourly, and Daily through the installed cycle 203 APK. Each
 page visibly shows Snow text with no weather mark. See the cycle history and
 `.codex/test-artifacts/204-complete-pixel3xl-snow-mark-gap-verification/`.
-Cycle 208 accepted the SQ.9A installed candidate on Pixel 3 XL. SQ.10 is now
-the performance-method track. Cycle 213 completed screenshot-backed path
-review, but observer endpoints remain unresolved; SQ.10-A also depends on a
-reviewed method for the cycle 211 measurement sources. Cycle 214 is the bounded
-method-decision review before any scored work.
+Cycle 208 accepted the SQ.9A installed candidate on Pixel 3 XL. Cycles 210–214
+documented attempts to establish a static performance measurement method.
+Cycle 214 found several observer and measurement sources unsupported for
+scored use. On 2026-10-21, the owner removed this measurement as a standing
+requirement; these findings remain historical and do not block the branch.
 
 **SQ.10-OBSERVER — Establish static Full performance observer feasibility — BLOCKED (cycle 210 closed)**
 
@@ -1477,7 +1482,7 @@ and its evidence directory.
 - **Evidence:** `.codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/`, linked
   to cycle 212 screenshots and raw action records.
 
-**SQ.10-METHOD-DECISION — Decide SQ.10 static measurement method — PLANNED (cycle 214)**
+**SQ.10-METHOD-DECISION — Decide SQ.10 static measurement method — DONE (cycle 214)**
 
 - **Boundary:** review the existing cycle 211 measurement evidence and cycle
   213 path/event evidence; make no app, test, or build-source changes and collect
@@ -1487,47 +1492,32 @@ and its evidence directory.
   cadence/tail, request/cache controls, and Gate B calculations have a valid
   method or still require bounded feasibility work. Preserve unresolved sources
   as UNVERIFIED and keep SQ.10-A gated where required.
-- **Exit:** publish the evidence-backed method matrix, valid/diagnostic/unverified
-  dispositions, explicit SQ.10-A eligibility decision, and one bounded next
-  prerequisite if any source remains unsupported. The 500 ms limit and Gate B
-  thresholds are unchanged; no score or Gate B result is produced.
+- **Exit:** published the evidence-backed source matrix, separate evidence and
+  method-readiness dispositions, and `GATED` SQ.10-A handoff. The 500 ms limit
+  and Gate B thresholds are unchanged; no score or Gate B result is produced.
 - **Dependencies:** closed cycles 211 and 213 and their linked evidence.
 - **Evidence:** `.codex/test-artifacts/214-sq10-method-decision/`.
 
-**SQ.10-A — Score static Full performance — PLANNED (DEPENDENT)**
+**SQ.10 — Static performance measurement — DEFERRED by owner (2026-10-21)**
 
-- **Planning:** plan only after cycle 214's method decision supports the
-  interaction endpoint and each scored source, with any required feasibility
-  validation completed. Cycle 213's screenshot visibility alone does not
-  resolve its remaining event-observer gaps.
-- **Boundary:** collect five valid paired None/Full runs in each of four
-  Standard-contrast Pixel 3 XL cells (font 1.0/1.3 × LTR/RTL), alternating
-  appearance order. Score only scripted interaction and transition windows;
-  no idle-frame accumulation, scrolling, or motion.
-- **Gate B limits:** retain the adopted limits: at least 90% of observed
-  transition frames meet the active refresh deadline (16.67 ms at 60 Hz),
-  transition-frame p95 duration at most 25 ms, added settled/peak PSS at most
-  16 MiB, and scripted interaction p95 at most 500 ms. Report raw sample/frame
-  counts and each configuration's device-scoped result. Use nearest-rank p95
-  on pooled valid frame/action samples per appearance and cell; compute the
-  deadline-hit share over all valid transition frames and memory as the median
-  of matched Full-minus-None pair deltas. Insufficient frame evidence is
-  UNVERIFIED, never an inferred pass or fail. Startup TTID/TTFD,
-  if collected, is diagnostic and outside Gate B.
-- **Dependencies:** cycle 213 path-resolution exit, accepted SQ.9A candidate,
-  revalidated Pixel 3 XL setup, and the explicit measurement-method decision.
-- **Exit:** publish PASS/FAIL/UNVERIFIED for every budget and the Pixel 3 XL
-  scoped result. Record any failed or unavailable gate precisely and stop
-  dependent level/motion work pending replanning.
-- **Evidence:** complete raw scored runs, invalid-run records, paired and
-  pooled calculations, installed captures, configuration, and gate matrix.
+- The owner removed the standing Static Full performance measurement
+  requirement. Revisit performance investigation if a performance issue is
+  observed in use; no scored or unscored feasibility cycle is currently
+  required.
+- Cycles 210–214 and their evidence remain historical records of the prior
+  attempt. Their unresolved observer and measurement findings are not product
+  failures, do not imply a performance pass/fail, and do not block later SQ
+  appearance work.
+- The former cycle targets 215–217 are canceled. Do not create replacement
+  performance cycles unless an observed issue leads to an explicit replan.
+- Owner decision: [2026-10-21 static performance gate withdrawal](../.codex/history/2026-10-21-owner-defers-static-performance-gate.md).
 
-**SQ.11 — Derive static Subtle — PLANNED**
+**SQ.11 — Derive static Subtle — NEXT**
 
 - **Boundary:** reduce approved Full lighting, texture, marks, and ornament
   through Glass Subtle policy. Keep the finished background, facts, controls,
   semantics, and static behavior on all four pages.
-- **Dependencies:** SQ.10-A Gate B pass.
+- **Dependencies:** SQ.9A installed acceptance pass.
 - **Exit:** focused level/mark checks pass; paired installed Full/Subtle
   captures show a distinct, readable reduction on every page.
 - **Evidence:** checks and paired same-fixture four-page captures.
@@ -1574,7 +1564,7 @@ and its evidence directory.
 - **Boundary:** establish active-page, foreground/background, reduced-motion,
   animator-scale, and fallback policy with an installed probe. Add no
   seam-glint artwork; None and Subtle remain static.
-- **Dependencies:** SQ.9A installed acceptance pass, SQ.10-A Gate B pass, and SQ.14.
+- **Dependencies:** SQ.9A installed acceptance pass and SQ.14.
 - **Exit:** focused lifecycle/policy checks and installed probe show decorative
   drawing stops on inactive pages/background and respects motion settings.
   Failure stops SQ.16.

@@ -125,7 +125,9 @@ texture, gradients, glow, and animation while retaining readable facts, function
 controls, and semantics. Subtle adds restrained static decoration. Full targets richer art, light,
 depth, and controlled motion through composition and whitespace; it does not add enclosing boxes
 around weather data. Menus and controls may retain solid readable surfaces, and critical text stays
-sharp and stationary. Full visual acceptance requires installed evidence and measured performance.
+sharp and stationary. Full visual acceptance requires installed evidence.
+Static performance is revisited if an issue is observed in use; it is not a
+release prerequisite.
 High contrast and reduced motion are independent overlays; effective fallback never rewrites the
 saved preference. Effects must not change forecast values/chronology, provenance, missing-data
 behavior, alert meaning, page semantics, accessibility meaning, or forecast/alert request and cache

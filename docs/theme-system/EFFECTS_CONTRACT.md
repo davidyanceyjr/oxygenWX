@@ -42,8 +42,9 @@ for FX.09, with the stored `off` identifier preserved.
   motion never serve as quantitative weather indicators.
 
 Visual ambition is a target, not evidence of acceptance. Full acceptance
-requires installed-app evidence and measured performance; compilation and
-previews alone do not establish it.
+requires installed-app evidence; compilation and previews alone do not
+establish it. Static performance investigation is revisited if an issue is
+observed in use and is not a standing acceptance gate.
 
 ## Palette and theme identity
 
@@ -84,10 +85,10 @@ Full motion is considered only after that theme's static Full treatment passes
 installed acceptance and lifecycle controls establish that inactive pages and
 backgrounded apps stop drawing. Reduced motion disables motion while retaining
 the selected static appearance level when readable and performant.
-For Smoked Quartz, static Full also passes a separately measured performance
-gate before seam-glint motion is considered. Motion has its own lifecycle gate
-and incremental performance check; neither substitutes for static acceptance
-or static performance evidence.
+There is no standing static performance gate for Smoked Quartz. Revisit
+performance investigation if an issue is observed in use. Seam-glint remains
+conditional on the motion lifecycle gate; lifecycle checks do not imply a
+quantitative performance result.
 
 ## Functional invariants
 

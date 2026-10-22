@@ -161,9 +161,11 @@ stone tonal gradient, integrated sediment strata (Details micro-etch), and fine
 embedded grain at None. Separate decorative weather marks and icons, quartz
 inclusions, seam-glint and other overlays or glyphs, added glow, and motion are
 removed. Weather facts, provenance, and usable text controls remain visible.
-Other themes keep the general None rule. Static Full installed acceptance and
-static performance precede a separate motion lifecycle gate; adopted motion
-then receives its own incremental performance check.
+Other themes keep the general None rule. Static Full installed acceptance
+precedes a separate motion lifecycle gate. There is no standing static
+performance gate; investigate performance if an issue is observed in use. Any
+later motion work must still satisfy the motion lifecycle and reduced-motion
+requirements.
 
 The following roles are semantic appearance inputs, not a prescribed legacy
 palette. Their concrete values are selected by the active theme:

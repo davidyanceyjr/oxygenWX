@@ -1,6 +1,6 @@
 # Plan 214 — Decide SQ.10 static measurement method
 
-Status: Planned
+Status: Completed
 Cycle ID: 214-sq10-method-decision
 Roadmap item: SQ.10-METHOD-DECISION
 Created: 2026-10-21
@@ -36,19 +36,26 @@ Documentation and existing evidence review only. Record the method decision and 
 
 ## Implementation steps
 
-1. Establish the evidence index from cycle 211 `protocol.md`, `findings.md`,
-   `handoff.md`, `analyze_capture_sources.py`, raw frame exports and trace
-   processor logs, PSS CSVs, device/host clock snapshots, request/cache records,
-   and `calculation-checks/`; use cycle 213 `handoff.md`,
-   `connected/paths-final.json`, `connected/paths-final-reviewed.json`, and
-   `visual-review.md`. Follow cycle 213's links into cycle 212 only where a
-   predecessor observation is needed. Preserve the distinction between raw
-   capture, automated classification, and manual screenshot adjudication.
-2. Build one row per source/claim, with these columns: required Gate B claim;
-   source artifact(s); what the record directly establishes; exclusions and
-   uncertainty; evidence disposition; method-readiness disposition; exact
-   endpoint/capture rule; matching or attribution rule; adequacy/invalidity
-   criteria; and next bounded evidence needed. Cover, at minimum:
+1. Establish a bounded evidence index from cycle 211 `protocol.md`,
+   `findings.md`, and `handoff.md`; `candidate-device-config.md`,
+   `restoration-readback.txt`, and `manifest.sha256`; `analyze_capture_sources.py`,
+   frame CSV exports, and trace processor logs; PSS CSVs; device/host clock
+   snapshots; request/cache records; and `calculation-checks/`. For cycle 213,
+   start with `handoff.md`, `connected/paths-final.json`,
+   `connected/paths-final-reviewed.json`, and `visual-review.md`. Follow cycle
+   213 links into cycle 212 only where a predecessor observation is needed.
+   Use the cycle findings and generated text/CSV outputs first; inspect a raw
+   trace, screenshot, or other large artifact only to resolve a specific
+   claim. Preserve the distinction between raw capture, automated
+   classification, and manual screenshot adjudication.
+2. Build a source disposition matrix with a separate row for every scored
+   claim and every materially distinct evidence source. Each row must record:
+   required Gate B claim; exact source artifact(s); what the record directly
+   establishes; exclusions and uncertainty; evidence disposition; method
+   readiness; exact endpoint/capture rule; matching or attribution rule;
+   adequacy and invalidity criteria; and the next bounded evidence needed.
+   Never let an adjacent source, action, or appearance inherit another row's
+   disposition. Cover, at minimum:
    - candidate, device, configuration, fixture, and restoration identity;
    - interaction input plus semantic event/query endpoint and safe target
      reachability, keeping screenshot-rendered state separate from event
@@ -64,16 +71,30 @@ Documentation and existing evidence review only. Record the method decision and 
      and does not establish;
    - calculation definitions, pooling, invalid-run retention, insufficiency
      rules, and the unchanged Gate B thresholds.
-3. Adjudicate each row independently. Do not transfer validity across sources
-   or actions. State explicitly whether the existing method is usable as
-   written, can become usable after a named bounded feasibility check, or is
-   unsupported. For each unsupported row, identify the specific observation
-   that would resolve it and the smallest safe scope that can collect that
-   evidence. If several gaps need distinct methods, record them separately and
-   order them; select the immediate next prerequisite based on dependency on
-   SQ.10-A, without implying later prerequisites are satisfied. Do not infer a
-   production defect or an accessibility failure from missing instrumentation
-   targets/events.
+3. Adjudicate every row independently and keep two conclusions separate:
+   (a) what the retained evidence establishes and (b) whether the method is
+   ready for scored use. In particular:
+   - Keep screenshot-rendered destination visibility separate from touchscreen
+     input, fresh eligible event receipt, and query/confirmation. A screenshot
+     does not satisfy the semantic interaction endpoint or establish an
+     accessibility action. Treat cycle 213 NO_TARGET/untapped outcomes as
+     unresolved observer evidence; do not infer a production reachability or
+     accessibility defect from them.
+   - For FrameTimeline, distinguish positively contaminated frame records
+     (including sorter-error or Late Present affected records where the raw
+     evidence establishes contamination) from records that are only missing
+     action-window filtering, content correlation, or adequate attribution.
+     Mark only positively contradicted/contaminated evidence INVALID, retain
+     it, and state why; keep absent, ambiguous, late, unattributable, or
+     insufficient evidence UNVERIFIED. Neither disposition is a Gate B result.
+   - State whether each method is usable as written, usable after a named
+     bounded feasibility check, or unsupported, using the plan's distinct
+     `READY`, `READY AFTER NAMED FEASIBILITY CHECK`, or `NOT READY` labels.
+     For every unsupported claim, identify the exact observation needed and
+     smallest safe scope that can obtain it. If gaps need distinct methods,
+     keep their follow-ups separate and ordered; select the immediate next
+     prerequisite by dependency on SQ.10-A without implying later prerequisites
+     are satisfied.
 4. Write `method-decision.md`, the source disposition matrix, and the SQ.10-A
    readiness handoff under the cycle evidence directory. Include direct
    relative links to the source artifacts and explain any conclusion that is
@@ -96,6 +117,9 @@ Documentation and existing evidence review only. Record the method decision and 
   with source artifact(s), capture/stop rule, attribution or matching rule,
   validity criteria, exclusions, and missing/late/ambiguous/insufficient
   `UNVERIFIED` behavior.
+- Each matrix row separately states the direct evidence disposition and the
+  method-readiness disposition; no readiness inference transfers across
+  evidence sources, actions, appearances, or claims.
 - Evidence disposition and method-readiness are separate for every row. Each
   claim links to evidence that directly supports it; inferences are labeled.
   Cycle 211's sorter errors/Late Present contamination, missing action filtering
@@ -105,6 +129,10 @@ Documentation and existing evidence review only. Record the method decision and 
 - Cycle 213 screenshot visibility and eligible event confirmation remain
   separate. Unique-target misses remain unresolved observer evidence and are
   not described as a production defect, accessibility failure, or pass.
+- FrameTimeline disposition identifies which retained records are positively
+  contaminated and INVALID, and which limitations are missing or ambiguous and
+  therefore UNVERIFIED; affected evidence remains retained and neither label
+  implies Gate B PASS/FAIL.
 - The handoff gives a direct `READY` or `GATED` SQ.10-A disposition. `READY`
   requires every scored source and the interaction endpoint to have an
   adequate method and any required feasibility validation to be complete. If

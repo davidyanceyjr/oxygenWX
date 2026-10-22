@@ -55,9 +55,9 @@ branch governed by `docs/UI_CONTEXT_ROADMAP.md` and the amended
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. It retains the persisted Glass theme
 identity and the five-theme obligation. Design static Full across all four
 pages first, derive Subtle and the Smoked Quartz-specific None treatment, and
-consider seam-glint motion only after static installed acceptance, a static
-performance gate, and a separate motion lifecycle gate. Measure motion
-performance separately. The detailed roadmap defines ordered SQ.1–SQ.18
+consider seam-glint motion only after static installed acceptance and a
+separate motion lifecycle gate. Static performance is revisited if issues are
+observed in use. The detailed roadmap defines ordered SQ.1–SQ.18
 boundaries, including the five SQ.9A-FLOW source, shared-background, and page
 integration slots inserted before SQ.9A, SQ.17A/SQ.17B, and the separate SQ.V
 full-suite session.
@@ -112,13 +112,19 @@ touchscreen input. It confirmed Full Hourly Later in five trials but left
 Daily range/visibility and Settings return paths unresolved or incompletely
 observed. Cycle 213 completed screenshot-backed path review on the accepted
 app, but several visible controls still lacked unique safe targets and eligible
-event confirmation. Cycle 214 is the PLANNED source-by-source method decision
-for cycle 211's measurement gaps and the cycle 213 observer gaps. SQ.10-A stays
-gated until each required method is supported by evidence or receives a
-separately bounded feasibility plan.
+event confirmation. Cycle 214 completed the source-by-source method decision
+for cycle 211's measurement gaps and the cycle 213 observer gaps; it found
+SQ.10-A was not measurable with the retained method. On 2026-10-21, the owner
+removed static performance measurement as a standing requirement and directed
+that it be revisited if performance issues arise in use. SQ.10's proposed
+feasibility and scored cycles 215–217 are canceled; retained findings are
+historical and do not block later static appearance work. See the owner
+decision in `.codex/history/2026-10-21-owner-defers-static-performance-gate.md`
+and the detailed roadmap. This decision does not claim a measured performance
+pass.
 The remaining SQ entries are ordered roadmap slots, not active cycle plans.
-Gate selection is not a performance pass; scored static measurement begins
-at SQ.10-A. The Gate B thresholds and original device decision are recorded in
+The former Gate B selection is historical and was superseded by the 2026-10-21
+owner decision. Its thresholds and original device decision are recorded in
 `.codex/test-artifacts/183-owner-approved-pixel5a-waiver/owner-decisions.md`;
 the 2026-10-16 device clarification above supersedes that decision's
 Fold-only requirement.
