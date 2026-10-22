@@ -188,7 +188,7 @@ Presentation configuration must not change weather semantics. The long-term reso
 
 ```text
 Theme selection + contrast + effects + system motion policy
-    -> semantic resolved appearance
+    -> selected theme visual pack (semantic palette + resolved asset layers)
     -> theme-aware Compose components
     -> existing typed presentation models
 ```
@@ -203,6 +203,49 @@ The Standard/High contrast choice is persisted separately from theme selection
 in application-private storage and is available alongside theme selection in
 the focused Appearance destination. Standard preserves the theme's normal
 palette; High uses the resolver's accessible palette and opacity rules.
+
+### Theme visual packs and graphics libraries
+
+Each built-in theme provides a visual pack with a semantic palette and a
+theme-specific Compose graphics library. The shared appearance resolver
+selects the pack and its effect layers; the selected theme library owns how
+those layers look. Theme implementations can therefore be authored
+independently against one stable interface and registered with the shared
+resolver without moving per-theme drawing decisions into shared UI components.
+
+Each pack describes:
+
+- Semantic palette roles and the theme's color values. Use an approximate
+  **60/25/15** balance for foundation, supporting, and accent colors as visual
+  emphasis guidance, not as a strict screen-area or pixel quota. Semantic
+  status, warning, and condition roles retain their meaning and must meet the
+  applicable contrast requirements.
+- A graphics library of deterministic Compose drawing functions and, where
+  useful, theme-owned vector or image resources for backgrounds, textures,
+  and decorative glyphs. Functions draw from a narrow presentation context
+  such as page identity, resolved palette, contrast, and selected effects.
+  They do not access weather repositories, provider DTOs, persistence, or
+  network clients.
+- Effect asset groups that the resolver selects cumulatively:
+  **None = core theme assets; Subtle = core + Subtle assets; Full = core +
+  Subtle + Full assets.** Core assets preserve the theme's complete base look.
+  Optional effect layers add visual depth while keeping the theme identity and
+  all weather meaning unchanged.
+
+The renderer draws only the layers returned for the selected theme and effect
+level. Resource-backed optional layers may be loaded when selected and released
+when no longer selected; procedural drawing functions may remain registered
+while only the selected functions are invoked. Functional controls and their
+icons are core UI and are never removed by effects selection. A missing
+optional asset omits that layer and leaves the underlying theme surface intact;
+it does not introduce a placeholder or alter weather content.
+
+Reduced motion suppresses motion layers only. It retains the selected static
+Subtle and Full layers and never changes the saved effects preference. High
+contrast remains a separate palette/opacity resolution. Theme and effects
+changes must not refetch weather, change navigation behavior, or change
+accessibility or meteorological meaning. Concept boards and asset sheets guide
+review; they are not packaged as runtime screens.
 
 ## Availability and honesty
 
