@@ -435,6 +435,167 @@ class ThemeAppearanceApplicationFlowTest {
     }
 
     @Test
+    fun installedGlassNoneKeepsMineralBaseAndCompleteFactsAcrossPagesAndContrast() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val originalFontScale = shell("settings get system font_scale").trim().toFloat()
+        val originalAnimatorScale = shell("settings get global animator_duration_scale").trim().toFloat()
+        val originalDirectionOverride = LocationSearchTestHooks.layoutDirectionOverrideForTests
+        LocationSearchTestHooks.effectsOverrideForTests = null
+        ThemePreferenceTestHooks.storeFactory = { store }
+        ContrastPreferenceTestHooks.storeFactory = { contrastStore }
+        EffectsPreferenceTestHooks.storeFactory = { effectsStore }
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
+        val fixture = requireNotNull(canonicalSnapshot)
+        val home = HomePresentationMapper.map(fixture, HistoricalSynthesis.derive(fixture))
+        val operationBaseline = listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get())
+        assertEquals("Deterministic fixture performs no weather work", listOf(0, 0, 0, 0), operationBaseline)
+        val observations = mutableListOf<String>()
+        val states = listOf(
+            Triple("standard-font1.0", ContrastLevel.STANDARD, 1.0f),
+            Triple("standard-font1.3", ContrastLevel.STANDARD, 1.3f),
+            Triple("high-font1.0", ContrastLevel.HIGH, 1.0f),
+        )
+
+        fun selectPage(page: String, index: Int) {
+            val current = homePageSelector()
+            if (current == page) return
+            compose.onNodeWithContentDescription("Choose Home page, current: $current").performClick()
+            compose.onNodeWithContentDescription("$page page, ${index + 1} of 4, not selected").performClick()
+            compose.waitForIdle()
+        }
+
+        fun assertCurrentPageControl(description: String) {
+            val width = compose.onRoot().fetchSemanticsNode().boundsInRoot.width
+            val all = compose.onAllNodesWithContentDescription(description).fetchSemanticsNodes()
+            val currentIndex = all.indices.firstOrNull {
+                all[it].boundsInRoot.left >= 0f && all[it].boundsInRoot.right <= width
+            }
+            assertTrue("Current page exposes control '$description'", currentIndex != null)
+            compose.onAllNodesWithContentDescription(description)[requireNotNull(currentIndex)]
+                .assertExists()
+        }
+
+        try {
+            states.forEach { (state, contrast, fontScale) ->
+                setFontScale(fontScale)
+                compose.activityRule.scenario.recreate()
+                compose.waitForIdle()
+                compose.activityRule.scenario.onActivity { activity ->
+                    assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.GLASS))
+                    assertEquals(ContrastPreferenceWriteResult.SUCCESS, activity.selectContrastForTests(contrast))
+                    assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(ThemeEffectsLevel.OFF))
+                }
+                compose.waitUntil(5_000) {
+                    observedBackdropTheme.get()?.let {
+                        it.definition.id == WeatherThemeId.GLASS && it.contrast == contrast &&
+                            it.effects == ThemeEffectsLevel.OFF && it.motionStyle == MotionStyle.OFF &&
+                            it.ambientBackground.overlay == com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay.NONE
+                    } == true
+                }
+                assertEquals("Saved None preference is stable", ThemeEffectsLevel.OFF, effectsStore.value)
+                compose.activityRule.scenario.onActivity { canonicalSnapshot = it.canonicalWeatherFixtureForTests() }
+                assertEquals("Fixture remains unchanged", fixture, canonicalSnapshot)
+
+                listOf("Now", "Hourly", "Daily", "Details").forEachIndexed { index, page ->
+                    selectPage(page, index)
+                    compose.onNodeWithContentDescription("Choose Home page, current: $page").assertIsDisplayed()
+                    when (page) {
+                        "Now" -> assertFullNowWeatherFacts()
+                        "Hourly" -> {
+                            assertHourlyForecastWindow(home.hourlyWindows.first(), simple = false)
+                            assertForecastTextPresent(home.sourceLine)
+                            assertForecastTextPresent(home.updatedLine)
+                            compose.onNodeWithText("Choose forecast date").performScrollTo().assertIsDisplayed()
+                            assertCurrentPageControl("Earlier unavailable")
+                            assertCurrentPageControl("Later")
+                        }
+                        "Daily" -> {
+                            assertDailyForecastWindow(home.dailyWindows.first(), simple = false)
+                            assertForecastTextPresent(home.sourceLine)
+                            assertForecastTextPresent(home.updatedLine)
+                            assertCurrentPageControl("Earlier unavailable")
+                            assertCurrentPageControl("Later")
+                        }
+                        "Details" -> {
+                            assertForecastTextPresent(home.sourceLine)
+                            assertForecastTextPresent(home.updatedLine)
+                            assertForecastTextPresent("Conditions")
+                            assertForecastTextPresent("Feels like")
+                            assertForecastTextPresent("Humidity")
+                        }
+                    }
+                    assertEquals("None has no Now condition mark", 0,
+                        compose.onAllNodesWithTag("now-condition-mark", useUnmergedTree = true).fetchSemanticsNodes().size)
+                    val image = compose.onRoot().captureToImage().asAndroidBitmap()
+                    val filename = "glass-none-$state-${page.lowercase()}.png"
+                    save216Capture(context, filename, image)
+                    observations += "$filename contrast=$contrast effects=${effectsStore.value} page=$page facts-controls=PASS"
+                }
+                assertEquals("Appearance selection does not change weather/cache work", operationBaseline,
+                    listOf(forecastRequests.get(), cacheReads.get(), cacheWrites.get(), alertRequests.get()))
+            }
+            setFontScale(1.0f)
+            LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
+            compose.activityRule.scenario.recreate()
+            compose.waitForIdle()
+            compose.activityRule.scenario.onActivity { activity ->
+                assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.GLASS))
+                assertEquals(ContrastPreferenceWriteResult.SUCCESS, activity.selectContrastForTests(ContrastLevel.STANDARD))
+                assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(ThemeEffectsLevel.OFF))
+            }
+            selectPage("Now", 0)
+            val rtlCondition = compose.onNodeWithText("Partly cloudy", useUnmergedTree = true).fetchSemanticsNode()
+            assertEquals("Effective RTL is applied to the installed page", LayoutDirection.Rtl, rtlCondition.layoutInfo.layoutDirection)
+            compose.onNodeWithText("28 °C", useUnmergedTree = true).assertExists()
+            compose.onNodeWithText("Demo Station").assertIsDisplayed()
+            save216Capture(context, "glass-none-standard-rtl-now.png", compose.onRoot().captureToImage().asAndroidBitmap())
+            observations += "glass-none-standard-rtl-now.png direction=RTL effects=${effectsStore.value} facts-controls=PASS"
+
+            shell("settings put global animator_duration_scale 0")
+            MotionPolicyTestHooks.systemScaleOverride.value = 0f
+            compose.activityRule.scenario.recreate()
+            compose.waitForIdle()
+            compose.activityRule.scenario.onActivity { activity ->
+                assertEquals(ThemePreferenceWriteResult.SUCCESS, activity.selectThemeForTests(WeatherThemeId.GLASS))
+                assertEquals(ContrastPreferenceWriteResult.SUCCESS, activity.selectContrastForTests(ContrastLevel.STANDARD))
+                assertEquals(EffectsPreferenceWriteResult.SUCCESS, activity.selectEffectsForTests(ThemeEffectsLevel.OFF))
+            }
+            selectPage("Now", 0)
+            compose.waitUntil(5_000) { observedMotionStyle.get() == MotionStyle.OFF }
+            assertEquals("Reduced motion leaves saved None unchanged", ThemeEffectsLevel.OFF, effectsStore.value)
+            compose.onNodeWithText("Partly cloudy", useUnmergedTree = true).assertExists()
+            compose.onNodeWithText("28 °C", useUnmergedTree = true).assertExists()
+            compose.onNodeWithText("Demo Station").assertIsDisplayed()
+            save216Capture(context, "glass-none-standard-reduced-motion-now.png", compose.onRoot().captureToImage().asAndroidBitmap())
+            observations += "glass-none-standard-reduced-motion-now.png animatorScale=0 motion=${observedMotionStyle.get()} savedEffects=${effectsStore.value} facts-controls=PASS"
+            val acceptance =
+                "Installed MainActivity -> OxygenWeatherApp -> ProductionBackdrop; fixture=Demo Station; " +
+                    "device=${android.os.Build.MODEL}; API=${android.os.Build.VERSION.SDK_INT}; " +
+                    "viewport=${compose.activity.resources.configuration.screenWidthDp}x${compose.activity.resources.configuration.screenHeightDp}dp; " +
+                    "screen=${shell("wm size").trim()}; density=${shell("wm density").trim()}; fixture=$fixture; " +
+                    "operations=$operationBaseline; saved effects remained OFF.\n" + observations.joinToString("\n", postfix = "\n")
+            val values = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "216-sq12-acceptance.txt")
+                put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/OxygenWX/216-sq12-smoked-quartz-none")
+            }
+            val uri = context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+                ?: error("Unable to create cycle 216 installed acceptance record")
+            context.contentResolver.openOutputStream(uri)?.bufferedWriter()?.use { it.write(acceptance) }
+                ?: error("Unable to save cycle 216 installed acceptance record")
+        } finally {
+            setFontScale(originalFontScale)
+            shell("settings put global animator_duration_scale $originalAnimatorScale")
+            MotionPolicyTestHooks.systemScaleOverride.value = null
+            LocationSearchTestHooks.layoutDirectionOverrideForTests = originalDirectionOverride
+            compose.activityRule.scenario.recreate()
+            compose.waitForIdle()
+        }
+    }
+
+    @Test
     fun cycle145InstalledFallbackAndReducedMotionMatrix() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val evidence = File(context.getExternalFilesDir(null), "145-ambient-background-performance-fallback-hardening")
@@ -1630,6 +1791,23 @@ class ThemeAppearanceApplicationFlowTest {
         context.contentResolver.openOutputStream(uri)?.use { output ->
             check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
         } ?: error("Unable to write installed Settings capture for $name")
+    }
+
+    private fun save216Capture(
+        context: android.content.Context,
+        name: String,
+        bitmap: android.graphics.Bitmap,
+    ) {
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "216-$name")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/216-sq12-smoked-quartz-none")
+        }
+        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            ?: error("Unable to create cycle 216 installed screenshot record for $name")
+        context.contentResolver.openOutputStream(uri)?.use { output ->
+            check(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output))
+        } ?: error("Unable to save cycle 216 installed screenshot for $name")
     }
 
     private fun openAppearanceFromHome() {

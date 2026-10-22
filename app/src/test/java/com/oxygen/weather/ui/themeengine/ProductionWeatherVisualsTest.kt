@@ -99,6 +99,32 @@ class ProductionWeatherVisualsTest {
     }
 
     @Test
+    fun glassNoneRetainsEachPagesNativeOpaqueMineralBaseWithoutSeparateMarks() {
+        val none = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.OFF)
+        val expectedGeometry = mapOf(
+            GlassHomePage.NOW to MineralGeometry.DIAGONAL_SEAM,
+            GlassHomePage.HOURLY to MineralGeometry.HORIZONTAL_STRATA,
+            GlassHomePage.DAILY to MineralGeometry.TERRACES,
+            GlassHomePage.DETAILS to MineralGeometry.MICRO_ETCH,
+        )
+
+        GlassHomePage.entries.forEach { page ->
+            val recipe = mineralRecipe(page, none)
+            assertEquals("$page retains its adopted mineral geometry", expectedGeometry.getValue(page), recipe.geometry)
+            assertTrue("$page keeps a positive base strength", recipe.strength > 0f)
+            assertTrue("$page keeps embedded grain", recipe.grainAlpha > 0f)
+            assertFalse("$page is not replaced with a flat canvas at Standard contrast", recipe.flatOpaque)
+        }
+        assertEquals(AmbientBackgroundOverlay.NONE, none.ambientBackground.overlay)
+        assertEquals(AmbientBackgroundStrength.NONE, none.ambientBackground.overlayStrength)
+        assertEquals(MotionStyle.OFF, none.motionStyle)
+        assertEquals(1f, none.palette.canvas.alpha, 0f)
+        WeatherMarkCondition.entries.forEach { condition ->
+            assertEquals("None suppresses the separate $condition mark", null, weatherMarkTreatment(none, condition))
+        }
+    }
+
+    @Test
     fun rtlMirrorsOnlyDirectionalNowGeometry() {
         val theme = resolveTheme(WeatherThemeId.GLASS)
         GlassHomePage.entries.forEach { page ->
