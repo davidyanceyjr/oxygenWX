@@ -408,20 +408,31 @@ decorative marks, icons, overlays, glyphs, and motion while retaining the
 finished opaque, static Smoked Quartz mineral background specified in the
 effects contract. Keep weather facts and usable text controls at every level.
 SQ.17A covers layout/localization acceptance and SQ.17B covers
-appearance/behavior acceptance. Seam-glint motion is conditional on static
-Full acceptance and a separate lifecycle gate. Revisit performance if an
-issue is observed in use. Each implementation
-session uses focused tests for its changed behavior; SQ.V is a separately
-planned full-suite verification session. Bound each implementation plan below
-55% of the context window, targeting 35–45%.
+appearance/behavior acceptance. Following SQ.14, the owner added a
+Compose-native Smoked Quartz assets library and migration as two bounded
+implementation slices, SQ.14A–SQ.14B, followed by final Smoked Quartz acceptance
+in SQ.17A/SQ.17B. The library owns theme-specific drawing and exposes neutral
+Compose inputs; the app remains the owner of theme resolution, weather
+semantics, and navigation. The owner deprecated Smoked Quartz seam-glint motion
+and redirected that roadmap capacity to application UI completion for
+Atmospheric, Minimal OLED, Instrument, and Terminal. This new work uses the
+ordered SQ.15-A…S identifiers after Smoked Quartz acceptance; its detailed
+boundaries must keep the existing shared navigation, weather semantics, and
+theme/effects contracts. Revisit performance if an issue is observed in use.
+Each implementation session uses focused tests for its changed behavior;
+SQ.V is a separately planned full-suite verification session. Bound each
+implementation plan below 55% of the context window, targeting 35–45%.
 
-This branch does not fulfill the broader UI.8–UI.17 slots below. Those slots
-are deferred during Smoked Quartz work, retain their remaining-theme,
-cross-theme, page-integration, motion, request/cache, and performance
-obligations, and resume at UI.8 through an evidence-based roadmap review after
-the Smoked Quartz branch closes. Their earlier 13–17-cycle forecast applies
-only to that original effects scope; it is not a cap or completion claim for
-SQ work. The completed R5.4 Glass implementation remains historical evidence.
+This branch does not fulfill the broader UI.8–UI.17 slots below. The owner
+directed SQ.15-A…S track covers the remaining themes' application-page
+integration and installed appearance states; UI.8–UI.17 retain any shared
+renderer, cross-theme effects, motion, request/cache, and performance
+obligations not explicitly accepted by SQ evidence. After the Smoked Quartz
+branch closes, review those obligations at UI.8 and account for existing SQ
+evidence before planning further work. The earlier 13–17-cycle forecast
+applies only to that original effects scope; it is not a cap or completion
+claim for SQ work. The completed R5.4 Glass implementation remains historical
+evidence.
 The ordered boundaries below are roadmap planning slots, not cycle plans or
 activation. Before production edits, create and activate a bounded plan under
 the repository workflow. SQ.1 records gate configurations; SQ.2 reviews the
@@ -505,7 +516,7 @@ host-driven process restart passed. Exact verification and limitations are in
 `.codex/history/2026-10-22-222-sq13-smoked-quartz-appearance-switching.md` and
 `.codex/test-artifacts/222-sq13-smoked-quartz-appearance-switching/`.
 
-**SQ.14 — Verify static cross-page interactions — NEXT**
+**SQ.14 — Verify static cross-page interactions — DONE (cycle 223)**
 
 - **Boundary:** exercise the defined four-page matrix of pager, Hourly/Daily
   window controls, title/action menus, routes, and Back at all three levels.
@@ -516,42 +527,254 @@ host-driven process restart passed. Exact verification and limitations are in
   passes, or exact failing cases stop dependent acceptance work.
 - **Evidence:** matrix, installed interaction recordings, and focused results.
 
-**SQ.15 — Establish the motion lifecycle gate — PLANNED**
+Cycle 223 verified the four-page × three-effects-level static interaction
+matrix on the Pixel 3 XL. Navigation, forecast-window controls, menus, routes,
+and return behavior passed installed checks; no product correction was needed.
+Focused check non-passes without established input/target setup were manually
+verified in the installed app. The in-scope request/cache check passed. Exact
+scope and remaining limitations are in
+`.codex/history/2026-10-22-223-sq14-static-cross-page-interactions.md` and
+`.codex/test-artifacts/223-sq14-static-cross-page-interactions/`.
 
-- **Boundary:** establish active-page, foreground/background, reduced-motion,
-  animator-scale, and fallback policy with an installed probe. Add no
-  seam-glint artwork; None and Subtle remain static.
-- **Dependencies:** SQ.9A installed acceptance pass and SQ.14.
-- **Exit:** focused lifecycle/policy checks and installed probe show decorative
-  drawing stops on inactive pages/background and respects motion settings.
-  Failure stops SQ.16.
-- **Evidence:** probe configuration, recordings, and focused results.
+**SQ.14A — Establish the all-theme Compose assets library — PLANNED**
 
-**SQ.16 — Add conditional Full seam glint — PLANNED**
+Owner direction on 2026-10-22 expands SQ.14A from Smoked Quartz-only to the
+five built-in theme palettes and backgrounds. Implement it as three ordered
+partial cycles: palette-pack ownership first, Smoked Quartz background
+migration second, then the remaining four theme backgrounds. The all-theme pack
+scope is Atmospheric, Smoked Quartz (Glass),
+Minimal OLED, Instrument, and Terminal. **Base/Core** names the core asset set
+selected by the existing **None** effects level; it does not add a fourth
+effects state or change internal `OFF`/persisted `off` identities.
 
-- **Boundary:** after SQ.15 passes, implement only the reviewed one-pass
-  decorative seam glint in Full. Text stays stationary; None, Subtle, and
-  reduced-motion Full keep their static appearance. Omit motion if the
-  design/lifecycle gate does not support it.
-- **Dependencies:** SQ.15 pass and SQ.2's reviewed motion study.
-- **Exit:** if adopted, focused trigger/stop checks and installed active,
-  inactive, background/return, and reduced-motion review pass; otherwise a
-  recorded omission closes this conditional slot without a motion claim.
-- **Evidence:** motion decision, checks, and recordings when implemented.
+- **Requested outcome:** build a local Android Compose assets library that owns
+  the five semantic color palettes and their Base/Core (None), Subtle, and Full
+  background recipes, then route production background drawing through it.
+- **Boundary:** `SQ.14A-A` adds the module and migrates all five theme palettes
+  while keeping drawing in the app. `SQ.14A-B` migrates the four Smoked Quartz
+  page backgrounds. `SQ.14A-C` migrates the current background recipes for the
+  other four themes. The final module provides all five palettes and all five
+  theme backgrounds.
+  The app keeps theme identity, saved preference, effects/contrast/layout
+  resolution, and adapter ownership. The module has no dependency on app
+  presentation, theme resolver, preferences, repositories, or weather/provider
+  DTOs. Weather marks are excluded and remain a separate migration boundary.
+- **Dependencies:** SQ.14; Smoked Quartz palette/background behavior approved
+  in SQ.2 and installed outcomes in SQ.9A, SQ.11, and SQ.12; current installed
+  behavior for the other four themes is the immediate parity baseline, not new
+  design acceptance.
+- **Functional invariants:** preserve all five current semantic palettes and
+  background recipes, all None/Subtle/Full and high-contrast behavior, the
+  Smoked Quartz None exception, static/reduced-motion result, palette-role
+  binding, text-safe regions, RTL behavior, accessibility invisibility,
+  weather meaning, navigation, and request/cache behavior.
+- **Verification and evidence:** focused palette, pack mapping, recipe, and
+  rendering tests; module/app compilation and applicable lint; one-way Gradle
+  dependency inspection; Pixel 3 XL installed before/after comparison for all
+  five themes, four pages, and three levels at compact baseline across the
+  three partials, plus targeted large-font, high-contrast, RTL, and
+  reduced-motion states. Record exact build/device/configuration and per-state
+  visual results under each partial's
+  `.codex/test-artifacts/<cycle-id>/`; run `git diff --check`.
+- **Exit:** all five theme palettes and background renderers are owned by and
+  consumed through the library; focused checks and compilation pass; installed
+  comparisons show no material change to current appearance or readability.
+  Stop dependent SQ.14B migration if parity fails and record the difference.
+- **Risks/assumptions:** this is an in-repository Compose module, not a
+  separately published artifact. Existing non-Glass rendering is preserved
+  from the immediate baseline; completing the asset move does not claim future
+  theme design acceptance. Partial estimates: 35–45% for palette ownership,
+  35–45% for Smoked Quartz background migration, and 40–50% for the other four
+  background migrations.
+- **Out of scope:** weather marks (SQ.14B), new visual treatments, changed
+  recipe/palette values, persisted identities, publishing, full SQ.17/SQ.V
+  acceptance, and full-suite verification.
 
-**SQ.17A — Accept layout and localization — PLANNED**
+**SQ.14B — Move Smoked Quartz weather marks into the assets library — PLANNED**
+
+- **Requested outcome:** make supported Smoked Quartz condition marks part of
+  the Compose assets library and remove their duplicate app-owned drawing
+  implementation.
+- **Boundary:** add a typed library mark API and the current Smoked Quartz
+  clear, partly-cloudy, cloudy, rain, and storm vectors/drawings; keep Snow,
+  null, and unsupported identities as no mark; adapt existing app
+  presentation/theme values at the app boundary and route current production
+  mark call sites through the module. Do not absorb other theme mark families.
+- **Dependencies:** completion of all three SQ.14A partial cycles; approved D29
+  no-mark gaps; existing SQ.12 None suppression.
+- **Functional invariants:** marks remain decorative and accessibility-hidden;
+  visible condition text stays authoritative; effects None continues to
+  suppress marks; colors come from semantic theme roles; no mark implies
+  unsupported weather meaning, alert, severity, or chronology.
+- **Verification and evidence:** focused module/API mapping tests, app
+  composition tests for supported and omitted marks, module/app compilation,
+  installed representative Smoked Quartz Now/Hourly/Daily captures at None,
+  Subtle, and Full, and `git diff --check`. Preserve screenshots, test output,
+  and configuration under `.codex/test-artifacts/<cycle-id>/`.
+- **Exit:** app call sites use the library API, existing supported marks render
+  with the approved level behavior, and missing/Snow/None cases remain absent;
+  focused checks and installed comparisons pass. Record any unverified
+  condition explicitly.
+- **Risks/assumptions:** the app remains the adapter from canonical weather
+  condition and resolved theme to library input; the module does not acquire
+  domain or resolver dependencies. Estimated context use: 35–45%.
+- **Out of scope:** marks for other themes, new artwork, quartz overlays,
+  seam-glint/motion, permanent global asset-manifest updates before SQ.17
+  review, broad appearance acceptance, and full suites.
+
+**SQ.15-A…S — Remaining-theme application UI and pack completion — OWNER DIRECTED**
+
+The owner selected end-to-end coverage for Atmospheric, Minimal OLED,
+Instrument, and Terminal across Now, Hourly, Daily, and Details at None, Subtle,
+and Full, completing one theme before starting the next. The approved TP design
+pack and current product/UI specifications remain the authorities; this track
+implements and accepts those directions through the real application path.
+The order is SQ.14A-A → SQ.14A-B → SQ.14A-C → SQ.14B → SQ.17A → SQ.17B
+→ SQ.15-A…S → SQ.V. This finishes the all-theme palette/background library before the
+Smoked Quartz mark migration, then completes Smoked Quartz acceptance before
+beginning the remaining-theme application-page work. Full-suite verification
+remains at the end of the branch.
+
+**SQ.15-A — Audit remaining-theme UI gaps and freeze the acceptance matrix**
+
+- **Boundary:** inspect the approved theme-pack artifacts, TP.3 evidence,
+  current app resolver/renderers, and existing installed/test evidence for the
+  four remaining themes. Record a theme × page × effects matrix that marks
+  accepted existing behavior, concrete gaps, owner-decision gaps, and evidence
+  needed by SQ.15-B…Q. No production edits.
+- **Dependencies:** SQ.17B and the existing TP.3 acceptance. The four-theme
+  track follows final Smoked Quartz acceptance so it cannot delay closure of
+  the current theme objective.
+- **Exit:** each of the 48 theme/page/effects combinations has a source/evidence
+  pointer and a disposition; the page-slice boundaries below remain one-page
+  outcomes or are explicitly updated before implementation. No unsupported
+  design or weather meaning is inferred.
+- **Evidence:** source/evidence inventory, matrix, and exact limitations in
+  `.codex/test-artifacts/<cycle-id>/` and cycle history.
+- **Context target:** 35–45%; documentation and inspection only.
+
+**SQ.15-B…Q — One-page implementation slices, theme by theme**
+
+Each slice below changes one theme on one Home page and supports the adopted
+None/Subtle/Full behavior. The four page slices for a theme complete before
+moving to the next theme. SQ.15-A's matrix may narrow an already accepted
+page/level cell out of production edits, but its installed evidence must still
+be confirmed and the roadmap updated with the exact disposition before that
+slice is skipped.
+
+| Slice | Theme / page | Production boundary | Depends on |
+|---|---|---|---|
+| SQ.15-B | Atmospheric / Now | Integrate the approved Atmospheric recipe and its three effects levels through the production Now page. | SQ.15-A |
+| SQ.15-C | Atmospheric / Hourly | Integrate the approved recipe on Hourly; retain six-entry windows, date jump, and visible Earlier/Later controls. | SQ.15-B |
+| SQ.15-D | Atmospheric / Daily | Integrate the approved recipe on Daily; retain five chronological rows, value states, and visible controls. | SQ.15-C |
+| SQ.15-E | Atmospheric / Details | Integrate the approved recipe on Details; preserve source, freshness, forecast-pattern, and historical group distinctions. | SQ.15-D |
+| SQ.15-F | Minimal OLED / Now | Integrate the approved Minimal OLED recipe and three levels through Now. | SQ.15-E |
+| SQ.15-G | Minimal OLED / Hourly | Integrate the approved recipe on Hourly with its existing chronological and window contract. | SQ.15-F |
+| SQ.15-H | Minimal OLED / Daily | Integrate the approved recipe on Daily with its existing chronological and window contract. | SQ.15-G |
+| SQ.15-I | Minimal OLED / Details | Integrate the approved recipe on Details while preserving semantic group boundaries. | SQ.15-H |
+| SQ.15-J | Instrument / Now | Integrate the approved Instrument recipe and three levels through Now. | SQ.15-I |
+| SQ.15-K | Instrument / Hourly | Integrate the approved recipe on Hourly with its existing chronological and window contract. | SQ.15-J |
+| SQ.15-L | Instrument / Daily | Integrate the approved recipe on Daily with its existing chronological and window contract. | SQ.15-K |
+| SQ.15-M | Instrument / Details | Integrate the approved recipe on Details while preserving semantic group boundaries. | SQ.15-L |
+| SQ.15-N | Terminal / Now | Integrate the approved Terminal recipe and three levels through Now. | SQ.15-M |
+| SQ.15-O | Terminal / Hourly | Integrate the approved recipe on Hourly with its existing chronological and window contract. | SQ.15-N |
+| SQ.15-P | Terminal / Daily | Integrate the approved recipe on Daily with its existing chronological and window contract. | SQ.15-O |
+| SQ.15-Q | Terminal / Details | Integrate the approved recipe on Details while preserving semantic group boundaries. | SQ.15-P |
+
+**Shared boundary and exit for SQ.15-B…Q:** change only the named theme/page,
+reuse the completed resolver and applicable theme pack assets, and do not
+introduce a new palette, page structure, weather meaning, destination, data
+request, or theme preference. Preserve all weather values, missing-data
+behavior, chronology, provenance, named page identity, accessibility semantics,
+48dp targets, and the theme's effects None contract. None remains opaque, static,
+and complete; any optional decorative mark stays redundant to visible text and
+is absent for unsupported/missing identities. Static Subtle and Full treatment
+must remain readable and source-backed. Do not add motion in these slices; any
+later motion requires that theme's static acceptance and a separate lifecycle
+gate.
+
+Each slice targets 35–45% context and must stay below 55%; if evidence shows a
+named page/theme outcome is larger, split it with dependent suffixes before
+activation. Run focused checks for the changed page/theme behavior, applicable
+compilation/lint, and `git diff --check`. Install on Pixel 3 XL with screen
+timeout disabled and Stay Awake confirmed. Capture the named page at None,
+Subtle, and Full on the compact baseline; cover large font, RTL, High contrast,
+and reduced motion when the change affects those conditions. Record actual
+device/API/build and configuration under the cycle-specific artifact path.
+Each slice exits only when focused checks and installed evidence show the
+approved page recipe at all three levels while preserving the shared product
+invariants; otherwise record the exact failed/unverified case and stop dependent
+theme work.
+
+Out of scope for each page slice: other pages or themes, new theme source
+decisions, changing effects preference identities, full cross-theme matrices,
+service-level TalkBack traversal, full test suites, and motion.
+
+**SQ.15-R — Cross-theme layout, localization, and effects review**
+
+- **Boundary:** review SQ.15-B…Q installed evidence and the four completed
+  themes as a whole at compact and large-font conditions, representative RTL,
+  High contrast, and reduced motion. Correct only concrete defects within one
+  bounded follow-up plan; do not absorb fixes to multiple themes/pages here.
+- **Dependencies:** SQ.15-Q and all prior SQ.15 page slices.
+- **Exit:** the four themes preserve required facts, controls, page identity,
+  chronology, and readable None/Subtle/Full treatments; each required cell is
+  pass, failed, or explicitly unverified with evidence and reason.
+- **Evidence:** consolidated installed matrix and focused results under the
+  cycle artifact path. This is not full-suite verification.
+- **Context target:** 35–45%; review stored evidence rather than recapturing
+  the complete 48-cell matrix. Split by theme pair before activation if the
+  evidence volume or defect investigation would exceed the 55% threshold.
+
+**SQ.15-S — Cross-theme behavior and pack reconciliation**
+
+- **Boundary:** reconcile approved sources, current app implementation, and
+  SQ.15-B…R evidence for the four themes. After SQ.17B has accepted Smoked
+  Quartz and this track has reviewed the other four themes, update the
+  permanent asset manifest as required by the adopted UI specification.
+  Focused checks cover theme switching, saved theme/effects identity,
+  no-refetch/request-cache invariance, semantics, and the documented
+  no-mark/missing-data behavior. No new visual treatment.
+- **Dependencies:** SQ.15-R.
+- **Exit:** the remaining four theme packs are accounted for in the production
+  app and evidence index; all identified invariants pass or are listed as
+  unresolved, with no claim beyond inspected evidence. Material fixes require
+  a new bounded plan.
+- **Evidence:** reconciliation matrix, focused test output, installed state
+  observations, and limitations under the cycle artifact path.
+- **Context target:** 35–45%; if manifest reconciliation or behavior diagnosis
+  pushes the estimate above 55%, split before activation without dropping any
+  pack or invariant obligation.
+
+**Motion:** Smoked Quartz seam-glint motion is deprecated; do not add it or its
+lifecycle/measurement cycles. Any motion in another theme remains conditional
+on that theme's static installed acceptance and its own lifecycle gate. The
+owner's scope decision is recorded in
+`.codex/history/2026-10-22-owner-directs-sq15-remaining-theme-ui.md`.
+
+**Historical SQ.15:** cycle 224's source audit and limitation remain intact as
+history; it does not block this new SQ.15-A…S track.
+
+**SQ.16 — Add conditional Full seam glint — DEPRECATED BY OWNER**
+
+- **Disposition:** the owner deprecated Smoked Quartz seam-glint motion and
+  redirected this remaining roadmap capacity to UI completion for the other
+  built-in themes. Do not implement the seam glint or add a motion lifecycle
+  probe for it.
+
+**SQ.17A — Accept Smoked Quartz layout and localization — PLANNED**
 
 - **Boundary:** review all four pages and three levels against SQ.1's compact,
-  font-scale, and RTL matrix, using representative paired states for overlays
-  and motion. Fix only evidenced Glass layout defects.
-- **Dependencies:** SQ.14 and SQ.16's pass or recorded omission.
+  font-scale, and RTL matrix, using representative paired states for static
+  decoration and effects. Fix only evidenced Glass layout defects.
+- **Dependencies:** SQ.14B.
 - **Exit:** required facts and controls remain visible, reachable, ordered,
   and meaningful with no clipping or direction-dependent decoration; record
   any unavailable system RTL or assistive-technology boundary.
 - **Evidence:** named installed configuration matrix, captures, and focused
   checks for corrections.
 
-**SQ.17B — Accept appearance and behavior — PLANNED**
+**SQ.17B — Accept Smoked Quartz appearance and behavior — PLANNED**
 
 - **Boundary:** review contrast, reduced motion, accessibility meaning,
   navigation, and request/cache invariance across three Glass levels and
@@ -564,29 +787,28 @@ host-driven process restart passed. Exact verification and limitations are in
 - **Evidence:** installed matrix, accessibility/behavior observations, and
   focused results for corrections.
 
-**SQ.18 — Measure motion increment and reconcile branch — PLANNED**
+**SQ.18 — Measure motion increment and reconcile branch — DEPRECATED BY OWNER**
 
-- **Boundary:** if SQ.16 adopted motion, compare static and motion cost on
-  SQ.1's named configurations and motion budget. Reconcile accepted design,
-  implementation, and evidence; substantial fixes need a new plan.
-- **Dependencies:** SQ.17B; SQ.16 pass or recorded omission.
-- **Exit:** adopted motion meets its separate incremental budget, or omission
-  is recorded; the branch report lists exact passed and unverified boundaries.
-  A failed motion budget cannot receive a pass by citing static results.
-- **Evidence:** raw comparative measurements when applicable, final installed
-  captures, and evidence index.
+- **Disposition:** there is no Smoked Quartz seam-glint motion to measure or
+  reconcile. Remaining theme UI work and the separate SQ.V verification retain
+  their own acceptance and evidence requirements.
 
 **SQ.V — Separate full-suite verification — PLANNED**
 
 - **Boundary:** run full relevant unit and connected-test suites in their own
   planned verification cycle; diagnose failures without folding material fixes
   into the verification session.
-- **Dependencies:** SQ.18 closeout.
+- **Dependencies:** completion of the remaining-theme UI track and SQ.17B
+  Smoked Quartz appearance/behavior acceptance.
 - **Exit:** history states suites, host/device configuration, results, and
   unverified boundaries. A failure or unavailable suite cannot be described
   as a pass.
 - **Evidence:** raw suite logs, configuration, and final installed smoke
   capture under the SQ.V cycle artifact directory.
+- **Device requirements:** use all registered devices—Pixel 3 XL, Pixel 5
+  (`redfin`), and Pixel Fold (`felix`)—for the full connected suite. Disable
+  screen timeout and confirm Developer Options Stay Awake on all three before
+  testing.
 
 ### Evidence-gated cycle budget for the original UI effects scope
 
@@ -599,41 +821,15 @@ requirement to fill every slot.
 Keep the final sequence within the owner's 13–17 range unless the UI.7 review
 records concrete evidence for changing that target.
 
-The following are planning slots, not PLANNED cycles. Give them exact
-boundaries, dependencies, and acceptance criteria only after UI.7:
-
-- **UI.8:** add shared rendering/model support only where the vertical slice
-  demonstrates a reusable need.
-- **UI.9–UI.10:** implement static treatments for remaining themes, grouped by
-  source and renderer ownership rather than one cycle per theme or effect.
-- **UI.11:** integrate accepted treatments into Now for remaining themes.
-- **UI.12–UI.14:** integrate Hourly, Daily, and Details, one page boundary per
-  cycle to protect each page's weather and navigation semantics.
-- **UI.15A–UI.15B:** split the motion lifecycle gate from one theme's motion
-  treatment as detailed below; both remain conditional on static acceptance.
-- **UI.16:** complete focused cross-theme appearance, palette/contrast, reduced
-  motion, and request/cache invariance checks that remain after the earlier
-  installed slices.
-- **UI.17:** measure performance on named device/API configurations and
-  reconcile the full effects evidence, recording any unverified boundary.
-
-### Motion split boundaries
-
-- **UI.15A — Motion lifecycle and fallback:** establish active/inactive-page
-  and foreground/background gating, reduced-motion/animator-scale behavior, and
-  preference-preserving fallback. Use focused lifecycle/policy tests and an
-  installed probe showing decorative drawing stops and resumes in the named
-  states. Add no theme-specific motion artwork.
-- **UI.15B — One theme motion treatment:** only after UI.15A and that theme's
-  static treatment pass, add motion for one theme. Verify the installed result
-  and stationary readable text on a named configuration. Leave other themes'
-  motion for a later evidence-based decision; reserve the cross-configuration
-  performance matrix for UI.17.
-
-These slots may be combined, dropped, or split at UI.7 to fit observed
-implementation coupling and the 13–17 total target. Do not create detailed
-plans or additional documentation-only cycles for UI.8–UI.17 before that
-evidence review. UI.7A has been dropped.
+The following UI.8–UI.17 slots remain planning placeholders, not PLANNED
+cycles. The owner-directed SQ.15-A…S sequence now covers application
+integration and installed appearance acceptance for the four remaining themes
+across all Home pages and three effects levels. Do not duplicate those theme
+and page implementations under UI.9–UI.14. After the Smoked Quartz branch
+closes, review UI.8–UI.17 at UI.8 using the SQ evidence to identify any
+remaining shared rendering/model, cross-theme behavior, motion, request/cache,
+or performance obligations. The original 13–17 cycle estimate applies only to
+that effects work and does not cap the SQ.15-A…S sequence. UI.7A remains dropped.
 
 The former FX.03–FX.40 sequence is superseded. Cycle 169 history preserves
 that proposal for auditability. FX.41, FX.42, and FX.43 identify UI.6A, UI.7, and conditional UI.7A;

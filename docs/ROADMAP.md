@@ -55,18 +55,29 @@ branch governed by `docs/UI_CONTEXT_ROADMAP.md` and the amended
 `docs/OXYGEN_UI_SPECIFICATION_ADOPTED.md`. It retains the persisted Glass theme
 identity and the five-theme obligation. Design static Full across all four
 pages first, derive Subtle and the Smoked Quartz-specific None treatment, and
-consider seam-glint motion only after static installed acceptance and a
-separate motion lifecycle gate. Static performance is revisited if issues are
-observed in use. The detailed roadmap defines ordered SQ.1–SQ.18
+complete its installed acceptance. The owner deprecated Smoked Quartz
+seam-glint motion and redirected the remaining track capacity to application
+UI completion for Atmospheric, Minimal OLED, Instrument, and Terminal under
+SQ.15-A…S. Static performance is revisited if issues are observed in use. The
+detailed roadmap defines ordered SQ.1–SQ.18
 boundaries, including the five SQ.9A-FLOW source, shared-background, and page
-integration slots inserted before SQ.9A, SQ.17A/SQ.17B, and the separate SQ.V
-full-suite session.
+integration slots inserted before SQ.9A; the owner-added SQ.14A all-theme
+palette/background assets library (three partial cycles) and SQ.14B Smoked Quartz
+weather-mark migration; SQ.17A/SQ.17B
+Smoked Quartz acceptance; SQ.15-A…S remaining-theme UI work; and the separate
+SQ.V full-suite session.
 SQ.1–SQ.9A are complete through cycle 208. SQ.10 static performance was
 removed as a standing requirement by the owner on 2026-10-21; revisit it only
 if an issue is observed in use. SQ.11–SQ.13 are complete in cycles 215, 216,
-and 222. SQ.14 is the next slice; remaining SQ entries are ordered slots, not
-active plans. The detailed status, dependencies, acceptance criteria, and
-history pointers are in `docs/UI_CONTEXT_ROADMAP.md`. The owner decision is
+and 222. SQ.14 completed in cycle 223; SQ.14A is the next slice, followed by
+SQ.14B, SQ.17A/SQ.17B Smoked Quartz acceptance, then owner-directed
+SQ.15-A…S remaining-theme UI completion. SQ.14A is currently PLANNED;
+subsequent SQ entries are ordered slots, not active plans.
+The detailed status,
+dependencies, acceptance criteria, and history pointers are in
+`docs/UI_CONTEXT_ROADMAP.md`. The owner decision is
+`.codex/history/2026-10-22-owner-directs-sq15-remaining-theme-ui.md`; the
+static-performance decision is
 `.codex/history/2026-10-21-owner-defers-static-performance-gate.md`.
 
 Completed R5.4 Glass work is historical evidence, not acceptance of the

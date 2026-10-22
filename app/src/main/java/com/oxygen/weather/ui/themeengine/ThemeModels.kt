@@ -2,13 +2,13 @@ package com.oxygen.weather.ui.themeengine
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.oxygen.themeassets.ThemePalette
 
 /** Stable presentation identities. Components consume resolved roles, never branch on these IDs. */
 enum class WeatherThemeId { ATMOSPHERIC, GLASS, MINIMAL_OLED, INSTRUMENT, TERMINAL }
@@ -29,26 +29,6 @@ data class ThemePreferences(
     val contrast: ContrastLevel = ContrastLevel.STANDARD,
     val layout: LayoutPreset = LayoutPreset.STANDARD,
     val effects: ThemeEffectsLevel = ThemeEffectsLevel.SUBTLE,
-)
-
-@Immutable
-data class ThemePalette(
-    val canvas: Color,
-    val atmosphereTop: Color,
-    val atmosphereBottom: Color,
-    val atmosphereGlow: Color,
-    val surface: Color,
-    val elevatedSurface: Color,
-    val content: Color,
-    val primaryData: Color,
-    val secondaryData: Color,
-    val outline: Color,
-    val conditionAccent: Color,
-    val precipitationAccent: Color,
-    val warning: Color,
-    val danger: Color,
-    val action: Color,
-    val actionContent: Color,
 )
 
 @Immutable

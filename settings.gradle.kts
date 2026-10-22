@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "OxygenWeather"
-include(":app")
+include(":app", ":oxygen-theme-assets")

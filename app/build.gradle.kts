@@ -42,6 +42,7 @@ tasks.matching { it.name == "compileDebugUnitTestKotlin" || it.name == "compileD
 }
 
 dependencies {
+    implementation(project(":oxygen-theme-assets"))
     val composeBom = platform("androidx.compose:compose-bom:2026.09.00")
     implementation(composeBom)
 

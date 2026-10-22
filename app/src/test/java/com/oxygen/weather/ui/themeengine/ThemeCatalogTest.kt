@@ -5,6 +5,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.oxygen.themeassets.ThemePackIdentity
+import com.oxygen.themeassets.ThemePalettePacks
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNotEquals
@@ -12,6 +14,23 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ThemeCatalogTest {
+    @Test
+    fun everyAppThemeMapsToItsExactModuleOwnedStandardPalette() {
+        val expectedPacks = mapOf(
+            WeatherThemeId.ATMOSPHERIC to ThemePackIdentity.ATMOSPHERIC,
+            WeatherThemeId.GLASS to ThemePackIdentity.SMOKED_QUARTZ,
+            WeatherThemeId.MINIMAL_OLED to ThemePackIdentity.MINIMAL_OLED,
+            WeatherThemeId.INSTRUMENT to ThemePackIdentity.INSTRUMENT,
+            WeatherThemeId.TERMINAL to ThemePackIdentity.TERMINAL,
+        )
+
+        assertEquals(WeatherThemeId.entries.toSet(), expectedPacks.keys)
+        WeatherThemeId.entries.forEach { id ->
+            assertEquals(expectedPacks.getValue(id), ThemeCatalog.packFor(id))
+            assertEquals(ThemePalettePacks.palette(expectedPacks.getValue(id)), ThemeCatalog.definition(id).palette)
+        }
+    }
+
     @Test
     fun approvedJsonSpacingTargetsMatchTypedCatalog() {
         assertEquals(12.dp, ThemeCatalog.glass.geometry.pageStackGap)

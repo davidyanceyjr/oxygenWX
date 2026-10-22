@@ -31,7 +31,7 @@ import com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength
 import com.oxygen.weather.ui.themeengine.ContrastLevel
 import com.oxygen.weather.ui.themeengine.LayoutPreset
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
-import com.oxygen.weather.ui.themeengine.ThemePalette
+import com.oxygen.themeassets.ThemePalette
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.WeatherMarkStyle

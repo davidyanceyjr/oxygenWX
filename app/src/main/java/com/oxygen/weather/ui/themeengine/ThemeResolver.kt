@@ -2,6 +2,8 @@ package com.oxygen.weather.ui.themeengine
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.oxygen.themeassets.ThemePalette
+import com.oxygen.themeassets.ThemePalettePacks
 
 /** Pure resolver: weather values, callbacks, persistence, and platform state are not inputs. */
 fun resolveTheme(
@@ -20,7 +22,7 @@ fun resolveTheme(
     val palette = when (contrast) {
         ContrastLevel.STANDARD -> definition.palette
         ContrastLevel.HIGH -> if (themeId == WeatherThemeId.GLASS) {
-            definition.palette.glassHighContrast()
+            ThemePalettePacks.smokedQuartzHighContrast
         } else definition.palette.highContrast(
             textBackgrounds = listOf(
                 definition.palette.canvas, // bare hero and selected page/date controls
@@ -89,25 +91,6 @@ fun resolveTheme(
         layout = layout,
     )
 }
-
-private fun ThemePalette.glassHighContrast(): ThemePalette = copy(
-    canvas = Color(0xFF000000),
-    atmosphereTop = Color(0xFF000000),
-    atmosphereBottom = Color(0xFF000000),
-    atmosphereGlow = Color(0xFFFFFFFF),
-    surface = Color(0xFF101010),
-    elevatedSurface = Color(0xFF101010),
-    content = Color(0xFFFFFFFF),
-    primaryData = Color(0xFFFFFFFF),
-    secondaryData = Color(0xFFFFFFFF),
-    outline = Color(0xFFFFFFFF),
-    conditionAccent = Color(0xFFFFFFFF),
-    precipitationAccent = Color(0xFFFFFFFF),
-    warning = Color(0xFFFFFFFF),
-    danger = Color(0xFFFFFFFF),
-    action = Color(0xFFFFFFFF),
-    actionContent = Color(0xFF000000),
-)
 
 private fun ThemePalette.highContrast(
     textBackgrounds: List<Color>,
