@@ -1512,7 +1512,7 @@ and its evidence directory.
   performance cycles unless an observed issue leads to an explicit replan.
 - Owner decision: [2026-10-21 static performance gate withdrawal](../.codex/history/2026-10-21-owner-defers-static-performance-gate.md).
 
-**SQ.11 — Derive static Subtle — NEXT**
+**SQ.11 — Derive static Subtle — DONE (cycle 215)**
 
 - **Boundary:** reduce approved Full lighting, texture, marks, and ornament
   through Glass Subtle policy. Keep the finished background, facts, controls,
@@ -1522,7 +1522,14 @@ and its evidence directory.
   captures show a distinct, readable reduction on every page.
 - **Evidence:** checks and paired same-fixture four-page captures.
 
-**SQ.12 — Derive Smoked Quartz None — PLANNED**
+Cycle 215 completed the four-page Standard Subtle treatment with focused
+resolver/rendering coverage and paired installed Full/Subtle captures. Font
+scale 1.3 was captured across all pages; High contrast and RTL/reduced-motion
+visual review was representative on Now, and TalkBack traversal was not run.
+See `.codex/history/2026-10-21-215-sq11-derive-static-subtle.md` and
+`.codex/test-artifacts/215-sq11-derive-static-subtle/`.
+
+**SQ.12 — Derive Smoked Quartz None — PLANNED (current cycle 216)**
 
 - **Boundary:** retain only the specified opaque static stone gradient,
   integrated strata/Details micro-etch, and embedded grain. Suppress separate
