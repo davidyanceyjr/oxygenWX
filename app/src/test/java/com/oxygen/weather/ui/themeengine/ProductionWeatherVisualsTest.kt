@@ -2,18 +2,14 @@ package com.oxygen.weather.ui.themeengine
 
 import com.oxygen.weather.presentation.WeatherMarkCondition
 import com.oxygen.weather.ui.themeengine.components.markStyleSignature
-import com.oxygen.weather.ui.themeengine.components.GlassHomePage
-import com.oxygen.weather.ui.themeengine.components.MineralGeometry
-import com.oxygen.weather.ui.themeengine.components.MineralPaletteRole
-import com.oxygen.weather.ui.themeengine.components.adjustedMineralNowLightSide
-import com.oxygen.weather.ui.themeengine.components.adjustSrgbBrightness
-import com.oxygen.weather.ui.themeengine.components.mineralRecipe
-import com.oxygen.weather.ui.themeengine.components.sharedFullMineralRecipe
-import com.oxygen.weather.ui.themeengine.components.shouldAdjustMineralNowContrast
 import com.oxygen.weather.ui.themeengine.components.weatherMarkTreatment
 import com.oxygen.weather.ui.themeengine.components.usesGlassOpenStaticPresentation
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.graphics.Color
+import com.oxygen.themeassets.BackgroundContrastLevel
+import com.oxygen.themeassets.BackgroundEffectsLevel
+import com.oxygen.themeassets.SmokedQuartzPage
+import com.oxygen.themeassets.ThemePackIdentity
+import com.oxygen.weather.ui.themeengine.components.GlassHomePage
+import com.oxygen.weather.ui.themeengine.components.smokedQuartzBackgroundInput
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -21,42 +17,49 @@ import org.junit.Test
 
 class ProductionWeatherVisualsTest {
     @Test
-    fun requestedBrightnessFactorsProduceExpectedSrgbChannels() {
-        assertEquals(Color(0xFF141E1A), adjustSrgbBrightness(Color(0xFF111916), 1.20f))
-        assertEquals(Color(0xFF0A100F), adjustSrgbBrightness(Color(0xFF0B1110), 0.93f))
-        assertEquals(
-            Color(0xFF111917),
-            adjustedMineralNowLightSide(Color(0xFF0B1110), Color(0xFF111916), 0.54f),
+    fun smokedQuartzAdapterExhaustivelyMapsAppPageEffectsContrastAndResolvedPalette() {
+        val pages = mapOf(
+            GlassHomePage.NOW to SmokedQuartzPage.NOW,
+            GlassHomePage.HOURLY to SmokedQuartzPage.HOURLY,
+            GlassHomePage.DAILY to SmokedQuartzPage.DAILY,
+            GlassHomePage.DETAILS to SmokedQuartzPage.DETAILS,
         )
-        assertEquals(Color(0x80141E1A), adjustSrgbBrightness(Color(0x80111916), 1.20f))
-        assertEquals(Color.White, adjustSrgbBrightness(Color(0xFFEEEEEE), 1.20f))
-    }
+        val effects = mapOf(
+            ThemeEffectsLevel.OFF to BackgroundEffectsLevel.NONE,
+            ThemeEffectsLevel.SUBTLE to BackgroundEffectsLevel.SUBTLE,
+            ThemeEffectsLevel.FULL to BackgroundEffectsLevel.FULL,
+        )
+        val contrasts = mapOf(
+            ContrastLevel.STANDARD to BackgroundContrastLevel.STANDARD,
+            ContrastLevel.HIGH to BackgroundContrastLevel.HIGH,
+        )
 
-    @Test
-    fun nowContrastAdjustmentIsLimitedToStandardGlassNow() {
-        val standardGlass = resolveTheme(WeatherThemeId.GLASS)
-        assertTrue(shouldAdjustMineralNowContrast(MineralGeometry.DIAGONAL_SEAM, standardGlass))
-        assertFalse(shouldAdjustMineralNowContrast(MineralGeometry.HORIZONTAL_STRATA, standardGlass))
-        assertFalse(shouldAdjustMineralNowContrast(MineralGeometry.TERRACES, standardGlass))
-        assertFalse(shouldAdjustMineralNowContrast(MineralGeometry.MICRO_ETCH, standardGlass))
-        assertFalse(
-            shouldAdjustMineralNowContrast(
-                MineralGeometry.DIAGONAL_SEAM,
-                resolveTheme(WeatherThemeId.GLASS, ContrastLevel.HIGH),
-            ),
-        )
-        WeatherThemeId.entries.filter { it != WeatherThemeId.GLASS }.forEach { id ->
-            assertFalse(shouldAdjustMineralNowContrast(MineralGeometry.DIAGONAL_SEAM, resolveTheme(id)))
+        pages.forEach { (appPage, libraryPage) ->
+            effects.forEach { (appEffects, libraryEffects) ->
+                contrasts.forEach { (appContrast, libraryContrast) ->
+                    val resolved = resolveTheme(WeatherThemeId.GLASS, appContrast, appEffects)
+                    val input = smokedQuartzBackgroundInput(resolved, appPage, androidx.compose.ui.unit.LayoutDirection.Rtl)
+                    assertEquals(ThemePackIdentity.SMOKED_QUARTZ, input.pack)
+                    assertEquals(libraryPage, input.page)
+                    assertEquals(libraryEffects, input.effects)
+                    assertEquals(libraryContrast, input.contrast)
+                    assertEquals(androidx.compose.ui.unit.LayoutDirection.Rtl, input.layoutDirection)
+                    assertEquals(resolved.palette, input.palette)
+                }
+            }
         }
     }
 
     @Test
-    fun glassPagesSelectOnlyTheirStaticGeometry() {
-        val theme = resolveTheme(WeatherThemeId.GLASS)
-        assertEquals(MineralGeometry.DIAGONAL_SEAM, mineralRecipe(GlassHomePage.NOW, theme).geometry)
-        assertEquals(MineralGeometry.HORIZONTAL_STRATA, mineralRecipe(GlassHomePage.HOURLY, theme).geometry)
-        assertEquals(MineralGeometry.TERRACES, mineralRecipe(GlassHomePage.DAILY, theme).geometry)
-        assertEquals(MineralGeometry.MICRO_ETCH, mineralRecipe(GlassHomePage.DETAILS, theme).geometry)
+    fun smokedQuartzAdapterRejectsOtherAppThemes() {
+        val failure = runCatching {
+            smokedQuartzBackgroundInput(
+                resolveTheme(WeatherThemeId.ATMOSPHERIC),
+                GlassHomePage.NOW,
+                androidx.compose.ui.unit.LayoutDirection.Ltr,
+            )
+        }.exceptionOrNull()
+        assertTrue(failure is IllegalStateException)
     }
 
     @Test
@@ -81,72 +84,6 @@ class ProductionWeatherVisualsTest {
             assertEquals(null, weatherMarkTreatment(none, condition))
         }
         assertEquals(null, weatherMarkTreatment(subtle, null))
-    }
-
-    @Test
-    fun mineralLevelsRetainBaseAndGrainWithOrderedStrength() {
-        val recipes = listOf(ThemeEffectsLevel.OFF, ThemeEffectsLevel.SUBTLE, ThemeEffectsLevel.FULL)
-            .map { mineralRecipe(GlassHomePage.NOW, resolveTheme(WeatherThemeId.GLASS, effects = it)) }
-        assertTrue(recipes.all { it.strength > 0f && it.grainAlpha > 0f && !it.flatOpaque })
-        assertTrue(recipes[0].strength < recipes[1].strength)
-        assertTrue(recipes[1].strength < recipes[2].strength)
-        assertEquals(
-            setOf(MineralPaletteRole.CANVAS, MineralPaletteRole.ATMOSPHERE_TOP,
-                MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.ATMOSPHERE_GLOW,
-                MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE),
-            recipes[0].roles,
-        )
-    }
-
-    @Test
-    fun glassNoneRetainsEachPagesNativeOpaqueMineralBaseWithoutSeparateMarks() {
-        val none = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.OFF)
-        val expectedGeometry = mapOf(
-            GlassHomePage.NOW to MineralGeometry.DIAGONAL_SEAM,
-            GlassHomePage.HOURLY to MineralGeometry.HORIZONTAL_STRATA,
-            GlassHomePage.DAILY to MineralGeometry.TERRACES,
-            GlassHomePage.DETAILS to MineralGeometry.MICRO_ETCH,
-        )
-
-        GlassHomePage.entries.forEach { page ->
-            val recipe = mineralRecipe(page, none)
-            assertEquals("$page retains its adopted mineral geometry", expectedGeometry.getValue(page), recipe.geometry)
-            assertTrue("$page keeps a positive base strength", recipe.strength > 0f)
-            assertTrue("$page keeps embedded grain", recipe.grainAlpha > 0f)
-            assertFalse("$page is not replaced with a flat canvas at Standard contrast", recipe.flatOpaque)
-        }
-        assertEquals(AmbientBackgroundOverlay.NONE, none.ambientBackground.overlay)
-        assertEquals(AmbientBackgroundStrength.NONE, none.ambientBackground.overlayStrength)
-        assertEquals(MotionStyle.OFF, none.motionStyle)
-        assertEquals(1f, none.palette.canvas.alpha, 0f)
-        WeatherMarkCondition.entries.forEach { condition ->
-            assertEquals("None suppresses the separate $condition mark", null, weatherMarkTreatment(none, condition))
-        }
-    }
-
-    @Test
-    fun rtlMirrorsOnlyDirectionalNowGeometry() {
-        val theme = resolveTheme(WeatherThemeId.GLASS)
-        GlassHomePage.entries.forEach { page ->
-            val recipe = mineralRecipe(page, theme)
-            val ltr = recipe.horizontalFraction(0.2f, LayoutDirection.Ltr)
-            val rtl = recipe.horizontalFraction(0.2f, LayoutDirection.Rtl)
-            if (page == GlassHomePage.NOW) assertEquals(0.8f, rtl, 0.0001f)
-            else assertEquals(ltr, rtl, 0.0001f)
-        }
-    }
-
-    @Test
-    fun highContrastIsFlatOpaqueForEveryPageAndLevel() {
-        GlassHomePage.entries.forEach { page ->
-            ThemeEffectsLevel.entries.forEach { effects ->
-                val recipe = mineralRecipe(page, resolveTheme(WeatherThemeId.GLASS, ContrastLevel.HIGH, effects))
-                assertTrue(recipe.flatOpaque)
-                assertEquals(0f, recipe.strength, 0f)
-                assertEquals(0f, recipe.grainAlpha, 0f)
-                assertEquals(setOf(MineralPaletteRole.CANVAS), recipe.roles)
-            }
-        }
     }
 
     @Test
@@ -182,63 +119,6 @@ class ProductionWeatherVisualsTest {
     }
 
     @Test
-    fun glassStaticFullUsesOnlyTheApprovedStaticRecipeAndMarks() {
-        val full = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.FULL)
-        GlassHomePage.entries.forEach { page ->
-            val recipe = mineralRecipe(page, full)
-            assertEquals("$page shares the static Full flow field", MineralGeometry.FLOW_FIELD, recipe.geometry)
-            assertEquals("$page receives static Full mineral strength", 0.54f, recipe.strength, 0f)
-            assertEquals("$page shares uniform fine grain", 0.54f * 0.25f, recipe.grainAlpha, 0f)
-            assertEquals("$page's Full material is not mirrored in RTL", 0.2f, recipe.horizontalFraction(0.2f, LayoutDirection.Rtl), 0f)
-        }
-        assertEquals(1, GlassHomePage.entries.map { mineralRecipe(it, full) }.distinct().size)
-        assertEquals(sharedFullMineralRecipe(full), mineralRecipe(GlassHomePage.NOW, full))
-        assertEquals(setOf(
-            MineralPaletteRole.CANVAS, MineralPaletteRole.ATMOSPHERE_TOP,
-            MineralPaletteRole.ATMOSPHERE_BOTTOM, MineralPaletteRole.ATMOSPHERE_GLOW,
-            MineralPaletteRole.SURFACE, MineralPaletteRole.OUTLINE,
-        ), mineralRecipe(GlassHomePage.NOW, full).roles)
-
-        val signatures = WeatherMarkCondition.entries.map { markStyleSignature(full.weatherMarkStyle, it) }
-        assertEquals(
-            listOf(
-                "glass:sun-fine-8ray",
-                "glass:cloud-front-sun-4ray",
-                "glass:rounded-cloud",
-                "glass:cloud-3-cyan-strokes",
-                "glass:cloud-violet-bolt",
-                null,
-            ),
-            signatures,
-        )
-        assertEquals(null, markStyleSignature(full.weatherMarkStyle, null))
-        assertEquals(null, weatherMarkTreatment(full, WeatherMarkCondition.SNOW))
-        assertEquals(null, weatherMarkTreatment(full, null))
-
-        val none = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.OFF)
-        val subtle = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.SUBTLE)
-        assertEquals(0.24f, mineralRecipe(GlassHomePage.NOW, none).strength, 0f)
-        assertEquals(0.36f, mineralRecipe(GlassHomePage.NOW, subtle).strength, 0f)
-        assertEquals(MineralGeometry.DIAGONAL_SEAM, mineralRecipe(GlassHomePage.NOW, none).geometry)
-        assertEquals(MineralGeometry.HORIZONTAL_STRATA, mineralRecipe(GlassHomePage.HOURLY, subtle).geometry)
-        assertEquals(MineralGeometry.TERRACES, mineralRecipe(GlassHomePage.DAILY, subtle).geometry)
-        assertEquals(MineralGeometry.MICRO_ETCH, mineralRecipe(GlassHomePage.DETAILS, subtle).geometry)
-        assertEquals(null, weatherMarkTreatment(none, WeatherMarkCondition.CLEAR))
-        assertEquals(null, weatherMarkTreatment(subtle, WeatherMarkCondition.CLEAR))
-        assertEquals("glass:sun-fine-8ray", weatherMarkTreatment(full, WeatherMarkCondition.CLEAR))
-        assertEquals(
-            markStyleSignature(full.weatherMarkStyle, WeatherMarkCondition.CLOUDY),
-            markStyleSignature(none.weatherMarkStyle, WeatherMarkCondition.CLOUDY),
-        )
-        WeatherThemeId.entries.filter { it != WeatherThemeId.GLASS }.forEach { id ->
-            val other = resolveTheme(id, effects = ThemeEffectsLevel.FULL)
-            assertEquals(null, markStyleSignature(other.weatherMarkStyle, WeatherMarkCondition.SNOW))
-            assertEquals(markStyleSignature(other.weatherMarkStyle, WeatherMarkCondition.CLEAR),
-                weatherMarkTreatment(resolveTheme(id, effects = ThemeEffectsLevel.OFF), WeatherMarkCondition.CLEAR))
-        }
-    }
-
-    @Test
     fun effectsOffResolvesApprovedOpaqueBackgroundAndStaticPolicy() {
         WeatherThemeId.entries.forEach { id ->
             val theme = resolveTheme(id, effects = ThemeEffectsLevel.OFF)
@@ -253,22 +133,6 @@ class ProductionWeatherVisualsTest {
             assertEquals(1f, theme.outlineOpacity)
             assertEquals(1f, theme.palette.canvas.alpha, 0f)
         }
-    }
-
-    @Test
-    fun fullRecipeIsStaticAndDoesNotResolveMotionFromPageIdentity() {
-        val full = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.FULL)
-        val recipes = GlassHomePage.entries.map { mineralRecipe(it, full) }
-        assertEquals(1, recipes.distinct().size)
-        assertTrue(recipes.all { it.geometry == MineralGeometry.FLOW_FIELD })
-        assertTrue(recipes.all { it.roles.containsAll(setOf(
-            MineralPaletteRole.CANVAS,
-            MineralPaletteRole.ATMOSPHERE_TOP,
-            MineralPaletteRole.ATMOSPHERE_BOTTOM,
-            MineralPaletteRole.ATMOSPHERE_GLOW,
-            MineralPaletteRole.SURFACE,
-            MineralPaletteRole.OUTLINE,
-        )) })
     }
 
     @Test

@@ -32,7 +32,8 @@ dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2026.09.00")
     api(composeBom)
     api("androidx.compose.runtime:runtime")
-    api("androidx.compose.ui:ui-graphics")
+    api("androidx.compose.ui:ui")
+    implementation("androidx.compose.foundation:foundation")
 
     testImplementation("junit:junit:4.13.2")
 }

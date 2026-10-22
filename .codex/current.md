@@ -1,12 +1,12 @@
 # Current Development Cycle
 
-State: IDLE
-Cycle ID: none
-Roadmap item: none
-Plan: none
-Evidence: none
+State: PLANNED
+Cycle ID: 227-sq14a-c-remaining-theme-backgrounds
+Roadmap item: SQ.14A-C
+Plan: .codex/plans/227-sq14a-c-remaining-theme-backgrounds.md
+Evidence: .codex/test-artifacts/227-sq14a-c-remaining-theme-backgrounds/
 Last updated: 2026-10-22
 
 ## Current objective
 
-No active cycle. Select the next item from `docs/ROADMAP.md`.
+Migrate remaining theme backgrounds into assets library
