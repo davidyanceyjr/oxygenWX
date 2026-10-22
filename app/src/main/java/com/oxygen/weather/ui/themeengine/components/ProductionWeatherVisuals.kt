@@ -29,6 +29,7 @@ import com.oxygen.weather.ui.themeengine.AmbientBackgroundBase
 import com.oxygen.weather.ui.themeengine.AmbientBackgroundOverlay
 import com.oxygen.weather.ui.themeengine.AmbientBackgroundStrength
 import com.oxygen.weather.ui.themeengine.ContrastLevel
+import com.oxygen.weather.ui.themeengine.LayoutPreset
 import com.oxygen.weather.ui.themeengine.ResolvedTheme
 import com.oxygen.weather.ui.themeengine.ThemePalette
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
@@ -48,6 +49,12 @@ enum class GlassHomePage { NOW, HOURLY, DAILY, DETAILS }
 
 internal enum class MineralGeometry { DIAGONAL_SEAM, HORIZONTAL_STRATA, TERRACES, MICRO_ETCH, FLOW_FIELD }
 internal enum class MineralPaletteRole { CANVAS, ATMOSPHERE_TOP, ATMOSPHERE_BOTTOM, ATMOSPHERE_GLOW, SURFACE, OUTLINE }
+
+/** Subtle Standard uses the open grouping treatment; Full already uses it in both layouts. */
+internal fun usesGlassOpenStaticPresentation(theme: ResolvedTheme): Boolean =
+    theme.definition.id == WeatherThemeId.GLASS &&
+        (theme.effects == ThemeEffectsLevel.FULL ||
+            (theme.effects == ThemeEffectsLevel.SUBTLE && theme.layout == LayoutPreset.STANDARD))
 
 internal data class MineralRecipe(
     val geometry: MineralGeometry,
@@ -356,14 +363,35 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawMineralPage(
             }
         }
         MineralGeometry.TERRACES -> {
-            listOf(0.09f to 0.17f, 0.33f to 0.39f, 0.70f to 0.77f, 0.91f to 1f).forEachIndexed { index, (top, bottom) ->
-                val inset = if (index % 2 == 0) 0.06f else 0.11f
-                drawRect(
-                    color = if (index % 2 == 0) palette.atmosphereBottom else palette.surface,
-                    topLeft = Offset(size.width * inset, size.height * top),
-                    size = androidx.compose.ui.geometry.Size(size.width * (1f - inset * 2f), size.height * (bottom - top)),
-                    alpha = strength * 0.63f,
+            if (theme.effects == ThemeEffectsLevel.SUBTLE) {
+                // Keep low-contrast terraces at the side gutters so they cannot
+                // read as bands behind individual forecast rows.
+                val terraces = listOf(
+                    Triple(0.04f, 0.22f, 0.08f to 0.19f),
+                    Triple(0.78f, 0.96f, 0.27f to 0.39f),
+                    Triple(0.03f, 0.19f, 0.49f to 0.62f),
+                    Triple(0.81f, 0.97f, 0.71f to 0.83f),
+                    Triple(0.05f, 0.21f, 0.88f to 0.97f),
                 )
+                terraces.forEachIndexed { index, (left, right, vertical) ->
+                    val (top, bottom) = vertical
+                    drawRect(
+                        color = if (index % 2 == 0) palette.atmosphereBottom else palette.surface,
+                        topLeft = Offset(size.width * left, size.height * top),
+                        size = androidx.compose.ui.geometry.Size(size.width * (right - left), size.height * (bottom - top)),
+                        alpha = strength * 0.4f,
+                    )
+                }
+            } else {
+                listOf(0.09f to 0.17f, 0.33f to 0.39f, 0.70f to 0.77f, 0.91f to 1f).forEachIndexed { index, (top, bottom) ->
+                    val inset = if (index % 2 == 0) 0.06f else 0.11f
+                    drawRect(
+                        color = if (index % 2 == 0) palette.atmosphereBottom else palette.surface,
+                        topLeft = Offset(size.width * inset, size.height * top),
+                        size = androidx.compose.ui.geometry.Size(size.width * (1f - inset * 2f), size.height * (bottom - top)),
+                        alpha = strength * 0.63f,
+                    )
+                }
             }
         }
         MineralGeometry.MICRO_ETCH -> {
@@ -616,6 +644,8 @@ internal fun markStyleSignature(style: WeatherMarkStyle, condition: WeatherMarkC
 
 /** Glass None retains its mineral base but removes every separate weather mark. */
 internal fun weatherMarkTreatment(theme: ResolvedTheme, condition: WeatherMarkCondition?): String? {
-    if (theme.definition.id == WeatherThemeId.GLASS && theme.effects == ThemeEffectsLevel.OFF) return null
+    if (theme.definition.id == WeatherThemeId.GLASS &&
+        (theme.effects == ThemeEffectsLevel.OFF ||
+            (theme.effects == ThemeEffectsLevel.SUBTLE && theme.layout == LayoutPreset.STANDARD))) return null
     return markStyleSignature(theme.weatherMarkStyle, condition)
 }

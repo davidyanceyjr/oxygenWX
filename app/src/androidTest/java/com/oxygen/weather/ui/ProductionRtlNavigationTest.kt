@@ -1,6 +1,9 @@
 package com.oxygen.weather.ui
 
 import android.content.Context
+import android.content.ContentValues
+import android.graphics.Bitmap
+import android.provider.MediaStore
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.isRoot
@@ -9,6 +12,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -93,6 +99,42 @@ class ProductionRtlNavigationTest {
         compose.waitForIdle()
         assertPage("Daily")
         assertRootDirection(LayoutDirection.Rtl)
+    }
+
+    @Test
+    fun installedGlassSubtleNowSupportsEffectiveRtl() {
+        LocationSearchTestHooks.layoutDirectionOverrideForTests = LayoutDirection.Rtl
+        compose.activityRule.scenario.recreate()
+        ThemePreferenceTestHooks.selectTheme?.invoke(WeatherThemeId.GLASS)
+        EffectsPreferenceTestHooks.selectEffects?.invoke(ThemeEffectsLevel.SUBTLE)
+        ContrastPreferenceTestHooks.selectContrast?.invoke(ContrastLevel.STANDARD)
+        compose.waitForIdle()
+
+        assertEquals(WeatherThemeId.GLASS, effectiveTheme?.definition?.id)
+        assertEquals(ThemeEffectsLevel.SUBTLE, effectiveTheme?.effects)
+        assertRootDirection(LayoutDirection.Rtl)
+        assertRtlStart("Demo Station")
+        compose.onNodeWithText("28 °C", useUnmergedTree = true).assertExists()
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        try {
+            InstrumentationRegistry.getInstrumentation().uiAutomation
+                .executeShellCommand("settings put global animator_duration_scale 0").close()
+            val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+            val values = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "glass-subtle-rtl-reduced-motion-now-360x640-font1.png")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/OxygenWX/215-sq11-derive-static-subtle")
+            }
+            val uri = requireNotNull(context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
+            requireNotNull(context.contentResolver.openOutputStream(uri)).use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            }
+        } finally {
+            InstrumentationRegistry.getInstrumentation().uiAutomation
+                .executeShellCommand("settings put global animator_duration_scale 1").close()
+        }
+        println("Installed Glass Subtle Now effective RTL and reduced-motion layout with visible facts: PASS; animator_duration_scale=0")
     }
 
     private fun selectPage(page: String) {

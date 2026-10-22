@@ -116,6 +116,7 @@ import com.oxygen.weather.ui.themeengine.components.ProductionHourlyEntry
 import com.oxygen.weather.ui.themeengine.components.ProductionWeatherMark
 import com.oxygen.weather.ui.themeengine.components.ProductionWindowControls
 import com.oxygen.weather.ui.themeengine.components.ProductionForecastContext
+import com.oxygen.weather.ui.themeengine.components.usesGlassOpenStaticPresentation
 import com.oxygen.weather.ui.themeengine.resolveTheme
 import com.oxygen.weather.ui.themeengine.applySystemMotionPolicy
 import com.oxygen.weather.ui.themeengine.ContrastLevel
@@ -1266,10 +1267,15 @@ private fun NowPage(
             if (theme.definition.id == WeatherThemeId.GLASS) 12.dp else layout.pageStackGap,
         ),
     ) {
-        val staticFullGlass = theme.definition.id == WeatherThemeId.GLASS &&
-            theme.effects == ThemeEffectsLevel.FULL
-        NowHero(theme, current, openPrimaryField = staticFullGlass)
-        NowSupportingMeasurements(theme, current, grouped = staticFullGlass)
+        val glassOpenStatic = usesGlassOpenStaticPresentation(theme)
+        val glassSubtle = glassOpenStatic && theme.effects == ThemeEffectsLevel.SUBTLE
+        NowHero(theme, current, openPrimaryField = glassOpenStatic)
+        NowSupportingMeasurements(
+            theme,
+            current,
+            grouped = glassOpenStatic,
+            singleSurface = glassSubtle,
+        )
         officialAlertSummary?.let { summary ->
             ProductionQuietSectionSurface(
                 theme,
@@ -1476,6 +1482,7 @@ private fun NowSupportingMeasurements(
     theme: ResolvedTheme,
     current: com.oxygen.weather.presentation.CurrentPresentation,
     grouped: Boolean = false,
+    singleSurface: Boolean = false,
 ) {
     val measurements = listOf(
         SupportMeasurement("Humidity", current.humidity, null),
@@ -1518,7 +1525,14 @@ private fun NowSupportingMeasurements(
                 }
             }
         }
-        if (grouped) {
+        if (singleSurface) {
+            ProductionSectionSurface(
+                theme,
+                Modifier.fillMaxWidth(),
+                PaddingValues(theme.geometry.panelInset),
+                content = measurementsContent,
+            )
+        } else if (grouped) {
             Column(
                 Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -1763,9 +1777,19 @@ private fun HourlyPage(
                 window.entries.take(6).forEach { entry -> SimpleHourlyEntry(theme, entry) }
             }
         } else {
-            val sharedGlassFullRows = theme.definition.id == WeatherThemeId.GLASS &&
-                theme.effects == ThemeEffectsLevel.FULL
-            HourlyEntryGrid(theme, window.entries, sharedGlassFullRows = sharedGlassFullRows)
+            val glassOpenStatic = usesGlassOpenStaticPresentation(theme)
+            val glassSubtle = glassOpenStatic && theme.effects == ThemeEffectsLevel.SUBTLE
+            if (glassSubtle) {
+                ProductionSectionSurface(
+                    theme,
+                    Modifier.fillMaxWidth(),
+                    PaddingValues(theme.geometry.panelInset),
+                ) {
+                    HourlyEntryGrid(theme, window.entries, sharedGlassFullRows = glassOpenStatic)
+                }
+            } else {
+                HourlyEntryGrid(theme, window.entries, sharedGlassFullRows = glassOpenStatic)
+            }
         }
         if (windows.isNotEmpty()) {
             ProductionWindowControls(
@@ -1846,8 +1870,7 @@ private fun DailyPage(
                     window.entries.take(5).forEach { entry -> SimpleDailyEntry(theme, entry) }
                 }
             } else {
-                val sharedGlassFullRows = theme.definition.id == WeatherThemeId.GLASS &&
-                    theme.effects == ThemeEffectsLevel.FULL
+                val sharedGlassFullRows = usesGlassOpenStaticPresentation(theme)
                 val rows: @Composable ColumnScope.() -> Unit = {
                     window.entries.take(5).forEach { entry ->
                         ProductionDailyRow(theme, entry, sharedGlassFullRow = sharedGlassFullRows)
@@ -1943,7 +1966,7 @@ private fun DetailsPage(
     theme: ResolvedTheme,
     forecastContext: ForecastContextPresentation?,
 ) {
-    val glassFullDetails = theme.definition.id == WeatherThemeId.GLASS && theme.effects == ThemeEffectsLevel.FULL
+    val glassFullDetails = usesGlassOpenStaticPresentation(theme)
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState())
             .padding(horizontal = theme.geometry.pageGutter, vertical = theme.geometry.pageVerticalInset),

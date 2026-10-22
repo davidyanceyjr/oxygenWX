@@ -11,6 +11,7 @@ import com.oxygen.weather.ui.themeengine.components.mineralRecipe
 import com.oxygen.weather.ui.themeengine.components.sharedFullMineralRecipe
 import com.oxygen.weather.ui.themeengine.components.shouldAdjustMineralNowContrast
 import com.oxygen.weather.ui.themeengine.components.weatherMarkTreatment
+import com.oxygen.weather.ui.themeengine.components.usesGlassOpenStaticPresentation
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.graphics.Color
 import org.junit.Assert.assertEquals
@@ -56,6 +57,30 @@ class ProductionWeatherVisualsTest {
         assertEquals(MineralGeometry.HORIZONTAL_STRATA, mineralRecipe(GlassHomePage.HOURLY, theme).geometry)
         assertEquals(MineralGeometry.TERRACES, mineralRecipe(GlassHomePage.DAILY, theme).geometry)
         assertEquals(MineralGeometry.MICRO_ETCH, mineralRecipe(GlassHomePage.DETAILS, theme).geometry)
+    }
+
+    @Test
+    fun glassSubtleUsesOpenStandardPresentationAndOmitsOptionalMarks() {
+        val subtle = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.SUBTLE)
+        val simpleSubtle = resolveTheme(
+            WeatherThemeId.GLASS,
+            effects = ThemeEffectsLevel.SUBTLE,
+            layout = LayoutPreset.SIMPLE,
+        )
+        val full = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.FULL)
+        val none = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.OFF)
+
+        assertTrue(usesGlassOpenStaticPresentation(subtle))
+        assertFalse(usesGlassOpenStaticPresentation(simpleSubtle))
+        assertTrue(usesGlassOpenStaticPresentation(full))
+        assertFalse(usesGlassOpenStaticPresentation(none))
+        WeatherMarkCondition.entries.forEach { condition ->
+            assertEquals(null, weatherMarkTreatment(subtle, condition))
+            assertEquals(markStyleSignature(simpleSubtle.weatherMarkStyle, condition), weatherMarkTreatment(simpleSubtle, condition))
+            assertEquals(markStyleSignature(full.weatherMarkStyle, condition), weatherMarkTreatment(full, condition))
+            assertEquals(null, weatherMarkTreatment(none, condition))
+        }
+        assertEquals(null, weatherMarkTreatment(subtle, null))
     }
 
     @Test
@@ -173,7 +198,7 @@ class ProductionWeatherVisualsTest {
         assertEquals(MineralGeometry.TERRACES, mineralRecipe(GlassHomePage.DAILY, subtle).geometry)
         assertEquals(MineralGeometry.MICRO_ETCH, mineralRecipe(GlassHomePage.DETAILS, subtle).geometry)
         assertEquals(null, weatherMarkTreatment(none, WeatherMarkCondition.CLEAR))
-        assertEquals("glass:sun-fine-8ray", weatherMarkTreatment(subtle, WeatherMarkCondition.CLEAR))
+        assertEquals(null, weatherMarkTreatment(subtle, WeatherMarkCondition.CLEAR))
         assertEquals("glass:sun-fine-8ray", weatherMarkTreatment(full, WeatherMarkCondition.CLEAR))
         assertEquals(
             markStyleSignature(full.weatherMarkStyle, WeatherMarkCondition.CLOUDY),

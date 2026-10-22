@@ -47,9 +47,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.oxygen.weather.presentation.WeatherMarkCondition
 import com.oxygen.weather.ui.themeengine.ContrastLevel
+import com.oxygen.weather.ui.themeengine.LayoutPreset
 import com.oxygen.weather.ui.themeengine.ThemeEffectsLevel
 import com.oxygen.weather.ui.themeengine.WeatherThemeId
 import com.oxygen.weather.ui.themeengine.resolveTheme
+import com.oxygen.weather.ui.themeengine.components.weatherMarkTreatment
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -112,6 +114,61 @@ class ProductionBackdropAtmosphericGlassTest {
         compose.onNodeWithContentDescription(FLOW_ACTION_LABEL).performClick()
         compose.runOnIdle { assertEquals("Foreground action remains interactive", 1, clicks.get()) }
         println("Glass Full shared flow field: all four page identities produce identical static render; foreground tap isolation=PASS")
+    }
+
+    @Test
+    fun glassSubtleRecipesRemainStaticPageSpecificAndOmitOptionalMarks() {
+        val effect = mutableStateOf(ThemeEffectsLevel.SUBTLE)
+        val page = mutableStateOf(GlassHomePage.NOW)
+        val theme = resolveTheme(WeatherThemeId.GLASS, effects = ThemeEffectsLevel.SUBTLE)
+        val simpleSubtle = resolveTheme(
+            WeatherThemeId.GLASS,
+            effects = ThemeEffectsLevel.SUBTLE,
+            layout = LayoutPreset.SIMPLE,
+        )
+        val subtleFrames = mutableMapOf<GlassHomePage, Bitmap>()
+        val noneFrames = mutableMapOf<GlassHomePage, Bitmap>()
+        compose.setContent {
+            CompositionLocalProvider(
+                LocalDensity provides Density(LocalDensity.current.density, fontScale = 1f),
+                LocalLayoutDirection provides LayoutDirection.Ltr,
+            ) {
+                val resolved = resolveTheme(WeatherThemeId.GLASS, effects = effect.value)
+                ProductionBackdrop(
+                    resolved,
+                    Modifier.requiredSize(360.dp, 640.dp).testTag(SUBTLE_BACKDROP_TAG),
+                    homePage = page.value,
+                ) { }
+            }
+        }
+
+        GlassHomePage.entries.forEach { homePage ->
+            compose.runOnIdle { page.value = homePage }
+            compose.waitForIdle()
+            val subtle = compose.onNodeWithTag(SUBTLE_BACKDROP_TAG).captureToImage().asAndroidBitmap()
+            subtleFrames[homePage] = subtle
+            Thread.sleep(250)
+            val settledSubtle = compose.onNodeWithTag(SUBTLE_BACKDROP_TAG).captureToImage().asAndroidBitmap()
+            assertTrue("$homePage Subtle backdrop remains static", subtle.sameAs(settledSubtle))
+            WeatherMarkCondition.entries.forEach { condition ->
+                assertEquals(null, weatherMarkTreatment(theme, condition))
+            }
+            assertEquals(
+                "glass:sun-fine-8ray",
+                weatherMarkTreatment(simpleSubtle, WeatherMarkCondition.CLEAR),
+            )
+
+            compose.runOnIdle { effect.value = ThemeEffectsLevel.OFF }
+            compose.waitForIdle()
+            val none = compose.onNodeWithTag(SUBTLE_BACKDROP_TAG).captureToImage().asAndroidBitmap()
+            noneFrames[homePage] = none
+            assertTrue("$homePage Subtle retains its static mineral field", !subtle.sameAs(none))
+            compose.runOnIdle { effect.value = ThemeEffectsLevel.SUBTLE }
+            compose.waitForIdle()
+        }
+        assertEquals(GlassHomePage.entries.size, subtleFrames.size)
+        assertEquals(GlassHomePage.entries.size, noneFrames.size)
+        println("Glass Subtle static page backgrounds differ from None; condition marks omitted: PASS")
     }
 
     private data class Case(
@@ -249,6 +306,7 @@ class ProductionBackdropAtmosphericGlassTest {
     private companion object {
         const val BACKDROP_TAG = "backdrop-host"
         const val FLOW_BACKDROP_TAG = "glass-full-flow-backdrop"
+        const val SUBTLE_BACKDROP_TAG = "glass-subtle-backdrop"
         const val FLOW_ACTION_LABEL = "Open forecast details"
         const val CONDITION_TAG = "caller-condition"
         const val ACTION_LABEL = "Inspect forecast button"
