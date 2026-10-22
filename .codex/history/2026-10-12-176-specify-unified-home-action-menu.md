@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 176-specify-unified-home-action-menu
 Roadmap item: NAV.4
 Closed: 2026-10-12
-Plan: .codex/plans/176-specify-unified-home-action-menu.md
+Plan: .codex/history/plans/176-specify-unified-home-action-menu.md
 Evidence: .codex/test-artifacts/176-specify-unified-home-action-menu/
 
 ## Outcome

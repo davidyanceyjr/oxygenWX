@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 186-static-mineral-background-foundation
 Roadmap item: SQ.4
 Closed: 2026-10-13
-Plan: .codex/plans/186-static-mineral-background-foundation.md
+Plan: .codex/history/plans/186-static-mineral-background-foundation.md
 Evidence: .codex/test-artifacts/186-static-mineral-background-foundation/
 
 ## Outcome

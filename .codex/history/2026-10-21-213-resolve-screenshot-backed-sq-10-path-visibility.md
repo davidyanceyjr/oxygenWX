@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 213-resolve-screenshot-backed-sq-10-path-visibility
 Roadmap item: SQ.10-TEST-PATH-RESOLUTION
 Closed: 2026-10-21
-Plan: .codex/plans/213-resolve-screenshot-backed-sq-10-path-visibility.md
+Plan: .codex/history/plans/213-resolve-screenshot-backed-sq-10-path-visibility.md
 Evidence: .codex/test-artifacts/213-resolve-screenshot-backed-sq-10-path-visibility/
 
 ## Outcome

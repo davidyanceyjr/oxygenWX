@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 048-d29-source-mark-treatment
 Roadmap item: TP.1D-D29-partial-A
 Closed: 2026-09-24
-Plan: .codex/plans/048-d29-source-mark-treatment.md
+Plan: .codex/history/plans/048-d29-source-mark-treatment.md
 Evidence: .codex/test-artifacts/048-d29-source-mark-treatment/
 
 ## Outcome

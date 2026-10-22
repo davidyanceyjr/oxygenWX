@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 198-sq9a-flow-backdrop
 Roadmap item: SQ.9A-FLOW-BACKDROP
 Closed: 2026-10-14
-Plan: .codex/plans/198-sq9a-flow-backdrop.md
+Plan: .codex/history/plans/198-sq9a-flow-backdrop.md
 Evidence: .codex/test-artifacts/198-sq9a-flow-backdrop/
 
 ## Outcome

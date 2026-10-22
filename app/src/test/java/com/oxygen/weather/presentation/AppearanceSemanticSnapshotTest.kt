@@ -51,8 +51,13 @@ class AppearanceSemanticSnapshotTest {
                         )
                     }
                     if (effects == ThemeEffectsLevel.OFF) {
+                        val expectedBase = if (theme == WeatherThemeId.GLASS) {
+                            AmbientBackgroundBase.TONAL_FIELD
+                        } else {
+                            AmbientBackgroundBase.SOLID
+                        }
                         assertEquals(
-                            AmbientBackground(AmbientBackgroundBase.SOLID, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE),
+                            AmbientBackground(expectedBase, AmbientBackgroundOverlay.NONE, AmbientBackgroundStrength.NONE),
                             resolved.ambientBackground,
                         )
                         assertEquals(MotionStyle.OFF, resolved.motionStyle)

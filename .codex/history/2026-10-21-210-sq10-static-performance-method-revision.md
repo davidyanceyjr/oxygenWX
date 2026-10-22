@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 210-sq10-static-performance-method-revision
 Roadmap item: SQ.10-OBSERVER
 Closed: 2026-10-21
-Plan: .codex/plans/210-sq10-static-performance-method-revision.md
+Plan: .codex/history/plans/210-sq10-static-performance-method-revision.md
 Evidence: .codex/test-artifacts/210-sq10-static-performance-method-revision/
 
 ## Outcome

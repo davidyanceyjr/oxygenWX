@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 177-unified-home-action-menu
 Roadmap item: NAV.5
 Closed: 2026-10-12
-Plan: .codex/plans/177-unified-home-action-menu.md
+Plan: .codex/history/plans/177-unified-home-action-menu.md
 Evidence: .codex/test-artifacts/177-unified-home-action-menu/
 
 ## Outcome

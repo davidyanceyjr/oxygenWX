@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 197-sq9a-flow-source-reconciled
 Roadmap item: SQ.9A-FLOW-SOURCE
 Closed: 2026-10-14
-Plan: .codex/plans/197-sq9a-flow-source-reconciled.md
+Plan: .codex/history/plans/197-sq9a-flow-source-reconciled.md
 Evidence: .codex/test-artifacts/197-sq9a-flow-source-reconciled/
 
 ## Outcome

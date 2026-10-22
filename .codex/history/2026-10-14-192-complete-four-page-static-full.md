@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 192-complete-four-page-static-full
 Roadmap item: SQ.9
 Closed: 2026-10-14
-Plan: .codex/plans/192-complete-four-page-static-full.md
+Plan: .codex/history/plans/192-complete-four-page-static-full.md
 Evidence: .codex/test-artifacts/192-complete-four-page-static-full/
 
 ## Outcome

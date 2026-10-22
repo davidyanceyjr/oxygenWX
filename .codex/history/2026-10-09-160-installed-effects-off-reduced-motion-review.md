@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 160-installed-effects-off-reduced-motion-review
 Roadmap item: R6.4-partial-B
 Closed: 2026-10-09
-Plan: .codex/plans/160-installed-effects-off-reduced-motion-review.md
+Plan: .codex/history/plans/160-installed-effects-off-reduced-motion-review.md
 Evidence: .codex/test-artifacts/160-installed-effects-off-reduced-motion-review/
 
 ## Outcome

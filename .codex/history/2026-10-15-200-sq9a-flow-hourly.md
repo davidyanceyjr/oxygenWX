@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 200-sq9a-flow-hourly
 Roadmap item: SQ.9A-FLOW-HOURLY
 Closed: 2026-10-15
-Plan: .codex/plans/200-sq9a-flow-hourly.md
+Plan: .codex/history/plans/200-sq9a-flow-hourly.md
 Evidence: .codex/test-artifacts/200-sq9a-flow-hourly/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 179-smoked-quartz-authority-baseline
 Roadmap item: SQ.1
 Closed: 2026-10-13
-Plan: .codex/plans/179-smoked-quartz-authority-baseline.md
+Plan: .codex/history/plans/179-smoked-quartz-authority-baseline.md
 Evidence: .codex/test-artifacts/179-smoked-quartz-authority-baseline/
 
 ## Outcome

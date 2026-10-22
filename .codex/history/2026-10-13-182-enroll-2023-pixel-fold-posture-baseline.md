@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 182-enroll-2023-pixel-fold-posture-baseline
 Roadmap item: SQ.1A.2
 Closed: 2026-10-13
-Plan: .codex/plans/182-enroll-2023-pixel-fold-posture-baseline.md
+Plan: .codex/history/plans/182-enroll-2023-pixel-fold-posture-baseline.md
 Evidence: .codex/test-artifacts/182-enroll-2023-pixel-fold-posture-baseline/
 
 ## Outcome

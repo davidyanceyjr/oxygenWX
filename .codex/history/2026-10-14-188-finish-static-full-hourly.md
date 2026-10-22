@@ -4,7 +4,7 @@ Status: Completed (resumed after device blocker cleared)
 Cycle ID: 188-finish-static-full-hourly
 Roadmap item: SQ.6
 Closed: 2026-10-14; installed evidence resumed 2026-10-14
-Plan: .codex/plans/188-finish-static-full-hourly.md
+Plan: .codex/history/plans/188-finish-static-full-hourly.md
 Evidence: .codex/test-artifacts/188-finish-static-full-hourly/
 
 ## Outcome

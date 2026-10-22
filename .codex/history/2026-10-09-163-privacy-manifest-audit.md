@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 163-privacy-manifest-audit
 Roadmap item: R7.1
 Closed: 2026-10-09
-Plan: .codex/plans/163-privacy-manifest-audit.md
+Plan: .codex/history/plans/163-privacy-manifest-audit.md
 Evidence: .codex/test-artifacts/163-privacy-manifest-audit/
 
 ## Outcome

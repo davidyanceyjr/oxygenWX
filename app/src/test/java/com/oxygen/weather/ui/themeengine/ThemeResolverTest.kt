@@ -9,6 +9,24 @@ import org.junit.Test
 
 class ThemeResolverTest {
     @Test
+    fun smokedQuartzAppearanceMatrixPreservesSelectionsAcrossEffectsAndContrast() {
+        ContrastLevel.entries.forEach { contrast ->
+            ThemeEffectsLevel.entries.forEach { effects ->
+                val resolved = resolveTheme(WeatherThemeId.GLASS, contrast, effects)
+                assertEquals(WeatherThemeId.GLASS, resolved.definition.id)
+                assertEquals(contrast, resolved.contrast)
+                assertEquals(effects, resolved.effects)
+                if (effects == ThemeEffectsLevel.OFF) {
+                    assertEquals(AmbientBackgroundBase.TONAL_FIELD, resolved.ambientBackground.base)
+                    assertEquals(MotionStyle.OFF, resolved.motionStyle)
+                    assertEquals(1f, resolved.panelOpacity, 0f)
+                    assertEquals(1f, resolved.outlineOpacity, 0f)
+                }
+            }
+        }
+    }
+
+    @Test
     fun resolvingEverySupportedCombinationIsDeterministicAndRetainsIdentity() {
         WeatherThemeId.values().forEach { id ->
             ContrastLevel.values().forEach { contrast ->

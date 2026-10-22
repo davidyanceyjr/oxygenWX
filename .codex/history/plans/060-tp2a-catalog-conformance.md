@@ -19,7 +19,7 @@ Implement the first half of the catalog-conformance checker: deterministically v
 
 - `scripts/verification/theme_catalog_conformance.py` — reusable JSON loading and structural/schema/value validation for the five theme files and manifest. It accepts a catalog-root path for fixture testing and never writes files.
 - `scripts/verification/test_theme_catalog_conformance.py` — focused standard-library `unittest` tests for clean and malformed catalogs.
-- `.codex/plans/060-tp2a-catalog-conformance.md`, `.codex/current.md`, `.codex/test-artifacts/060-tp2a-catalog-conformance/`, and the generated cycle history record — cycle state and evidence.
+- `.codex/history/plans/060-tp2a-catalog-conformance.md`, `.codex/current.md`, `.codex/test-artifacts/060-tp2a-catalog-conformance/`, and the generated cycle history record — cycle state and evidence.
 
 Approved input files under `docs/theme-system/tokens/catalog/` remain immutable. Do not edit `scripts/dev.py`, architecture documentation, Kotlin runtime source, resolver, or Compose code in this first part.
 

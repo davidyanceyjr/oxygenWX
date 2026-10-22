@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 209-sq10-static-full-performance
 Roadmap item: SQ.10
 Closed: 2026-10-16
-Plan: .codex/plans/209-sq10-static-full-performance.md
+Plan: .codex/history/plans/209-sq10-static-full-performance.md
 Evidence: .codex/test-artifacts/209-sq10-static-full-performance/
 
 ## Outcome

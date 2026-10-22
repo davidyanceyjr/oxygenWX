@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 189-finish-static-full-daily
 Roadmap item: SQ.7
 Closed: 2026-10-14
-Plan: .codex/plans/189-finish-static-full-daily.md
+Plan: .codex/history/plans/189-finish-static-full-daily.md
 Evidence: .codex/test-artifacts/189-finish-static-full-daily/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 205-accept-installed-four-page-static-full-after-snow-verification
 Roadmap item: SQ.9A
 Closed: 2026-10-15
-Plan: .codex/plans/205-accept-installed-four-page-static-full-after-snow-verification.md
+Plan: .codex/history/plans/205-accept-installed-four-page-static-full-after-snow-verification.md
 Evidence: .codex/test-artifacts/205-accept-installed-four-page-static-full-after-snow-verification/
 
 ## Outcome

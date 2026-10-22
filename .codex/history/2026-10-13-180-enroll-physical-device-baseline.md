@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 180-enroll-physical-device-baseline
 Roadmap item: SQ.1A
 Closed: 2026-10-13
-Plan: .codex/plans/180-enroll-physical-device-baseline.md
+Plan: .codex/history/plans/180-enroll-physical-device-baseline.md
 Evidence: .codex/test-artifacts/180-enroll-physical-device-baseline/
 
 ## Outcome

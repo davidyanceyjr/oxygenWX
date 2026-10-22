@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 181-enroll-adb-recognized-pixel-5-as-supplemental-device
 Roadmap item: SQ.1A.1
 Closed: 2026-10-13
-Plan: .codex/plans/181-enroll-adb-recognized-pixel-5-as-supplemental-device.md
+Plan: .codex/history/plans/181-enroll-adb-recognized-pixel-5-as-supplemental-device.md
 Evidence: .codex/test-artifacts/181-enroll-adb-recognized-pixel-5-as-supplemental-device/
 
 ## Outcome

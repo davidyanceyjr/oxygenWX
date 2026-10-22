@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 194-correct-rtl-glass-high-contrast
 Roadmap item: SQ.9A-CORR
 Closed: 2026-10-14
-Plan: .codex/plans/194-correct-rtl-glass-high-contrast.md
+Plan: .codex/history/plans/194-correct-rtl-glass-high-contrast.md
 Evidence: .codex/test-artifacts/194-correct-rtl-glass-high-contrast/
 
 ## Outcome

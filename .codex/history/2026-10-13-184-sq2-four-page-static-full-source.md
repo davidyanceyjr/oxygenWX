@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 184-sq2-four-page-static-full-source
 Roadmap item: SQ.2
 Closed: 2026-10-13
-Plan: .codex/plans/184-sq2-four-page-static-full-source.md
+Plan: .codex/history/plans/184-sq2-four-page-static-full-source.md
 Evidence: .codex/test-artifacts/184-sq2-four-page-static-full-source/
 
 ## Outcome

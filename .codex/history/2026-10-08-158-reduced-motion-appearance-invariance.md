@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 158-reduced-motion-appearance-invariance
 Roadmap item: R6.4
 Closed: 2026-10-08
-Plan: .codex/plans/158-reduced-motion-appearance-invariance.md
+Plan: .codex/history/plans/158-reduced-motion-appearance-invariance.md
 Evidence: .codex/test-artifacts/158-reduced-motion-appearance-invariance/
 
 ## Outcome

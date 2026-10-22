@@ -56,7 +56,7 @@ separate plan.
   `captures/oxygen-weather-tp2e-077-partial2/`; select those same three
   families. Do not assume an `installed/` subdirectory exists for cycle 077.
 - Prerequisite partial 1 plan, history, inventory, and matrix are read-only
-  precedent: `.codex/plans/078-tp2e-cross-effects-comparison-review.md`,
+  precedent: `.codex/history/plans/078-tp2e-cross-effects-comparison-review.md`,
   `.codex/history/2026-09-29-078-tp2e-cross-effects-comparison-review.md`,
   and `.codex/test-artifacts/078-tp2e-cross-effects-comparison-review/`.
 - Cycle 077 history and visual review document the existing Rain glyph gap in

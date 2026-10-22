@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 159-reduced-motion-appearance-flow
 Roadmap item: R6.4-partial-A
 Closed: 2026-10-09
-Plan: .codex/plans/159-reduced-motion-appearance-flow.md
+Plan: .codex/history/plans/159-reduced-motion-appearance-flow.md
 Evidence: .codex/test-artifacts/159-reduced-motion-appearance-flow/
 
 ## Outcome

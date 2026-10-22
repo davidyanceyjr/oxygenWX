@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 169-effects-track-roadmap-and-docs
 Roadmap item: UI.3
 Closed: 2026-10-11
-Plan: .codex/plans/169-effects-track-roadmap-and-docs.md
+Plan: .codex/history/plans/169-effects-track-roadmap-and-docs.md
 Evidence: .codex/test-artifacts/169-effects-track-roadmap-and-docs/
 
 ## Outcome

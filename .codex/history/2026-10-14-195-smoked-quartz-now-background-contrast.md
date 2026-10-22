@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 195-smoked-quartz-now-background-contrast
 Roadmap item: SQ.9A-NOWBG
 Closed: 2026-10-14
-Plan: .codex/plans/195-smoked-quartz-now-background-contrast.md
+Plan: .codex/history/plans/195-smoked-quartz-now-background-contrast.md
 Evidence: .codex/test-artifacts/195-smoked-quartz-now-background-contrast/
 
 ## Outcome

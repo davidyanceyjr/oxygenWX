@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 060-tp2a-catalog-conformance
 Roadmap item: TP.2A-part-one-catalog-schema
 Closed: 2026-09-26
-Plan: .codex/plans/060-tp2a-catalog-conformance.md
+Plan: .codex/history/plans/060-tp2a-catalog-conformance.md
 Evidence: .codex/test-artifacts/060-tp2a-catalog-conformance/
 
 ## Outcome

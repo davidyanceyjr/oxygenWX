@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 178-smoked-quartz-glass-now
 Roadmap item: UI.8
 Closed: 2026-10-12
-Plan: .codex/plans/178-smoked-quartz-glass-now.md
+Plan: .codex/history/plans/178-smoked-quartz-glass-now.md
 Evidence: .codex/test-artifacts/178-smoked-quartz-glass-now/
 
 ## Outcome

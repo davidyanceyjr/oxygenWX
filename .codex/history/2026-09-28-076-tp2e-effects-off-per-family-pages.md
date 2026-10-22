@@ -4,7 +4,7 @@ Status: PASS
 Cycle ID: 076-tp2e-effects-off-per-family-pages
 Roadmap item: TP.2E-effects-off-per-family-pages
 Closed: 2026-09-28
-Plan: .codex/plans/076-tp2e-effects-off-per-family-pages.md
+Plan: .codex/history/plans/076-tp2e-effects-off-per-family-pages.md
 Evidence: .codex/test-artifacts/076-tp2e-effects-off-per-family-pages/
 
 ## Outcome

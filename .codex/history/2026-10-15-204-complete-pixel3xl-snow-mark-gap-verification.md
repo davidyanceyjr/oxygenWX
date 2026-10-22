@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 204-complete-pixel3xl-snow-mark-gap-verification
 Roadmap item: SQ.9A-SNOW-R
 Closed: 2026-10-15
-Plan: .codex/plans/204-complete-pixel3xl-snow-mark-gap-verification.md
+Plan: .codex/history/plans/204-complete-pixel3xl-snow-mark-gap-verification.md
 Evidence: .codex/test-artifacts/204-complete-pixel3xl-snow-mark-gap-verification/
 
 ## Outcome

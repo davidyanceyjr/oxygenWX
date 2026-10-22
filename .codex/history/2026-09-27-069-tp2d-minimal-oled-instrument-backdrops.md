@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 069-tp2d-minimal-oled-instrument-backdrops
 Roadmap item: TP.2D-partial4
 Closed: 2026-09-27
-Plan: .codex/plans/069-tp2d-minimal-oled-instrument-backdrops.md
+Plan: .codex/history/plans/069-tp2d-minimal-oled-instrument-backdrops.md
 Evidence: .codex/test-artifacts/069-tp2d-minimal-oled-instrument-backdrops/
 
 ## Outcome

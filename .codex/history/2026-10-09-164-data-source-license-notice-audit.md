@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 164-data-source-license-notice-audit
 Roadmap item: R7.2
 Closed: 2026-10-09
-Plan: .codex/plans/164-data-source-license-notice-audit.md
+Plan: .codex/history/plans/164-data-source-license-notice-audit.md
 Evidence: .codex/test-artifacts/164-data-source-license-notice-audit/
 
 ## Outcome

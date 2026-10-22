@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 210-d-sq10-daily-later-reachability
 Roadmap item: SQ.10-OBSERVER-REACHABILITY
 Closed: 2026-10-21
-Plan: .codex/plans/210-d-sq10-daily-later-reachability.md
+Plan: .codex/history/plans/210-d-sq10-daily-later-reachability.md
 Evidence: .codex/test-artifacts/210-d-sq10-daily-later-reachability/
 
 ## Outcome

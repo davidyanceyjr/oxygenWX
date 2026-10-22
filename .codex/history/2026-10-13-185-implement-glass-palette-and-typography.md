@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 185-implement-glass-palette-and-typography
 Roadmap item: SQ.3
 Closed: 2026-10-13
-Plan: .codex/plans/185-implement-glass-palette-and-typography.md
+Plan: .codex/history/plans/185-implement-glass-palette-and-typography.md
 Evidence: .codex/test-artifacts/185-implement-glass-palette-and-typography/
 
 ## Outcome

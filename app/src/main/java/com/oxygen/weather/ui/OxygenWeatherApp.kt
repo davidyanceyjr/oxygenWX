@@ -1185,7 +1185,7 @@ private fun ThemeAppearanceSurface(
         Text("Choose how much visual motion and treatment to use", style = theme.typography.bodyMedium, color = theme.palette.secondaryData)
         ThemeEffectsLevel.entries.forEach { level ->
             val label = when (level) {
-                ThemeEffectsLevel.OFF -> "Effects off"
+                ThemeEffectsLevel.OFF -> "None"
                 ThemeEffectsLevel.SUBTLE -> "Subtle effects"
                 ThemeEffectsLevel.FULL -> "Full effects"
             }

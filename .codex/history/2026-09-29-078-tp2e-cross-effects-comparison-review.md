@@ -4,7 +4,7 @@ Status: Completed — PASS (partial 1 of 2)
 Cycle ID: 078-tp2e-cross-effects-comparison-review
 Roadmap item: TP.2E-cross-effects-review, partial 1
 Closed: 2026-09-29
-Plan: .codex/plans/078-tp2e-cross-effects-comparison-review.md
+Plan: .codex/history/plans/078-tp2e-cross-effects-comparison-review.md
 Evidence: .codex/test-artifacts/078-tp2e-cross-effects-comparison-review/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 168-github-actions-android-sdk
 Roadmap item: R7.3
 Closed: 2026-10-11
-Plan: .codex/plans/168-github-actions-android-sdk.md
+Plan: .codex/history/plans/168-github-actions-android-sdk.md
 Evidence: .codex/test-artifacts/168-github-actions-android-sdk/
 
 ## Outcome

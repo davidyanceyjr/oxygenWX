@@ -57,17 +57,9 @@ Do not claim an installed, accessibility, provider, or release boundary was veri
 ## Routine context and history lookup
 
 For a new task, load the governing specification and roadmap, `.codex/current.md`,
-and only the plan named by the current pointer (if any). The active `.codex/plans/`
-directory may contain unresolved plans; check status and dependencies before selecting
-one. Completed plans are archived under `.codex/history/plans/` beside their closed
-cycle records. Open a specific history record, archived plan, or evidence directory
-when a dependency, audit, regression investigation, or reconstruction requires it; do
-not load the full history or evidence tree as routine context.
-
-## Routine context and history lookup
-
-For a new task, load the governing specification and roadmap, `.codex/current.md`,
-and only the plan named by the current pointer (if any). The active `.codex/plans/`
+and only the plan named by the current pointer (if any). If the general roadmap
+identifies a focused branch, read that branch roadmap for its current frontier
+and ordering; do not load unrelated detailed roadmaps. The active `.codex/plans/`
 directory may contain unresolved plans; check status and dependencies before selecting
 one. Completed plans are archived under `.codex/history/plans/` beside their closed
 cycle records. Open a specific history record, archived plan, or evidence directory

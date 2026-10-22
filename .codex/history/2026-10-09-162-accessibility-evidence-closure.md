@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 162-accessibility-evidence-closure
 Roadmap item: R6.5
 Closed: 2026-10-09
-Plan: .codex/plans/162-accessibility-evidence-closure.md
+Plan: .codex/history/plans/162-accessibility-evidence-closure.md
 Evidence: .codex/test-artifacts/162-accessibility-evidence-closure/
 
 ## Outcome

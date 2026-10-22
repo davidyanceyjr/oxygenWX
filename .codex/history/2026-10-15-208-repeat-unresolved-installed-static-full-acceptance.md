@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 208-repeat-unresolved-installed-static-full-acceptance
 Roadmap item: SQ.9A
 Closed: 2026-10-15
-Plan: .codex/plans/208-repeat-unresolved-installed-static-full-acceptance.md
+Plan: .codex/history/plans/208-repeat-unresolved-installed-static-full-acceptance.md
 Evidence: .codex/test-artifacts/208-repeat-unresolved-installed-static-full-acceptance/
 
 ## Outcome

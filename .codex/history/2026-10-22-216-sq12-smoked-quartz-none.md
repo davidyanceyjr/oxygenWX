@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 216-sq12-smoked-quartz-none
 Roadmap item: SQ.12
 Closed: 2026-10-22
-Plan: .codex/plans/216-sq12-smoked-quartz-none.md
+Plan: .codex/history/plans/216-sq12-smoked-quartz-none.md
 Evidence: .codex/test-artifacts/216-sq12-smoked-quartz-none/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 214-sq10-method-decision
 Roadmap item: SQ.10-METHOD-DECISION
 Closed: 2026-10-21
-Plan: .codex/plans/214-sq10-method-decision.md
+Plan: .codex/history/plans/214-sq10-method-decision.md
 Evidence: .codex/test-artifacts/214-sq10-method-decision/
 
 ## Outcome

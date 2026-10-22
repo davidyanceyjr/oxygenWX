@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 165-linux-clean-clone-build-matrix
 Roadmap item: R7.3
 Closed: 2026-10-10
-Plan: .codex/plans/165-linux-clean-clone-build-matrix.md
+Plan: .codex/history/plans/165-linux-clean-clone-build-matrix.md
 Evidence: .codex/test-artifacts/165-linux-clean-clone-build-matrix/
 
 ## Outcome

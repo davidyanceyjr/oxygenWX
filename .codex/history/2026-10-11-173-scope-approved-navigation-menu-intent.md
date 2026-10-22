@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 173-scope-approved-navigation-menu-intent
 Roadmap item: NAV.1
 Closed: 2026-10-11
-Plan: .codex/plans/173-scope-approved-navigation-menu-intent.md
+Plan: .codex/history/plans/173-scope-approved-navigation-menu-intent.md
 Evidence: .codex/test-artifacts/173-scope-approved-navigation-menu-intent/
 
 ## Outcome

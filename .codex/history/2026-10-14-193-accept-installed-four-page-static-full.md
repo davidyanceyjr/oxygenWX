@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 193-accept-installed-four-page-static-full
 Roadmap item: SQ.9A
 Closed: 2026-10-14
-Plan: .codex/plans/193-accept-installed-four-page-static-full.md
+Plan: .codex/history/plans/193-accept-installed-four-page-static-full.md
 Evidence: .codex/test-artifacts/193-accept-installed-four-page-static-full/
 
 ## Outcome

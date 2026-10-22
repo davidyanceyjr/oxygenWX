@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 171-ui6a-atmospheric-now-static-level
 Roadmap item: UI.6A
 Closed: 2026-10-11
-Plan: .codex/plans/171-ui6a-atmospheric-now-static-level.md
+Plan: .codex/history/plans/171-ui6a-atmospheric-now-static-level.md
 Evidence: .codex/test-artifacts/171-ui6a-atmospheric-now-static-level/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: PASS
 Cycle ID: 075-tp2e-per-family-showcase-pages
 Roadmap item: TP.2E-per-family-pages
 Closed: 2026-09-28
-Plan: .codex/plans/075-tp2e-per-family-showcase-pages.md
+Plan: .codex/history/plans/075-tp2e-per-family-showcase-pages.md
 Evidence: .codex/test-artifacts/075-tp2e-per-family-showcase-pages/
 
 ## Outcome

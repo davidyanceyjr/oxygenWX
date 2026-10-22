@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 212-sq10-test-path-observability
 Roadmap item: SQ.10-TEST-OBSERVABILITY
 Closed: 2026-10-21
-Plan: .codex/plans/212-sq10-test-path-observability.md
+Plan: .codex/history/plans/212-sq10-test-path-observability.md
 Evidence: .codex/test-artifacts/212-sq10-test-path-observability/
 
 ## Outcome

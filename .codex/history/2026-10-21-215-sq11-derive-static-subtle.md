@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 215-sq11-derive-static-subtle
 Roadmap item: SQ.11
 Closed: 2026-10-21
-Plan: .codex/plans/215-sq11-derive-static-subtle.md
+Plan: .codex/history/plans/215-sq11-derive-static-subtle.md
 Evidence: .codex/test-artifacts/215-sq11-derive-static-subtle/
 
 ## Outcome

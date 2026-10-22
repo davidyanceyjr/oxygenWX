@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 161-cross-theme-layout-appearance-invariance
 Roadmap item: R6.4A
 Closed: 2026-10-09
-Plan: .codex/plans/161-cross-theme-layout-appearance-invariance.md
+Plan: .codex/history/plans/161-cross-theme-layout-appearance-invariance.md
 Evidence: .codex/test-artifacts/161-cross-theme-layout-appearance-invariance/
 
 ## Outcome

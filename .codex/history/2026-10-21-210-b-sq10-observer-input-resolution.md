@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 210-b-sq10-observer-input-resolution
 Roadmap item: SQ.10-OBSERVER-INPUT-RESOLUTION
 Closed: 2026-10-21
-Plan: .codex/plans/210-b-sq10-observer-input-resolution.md
+Plan: .codex/history/plans/210-b-sq10-observer-input-resolution.md
 Evidence: .codex/test-artifacts/210-b-sq10-observer-input-resolution/
 
 ## Outcome

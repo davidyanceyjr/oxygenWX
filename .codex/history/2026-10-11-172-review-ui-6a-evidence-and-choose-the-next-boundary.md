@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 172-review-ui-6a-evidence-and-choose-the-next-boundary
 Roadmap item: UI.7
 Closed: 2026-10-11
-Plan: .codex/plans/172-review-ui-6a-evidence-and-choose-the-next-boundary.md
+Plan: .codex/history/plans/172-review-ui-6a-evidence-and-choose-the-next-boundary.md
 Evidence: .codex/test-artifacts/172-review-ui-6a-evidence-and-choose-the-next-boundary/
 
 ## Outcome

@@ -89,6 +89,7 @@ class ThemeCatalogTest {
         assertTrue(ThemeCatalog.terminal.typography.bodyMedium.fontFamily != FontFamily.Monospace)
         assertEquals(56.sp, ThemeCatalog.atmospheric.typography.displayLarge.fontSize)
         assertEquals(48.sp, ThemeCatalog.terminal.typography.displayLarge.fontSize)
+        assertEquals("Smoked Quartz", ThemeCatalog.definition(WeatherThemeId.GLASS).displayName)
     }
 
     @Test

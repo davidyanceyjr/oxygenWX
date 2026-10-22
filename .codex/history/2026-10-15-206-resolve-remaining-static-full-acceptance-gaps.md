@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 206-resolve-remaining-static-full-acceptance-gaps
 Roadmap item: SQ.9A
 Closed: 2026-10-15
-Plan: .codex/plans/206-resolve-remaining-static-full-acceptance-gaps.md
+Plan: .codex/history/plans/206-resolve-remaining-static-full-acceptance-gaps.md
 Evidence: .codex/test-artifacts/206-resolve-remaining-static-full-acceptance-gaps/
 
 ## Outcome

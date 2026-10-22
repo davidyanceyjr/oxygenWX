@@ -8,6 +8,24 @@ import org.junit.Test
 
 class ReducedMotionPolicyTest {
     @Test
+    fun smokedQuartzZeroScaleChangesOnlyEffectiveMotionForEverySelection() {
+        ContrastLevel.entries.forEach { contrast ->
+            ThemeEffectsLevel.entries.forEach { effects ->
+                val resolved = resolveTheme(WeatherThemeId.GLASS, contrast, effects)
+                val reduced = ReducedMotionPolicy.applySystemMotionPolicy(resolved, 0f)
+                assertEquals(resolved.copy(motionStyle = MotionStyle.OFF), reduced)
+                assertEquals(resolved.definition, reduced.definition)
+                assertEquals(resolved.contrast, reduced.contrast)
+                assertEquals(resolved.effects, reduced.effects)
+                assertEquals(resolved.ambientBackground, reduced.ambientBackground)
+                assertEquals(resolved.panelOpacity, reduced.panelOpacity, 0f)
+                assertEquals(resolved.outlineOpacity, reduced.outlineOpacity, 0f)
+                assertEquals(resolved, ReducedMotionPolicy.applySystemMotionPolicy(resolved, 1f))
+            }
+        }
+    }
+
+    @Test
     fun classifiesSystemAnimationScale() {
         assertTrue(ReducedMotionPolicy.allowsMotion(null))
         assertFalse(ReducedMotionPolicy.allowsMotion(0f))

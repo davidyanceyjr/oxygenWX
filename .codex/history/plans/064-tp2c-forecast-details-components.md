@@ -25,7 +25,7 @@ components are the dependent `TP.2C-partial2` slice in
   components.
 - `app/src/androidTest/java/com/oxygen/weather/ui/themeengine/components/ProductionForecastComponentsTest.kt`:
   focused installed Compose tests for the four components above.
-- `.codex/plans/064-tp2c-forecast-details-components.md`, `.codex/current.md`,
+- `.codex/history/plans/064-tp2c-forecast-details-components.md`, `.codex/current.md`,
   `.codex/test-artifacts/064-tp2c-forecast-details-components/`, and
   `docs/theme-pack-roadmap.md`: plan/lifecycle/evidence and exact final result.
 

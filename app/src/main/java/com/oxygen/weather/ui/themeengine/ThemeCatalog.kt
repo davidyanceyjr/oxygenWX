@@ -33,7 +33,7 @@ object ThemeCatalog {
         ThemeVisualLanguage(AmbientBackgroundBase.TONAL_FIELD, AmbientBackgroundOverlay.SOFT_GLOW, SurfaceStyle.SOFT_TRANSLUCENT, HeroStyle.EDITORIAL, WeatherMarkStyle.ILLUSTRATIVE_LINE, MotionStyle.SUBTLE, true, 0.86f, 1f),
     )
     val glass = ThemeDefinition(
-        WeatherThemeId.GLASS, "Glass",
+        WeatherThemeId.GLASS, "Smoked Quartz",
         palette("0B1110", "0B1110", "111916", "D4E1D4", "18211E", "111916", "EAF2E9", "A9BCB0", "A9BCB0", "D4E1D4", "A9BCB0", "EAF2E9", "EAF2E9", "C9DEC9", "0B1110"),
         smokedQuartzTypography(),
         spaciousGeometry(26.dp).copy(pageStackGap = 12.dp, gridGap = 10.dp, panelInset = 14.dp),

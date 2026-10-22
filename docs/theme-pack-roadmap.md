@@ -49,7 +49,7 @@ Cycle `071-tp2e-installed-shared-component-showcase` established that the six-fa
 The Subtle outcome is six independent test-only screens—page identity, current conditions, forecast windows, source/inspection, weather mark, and backdrop—with captures for Atmospheric, Glass, Minimal OLED, Instrument, and Terminal at 360 × 640 dp, font scale 1.0, LTR, Standard contrast, Subtle effects. Cycle 075 retained 30 individual installed captures; every screen fits without scrolling or clipping and reuses the same typed fixture facts. The Effects Off capture set was verified in two bounded parts below. Comparative review and repository closure completed in cycles 078 and 084; production correction remains separate work.
 
 The Effects Off capture matrix was split to stay within the context budget:
-[`076-tp2e-effects-off-per-family-pages.md`](../.codex/plans/076-tp2e-effects-off-per-family-pages.md)
+[`076-tp2e-effects-off-per-family-pages.md`](../.codex/history/plans/076-tp2e-effects-off-per-family-pages.md)
 covers page identity, current conditions, and forecast windows (15 cases);
 [`076-tp2e-effects-off-per-family-pages-partial2.md`](../.codex/plans/076-tp2e-effects-off-per-family-pages-partial2.md)
 covers source/inspection, weather mark, and backdrop (15 dependent cases).
@@ -195,7 +195,7 @@ inventory validator. Evidence is under
 
 **Completed bounded slice — Now mapping:** cycle
 `051-d31-page-atmosphere-mapping`, plan
-`.codex/plans/051-d31-page-atmosphere-mapping.md`, records exactly five
+`.codex/history/plans/051-d31-page-atmosphere-mapping.md`, records exactly five
 source-traceable proposed Now cells in
 `docs/theme-system/design-pack/D31_PAGE_ATMOSPHERES.md`, repairs and guards the
 Minimal OLED source-audit profile reference, and adds source-aware validation
@@ -713,7 +713,7 @@ including Standard/Subtle, High contrast/Subtle, Standard/Effects Off, compact
 component content/interactions; no production correction was necessary. Exact
 verification and boundaries: `.codex/history/2026-09-26-064-tp2c-forecast-details-components.md`
 and `.codex/test-artifacts/064-tp2c-forecast-details-components/`. Plan:
-`.codex/plans/064-tp2c-forecast-details-components.md`.
+`.codex/history/plans/064-tp2c-forecast-details-components.md`.
 
 **TP.2C-partial2 Details/source components — PASS (cycle 064):** Installed
 contract tests passed across all five themes at Standard/Subtle, High
@@ -844,7 +844,7 @@ work; source inspection or compilation alone does not establish visual success.
 
 ### TP.2E — Installed shared-component showcase — REVISED (individual family screens)
 
-The six shared-component families are reviewed on separate test-only screens so each family can use the full approved viewport. This does not add product pages or change the four-page Home contract. The exact owner-directed revision and bounded execution plan are recorded at the top of this document and under `.codex/plans/075-tp2e-per-family-showcase-pages.md`.
+The six shared-component families are reviewed on separate test-only screens so each family can use the full approved viewport. This does not add product pages or change the four-page Home contract. The exact owner-directed revision and bounded execution plan are recorded at the top of this document and under `.codex/history/plans/075-tp2e-per-family-showcase-pages.md`.
 
 #### TP.2E — Subtle per-family installed pages — PASS
 

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 203-sq9a-snow-mark-gap-fixture-and-installed-check
 Roadmap item: SQ.9A-SNOW
 Closed: 2026-10-15
-Plan: .codex/plans/203-sq9a-snow-mark-gap-fixture-and-installed-check.md
+Plan: .codex/history/plans/203-sq9a-snow-mark-gap-fixture-and-installed-check.md
 Evidence: .codex/test-artifacts/203-sq9a-snow-mark-gap-fixture-and-installed-check/
 
 ## Outcome

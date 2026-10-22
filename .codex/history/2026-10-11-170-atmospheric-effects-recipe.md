@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 170-atmospheric-effects-recipe
 Roadmap item: UI.5
 Closed: 2026-10-11
-Plan: .codex/plans/170-atmospheric-effects-recipe.md
+Plan: .codex/history/plans/170-atmospheric-effects-recipe.md
 Evidence: .codex/test-artifacts/170-atmospheric-effects-recipe/
 
 ## Outcome

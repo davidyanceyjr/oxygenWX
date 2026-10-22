@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 187-finish-static-full-now
 Roadmap item: SQ.5
 Closed: 2026-10-14
-Plan: .codex/plans/187-finish-static-full-now.md
+Plan: .codex/history/plans/187-finish-static-full-now.md
 Evidence: .codex/test-artifacts/187-finish-static-full-now/
 
 ## Outcome

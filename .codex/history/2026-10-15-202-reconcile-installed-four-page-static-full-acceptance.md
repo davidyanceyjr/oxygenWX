@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 202-reconcile-installed-four-page-static-full-acceptance
 Roadmap item: SQ.9A
 Closed: 2026-10-15
-Plan: .codex/plans/202-reconcile-installed-four-page-static-full-acceptance.md
+Plan: .codex/history/plans/202-reconcile-installed-four-page-static-full-acceptance.md
 Evidence: .codex/test-artifacts/202-reconcile-installed-four-page-static-full-acceptance/
 
 ## Outcome

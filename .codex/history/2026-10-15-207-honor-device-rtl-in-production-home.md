@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 207-honor-device-rtl-in-production-home
 Roadmap item: SQ.9A
 Closed: 2026-10-15
-Plan: .codex/plans/207-honor-device-rtl-in-production-home.md
+Plan: .codex/history/plans/207-honor-device-rtl-in-production-home.md
 Evidence: .codex/test-artifacts/207-honor-device-rtl-in-production-home/
 
 ## Outcome

@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 174-lower-right-quick-navigation
 Roadmap item: NAV.2
 Closed: 2026-10-11
-Plan: .codex/plans/174-lower-right-quick-navigation.md
+Plan: .codex/history/plans/174-lower-right-quick-navigation.md
 Evidence: .codex/test-artifacts/174-lower-right-quick-navigation/
 
 ## Outcome

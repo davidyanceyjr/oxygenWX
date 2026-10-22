@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 183-owner-approved-pixel5a-waiver
 Roadmap item: SQ.1A
 Closed: 2026-10-13
-Plan: .codex/plans/183-owner-approved-pixel5a-waiver.md
+Plan: .codex/history/plans/183-owner-approved-pixel5a-waiver.md
 Evidence: .codex/test-artifacts/183-owner-approved-pixel5a-waiver/
 
 ## Outcome

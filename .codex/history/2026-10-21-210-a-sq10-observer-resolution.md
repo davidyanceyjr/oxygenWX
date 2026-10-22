@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 210-a-sq10-observer-resolution
 Roadmap item: SQ.10-OBSERVER-RESOLUTION
 Closed: 2026-10-21
-Plan: .codex/plans/210-a-sq10-observer-resolution.md
+Plan: .codex/history/plans/210-a-sq10-observer-resolution.md
 Evidence: .codex/test-artifacts/210-a-sq10-observer-resolution/
 
 ## Outcome

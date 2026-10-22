@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 211-sq10-static-full-dry-run-method-validation
 Roadmap item: SQ.10-DRY-RUN
 Closed: 2026-10-21
-Plan: .codex/plans/211-sq10-static-full-dry-run-method-validation.md
+Plan: .codex/history/plans/211-sq10-static-full-dry-run-method-validation.md
 Evidence: .codex/test-artifacts/211-sq10-static-full-dry-run-method-validation/
 
 ## Outcome

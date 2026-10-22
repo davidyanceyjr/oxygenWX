@@ -4,7 +4,7 @@ Status: Completed
 Cycle ID: 191-capture-installed-sparse-details
 Roadmap item: SQ.8
 Closed: 2026-10-14
-Plan: .codex/plans/191-capture-installed-sparse-details.md
+Plan: .codex/history/plans/191-capture-installed-sparse-details.md
 Evidence: .codex/test-artifacts/191-capture-installed-sparse-details/
 
 ## Outcome
